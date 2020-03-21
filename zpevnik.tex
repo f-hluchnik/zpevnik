@@ -43,13 +43,12 @@ colorlinks=true, linkcolor=gray
 	% charakteristiky akordů kromě moll se píšou do horního indexu
 	% maj se píše bez sedmičky
 	% pochody v basu se píšou do dolního indexu (\bas)
-	%vinv se píše bez zalomení řádku před tím, ale hned poté \vinv\\
 %AKORDY
 \newcommand{\bas}[1]{/\textsubscript{#1}}%dolní index pro přechody v basu
 \newcommand{\add}[1]{\textsuperscript{#1}}%manuální horní index
 \newcommand{\maj}{\textsuperscript{maj}}%maj7 akordy
 \newcommand{\sus}[1]{\textsuperscript{sus#1}}%sus[] akordy
-\newcommand{\dm}{\textsuperscript{\Large{$\circ$}}}%dim akordy
+\newcommand{\dm}{\textsuperscript{\Large{$\circ$}\normalsize{7}}}%dim akordy
 \newcommand{\+}{\textsuperscript{+}}%aug akordy (C-E-G#)
 \newcommand{\bb}{\textsuperscript{\Large$\flat$}}%béčko
 \newcommand{\kk}{\textsuperscript{\#}}%křížek
@@ -72,7 +71,8 @@ colorlinks=true, linkcolor=gray
 \newcommand{\ns}{\vspace{-20pt}}%no space - zrušení mezery mezi slokami
 \newcommand{\cns}{\vspace{-35pt}}%no space - zrušení mezery mezi slokami
 %MAIN
-\newcommand{\song}[1]{\section*{\Huge\expandafter\sc\textbf{{#1}}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}}%název
+\newcommand{\song}[1]{\section*{\Huge\expandafter\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
+}%název
 \newcommand{\sub}[1]{\vspace{-10mm}\subsection*{\large\expandafter\MakeUppercase\expandafter{#1}}}%podnázev
 \newcommand{\refrain}[1]{\vspace{20pt}\textbf{{R:}}\hspace{0.5em}{#1}}%refrain
 \newcommand{\refrainn}[2]{\vspace{20pt}\textbf{{R{#1}:}}\hspace{-0.1em}{#2}}%číslovaný refrain
@@ -84,6 +84,7 @@ colorlinks=true, linkcolor=gray
 \newcommand{\cod}[1]{\vspace{20pt}\textbf{C:}\hspace{0.6em}{#1}}%coda
 \newcommand{\vers}[2]{\vspace{20pt}\textbf{#1.}\hspace{0.7em}{#2}}%sloka
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
+\newcommand{\rec}[1]{\emph{rec: }{#1}}%recitativ
 
 \newcommand{\pic}[3]{\tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (current page.center){\includegraphics[width=#1mm,height=#2mm]{obrazky/#3}};}
 
@@ -105,6 +106,7 @@ colorlinks=true, linkcolor=gray
 
 \begin{Large}
 %A
+\input{pisnicky/ajatakadzivocka}
 \input{pisnicky/alenkavrisidivu}
 \input{pisnicky/alisongross}
 \input{pisnicky/allmyloving}
@@ -128,6 +130,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/blazekII}
 \input{pisnicky/botyprotilasce}
 \input{pisnicky/bratrickuzavirejvratka}
+\input{pisnicky/breclavskakasarna}
 \input{pisnicky/brnojezlatalod}
 \input{pisnicky/buraky}
 
@@ -142,6 +145,7 @@ colorlinks=true, linkcolor=gray
 
 %Č
 \input{pisnicky/carodejnicezamesbury}
+\input{pisnicky/ceresnicky}
 \input{pisnicky/cernaostrava}
 \input{pisnicky/cerneocijdetespat}
 \input{pisnicky/cernymuz}
@@ -157,6 +161,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/dejmivicsvelasky}
 \input{pisnicky/detijdoukamjeposlou}
 \input{pisnicky/dezo}
+\input{pisnicky/dobreminenarada}
 \input{pisnicky/dobrodruzstvisbohempanem}
 \input{pisnicky/dokudsezpiva}
 \input{pisnicky/doneygal}
@@ -170,11 +175,16 @@ colorlinks=true, linkcolor=gray
 
 %E
 \input{pisnicky/ejhorahora}
+\input{pisnicky/ejtahuckahospoda}
+\input{pisnicky/ejzomrelamizena}
 \input{pisnicky/eldorado}
 \input{pisnicky/escesijapoharvinazaplatim}
 \input{pisnicky/escesomsaneozenil}
+\input{pisnicky/estebylystyrytydnedohodu}
+\input{pisnicky/estevinkonevykyslo}
 
 %F
+\input{pisnicky/farao}
 \input{pisnicky/fi-li-mi}
 \input{pisnicky/fiveshortminutes}
 \input{pisnicky/fornoone}
@@ -200,19 +210,25 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/honkytonkyblues}
 \input{pisnicky/horelalipkahorela}
 \input{pisnicky/houseoftherisingsun}
+\input{pisnicky/housertetyrody}
 \input{pisnicky/hrobar}
 \input{pisnicky/hudsonskysify}
 \input{pisnicky/huslicky}
+\input{pisnicky/hvezdanavrbe}
+\input{pisnicky/hvezdyjsoujaksedmikraskynadbrnem}
 
 %CH
 \input{pisnicky/chajdamala}
 \input{pisnicky/chaloupka}
+\input{pisnicky/chodimechodime}
 \input{pisnicky/chodimpobroadwayi}
+\input{pisnicky/chytilajsemnapasecemotylka}
 
 %I
 \input{pisnicky/idzepostaridze}
 \input{pisnicky/imagine}
 \input{pisnicky/inthesummertime}
+\input{pisnicky/ionlywanttobewithyou}
 \input{pisnicky/isielmacekdomalacek}
 \input{pisnicky/islamarina}
 
@@ -220,6 +236,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/jaharfumam}
 \input{pisnicky/jachcipoezii}
 \input{pisnicky/jaktosnamalaskobude}
+\input{pisnicky/japonecka}
 \input{pisnicky/jarmila}
 \input{pisnicky/jaro}
 \input{pisnicky/jdoupomnejdou}
@@ -236,13 +253,17 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/karavanamraku}
 \input{pisnicky/katce}
 \input{pisnicky/kayandra}
+\input{pisnicky/kedsomisiel}
 \input{pisnicky/kedsomisielzrana}
 \input{pisnicky/kdejsou}
 \input{pisnicky/kdovicobudepak}
+\input{pisnicky/kdybybylamorava}
 \input{pisnicky/kdybybylbavorov}
+\input{pisnicky/kdybychbylaptackem}
 \input{pisnicky/kdybytadybylatakovapanenka}
 \input{pisnicky/kdyzjsembylchlapecmalej}
 \input{pisnicky/kdyzmebralizavojaka}
+\input{pisnicky/kdyzsemselzhradista}
 \input{pisnicky/koberecek}
 \input{pisnicky/kockanaokne}
 \input{pisnicky/kometa}
@@ -254,6 +275,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/kuptesihrebeny}
 
 %L
+\input{pisnicky/labamba}
 \input{pisnicky/ladovskazima}
 \input{pisnicky/ladycarneval}
 \input{pisnicky/lachtani}
@@ -263,6 +285,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/leavingonajetplane}
 \input{pisnicky/letadozravani}
 \input{pisnicky/letitbe}
+\input{pisnicky/letochovahospudecka}
 \input{pisnicky/letosmonikou}
 \input{pisnicky/linda}
 \input{pisnicky/littlebighorn}
@@ -279,6 +302,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/marie}
 \input{pisnicky/marnivasestrenice}
 \input{pisnicky/maschutmajoranky}
+\input{pisnicky/masirujunafrancuza}
 \input{pisnicky/medicinman}
 \input{pisnicky/medvedinevedi}
 \input{pisnicky/melanaocichbryle}
@@ -297,15 +321,18 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/nacopojdemdomov}
 \input{pisnicky/nadejeatouhy}
 \input{pisnicky/nagasakihirosima}
+\input{pisnicky/nahorachstudenky}
 \input{pisnicky/nakamenikamen}
 \input{pisnicky/namest}
 \input{pisnicky/namornik}
 \input{pisnicky/namsestalonecoprekrasneho}
+\input{pisnicky/nancymulligan}
 \input{pisnicky/narozloucenimypoteseni}
 \input{pisnicky/nashville}
 \input{pisnicky/natechpanskychlukach}
 \input{pisnicky/natusvatukaterinu}
 \input{pisnicky/necoolasce}
+\input{pisnicky/nedalekoodtrencina}
 \input{pisnicky/nechtezvonyznit}
 \input{pisnicky/nekdopijelih}
 \input{pisnicky/nemusibejt}
@@ -332,21 +359,28 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/paradaII}
 \input{pisnicky/parhavranichcopanku}
 \input{pisnicky/partazrancey}
+\input{pisnicky/peklavdolky}
 \input{pisnicky/pennylane}
 \input{pisnicky/penzioncesko}
 \input{pisnicky/perinamastyryrozky}
 \input{pisnicky/pijtevodu}
 \input{pisnicky/pisenzhrzenehotrampa}
+\input{pisnicky/piskajicicikan}
+\input{pisnicky/plavalahusickapodunaji}
 \input{pisnicky/pocestny}
 \input{pisnicky/poddubemzadubem}
+\input{pisnicky/podnasimokynkem}
 \input{pisnicky/pohoda}
 \input{pisnicky/pochodmarodu}
 \input{pisnicky/pojdmespat}
+\input{pisnicky/potrikratsomnaokenkotukal}
+\input{pisnicky/poutnikadivka}
 \input{pisnicky/povidej}
 \input{pisnicky/prahaprcice}
 \input{pisnicky/prachovskeskaly}
 \input{pisnicky/praminekvlasu}
 \input{pisnicky/prazce}
+\input{pisnicky/pridijanoknam}
 \input{pisnicky/promeny}
 \input{pisnicky/prejelijsmeslepici}
 \input{pisnicky/privozskaput}
@@ -355,6 +389,7 @@ colorlinks=true, linkcolor=gray
 %R
 \input{pisnicky/radchodimnapostu}
 \input{pisnicky/raketounamars}
+\input{pisnicky/redrivervalley}
 \input{pisnicky/rezrezrez}
 \input{pisnicky/rodneudoli}
 \input{pisnicky/romance16leta}
@@ -377,18 +412,22 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/scarboroughfair}
 \input{pisnicky/scarboroughfaircarthy}
 \input{pisnicky/severnivitr}
+\input{pisnicky/sklenickotysklenena}
 \input{pisnicky/slavicizmadridu}
 \input{pisnicky/slunecnyhrob}
 \input{pisnicky/slunicko}
 \input{pisnicky/snebyvalouochotou}
 \input{pisnicky/soudnyden}
 \input{pisnicky/sousedovictonicek}
+\input{pisnicky/spanembohemidemodvas}
 \input{pisnicky/spinkej}
 \input{pisnicky/sprostyadmindusan}
 \input{pisnicky/stanky}
 \input{pisnicky/staraarcha}
 \input{pisnicky/starypribeh}
 \input{pisnicky/stojihruskavsirempoli}
+\input{pisnicky/studentskahalenka}
+\input{pisnicky/svatoborskesirepole}
 \input{pisnicky/svazceskychbohemu}
 \input{pisnicky/svetsnamahoupa}
 
@@ -399,15 +438,21 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/skrhola}
 \input{pisnicky/slapejdalspiritual}
 \input{pisnicky/slapejdaltucny}
+\input{pisnicky/slypanenkysilnici}
 \input{pisnicky/svagrmabagr}
 
 %T
+\input{pisnicky/takbytjednoubouri}
 \input{pisnicky/takjsemtady}
+\input{pisnicky/takkratkoupisenjestenikdonenapsal}
+\input{pisnicky/tamokololevoci}
+\input{pisnicky/tancujtancujvykrucaj}
 \input{pisnicky/tearsinheaven}
 \input{pisnicky/tecevodatece}
 \input{pisnicky/tenkdoneduma}
-\input{pisnicky/tisicmil}
+\input{pisnicky/tikoberstisynci}
 \input{pisnicky/timeinabottle}
+\input{pisnicky/tisicmil}
 \input{pisnicky/tophatbarandgrill}
 \input{pisnicky/totahelpa}
 \input{pisnicky/tramvajacka}
@@ -424,6 +469,7 @@ colorlinks=true, linkcolor=gray
 %U
 \input{pisnicky/ukolebavkaprokubualenku}
 \input{pisnicky/unasnaseveru}
+\input{pisnicky/uztypilkydorezaly}
 
 %V
 \input{pisnicky/vadinevadi}
@@ -433,6 +479,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/vcelkamaja}
 \input{pisnicky/vcera}
 \input{pisnicky/vcerazvecera}
+\input{pisnicky/vdobrymizlym}
 \input{pisnicky/vedmedalcestoma}
 \input{pisnicky/velicenstvokat}
 \input{pisnicky/velrybarskavyprava}
@@ -440,6 +487,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/vesnickaromance}
 \input{pisnicky/vineckobile}
 \input{pisnicky/vinnetou}
+\input{pisnicky/virginie}
 \input{pisnicky/vjednymdumku}
 \input{pisnicky/vlese}
 \input{pisnicky/vmorijemistadost}
@@ -447,9 +495,12 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/vodauzjesvarena}
 \input{pisnicky/vodavodenka}
 \input{pisnicky/vrana}
+\input{pisnicky/vsinidolinecka}
+\input{pisnicky/vyletelaholubicka}
 \input{pisnicky/vysokyjalovec}
 
 %W
+\input{pisnicky/wadeinthewater}
 \input{pisnicky/walkingbacktohappiness}
 \input{pisnicky/waterloo}
 \input{pisnicky/wearethechampions}
@@ -478,6 +529,7 @@ colorlinks=true, linkcolor=gray
 
 %Ž
 \input{pisnicky/zivotjejennahoda}
+\input{pisnicky/zizen}
 \input{pisnicky/zizniva}
 \end{Large}
 \input{obsah}
