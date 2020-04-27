@@ -1,54 +1,38 @@
 \documentclass[a4paper, 10pt]{article}
-\usepackage{auxhook}
-\usepackage{amsmath}
-% nastav kodovani na vstupu
 \usepackage[utf8]{inputenc}
-% nastav jazyk
 \usepackage[czech, british]{babel}
 \usepackage[autostyle]{csquotes}
-% moznost dvousloupcovych stran
 \usepackage{multicol}
-% uprava rozmeru strany a okraju
 \usepackage[top=1.5cm, left=2cm, right=1cm, bottom=2cm]{geometry}
-% moznost barevneho textu
-\usepackage{color}
-\usepackage{musixtex}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{tipa}
-\usepackage{graphicx}
 \usepackage{tikz}
-\usepackage{afterpage}
 \usepackage[T1]{fontenc}
 \usepackage{setspace}
-%\usepackage{lyluatex}
+\usepackage{dashrule}
 %poslední balík
 \usepackage[pdftex]{hyperref}
-\hypersetup{
-colorlinks=true, linkcolor=gray
-}
+\hypersetup{colorlinks=true, linkcolor=gray}
  
+%příkazy pro hypertextové odkazy
 \newcommand{\hylo}[2]{\hyperlink{#1}{#2}}
 \newcommand{\hyl}[2]{\vspace{-15pt}\hspace{28pt}\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
 \newcommand{\hyt}[1]{\hypertarget{#1}{}}
 
 
-\def\everypar{\parindent=-10mm} % předsazení prvního řádku odstavce
-\newcommand{\tx}[1]{\zcharnote{G}{\begin{tabular}{@{}l@{}}#1\end{tabular}}}
-
+\def\everypar{\parindent=-10mm} %předsazení prvního řádku odstavce
 \newcommand{\chord}[2][l]{\makebox[0pt][#1]{\textbf{\begin{tabular}[b]{@{}l@{}}#2\\
-						\mbox{}\end{tabular}}}} %příkaz pro akordy
+				\mbox{}\end{tabular}}}} %příkaz pro akordy
 \pdfminorversion=7		
+
 %%KONVENCE
 	% charakteristiky akordů kromě moll se píšou do horního indexu
-	% maj se píše bez sedmičky
 	% pochody v basu se píšou do dolního indexu (\bas)
 %AKORDY
 \newcommand{\bas}[1]{/\textsubscript{#1}}%dolní index pro přechody v basu
 \newcommand{\add}[1]{\textsuperscript{#1}}%manuální horní index
-\newcommand{\maj}{\textsuperscript{maj}}%maj7 akordy
+\newcommand{\maj}{\textsuperscript{maj\textsuperscript{\footnotesize{7}}}}%maj7 akordy
 \newcommand{\sus}[1]{\textsuperscript{sus#1}}%sus[] akordy
-\newcommand{\dm}{\textsuperscript{\Large{$\circ$}\normalsize{7}}}%dim akordy
+\newcommand{\dm}{\textsuperscript{\Large{$\circ$}}}%dim akordy (malý zmenšený septakord c-es-ges-a)
+\newcommand{\zs}{m\textsuperscript{7/5\large$\flat$}}%zmenšený septakord (c-es-ges-b)
 \newcommand{\+}{\textsuperscript{+}}%aug akordy (C-E-G#)
 \newcommand{\bb}{\textsuperscript{\Large$\flat$}}%béčko
 \newcommand{\kk}{\textsuperscript{\#}}%křížek
@@ -58,6 +42,7 @@ colorlinks=true, linkcolor=gray
 \newcommand{\7}{\textsuperscript{7}}%7
 \newcommand{\9}{\textsuperscript{9}}%9
 \newcommand{\note}[1]{\emph{#1}\vspace{-20pt}}
+
 %MEZERY
 %horizontální
 \newcommand{\bc}{\hspace{60pt}}%velký akord navíc
@@ -70,6 +55,8 @@ colorlinks=true, linkcolor=gray
 \newcommand{\vinv}{\vspace{-2mm}\\}%vertical in verse - svislé odsazení
 \newcommand{\ns}{\vspace{-20pt}}%no space - zrušení mezery mezi slokami
 \newcommand{\cns}{\vspace{-35pt}}%no space - zrušení mezery mezi slokami
+\newcommand{\lsp}[1]{\vspace{-13pt}\hspace{25pt}\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
+
 %MAIN
 \newcommand{\song}[1]{\section*{\Huge\expandafter\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
@@ -81,12 +68,15 @@ colorlinks=true, linkcolor=gray
 \newcommand{\intro}[1]{\vspace{20pt}\textbf{I:}\hspace{1.2em}{#1}}%intro
 \newcommand{\bridge}[1]{\vspace{20pt}\textbf{B:}\hspace{0.6em}{#1}}%bridge
 \newcommand{\solo}[1]{\vspace{20pt}\textbf{S:}\hspace{1.2em}{#1}}%solo
+\newcommand{\solon}[2]{\vspace{20pt}\textbf{S{#1}:}\hspace{1.2em}{#2}}%solo
+\newcommand{\solosm}[1]{\vspace{20pt}\textbf{S{#1}.}\hspace{1.2em}}%solo
 \newcommand{\cod}[1]{\vspace{20pt}\textbf{C:}\hspace{0.6em}{#1}}%coda
 \newcommand{\vers}[2]{\vspace{20pt}\textbf{#1.}\hspace{0.7em}{#2}}%sloka
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
 \newcommand{\rec}[1]{\emph{rec: }{/#1/}}%recitativ
+\newcommand{\fakt}[1]{\vspace*{\fill}*\begin{normalsize}#1\end{normalsize}}%zajímavosti, fakty
 
-\newcommand{\pic}[3]{\tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (current page.center){\includegraphics[width=#1mm,height=#2mm]{obrazky/#3}};}
+\newcommand{\pic}[3]{\tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (current page.center){\includegraphics[width=#1mm,height=#2mm]{obrazky/#3}};} %příkaz pro obrázky
 
 \author{František Hluchník}
 
@@ -127,6 +117,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/bajecnazenska}
 \input{pisnicky/barbarskepobrezi}
 \input{pisnicky/barborapiseztabora}
+\input{pisnicky/basniktenmapravoveta}
 \input{pisnicky/batalion}
 \input{pisnicky/bednaodwhisky}
 \input{pisnicky/beranekavlk}
@@ -155,7 +146,9 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/carodejnicezamesbury}
 \input{pisnicky/ceresnicky}
 \input{pisnicky/cernaostrava}
+\input{pisnicky/cernejpasazer}
 \input{pisnicky/cerneocijdetespat}
+\input{pisnicky/cernosskeghetto}
 \input{pisnicky/cernymuz}
 \input{pisnicky/certvikdykotvyzvednem}
 \input{pisnicky/cervenareka}
@@ -171,8 +164,12 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/davidagolias}
 \input{pisnicky/dejmivicsvelasky}
 \input{pisnicky/delani}
+\input{pisnicky/depese}
 \input{pisnicky/detijdoukamjeposlou}
 \input{pisnicky/dezo}
+\input{pisnicky/digadigadoo}
+\input{pisnicky/digadigadoplihal}
+\input{pisnicky/digadigadospiritual}
 \input{pisnicky/dobreminenarada}
 \input{pisnicky/dobrodruzstvisbohempanem}
 \input{pisnicky/dokudsezpiva}
@@ -184,6 +181,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/drunkensailor}
 \input{pisnicky/duhovavila}
 \input{pisnicky/dumuvychazejicihoslunce}
+\input{pisnicky/dvahavrani}
 \input{pisnicky/dvakrat}
 
 %Ď
@@ -193,6 +191,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/eduvzalikfotografovi}
 \input{pisnicky/elcondorpasa}
 \input{pisnicky/elektrickyvalcik}
+\input{pisnicky/ejbozemuj}
 \input{pisnicky/ejhorahora}
 \input{pisnicky/ejtahuckahospoda}
 \input{pisnicky/ejzomrelamizena}
@@ -204,6 +203,7 @@ colorlinks=true, linkcolor=gray
 
 %F
 \input{pisnicky/farao}
+\input{pisnicky/felicita}
 \input{pisnicky/fi-li-mi}
 \input{pisnicky/fiveshortminutes}
 \input{pisnicky/fornoone}
@@ -218,13 +218,16 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/guantanamo}
 
 %H
+\input{pisnicky/hadejkdomipise}
 \input{pisnicky/hajnyjelesapan}
 \input{pisnicky/harmonikarska}
 \input{pisnicky/haubilouplani}
+\input{pisnicky/hejholazpivejsisam}
 \input{pisnicky/hejpanekrali}
 \input{pisnicky/hejteto}
 \input{pisnicky/herecomesthesun}
 \input{pisnicky/heyjude}
+\input{pisnicky/hittheroadjack}
 \input{pisnicky/hlavnezejsmenavzduchu}
 \input{pisnicky/hledamdevcenanedeli}
 \input{pisnicky/hledasezena}
@@ -258,12 +261,15 @@ colorlinks=true, linkcolor=gray
 
 %I
 \input{pisnicky/idzepostaridze}
+\input{pisnicky/ififell}
+\input{pisnicky/illbethereforyou}
 \input{pisnicky/imagine}
 \input{pisnicky/inthesummertime}
 \input{pisnicky/inzenyrska}
 \input{pisnicky/ionlywanttobewithyou}
 \input{pisnicky/isielmacekdomalacek}
 \input{pisnicky/islamarina}
+\input{pisnicky/italneznatenzazrak}
 
 %J
 \input{pisnicky/jabuduchoditpospickach}
@@ -302,10 +308,13 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/kdybytadybylatakovapanenka}
 \input{pisnicky/kdyzjsembylchlapecmalej}
 \input{pisnicky/kdyzmebralizavojaka}
+\input{pisnicky/kdyznapavoukasedneblues}
+\input{pisnicky/kdyzprijdouchvile}
 \input{pisnicky/kdyzsemselzhradista}
 \input{pisnicky/kdyzsezamilujekun}
 \input{pisnicky/kloboukvekrovi}
 \input{pisnicky/kluciklucisklukama}
+\input{pisnicky/kluziste}
 \input{pisnicky/koberecek}
 \input{pisnicky/kocourseschoulilnatvujklin}
 \input{pisnicky/kockanaokne}
@@ -336,8 +345,10 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/letochovahospudecka}
 \input{pisnicky/letosmonikou}
 \input{pisnicky/linda}
+\input{pisnicky/litaliano}
 \input{pisnicky/littlebighorn}
 \input{pisnicky/livingnextdoortoalice}
+\input{pisnicky/loddeti}
 \input{pisnicky/lojzaaliza}
 \input{pisnicky/lovemetender}
 
@@ -346,9 +357,11 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/majak}
 \input{pisnicky/maleceskeblues}
 \input{pisnicky/malekote}
+\input{pisnicky/malujzaseobrazky}
 \input{pisnicky/mamincinpernik}
 \input{pisnicky/mammalystan}
 \input{pisnicky/mamosvazmimujranec}
+\input{pisnicky/mamprimaden}
 \input{pisnicky/margot}
 \input{pisnicky/marie}
 \input{pisnicky/marnivasestrenice}
@@ -361,15 +374,19 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/milencivtexaskach}
 \input{pisnicky/milionar}
 \input{pisnicky/mlecnybar}
+\input{pisnicky/mlyny}
 \input{pisnicky/mnisijsoutisi}
 \input{pisnicky/mojiprvnimuze}
 \input{pisnicky/montgomery}
 \input{pisnicky/morituritesalutant}
+\input{pisnicky/morseovka}
 \input{pisnicky/mosty}
 \input{pisnicky/motyl}
 \input{pisnicky/mravencivkredenci}
 \input{pisnicky/mravenciukolebavka}
+\input{pisnicky/muzikanticodelate}
 \input{pisnicky/muzinejvicslusisolo}
+\input{pisnicky/mys}
 
 %N
 \input{pisnicky/nacopojdemdomov}
@@ -382,6 +399,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/namornik}
 \input{pisnicky/namsestalonecoprekrasneho}
 \input{pisnicky/nancymulligan}
+\input{pisnicky/napradedusnezi}
 \input{pisnicky/narozloucenimypoteseni}
 \input{pisnicky/nashledanoukrokodyle}
 \input{pisnicky/nashville}
@@ -393,6 +411,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/necoolasce}
 \input{pisnicky/nedalekoodtrencina}
 \input{pisnicky/nechtezvonyznit}
+\input{pisnicky/nejdelsivlak}
 \input{pisnicky/nekdopijelih}
 \input{pisnicky/nemusibejt}
 \input{pisnicky/nenivsechnoparada}
@@ -401,10 +420,12 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/niagara}
 \input{pisnicky/nictolikneboli}
 \input{pisnicky/noe}
+\input{pisnicky/nosorozec}
 \input{pisnicky/nowhereman}
 
 %O
 \input{pisnicky/obladioblada}
+\input{pisnicky/odecita}
 \input{pisnicky/odopavyjeduvozy}
 \input{pisnicky/ohfreedom}
 \input{pisnicky/ohsusanna}
@@ -427,14 +448,17 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/peklavdolky}
 \input{pisnicky/pennylane}
 \input{pisnicky/penzioncesko}
+\input{pisnicky/pepita}
 \input{pisnicky/perinamastyryrozky}
 \input{pisnicky/pijtevodu}
+\input{pisnicky/pisenprace}
 \input{pisnicky/pisenzhrzenehotrampa}
 \input{pisnicky/piskajicicikan}
 \input{pisnicky/plavalahusickapodunaji}
 \input{pisnicky/pocestny}
 \input{pisnicky/poddubemzadubem}
 \input{pisnicky/podnasimokynkem}
+\input{pisnicky/podzim}
 \input{pisnicky/podzimni}
 \input{pisnicky/pohoda}
 \input{pisnicky/pochodamerickychnamorniku}
@@ -450,15 +474,19 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/prazce}
 \input{pisnicky/pridijanoknam}
 \input{pisnicky/promeny}
+\input{pisnicky/prsi}
 \input{pisnicky/prejelijsmeslepici}
 \input{pisnicky/privozskaput}
+\input{pisnicky/priznavam}
 \input{pisnicky/pterodaktylus}
 \input{pisnicky/puffthemagicdragon}
 \input{pisnicky/pulnocni}
 
 %R
+\input{pisnicky/radasemiluje}
 \input{pisnicky/radchodimnapostu}
 \input{pisnicky/raketounamars}
+\input{pisnicky/reddwarftheme}
 \input{pisnicky/redrivervalley}
 \input{pisnicky/reklamanaticho}
 \input{pisnicky/rezrezrez}
@@ -470,6 +498,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/rubikovakostka}
 \input{pisnicky/rutysutyarizonatexas}
 \input{pisnicky/ruzeztexasu}
+\input{pisnicky/ruzicka}
 \input{pisnicky/rychlikjededoprahy}
 \input{pisnicky/ryljencelejdenryl}
 
@@ -482,10 +511,13 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/samsnohaminastole}
 \input{pisnicky/samuraj}
 \input{pisnicky/santalucia}
+\input{pisnicky/saraperchetiamo}
+\input{pisnicky/saro}
 \input{pisnicky/sbohemgalanecko}
 \input{pisnicky/scarboroughfair}
 \input{pisnicky/scarboroughfaircarthy}
 \input{pisnicky/seeyoulateralligator}
+\input{pisnicky/senzaunperche}
 \input{pisnicky/severnivitr}
 \input{pisnicky/skaloskalo}
 \input{pisnicky/sklenickotysklenena}
@@ -497,6 +529,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/sousedovictonicek}
 \input{pisnicky/spanembohemidemodvas}
 \input{pisnicky/spinkej}
+\input{pisnicky/spravnyslovo}
 \input{pisnicky/sprostyadmindusan}
 \input{pisnicky/stanky}
 \input{pisnicky/staraarcha}
@@ -534,8 +567,10 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/tearsinheaven}
 \input{pisnicky/tecevodatece}
 \input{pisnicky/tenkdoneduma}
+\input{pisnicky/tesar}
 \input{pisnicky/thesoundofsilence}
 \input{pisnicky/thewateriswide}
+\input{pisnicky/tiamo}
 \input{pisnicky/tikoberstisynci}
 \input{pisnicky/timeinabottle}
 \input{pisnicky/tisicmil}
@@ -555,11 +590,14 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/tricitronky}
 \input{pisnicky/trikrize}
 \input{pisnicky/tvojesnidane}
+\input{pisnicky/tyjamo}
 
 %U
 \input{pisnicky/ukolebavkaprokubualenku}
 \input{pisnicky/unasnaseveru}
 \input{pisnicky/uzkonicekpadi}
+\input{pisnicky/uzsenamcaskrati}
+\input{pisnicky/uztonenapravim}
 \input{pisnicky/uztypilkydorezaly}
 
 %V
@@ -567,6 +605,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/valcicek}
 \input{pisnicky/valkaruzi}
 \input{pisnicky/vandrovni}
+\input{pisnicky/variacenarenesancnitema}
 \input{pisnicky/vcelkamaja}
 \input{pisnicky/vcera}
 \input{pisnicky/vcerazvecera}
@@ -586,6 +625,7 @@ colorlinks=true, linkcolor=gray
 \input{pisnicky/vodacomadrzinadvodou}
 \input{pisnicky/vodauzjesvarena}
 \input{pisnicky/vodavodenka}
+\input{pisnicky/vosa}
 \input{pisnicky/vrana}
 \input{pisnicky/vsinidolinecka}
 \input{pisnicky/vsichnijsouuzvmexiku}
