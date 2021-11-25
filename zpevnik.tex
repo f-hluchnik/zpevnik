@@ -10,6 +10,7 @@
 \usepackage{setspace}
 \usepackage{dashrule}
 \usepackage{amssymb}
+\usepackage{xcolor}
 %poslední balík
 \usepackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true, linkcolor=gray}
@@ -21,7 +22,9 @@
 
 
 \def\everypar{\parindent=-10mm} %předsazení prvního řádku odstavce
-\newcommand{\chord}[2][l]{\makebox[0pt][#1]{\textbf{\begin{tabular}[b]{@{}l@{}}#2\\
+\definecolor{chordred}{RGB}{184, 39, 39}
+\definecolor{chordblack}{RGB}{0, 0, 0}
+\newcommand{\chord}[2][l]{\makebox[0pt][#1]{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#2}\\
 				\mbox{}\end{tabular}}}} %příkaz pro akordy
 %\newcommand{\chord}[2][l]{} % alternativní příkaz pro akordy pro zpěvních bez akordů
 \pdfminorversion=7		
@@ -72,7 +75,7 @@
 \newcommand{\intro}[1]{\vspace{20pt}\textbf{I:}\hspace{0.9em}{#1}}%intro
 \newcommand{\bridge}[1]{\vspace{20pt}\textbf{B:}\hspace{0.6em}{#1}}%bridge
 \newcommand{\solo}[1]{\vspace{20pt}\textbf{S:}\hspace{1.2em}{#1}}%solo
-\newcommand{\solon}[2]{\vspace{20pt}\textbf{S{#1}:}\hspace{1.2em}{#2}}%solo
+\newcommand{\solon}[2]{\vspace{20pt}\textbf{S{#1}:}{#2}}%solo
 \newcommand{\solosm}[1]{\vspace{20pt}\textbf{S{#1}.}\hspace{1.2em}}%solo
 \newcommand{\cod}[1]{\vspace{20pt}\textbf{C:}\hspace{0.6em}{#1}}%coda
 \newcommand{\vers}[2]{\vspace{20pt}\textbf{#1.}\hspace{0.7em}{#2}}%sloka
@@ -114,8 +117,10 @@
 \include{pisnicky/allihavetodoisdream}
 \include{pisnicky/allmyloving}
 \include{pisnicky/allyouneedislove}
+\include{pisnicky/amazonka}
 \include{pisnicky/amerika}
 \include{pisnicky/andel}
+\include{pisnicky/andelska}
 \include{pisnicky/anickadusickanekasli}
 \include{pisnicky/apak}
 \include{pisnicky/auldlangsyne}
@@ -230,6 +235,7 @@
 \include{pisnicky/felicita}
 \include{pisnicky/fi-li-mi}
 \include{pisnicky/fiveshortminutes}
+\include{pisnicky/flymetothemoon}
 \include{pisnicky/fornoone}
 \include{pisnicky/fotbal}
 \include{pisnicky/frankiedlouhan}
@@ -395,6 +401,7 @@
 \include{pisnicky/livingnextdoortoalice}
 \include{pisnicky/loddeti}
 \include{pisnicky/lojzaaliza}
+\include{pisnicky/lonelystranger}
 \include{pisnicky/lovemetender}
 
 %M
@@ -513,6 +520,7 @@
 \include{pisnicky/pepita}
 \include{pisnicky/perinamastyryrozky}
 \include{pisnicky/pijtevodu}
+\include{pisnicky/pisenokoni}
 \include{pisnicky/pisenprace}
 \include{pisnicky/pisenzhrzenehotrampa}
 \include{pisnicky/piskajicicikan}
@@ -521,7 +529,8 @@
 \include{pisnicky/poddubemzadubem}
 \include{pisnicky/podnasimokynkem}
 \include{pisnicky/podzim}
-\include{pisnicky/podzimni}
+\include{pisnicky/podzimniplihal}
+\include{pisnicky/podzimnispiritual}
 \include{pisnicky/pohadka}
 \include{pisnicky/pohoda}
 \include{pisnicky/pochodamerickychnamorniku}
@@ -558,6 +567,7 @@
 \include{pisnicky/radchodimnapostu}
 \include{pisnicky/radsebrouzdamrosou}
 \include{pisnicky/raketounamars}
+\include{pisnicky/ranavtrave}
 \include{pisnicky/rande}
 \include{pisnicky/reddwarftheme}
 \include{pisnicky/redrivervalley}
@@ -641,6 +651,7 @@
 \include{pisnicky/takbytjednoubouri}
 \include{pisnicky/takdavnojiz}
 \include{pisnicky/takjsemtady}
+\include{pisnicky/takjsmevandrovali}
 \include{pisnicky/takkratkoupisenjestenikdonenapsal}
 \include{pisnicky/tamokololevoci}
 \include{pisnicky/tamunebeskychbran}
@@ -720,6 +731,7 @@
 \include{pisnicky/vodacomadrzinadvodou}
 \include{pisnicky/vodauzjesvarena}
 \include{pisnicky/vodavodenka}
+\include{pisnicky/vor}
 \include{pisnicky/vosa}
 \include{pisnicky/vranabuty}
 \include{pisnicky/vranaplihal}
