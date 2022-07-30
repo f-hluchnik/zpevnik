@@ -1,0 +1,6572 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2022.7.30)  30 JUL 2022 16:15
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**zpevnik.tex
+(./zpevnik.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-05-07>
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+\c@part=\count179
+\c@section=\count180
+\c@subsection=\count181
+\c@subsubsection=\count182
+\c@paragraph=\count183
+\c@subparagraph=\count184
+\c@figure=\count185
+\c@table=\count186
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2020/08/01 v1.3d Input encoding file
+\inpenc@prehook=\toks15
+\inpenc@posthook=\toks16
+)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2021/04/26 3.58 The Babel package
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2021/04/26 3.58 Babel common definitions
+\babel@savecnt=\count187
+\U@D=\dimen139
+\l@unhyphenated=\language85
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@readstream=\read2
+)
+\bbl@dirlevel=\count188
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel-czech/czech.ldf
+Language: czech 2008/07/06 v3.1a Czech support from the babel system
+Package babel Info: Making " an active character on input line 172.
+\cs@wordlen=\count189
+Package babel Info: Making - an active character on input line 226.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/british.ldf
+Language: british 2017/06/06 v3.3r English support from the babel system
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+Language: english 2017/06/06 v3.3r English support from the babel system
+Package babel Info: Hyphen rules for 'canadian' set to \l@english
+(babel)             (\language0). Reported on input line 102.
+Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
+(babel)             (\language26). Reported on input line 105.
+Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
+(babel)             (\language26). Reported on input line 108.
+)))
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.sty
+Package: csquotes 2021-02-22 v5.2l context-sensitive quotations (JAW)
+
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count190
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+)
+\csq@reset=\count191
+\csq@gtype=\count192
+\csq@glevel=\count193
+\csq@qlevel=\count194
+\csq@maxlvl=\count195
+\csq@tshold=\count196
+\csq@ltx@everypar=\toks18
+
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def
+File: csquotes.def 2021-02-22 v5.2l csquotes generic definitions (JAW)
+)
+Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
+Package csquotes Info: ... configuration file loaded successfully.
+
+(/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg
+File: csquotes.cfg 
+)
+Package csquotes Info: Enabling multilingual quotes.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty
+Package: multicol 2019/12/09 v1.8y multicolumn formatting (FMi)
+\c@tracingmulticols=\count197
+\mult@box=\box47
+\multicol@leftmargin=\dimen140
+\c@unbalance=\count198
+\c@collectmore=\count199
+\doublecol@number=\count266
+\multicoltolerance=\count267
+\multicolpretolerance=\count268
+\full@width=\dimen141
+\page@free=\dimen142
+\premulticols=\dimen143
+\postmulticols=\dimen144
+\multicolsep=\skip49
+\multicolbaselineskip=\skip50
+\partial@page=\box48
+\last@line=\box49
+\maxbalancingoverflow=\dimen145
+\mult@rightbox=\box50
+\mult@grightbox=\box51
+\mult@gfirstbox=\box52
+\mult@firstbox=\box53
+\@tempa=\box54
+\@tempa=\box55
+\@tempa=\box56
+\@tempa=\box57
+\@tempa=\box58
+\@tempa=\box59
+\@tempa=\box60
+\@tempa=\box61
+\@tempa=\box62
+\@tempa=\box63
+\@tempa=\box64
+\@tempa=\box65
+\@tempa=\box66
+\@tempa=\box67
+\@tempa=\box68
+\@tempa=\box69
+\@tempa=\box70
+\@tempa=\box71
+\@tempa=\box72
+\@tempa=\box73
+\@tempa=\box74
+\@tempa=\box75
+\@tempa=\box76
+\@tempa=\box77
+\@tempa=\box78
+\@tempa=\box79
+\@tempa=\box80
+\@tempa=\box81
+\@tempa=\box82
+\@tempa=\box83
+\@tempa=\box84
+\@tempa=\box85
+\@tempa=\box86
+\@tempa=\box87
+\@tempa=\box88
+\@tempa=\box89
+\@tempa=\box90
+\c@minrows=\count269
+\c@columnbadness=\count270
+\c@finalcolumnbadness=\count271
+\last@try=\dimen146
+\multicolovershoot=\dimen147
+\multicolundershoot=\dimen148
+\mult@nat@firstbox=\box91
+\colbreak@box=\box92
+\mc@col@check@num=\count272
+)
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count273
+\Gm@cntv=\count274
+\c@Gm@tempcnt=\count275
+\Gm@bindingoffset=\dimen149
+\Gm@wd@mp=\dimen150
+\Gm@odd@mp=\dimen151
+\Gm@even@mp=\dimen152
+\Gm@layoutwidth=\dimen153
+\Gm@layoutheight=\dimen154
+\Gm@layouthoffset=\dimen155
+\Gm@layoutvoffset=\dimen156
+\Gm@dimlist=\toks19
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+\pgfutil@everybye=\toks20
+\pgfutil@tempdima=\dimen157
+\pgfutil@tempdimb=\dimen158
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.t
+ex)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+\pgfutil@abb=\box93
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/pgf.revision.tex)
+Package: pgfrcs 2020/12/27 v3.1.8b (3.1.8b)
+))
+Package: pgf 2020/12/27 v3.1.8b (3.1.8b)
+
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen159
+\Gin@req@width=\dimen160
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2020/12/27 v3.1.8b (3.1.8b)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks21
+\pgfkeys@temptoks=\toks22
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.t
+ex
+\pgfkeys@tmptoks=\toks23
+))
+\pgf@x=\dimen161
+\pgf@y=\dimen162
+\pgf@xa=\dimen163
+\pgf@ya=\dimen164
+\pgf@xb=\dimen165
+\pgf@yb=\dimen166
+\pgf@xc=\dimen167
+\pgf@yc=\dimen168
+\pgf@xd=\dimen169
+\pgf@yd=\dimen170
+\w@pgf@writea=\write3
+\r@pgf@reada=\read3
+\c@pgf@counta=\count276
+\c@pgf@countb=\count277
+\c@pgf@countc=\count278
+\c@pgf@countd=\count279
+\t@pgf@toka=\toks24
+\t@pgf@tokb=\toks25
+\t@pgf@tokc=\toks26
+\pgf@sys@id@count=\count280
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2020/12/27 v3.1.8b (3.1.8b)
+)
+Driver file for pgf: pgfsys-pdftex.def
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
+File: pgfsys-pdftex.def 2020/12/27 v3.1.8b (3.1.8b)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.de
+f
+File: pgfsys-common-pdf.def 2020/12/27 v3.1.8b (3.1.8b)
+)))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
+tex
+File: pgfsyssoftpath.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfsyssoftpath@smallbuffer@items=\count281
+\pgfsyssoftpath@bigbuffer@items=\count282
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
+tex
+File: pgfsysprotocol.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)) (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2020/12/27 v3.1.8b (3.1.8b)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+\pgfmath@dimen=\dimen171
+\pgfmath@count=\count283
+\pgfmath@box=\box94
+\pgfmath@toks=\toks27
+\pgfmath@stack@operand=\toks28
+\pgfmath@stack@operation=\toks29
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code
+.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonomet
+ric.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.cod
+e.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison
+.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.
+tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code
+.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.
+tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerari
+thmetics.code.tex)))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count284
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
+x
+File: pgfcorepoints.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@picminx=\dimen172
+\pgf@picmaxx=\dimen173
+\pgf@picminy=\dimen174
+\pgf@picmaxy=\dimen175
+\pgf@pathminx=\dimen176
+\pgf@pathmaxx=\dimen177
+\pgf@pathminy=\dimen178
+\pgf@pathmaxy=\dimen179
+\pgf@xx=\dimen180
+\pgf@xy=\dimen181
+\pgf@yx=\dimen182
+\pgf@yy=\dimen183
+\pgf@zx=\dimen184
+\pgf@zy=\dimen185
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.
+code.tex
+File: pgfcorepathconstruct.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@path@lastx=\dimen186
+\pgf@path@lasty=\dimen187
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code
+.tex
+File: pgfcorepathusage.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@shorten@end@additional=\dimen188
+\pgf@shorten@start@additional=\dimen189
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.te
+x
+File: pgfcorescopes.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfpic=\box95
+\pgf@hbox=\box96
+\pgf@layerbox@main=\box97
+\pgf@picture@serial@count=\count285
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
+ode.tex
+File: pgfcoregraphicstate.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgflinewidth=\dimen190
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformation
+s.code.tex
+File: pgfcoretransformations.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@pt@x=\dimen191
+\pgf@pt@y=\dimen192
+\pgf@pt@temp=\dimen193
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.t
+ex
+File: pgfcoreobjects.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing
+.code.tex
+File: pgfcorepathprocessing.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.te
+x
+File: pgfcorearrows.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfarrowsep=\dimen194
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@max=\dimen195
+\pgf@sys@shading@range@num=\count286
+\pgf@shadingcount=\count287
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.
+tex
+File: pgfcoreexternal.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfexternal@startupbox=\box98
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.te
+x
+File: pgfcorelayers.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.c
+ode.tex
+File: pgfcoretransparency.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.
+tex
+File: pgfcorepatterns.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
+File: pgfcorerdf.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfnodeparttextbox=\box99
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+File: pgfmoduleplot.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65
+.sty
+Package: pgfcomp-version-0-65 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@nodesepstart=\dimen196
+\pgf@nodesepend=\dimen197
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18
+.sty
+Package: pgfcomp-version-1-18 2020/12/27 v3.1.8b (3.1.8b)
+)) (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgffor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex))
+(/usr/share/texlive/texmf-dist/tex/latex/pgf/math/pgfmath.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2020/12/27 v3.1.8b (3.1.8b)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
+\pgffor@iter=\dimen198
+\pgffor@skip=\dimen199
+\pgffor@stack=\toks30
+\pgffor@toks=\toks31
+))
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+Package: tikz 2020/12/27 v3.1.8b (3.1.8b)
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
+.code.tex
+File: pgflibraryplothandlers.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgf@plot@mark@count=\count288
+\pgfplotmarksize=\dimen256
+)
+\tikz@lastx=\dimen257
+\tikz@lasty=\dimen258
+\tikz@lastxsaved=\dimen259
+\tikz@lastysaved=\dimen260
+\tikz@lastmovetox=\dimen261
+\tikz@lastmovetoy=\dimen262
+\tikzleveldistance=\dimen263
+\tikzsiblingdistance=\dimen264
+\tikz@figbox=\box100
+\tikz@figbox@bg=\box101
+\tikz@tempbox=\box102
+\tikz@tempbox@bg=\box103
+\tikztreelevel=\count289
+\tikznumberofchildren=\count290
+\tikznumberofcurrentchild=\count291
+\tikz@fig@count=\count292
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+File: pgfmodulematrix.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+\pgfmatrixcurrentrow=\count293
+\pgfmatrixcurrentcolumn=\count294
+\pgf@matrix@numberofcolumns=\count295
+)
+\tikz@expandcount=\count296
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
+zlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2020/12/27 v3.1.8b (3.1.8b)
+)))
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2020/10/14 v3.0a eso-pic (RN)
+\ESO@tempdima=\dimen265
+\ESO@tempdimb=\dimen266
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
+)
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+(/usr/share/texlive/texmf-dist/tex/latex/dashrule/dashrule.sty
+Package: dashrule 2013/03/28 v1.3 Dashed rules
+
+(/usr/share/texlive/texmf-dist/tex/latex/ifmtarg/ifmtarg.sty
+Package: ifmtarg 2018/04/16 v1.2b check for an empty argument
+)
+\c@hdr@segments=\count297
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks32
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2021-02-27 v7.00k Hypertext links for LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+)
+\@linkdim=\dimen267
+\Hy@linkcounter=\count298
+\Hy@pagecounter=\count299
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2021-02-27 v7.00k Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def
+File: hyperref-langpatches.def 2021-02-27 v7.00k Hyperref: patches for babel la
+nguages
+)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count300
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2021-02-27 v7.00k Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Hyper figures OFF on input line 4192.
+Package hyperref Info: Link nesting OFF on input line 4197.
+Package hyperref Info: Hyper index ON on input line 4200.
+Package hyperref Info: Plain pages OFF on input line 4207.
+Package hyperref Info: Backreferencing OFF on input line 4212.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4445.
+\c@Hy@tempcnt=\count301
+
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip16
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4804.
+\XeTeXLinkMargin=\dimen268
+
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count302
+\Field@Width=\dimen269
+\Fld@charsize=\dimen270
+Package hyperref Info: Hyper figures OFF on input line 6075.
+Package hyperref Info: Link nesting OFF on input line 6080.
+Package hyperref Info: Hyper index ON on input line 6083.
+Package hyperref Info: backreferencing OFF on input line 6090.
+Package hyperref Info: Link coloring OFF on input line 6095.
+Package hyperref Info: Link coloring with OCG OFF on input line 6100.
+Package hyperref Info: PDF/A mode OFF on input line 6105.
+LaTeX Info: Redefining \ref on input line 6145.
+LaTeX Info: Redefining \pageref on input line 6149.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
+ge
+with kernel methods
+)
+\Hy@abspage=\count303
+\c@Item=\count304
+\c@Hfootnote=\count305
+)
+Package hyperref Info: Driver: hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2021-02-27 v7.00k Hyperref driver for pdfTeX
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
+e
+with kernel methods
+)
+\Fld@listcount=\count306
+\c@bookmark@seq@number=\count307
+
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip51
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 16.
+Package csquotes Info: Checking for multilingual support...
+Package csquotes Info: ... found 'babel' package.
+
+(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count308
+\l__pdf_internal_box=\box104
+)
+(./zpevnik.aux (./preamble/obalka.aux) (./preamble/patitul.aux)
+(./preamble/vydavatelskyzaznam.aux) (./preamble/titulnilist.aux)
+(./preamble/dedikace.aux) (./preamble/uvod.aux) (./pisnicky/abychtuzil.aux)
+(./pisnicky/acrosstheuniverse.aux) (./pisnicky/ahorsewithnoname.aux)
+(./pisnicky/aintnograve.aux) (./pisnicky/ajatakadzivocka.aux)
+(./pisnicky/alenkavrisidivu.aux) (./pisnicky/alisongross.aux)
+(./pisnicky/allihavetodoisdream.aux) (./pisnicky/allmyloving.aux)
+(./pisnicky/allyouneedislove.aux) (./pisnicky/amazonka.aux)
+(./pisnicky/amerika.aux) (./pisnicky/andel.aux) (./pisnicky/andelska.aux)
+(./pisnicky/anickadusickanekasli.aux) (./pisnicky/apak.aux)
+(./pisnicky/auldlangsyne.aux) (./pisnicky/autobusyprijizdeji.aux)
+(./pisnicky/autumnleaves.aux) (./pisnicky/aznamprijdoumirubrat.aux)
+(./pisnicky/azseknampravovrati.aux) (./pisnicky/aztosemnusekne.aux)
+(./pisnicky/azvzletnouptaci.aux) (./pisnicky/babickamary.aux)
+(./pisnicky/bajecnazenska.aux) (./pisnicky/barbarskepobrezi.aux)
+(./pisnicky/barborapiseztabora.aux) (./pisnicky/basniktenmapravoveta.aux)
+(./pisnicky/batalion.aux) (./pisnicky/bednaodwhisky.aux)
+(./pisnicky/beranekavlk.aux) (./pisnicky/beskydebeskyde.aux)
+(./pisnicky/bigbangtheorytheme.aux) (./pisnicky/blackbird.aux)
+(./pisnicky/blaznovaukolebavka.aux) (./pisnicky/blazekI.aux)
+(./pisnicky/blazekII.aux) (./pisnicky/bluesfolsomskeveznice.aux)
+(./pisnicky/bonsoirmademoiselleparis.aux) (./pisnicky/botyprotilasce.aux)
+(./pisnicky/botyzkuzetoulavejchpsu.aux) (./pisnicky/bratrickuzavirejvratka.aux)
+(./pisnicky/breclavskakasarna.aux) (./pisnicky/brnojezlatalod.aux)
+(./pisnicky/budemilehkazem.aux) (./pisnicky/buraky.aux)
+(./pisnicky/carminaamorosa.aux) (./pisnicky/codelastodelejrad.aux)
+(./pisnicky/cojsemmeldneskobedu.aux) (./pisnicky/cojstehasici.aux)
+(./pisnicky/cosatosupoce.aux) (./pisnicky/coztebebude.aux)
+(./pisnicky/carodejnicezamesbury.aux) (./pisnicky/casysemeni.aux)
+(./pisnicky/ceresne.aux) (./pisnicky/ceresnicky.aux) (./pisnicky/cernadira.aux)
+(./pisnicky/cernaostrava.aux) (./pisnicky/cernejpasazer.aux)
+(./pisnicky/cerneocijdetespat.aux) (./pisnicky/cernosskeghetto.aux)
+(./pisnicky/cernymuz.aux) (./pisnicky/certvikdykotvyzvednem.aux)
+(./pisnicky/cervenareka.aux) (./pisnicky/cervenarekatucny.aux)
+(./pisnicky/ceskapisnicka.aux) (./pisnicky/cizesutokone.aux)
+(./pisnicky/cmelak.aux) (./pisnicky/ctrnactkubiku.aux) (./pisnicky/dajana.aux)
+(./pisnicky/daltouvodou.aux) (./pisnicky/dameklukoviskoly.aux)
+(./pisnicky/darmodej.aux) (./pisnicky/davidagolias.aux)
+(./pisnicky/deepriverblues.aux) (./pisnicky/dejmivicsvelasky.aux)
+(./pisnicky/delamecomuzem.aux) (./pisnicky/delani.aux) (./pisnicky/depese.aux)
+(./pisnicky/detijdoukamjeposlou.aux) (./pisnicky/dezo.aux)
+(./pisnicky/digadigadoo.aux) (./pisnicky/digadigadoplihal.aux)
+(./pisnicky/digadigadospiritual.aux) (./pisnicky/dobreminenarada.aux)
+(./pisnicky/dobrodruzstvisbohempanem.aux) (./pisnicky/dokudsezpiva.aux)
+(./pisnicky/donebes.aux) (./pisnicky/doneygal.aux)
+(./pisnicky/dontstopmenow.aux) (./pisnicky/dorajenevedemost.aux)
+(./pisnicky/doyouhearthepeoplesing.aux) (./pisnicky/drakodbileskaly.aux)
+(./pisnicky/drunkensailor.aux) (./pisnicky/duhovavila.aux)
+(./pisnicky/dumuvychazejicihoslunce.aux) (./pisnicky/dvahavrani.aux)
+(./pisnicky/dvakrat.aux) (./pisnicky/dvebaby.aux)
+(./pisnicky/dablovynamluvy.aux) (./pisnicky/eduvzalikfotografovi.aux)
+(./pisnicky/elcondorpasa.aux) (./pisnicky/eldorado.aux)
+(./pisnicky/elektrickyvalcik.aux) (./pisnicky/ejbozemuj.aux)
+(./pisnicky/ejhorahora.aux) (./pisnicky/ejtahuckahospoda.aux)
+(./pisnicky/ejzomrelamizena.aux) (./pisnicky/escesijapoharvinazaplatim.aux)
+(./pisnicky/escesomsaneozenil.aux) (./pisnicky/estebylystyrytydnedohodu.aux)
+(./pisnicky/estevinkonevykyslo.aux) (./pisnicky/farao.aux)
+(./pisnicky/feleenazelpasa.aux) (./pisnicky/felicita.aux)
+(./pisnicky/fi-li-mi.aux) (./pisnicky/fiveshortminutes.aux)
+(./pisnicky/flymetothemoon.aux) (./pisnicky/folsomprisonblues.aux)
+(./pisnicky/fornoone.aux) (./pisnicky/fotbal.aux)
+(./pisnicky/frankiedlouhan.aux) (./pisnicky/frantisek.aux)
+(./pisnicky/frydekmistek.aux) (./pisnicky/gilotina.aux) (./pisnicky/girl.aux)
+(./pisnicky/greensleeves.aux) (./pisnicky/gronskapisnicka.aux)
+(./pisnicky/guadalcanal.aux) (./pisnicky/guantanamo.aux)
+(./pisnicky/hadejkdomipise.aux) (./pisnicky/hajnyjelesapan.aux)
+(./pisnicky/harmonikarska.aux) (./pisnicky/haubilouplani.aux)
+(./pisnicky/hejholazpivejsisam.aux) (./pisnicky/hejpanekrali.aux)
+(./pisnicky/hejteto.aux) (./pisnicky/help.aux) (./pisnicky/herecomesthesun.aux)
+(./pisnicky/heyhey.aux) (./pisnicky/heyjude.aux) (./pisnicky/hittheroadjack.aux
+) (./pisnicky/hladiny.aux) (./pisnicky/hlavnezejsmenavzduchu.aux)
+(./pisnicky/hledamdevcenanedeli.aux) (./pisnicky/hledasezena.aux)
+(./pisnicky/hlidackrav.aux) (./pisnicky/hlupakunajdute.aux)
+(./pisnicky/hodiljsemflintudozita.aux) (./pisnicky/hohowatanay.aux)
+(./pisnicky/hojahoj.aux) (./pisnicky/holkyznasiskolky.aux)
+(./pisnicky/holubidum.aux) (./pisnicky/honkytonkyblues.aux)
+(./pisnicky/horelalipkahorela.aux) (./pisnicky/hornicka.aux)
+(./pisnicky/houseoftherisingsun.aux) (./pisnicky/housertetyrody.aux)
+(./pisnicky/hrobar.aux) (./pisnicky/hudsonskysify.aux) (./pisnicky/huslicky.aux
+) (./pisnicky/hvezdanavrbe.aux)
+(./pisnicky/hvezdyjsoujaksedmikraskynadbrnem.aux) (./pisnicky/chajdamala.aux)
+(./pisnicky/chaloupka.aux) (./pisnicky/chattanoogachoochoo.aux)
+(./pisnicky/chcibytpritom.aux) (./pisnicky/childrengowhereisendthee.aux)
+(./pisnicky/chirpychirpycheepcheep.aux) (./pisnicky/chodimechodime.aux)
+(./pisnicky/chodimpobroadwayi.aux) (./pisnicky/chvalimtezemema.aux)
+(./pisnicky/chytilajsemnapasecemotylka.aux) (./pisnicky/idzepostaridze.aux)
+(./pisnicky/ififell.aux) (./pisnicky/illbethereforyou.aux)
+(./pisnicky/illfollowthesun.aux) (./pisnicky/imagine.aux)
+(./pisnicky/intelektualky.aux) (./pisnicky/inthesummertime.aux)
+(./pisnicky/inzenyrska.aux) (./pisnicky/ionlywanttobewithyou.aux)
+(./pisnicky/irenegoodnight.aux) (./pisnicky/isielmacekdomalacek.aux)
+(./pisnicky/islamarina.aux) (./pisnicky/italneznatenzazrak.aux)
+(./pisnicky/jabuduchoditpospickach.aux) (./pisnicky/jaharfumam.aux)
+(./pisnicky/jachcipoezii.aux) (./pisnicky/jakejetohezke.aux)
+(./pisnicky/jaktosnamalaskobude.aux) (./pisnicky/japonecka.aux)
+(./pisnicky/jarmila.aux) (./pisnicky/jaro.aux) (./pisnicky/jarodelapokusy.aux)
+(./pisnicky/jarosovskypivovar.aux) (./pisnicky/jasetesimdonebe.aux)
+(./pisnicky/jastebouzitnebudu.aux) (./pisnicky/jdemzpatkydolesu.aux)
+(./pisnicky/jdoupomnejdou.aux) (./pisnicky/jedesohajzvidna.aux)
+(./pisnicky/jednohodnesevratis.aux) (./pisnicky/jednoubudemdal.aux)
+(./pisnicky/jednourano.aux) (./pisnicky/jenamteplo.aux)
+(./pisnicky/jestemichvilkuzpivej.aux) (./pisnicky/jestlitonebudelaska.aux)
+(./pisnicky/jez.aux) (./pisnicky/jezisek.aux) (./pisnicky/jinetonebude.aux)
+(./pisnicky/jozinzbazin.aux) (./pisnicky/jsemvasniva.aux)
+(./pisnicky/karavanamraku.aux) (./pisnicky/katce.aux) (./pisnicky/kayandra.aux)
+(./pisnicky/kedsomisiel.aux) (./pisnicky/kedsomisielzrana.aux)
+(./pisnicky/kdejsou.aux) (./pisnicky/kdonaplninebe.aux)
+(./pisnicky/kdovicobudepak.aux) (./pisnicky/kdybybylamorava.aux)
+(./pisnicky/kdybybylbavorov.aux) (./pisnicky/kdybychbylaptackem.aux)
+(./pisnicky/kdybychbylavlastovkou.aux) (./pisnicky/kdybysevkomnatach.aux)
+(./pisnicky/kdybytadybylatakovapanenka.aux)
+(./pisnicky/kdyzjsembylchlapecmalej.aux) (./pisnicky/kdyzmebralizavojaka.aux)
+(./pisnicky/kdyznapavoukasedneblues.aux) (./pisnicky/kdyzprijdouchvile.aux)
+(./pisnicky/kdyzsemselzhradista.aux) (./pisnicky/kdyzsezamilujekun.aux)
+(./pisnicky/kloboukvekrovi.aux) (./pisnicky/kluciklucisklukama.aux)
+(./pisnicky/kluziste.aux) (./pisnicky/koberecek.aux)
+(./pisnicky/kocourseschoulilnatvujklin.aux) (./pisnicky/kockanaokne.aux)
+(./pisnicky/kolenasejchalupecky.aux) (./pisnicky/kolobezka.aux)
+(./pisnicky/kometa.aux) (./pisnicky/koukamjakcelazemevstava.aux)
+(./pisnicky/kovbojuvnarek.aux) (./pisnicky/kozel.aux)
+(./pisnicky/krajinaposedlatmou.aux) (./pisnicky/kralaklaun.aux)
+(./pisnicky/kratkypopisleta.aux) (./pisnicky/kravykravy.aux)
+(./pisnicky/krutavalka.aux) (./pisnicky/kumbaya.aux)
+(./pisnicky/kuptesihrebeny.aux) (./pisnicky/labamba.aux)
+(./pisnicky/ladovskazima.aux) (./pisnicky/ladycarneval.aux)
+(./pisnicky/lachtani.aux) (./pisnicky/laskajetusnami.aux) (./pisnicky/lasko.aux
+) (./pisnicky/laskomajastunu.aux) (./pisnicky/laughingontheoutside.aux)
+(./pisnicky/layla.aux) (./pisnicky/leavingonajetplane.aux)
+(./pisnicky/letadozravani.aux) (./pisnicky/letelybacily.aux)
+(./pisnicky/letitbe.aux) (./pisnicky/letniukolebavka.aux)
+(./pisnicky/letochovahospudecka.aux) (./pisnicky/letosmonikou.aux)
+(./pisnicky/linda.aux) (./pisnicky/litaliano.aux) (./pisnicky/littlebighorn.aux
+) (./pisnicky/livingnextdoortoalice.aux) (./pisnicky/loddeti.aux)
+(./pisnicky/lojzaaliza.aux) (./pisnicky/lonelystranger.aux)
+(./pisnicky/lovemetender.aux) (./pisnicky/macpherson.aux) (./pisnicky/majak.aux
+) (./pisnicky/maleceskeblues.aux) (./pisnicky/malekote.aux)
+(./pisnicky/malujzaseobrazky.aux) (./pisnicky/mamdomakocku.aux)
+(./pisnicky/mamincinpernik.aux) (./pisnicky/mammalystan.aux)
+(./pisnicky/mamosvazmimujranec.aux) (./pisnicky/mamprimaden.aux)
+(./pisnicky/mamutikrik.aux) (./pisnicky/margot.aux)
+(./pisnicky/marjankomarjanko.aux) (./pisnicky/marie.aux)
+(./pisnicky/marnivasestrenice.aux) (./pisnicky/maschutmajoranky.aux)
+(./pisnicky/masirujunafrancuza.aux) (./pisnicky/mecvrucemam.aux)
+(./pisnicky/medicinman.aux) (./pisnicky/medvedinevedi.aux)
+(./pisnicky/melanaocichbryle.aux) (./pisnicky/mezihorami.aux)
+(./pisnicky/mezinarodni.aux) (./pisnicky/mikymauz.aux)
+(./pisnicky/milencivtexaskach.aux) (./pisnicky/milionar.aux)
+(./pisnicky/minulost.aux) (./pisnicky/mlecnybar.aux) (./pisnicky/mlyny.aux)
+(./pisnicky/mnisijsoutisi.aux) (./pisnicky/mobilizace.aux)
+(./pisnicky/mojiprvnimuze.aux) (./pisnicky/montgomery.aux)
+(./pisnicky/morituritesalutant.aux) (./pisnicky/morseovka.aux)
+(./pisnicky/moskevskavirtualka.aux) (./pisnicky/mosty.aux)
+(./pisnicky/motyl.aux) (./pisnicky/moudobrouzpravuhlasej.aux)
+(./pisnicky/mravencivkredenci.aux) (./pisnicky/mravenciukolebavka.aux)
+(./pisnicky/muzikanticodelate.aux) (./pisnicky/muzinejvicslusisolo.aux)
+(./pisnicky/mys.aux) (./pisnicky/nacekane.aux) (./pisnicky/nacopojdemdomov.aux)
+(./pisnicky/nadejeatouhy.aux) (./pisnicky/nadejilaskouavirou.aux)
+(./pisnicky/nagasakihirosima.aux) (./pisnicky/nahorachstudenky.aux)
+(./pisnicky/nakamenikamen.aux) (./pisnicky/nakolena.aux) (./pisnicky/namest.aux
+) (./pisnicky/namornicka.aux) (./pisnicky/namornik.aux)
+(./pisnicky/namsestalonecoprekrasneho.aux) (./pisnicky/nancymulligan.aux)
+(./pisnicky/napradedusnezi.aux) (./pisnicky/narozloucenimypoteseni.aux)
+(./pisnicky/nashledanoukrokodyle.aux) (./pisnicky/nashville.aux)
+(./pisnicky/natechpanskychlukach.aux) (./pisnicky/natusvatukaterinu.aux)
+(./pisnicky/navode.aux) (./pisnicky/nausniceztresni.aux)
+(./pisnicky/nebenazemi.aux) (./pisnicky/necoolasce.aux)
+(./pisnicky/nedalekoodtrencina.aux) (./pisnicky/nechtezvonyznit.aux)
+(./pisnicky/nejdelsivlak.aux) (./pisnicky/nejlipjimbylo.aux)
+(./pisnicky/nekdopijelih.aux) (./pisnicky/nemusibejt.aux)
+(./pisnicky/nenivsechnoparada.aux) (./pisnicky/neopatrnykrecek.aux)
+(./pisnicky/nepijjanonepijvodu.aux) (./pisnicky/netusim.aux)
+(./pisnicky/nevadi.aux) (./pisnicky/niagara.aux) (./pisnicky/nictolikneboli.aux
+) (./pisnicky/noaco.aux) (./pisnicky/nobodyknowsyouwhenyouredownandout.aux)
+(./pisnicky/noe.aux) (./pisnicky/nomoreauctionblockforme.aux)
+(./pisnicky/norwegianwood.aux) (./pisnicky/nosorozec.aux)
+(./pisnicky/nowhereman.aux) (./pisnicky/obladioblada.aux)
+(./pisnicky/odecita.aux) (./pisnicky/odopavyjeduvozy.aux)
+(./pisnicky/ohfreedom.aux) (./pisnicky/ohsusanna.aux)
+(./pisnicky/okolohradce.aux) (./pisnicky/okor.aux)
+(./pisnicky/oldtimereligion.aux) (./pisnicky/olivertwist.aux)
+(./pisnicky/olomouc.aux) (./pisnicky/oneofus.aux)
+(./pisnicky/oranzovyexpres.aux) (./pisnicky/orlice.aux) (./pisnicky/osmichu.aux
+) (./pisnicky/ostravo.aux) (./pisnicky/outsiderwaltz.aux)
+(./pisnicky/padalyhvezdy.aux) (./pisnicky/pandoktorjanousek.aux)
+(./pisnicky/paneprezidente.aux) (./pisnicky/panubohudooken.aux)
+(./pisnicky/paradaI.aux) (./pisnicky/paradaII.aux)
+(./pisnicky/parhavranichcopanku.aux) (./pisnicky/partazrancey.aux)
+(./pisnicky/pata.aux) (./pisnicky/peklavdolky.aux) (./pisnicky/pennylane.aux)
+(./pisnicky/penzioncesko.aux) (./pisnicky/pepita.aux)
+(./pisnicky/perinamastyryrozky.aux) (./pisnicky/pijtevodu.aux)
+(./pisnicky/pisencomeucillistopad.aux) (./pisnicky/pisenokoni.aux)
+(./pisnicky/pisenorose.aux) (./pisnicky/pisenprace.aux)
+(./pisnicky/pisenzhrzenehotrampa.aux) (./pisnicky/piskajicicikan.aux)
+(./pisnicky/plavalahusickapodunaji.aux) (./pisnicky/pocestny.aux)
+(./pisnicky/poddubemzadubem.aux) (./pisnicky/podnasimokynkem.aux)
+(./pisnicky/podzim.aux) (./pisnicky/podzimniplihal.aux)
+(./pisnicky/podzimnispiritual.aux) (./pisnicky/pohadka.aux)
+(./pisnicky/pohoda.aux) (./pisnicky/pochodamerickychnamorniku.aux)
+(./pisnicky/pochodmarodu.aux) (./pisnicky/pojdmespat.aux)
+(./pisnicky/porekadla.aux) (./pisnicky/poslednikovboj.aux)
+(./pisnicky/potopa.aux) (./pisnicky/potrikratsomnaokenkotukal.aux)
+(./pisnicky/poutnikadivka.aux) (./pisnicky/povestehovejs.aux)
+(./pisnicky/povidej.aux) (./pisnicky/prahaprcice.aux)
+(./pisnicky/prachovskeskaly.aux) (./pisnicky/praminekvlasu.aux)
+(./pisnicky/prazce.aux) (./pisnicky/pridijanoknam.aux) (./pisnicky/prodavac.aux
+) (./pisnicky/prodavacslonu.aux) (./pisnicky/proklatejvuz.aux)
+(./pisnicky/promeny.aux) (./pisnicky/prosimteholka.aux) (./pisnicky/prsi.aux)
+(./pisnicky/predsusedovym.aux) (./pisnicky/prejelijsmeslepici.aux)
+(./pisnicky/privozskaput.aux) (./pisnicky/priznavam.aux)
+(./pisnicky/psicenazrzla.aux) (./pisnicky/pterodaktylus.aux)
+(./pisnicky/puffthemagicdragon.aux) (./pisnicky/pulnocni.aux)
+(./pisnicky/radasemiluje.aux) (./pisnicky/radchodimnapostu.aux)
+(./pisnicky/radsebrouzdamrosou.aux) (./pisnicky/raketounamars.aux)
+(./pisnicky/ranavtrave.aux) (./pisnicky/rande.aux)
+(./pisnicky/reddwarftheme.aux) (./pisnicky/redrivervalley.aux)
+(./pisnicky/reklamanaticho.aux) (./pisnicky/rezrezrez.aux)
+(./pisnicky/ringoffire.aux) (./pisnicky/rocknrollprobeethovena.aux)
+(./pisnicky/rockyraccoon.aux) (./pisnicky/rodneudoli.aux)
+(./pisnicky/romance16leta.aux) (./pisnicky/rosanakolejich.aux)
+(./pisnicky/rovnoujotadyrovnou.aux) (./pisnicky/roztrhanachalupka.aux)
+(./pisnicky/rubikovakostka.aux) (./pisnicky/rutysutyarizonatexas.aux)
+(./pisnicky/ruzeztexasu.aux) (./pisnicky/ruzicka.aux)
+(./pisnicky/rychlikjededoprahy.aux) (./pisnicky/ryljencelejdenryl.aux)
+(./pisnicky/rekalasky.aux) (./pisnicky/reknikdetykytkyjsou.aux)
+(./pisnicky/ridictentvrdejchlebama.aux) (./pisnicky/salome.aux)
+(./pisnicky/samsnohaminastole.aux) (./pisnicky/samuraj.aux)
+(./pisnicky/santalucia.aux) (./pisnicky/saraperchetiamo.aux)
+(./pisnicky/saro.aux) (./pisnicky/sbohemgalanecko.aux)
+(./pisnicky/scarboroughfair.aux) (./pisnicky/scarboroughfaircarthy.aux)
+(./pisnicky/seditopicupiana.aux) (./pisnicky/seeyoulateralligator.aux)
+(./pisnicky/senzaunperche.aux) (./pisnicky/severnivitr.aux)
+(./pisnicky/skaloskalo.aux) (./pisnicky/sklenickotysklenena.aux)
+(./pisnicky/slavicizmadridu.aux) (./pisnicky/slunecnyhrob.aux)
+(./pisnicky/slunicko.aux) (./pisnicky/snebyvalouochotou.aux)
+(./pisnicky/snidanevtrave.aux) (./pisnicky/soske.aux) (./pisnicky/soudnyden.aux
+) (./pisnicky/sousedovictonicek.aux) (./pisnicky/spanembohemidemodvas.aux)
+(./pisnicky/spimvobili.aux) (./pisnicky/spinkej.aux)
+(./pisnicky/spravnyslovo.aux) (./pisnicky/sprostyadmindusan.aux)
+(./pisnicky/stanky.aux) (./pisnicky/staraarcha.aux) (./pisnicky/starypribeh.aux
+) (./pisnicky/statistika.aux) (./pisnicky/stinkatedral.aux)
+(./pisnicky/stojihruskavsirempoli.aux) (./pisnicky/studentskahalenka.aux)
+(./pisnicky/summertime.aux) (./pisnicky/svatebnikosile.aux)
+(./pisnicky/svatoborskesirepole.aux) (./pisnicky/svazceskychbohemu.aux)
+(./pisnicky/svetsnamahoupa.aux) (./pisnicky/swingmodrezdi.aux)
+(./pisnicky/satydelajcloveka.aux) (./pisnicky/sirokyhluboky.aux)
+(./pisnicky/siryproud.aux) (./pisnicky/skodalasky.aux) (./pisnicky/skrhola.aux)
+(./pisnicky/slapejdalspiritual.aux) (./pisnicky/slapejdaltucny.aux)
+(./pisnicky/slypanenkysilnici.aux) (./pisnicky/sroubyamatice.aux)
+(./pisnicky/sss.aux) (./pisnicky/svagrmabagr.aux)
+(./pisnicky/takabystetovedela.aux) (./pisnicky/takbytjednoubouri.aux)
+(./pisnicky/takdavnojiz.aux) (./pisnicky/takjsemtady.aux)
+(./pisnicky/takjsmevandrovali.aux)
+(./pisnicky/takkratkoupisenjestenikdonenapsal.aux)
+(./pisnicky/takuzmimaholkamava.aux) (./pisnicky/tamokololevoci.aux)
+(./pisnicky/tamunebeskychbran.aux) (./pisnicky/tancujtancujvykrucaj.aux)
+(./pisnicky/tasidele.aux) (./pisnicky/tearsinheaven.aux)
+(./pisnicky/tecevodatece.aux) (./pisnicky/tenkdoneduma.aux)
+(./pisnicky/tesar.aux) (./pisnicky/tetkajulka.aux)
+(./pisnicky/thesoundofsilence.aux) (./pisnicky/thetimestheyareachangin.aux)
+(./pisnicky/thewateriswide.aux) (./pisnicky/tiamo.aux)
+(./pisnicky/tikoberstisynci.aux) (./pisnicky/timeinabottle.aux)
+(./pisnicky/tisicmil.aux) (./pisnicky/tocozbyvalasko.aux)
+(./pisnicky/tophatbarandgrill.aux) (./pisnicky/totahelpa.aux)
+(./pisnicky/totenkratvctyricatompatom.aux)
+(./pisnicky/totenkratvsedesatomosmom.aux) (./pisnicky/touha.aux)
+(./pisnicky/tramvajacka.aux) (./pisnicky/trezor.aux)
+(./pisnicky/trhvescarborough.aux) (./pisnicky/trpaslicisvatba.aux)
+(./pisnicky/trubadurska.aux) (./pisnicky/tresnezraly.aux)
+(./pisnicky/tresnicky.aux) (./pisnicky/triandele.aux) (./pisnicky/tribratri.aux
+) (./pisnicky/tricitronky.aux) (./pisnicky/tricunici.aux)
+(./pisnicky/trikrize.aux) (./pisnicky/tuneljmenemcas.aux)
+(./pisnicky/tvojesnidane.aux) (./pisnicky/twistandshout.aux)
+(./pisnicky/tyjamo.aux) (./pisnicky/ukolebavkaprokubualenku.aux)
+(./pisnicky/unasnaseveru.aux) (./pisnicky/utekljsemodmanzelkykmamince.aux)
+(./pisnicky/uzkonicekpadi.aux) (./pisnicky/uznechcisevdat.aux)
+(./pisnicky/uzsenamcaskrati.aux) (./pisnicky/uztonenapravim.aux)
+(./pisnicky/uztypilkydorezaly.aux) (./pisnicky/vadinevadi.aux)
+(./pisnicky/valcicek.aux) (./pisnicky/valkaruzi.aux) (./pisnicky/vandrovani.aux
+) (./pisnicky/vandrovni.aux) (./pisnicky/variacenarenesancnitema.aux)
+(./pisnicky/vbufetu.aux) (./pisnicky/vcelkamaja.aux) (./pisnicky/vcera.aux)
+(./pisnicky/vcerazvecera.aux) (./pisnicky/vdobrymizlym.aux)
+(./pisnicky/vecernicek.aux) (./pisnicky/vedmedalcestoma.aux)
+(./pisnicky/velicenstvokat.aux) (./pisnicky/velkyvuz.aux)
+(./pisnicky/velrybarskavyprava.aux) (./pisnicky/veronika.aux)
+(./pisnicky/veruncinapisen.aux) (./pisnicky/veskrini.aux)
+(./pisnicky/vesnickaromance.aux) (./pisnicky/vila.aux)
+(./pisnicky/vineckobile.aux) (./pisnicky/vinnetou.aux) (./pisnicky/virginie.aux
+) (./pisnicky/vitrtovi.aux) (./pisnicky/vjednymdumku.aux) (./pisnicky/vlak.aux)
+(./pisnicky/vlastovkolet.aux) (./pisnicky/vlese.aux)
+(./pisnicky/vmorijemistadost.aux) (./pisnicky/vodacomadrzinadvodou.aux)
+(./pisnicky/vodauzjesvarena.aux) (./pisnicky/vodavodenka.aux)
+(./pisnicky/vor.aux) (./pisnicky/vosa.aux) (./pisnicky/vranabuty.aux)
+(./pisnicky/vranaplihal.aux) (./pisnicky/vsinidolinecka.aux)
+(./pisnicky/vsichnijsouuzvmexiku.aux) (./pisnicky/vyletelaholubicka.aux)
+(./pisnicky/vysokyjalovec.aux) (./pisnicky/wadeinthewater.aux)
+(./pisnicky/walkingbacktohappiness.aux) (./pisnicky/waterloo.aux)
+(./pisnicky/wearethechampions.aux) (./pisnicky/wewillrockyou.aux)
+(./pisnicky/whenthesaintsgomarchingin.aux)
+(./pisnicky/workinatthecarwashblues.aux) (./pisnicky/www.idnes.aux)
+(./pisnicky/yellowsubmarine.aux) (./pisnicky/yesterday.aux)
+(./pisnicky/zabilizabili.aux) (./pisnicky/zahradaticha.aux)
+(./pisnicky/zapomenutytrumf.aux) (./pisnicky/zapomnetliva.aux)
+(./pisnicky/zasvoupravdoustat.aux) (./pisnicky/zatimcosekoupes.aux)
+(./pisnicky/zavolejtestraze.aux) (./pisnicky/zdaloseti.aux)
+(./pisnicky/zejtramamzkousku.aux) (./pisnicky/zelenefrancouzskeplane.aux)
+(./pisnicky/zeleneplane.aux) (./pisnicky/zeleneudoli.aux)
+(./pisnicky/zitraranovpet.aux) (./pisnicky/zklamanalaska.aux)
+(./pisnicky/zkratky.aux) (./pisnicky/zlataklec.aux)
+(./pisnicky/zlatestrevicky.aux) (./pisnicky/zpatkydotrenek.aux)
+(./pisnicky/zpivatatajan.aux) (./pisnicky/ztracenabackorka.aux)
+(./pisnicky/zumzumI.aux) (./pisnicky/zumzumII.aux) (./pisnicky/zustan.aux)
+(./pisnicky/zuzana.aux) (./pisnicky/zvednetekotvy.aux)
+(./pisnicky/zadnyjnevicosoudomazlice.aux) (./pisnicky/zelviblues.aux)
+(./pisnicky/zivotjejennahoda.aux) (./pisnicky/zizen.aux)
+(./pisnicky/zizniva.aux) (./obsah.aux))
+\openout1 = `zpevnik.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 97.
+LaTeX Font Info:    ... okay on input line 97.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(56.9055pt, 512.14963pt, 28.45274pt)
+* v-part:(T,H,B)=(42.67912pt, 745.46222pt, 56.9055pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=512.14963pt
+* \textheight=745.46222pt
+* \oddsidemargin=-15.36449pt
+* \evensidemargin=-15.36449pt
+* \topmargin=-66.59087pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=57.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count309
+\scratchdimen=\dimen271
+\scratchbox=\box105
+\nofMPsegments=\count310
+\nofMParguments=\count311
+\everyMPshowfont=\toks33
+\MPscratchCnt=\count312
+\MPscratchDim=\dimen272
+\MPnumerator=\count313
+\makeMPintoPDFobject=\count314
+\everyMPtoPDFconversion=\toks34
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package hyperref Info: Link coloring ON on input line 97.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
+
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count315
+)
+LaTeX Info: Redefining \ref on input line 97.
+LaTeX Info: Redefining \pageref on input line 97.
+LaTeX Info: Redefining \nameref on input line 97.
+
+(./zpevnik.out) (./zpevnik.out)
+\@outlinefile=\write4
+\openout4 = `zpevnik.out'.
+
+\openout2 = `preamble/obalka.aux'.
+
+ (./preamble/obalka.tex
+*geometry* verbose mode - [ newgeometry ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(89.62709pt, 479.42804pt, 28.45274pt)
+* v-part:(T,H,B)=(101.40665pt, 715.18745pt, 28.45274pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=479.42804pt
+* \textheight=715.18745pt
+* \oddsidemargin=17.3571pt
+* \evensidemargin=17.3571pt
+* \topmargin=-7.86334pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=57.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+<obrazky/titpic.jpg, id=7, 2814.515pt x 3979.86874pt>
+File: obrazky/titpic.jpg Graphic file (type jpg)
+<use obrazky/titpic.jpg>
+Package pdftex.def Info: obrazky/titpic.jpg  used on input line 3.
+(pdftex.def)             Requested size: 597.5075pt x 845.02776pt.
+ [1
+
+
+
+ <./obrazky/titpic.JPG>]) [2
+
+
+
+
+]
+\openout2 = `preamble/patitul.aux'.
+
+ (./preamble/patitul.tex [3
+
+
+{/usr/share/texlive/texmf-var/fonts/map/pdftex/updmap/pdftex.map}])
+\openout2 = `preamble/vydavatelskyzaznam.aux'.
+
+ (./preamble/vydavatelskyzaznam.tex
+LaTeX Font Info:    Trying to load font information for U+msa on input line 10.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 10.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [4
+
+
+
+])
+\openout2 = `preamble/titulnilist.aux'.
+
+
+(./preamble/titulnilist.tex
+LaTeX Font Info:    Trying to load font information for T1+frc on input line 5.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/frcursive/t1frc.fd
+File: t1frc.fd 2004/06/12 French Cursive font definition
+) [5
+
+
+
+])
+\openout2 = `preamble/dedikace.aux'.
+
+
+(./preamble/dedikace.tex [6
+
+
+
+])
+\openout2 = `preamble/uvod.aux'.
+
+ (./preamble/uvod.tex
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
+.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+) [7
+
+
+
+])
+\openout2 = `pisnicky/abychtuzil.aux'.
+
+
+(./pisnicky/abychtuzil.tex [8
+
+
+
+
+])
+\openout2 = `pisnicky/acrosstheuniverse.aux'.
+
+ (./pisnicky/acrosstheuniverse.tex
+<scores/acrosstheuniverse.pdf, id=67, 568.93553pt x 93.21826pt>
+File: scores/acrosstheuniverse.pdf Graphic file (type pdf)
+<use scores/acrosstheuniverse.pdf>
+Package pdftex.def Info: scores/acrosstheuniverse.pdf  used on input line 11.
+(pdftex.def)             Requested size: 515.0pt x 84.3892pt.
+ [9
+
+
+
+ <./scores/acrosstheuniverse.pdf>])
+\openout2 = `pisnicky/ahorsewithnoname.aux'.
+
+ (./pisnicky/ahorsewithnoname.tex [10
+
+
+
+])
+\openout2 = `pisnicky/aintnograve.aux'.
+
+
+(./pisnicky/aintnograve.tex [11
+
+
+
+])
+\openout2 = `pisnicky/ajatakadzivocka.aux'.
+
+ (./pisnicky/ajatakadzivocka.tex [12
+
+
+
+])
+\openout2 = `pisnicky/alenkavrisidivu.aux'.
+
+
+(./pisnicky/alenkavrisidivu.tex [13
+
+
+
+])
+\openout2 = `pisnicky/alisongross.aux'.
+
+ (./pisnicky/alisongross.tex [14
+
+
+
+])
+\openout2 = `pisnicky/allihavetodoisdream.aux'.
+
+
+(./pisnicky/allihavetodoisdream.tex [15
+
+
+
+])
+\openout2 = `pisnicky/allmyloving.aux'.
+
+ (./pisnicky/allmyloving.tex [16
+
+
+
+])
+\openout2 = `pisnicky/allyouneedislove.aux'.
+
+
+(./pisnicky/allyouneedislove.tex [17
+
+
+
+])
+\openout2 = `pisnicky/amazonka.aux'.
+
+ (./pisnicky/amazonka.tex [18
+
+
+
+])
+\openout2 = `pisnicky/amerika.aux'.
+
+
+(./pisnicky/amerika.tex [19
+
+
+
+])
+\openout2 = `pisnicky/andel.aux'.
+
+ (./pisnicky/andel.tex [20
+
+
+
+])
+\openout2 = `pisnicky/andelska.aux'.
+
+
+(./pisnicky/andelska.tex [21
+
+
+
+])
+\openout2 = `pisnicky/anickadusickanekasli.aux'.
+
+ (./pisnicky/anickadusickanekasli.tex [22
+
+
+
+])
+\openout2 = `pisnicky/apak.aux'.
+
+
+(./pisnicky/apak.tex [23
+
+
+
+])
+\openout2 = `pisnicky/auldlangsyne.aux'.
+
+ (./pisnicky/auldlangsyne.tex [24
+
+
+
+])
+\openout2 = `pisnicky/autobusyprijizdeji.aux'.
+
+
+(./pisnicky/autobusyprijizdeji.tex [25
+
+
+
+])
+\openout2 = `pisnicky/autumnleaves.aux'.
+
+ (./pisnicky/autumnleaves.tex [26
+
+
+
+])
+\openout2 = `pisnicky/aznamprijdoumirubrat.aux'.
+
+
+(./pisnicky/aznamprijdoumirubrat.tex [27
+
+
+
+])
+\openout2 = `pisnicky/azseknampravovrati.aux'.
+
+ (./pisnicky/azseknampravovrati.tex
+[28
+
+
+
+])
+\openout2 = `pisnicky/aztosemnusekne.aux'.
+
+ (./pisnicky/aztosemnusekne.tex [29
+
+
+
+])
+\openout2 = `pisnicky/azvzletnouptaci.aux'.
+
+ (./pisnicky/azvzletnouptaci.tex
+[30
+
+
+
+])
+\openout2 = `pisnicky/babickamary.aux'.
+
+ (./pisnicky/babickamary.tex [31
+
+
+
+])
+\openout2 = `pisnicky/bajecnazenska.aux'.
+
+ (./pisnicky/bajecnazenska.tex [32
+
+
+
+])
+\openout2 = `pisnicky/barbarskepobrezi.aux'.
+
+
+(./pisnicky/barbarskepobrezi.tex [33
+
+
+
+])
+\openout2 = `pisnicky/barborapiseztabora.aux'.
+
+ (./pisnicky/barborapiseztabora.tex
+[34
+
+
+
+])
+\openout2 = `pisnicky/basniktenmapravoveta.aux'.
+
+ (./pisnicky/basniktenmapravoveta.tex [35
+
+
+
+])
+\openout2 = `pisnicky/batalion.aux'.
+
+ (./pisnicky/batalion.tex
+<scores/batalion.pdf, id=377, 548.29843pt x 96.55072pt>
+File: scores/batalion.pdf Graphic file (type pdf)
+<use scores/batalion.pdf>
+Package pdftex.def Info: scores/batalion.pdf  used on input line 4.
+(pdftex.def)             Requested size: 512.14963pt x 90.19196pt.
+
+[36
+
+
+
+ <./scores/batalion.pdf>])
+\openout2 = `pisnicky/bednaodwhisky.aux'.
+
+ (./pisnicky/bednaodwhisky.tex [37
+
+
+
+])
+\openout2 = `pisnicky/beranekavlk.aux'.
+
+
+(./pisnicky/beranekavlk.tex [38
+
+
+
+])
+\openout2 = `pisnicky/beskydebeskyde.aux'.
+
+ (./pisnicky/beskydebeskyde.tex [39
+
+
+
+])
+\openout2 = `pisnicky/bigbangtheorytheme.aux'.
+
+
+(./pisnicky/bigbangtheorytheme.tex [40
+
+
+
+])
+\openout2 = `pisnicky/blackbird.aux'.
+
+ (./pisnicky/blackbird.tex [41
+
+
+
+])
+\openout2 = `pisnicky/blaznovaukolebavka.aux'.
+
+
+(./pisnicky/blaznovaukolebavka.tex [42
+
+
+
+])
+\openout2 = `pisnicky/blazekI.aux'.
+
+ (./pisnicky/blazekI.tex [43
+
+
+
+])
+\openout2 = `pisnicky/blazekII.aux'.
+
+
+(./pisnicky/blazekII.tex [44
+
+
+
+])
+\openout2 = `pisnicky/bluesfolsomskeveznice.aux'.
+
+ (./pisnicky/bluesfolsomskeveznice.tex [45
+
+
+
+])
+\openout2 = `pisnicky/bonsoirmademoiselleparis.aux'.
+
+
+(./pisnicky/bonsoirmademoiselleparis.tex [46
+
+
+
+])
+\openout2 = `pisnicky/botyprotilasce.aux'.
+
+ (./pisnicky/botyprotilasce.tex
+[47
+
+
+
+])
+\openout2 = `pisnicky/botyzkuzetoulavejchpsu.aux'.
+
+ (./pisnicky/botyzkuzetoulavejchpsu.tex [48
+
+
+
+])
+\openout2 = `pisnicky/bratrickuzavirejvratka.aux'.
+
+
+(./pisnicky/bratrickuzavirejvratka.tex [49
+
+
+
+])
+\openout2 = `pisnicky/breclavskakasarna.aux'.
+
+ (./pisnicky/breclavskakasarna.tex
+[50
+
+
+
+])
+\openout2 = `pisnicky/brnojezlatalod.aux'.
+
+ (./pisnicky/brnojezlatalod.tex [51
+
+
+
+])
+\openout2 = `pisnicky/budemilehkazem.aux'.
+
+ (./pisnicky/budemilehkazem.tex
+[52
+
+
+
+])
+\openout2 = `pisnicky/buraky.aux'.
+
+ (./pisnicky/buraky.tex [53
+
+
+
+])
+\openout2 = `pisnicky/carminaamorosa.aux'.
+
+ (./pisnicky/carminaamorosa.tex [54
+
+
+
+])
+\openout2 = `pisnicky/codelastodelejrad.aux'.
+
+
+(./pisnicky/codelastodelejrad.tex [55
+
+
+
+])
+\openout2 = `pisnicky/cojsemmeldneskobedu.aux'.
+
+ (./pisnicky/cojsemmeldneskobedu.tex
+[56
+
+
+
+])
+\openout2 = `pisnicky/cojstehasici.aux'.
+
+ (./pisnicky/cojstehasici.tex [57
+
+
+
+])
+\openout2 = `pisnicky/cosatosupoce.aux'.
+
+ (./pisnicky/cosatosupoce.tex [58
+
+
+
+])
+\openout2 = `pisnicky/coztebebude.aux'.
+
+
+(./pisnicky/coztebebude.tex [59
+
+
+
+])
+\openout2 = `pisnicky/carodejnicezamesbury.aux'.
+
+ (./pisnicky/carodejnicezamesbury.tex [60
+
+
+
+])
+\openout2 = `pisnicky/casysemeni.aux'.
+
+
+(./pisnicky/casysemeni.tex [61
+
+
+
+])
+\openout2 = `pisnicky/ceresne.aux'.
+
+ (./pisnicky/ceresne.tex [62
+
+
+
+])
+\openout2 = `pisnicky/ceresnicky.aux'.
+
+
+(./pisnicky/ceresnicky.tex [63
+
+
+
+])
+\openout2 = `pisnicky/cernadira.aux'.
+
+ (./pisnicky/cernadira.tex [64
+
+
+
+])
+\openout2 = `pisnicky/cernaostrava.aux'.
+
+
+(./pisnicky/cernaostrava.tex [65
+
+
+
+])
+\openout2 = `pisnicky/cernejpasazer.aux'.
+
+ (./pisnicky/cernejpasazer.tex [66
+
+
+
+])
+\openout2 = `pisnicky/cerneocijdetespat.aux'.
+
+
+(./pisnicky/cerneocijdetespat.tex [67
+
+
+
+])
+\openout2 = `pisnicky/cernosskeghetto.aux'.
+
+ (./pisnicky/cernosskeghetto.tex
+[68
+
+
+
+])
+\openout2 = `pisnicky/cernymuz.aux'.
+
+ (./pisnicky/cernymuz.tex [69
+
+
+
+])
+\openout2 = `pisnicky/certvikdykotvyzvednem.aux'.
+
+ (./pisnicky/certvikdykotvyzvednem.tex
+[70
+
+
+
+])
+\openout2 = `pisnicky/cervenareka.aux'.
+
+ (./pisnicky/cervenareka.tex [71
+
+
+
+])
+\openout2 = `pisnicky/cervenarekatucny.aux'.
+
+ (./pisnicky/cervenarekatucny.tex
+[72
+
+
+
+])
+\openout2 = `pisnicky/ceskapisnicka.aux'.
+
+ (./pisnicky/ceskapisnicka.tex [73
+
+
+
+])
+\openout2 = `pisnicky/cizesutokone.aux'.
+
+ (./pisnicky/cizesutokone.tex [74
+
+
+
+])
+\openout2 = `pisnicky/cmelak.aux'.
+
+
+(./pisnicky/cmelak.tex [75
+
+
+
+])
+\openout2 = `pisnicky/ctrnactkubiku.aux'.
+
+ (./pisnicky/ctrnactkubiku.tex [76
+
+
+
+])
+\openout2 = `pisnicky/dajana.aux'.
+
+
+(./pisnicky/dajana.tex [77
+
+
+
+])
+\openout2 = `pisnicky/daltouvodou.aux'.
+
+ (./pisnicky/daltouvodou.tex [78
+
+
+
+])
+\openout2 = `pisnicky/dameklukoviskoly.aux'.
+
+
+(./pisnicky/dameklukoviskoly.tex [79
+
+
+
+])
+\openout2 = `pisnicky/darmodej.aux'.
+
+ (./pisnicky/darmodej.tex [80
+
+
+
+])
+\openout2 = `pisnicky/davidagolias.aux'.
+
+
+(./pisnicky/davidagolias.tex [81
+
+
+
+])
+\openout2 = `pisnicky/deepriverblues.aux'.
+
+ (./pisnicky/deepriverblues.tex
+<scores/deepriverblues.pdf, id=832, 561.62827pt x 290.66591pt>
+File: scores/deepriverblues.pdf Graphic file (type pdf)
+<use scores/deepriverblues.pdf>
+Package pdftex.def Info: scores/deepriverblues.pdf  used on input line 9.
+(pdftex.def)             Requested size: 515.0pt x 266.53326pt.
+ [82
+
+
+
+ <./scores/deepriverblues.pdf>])
+\openout2 = `pisnicky/dejmivicsvelasky.aux'.
+
+ (./pisnicky/dejmivicsvelasky.tex [83
+
+
+
+])
+\openout2 = `pisnicky/delamecomuzem.aux'.
+
+
+(./pisnicky/delamecomuzem.tex [84
+
+
+
+])
+\openout2 = `pisnicky/delani.aux'.
+
+ (./pisnicky/delani.tex [85
+
+
+
+])
+\openout2 = `pisnicky/depese.aux'.
+
+
+(./pisnicky/depese.tex [86
+
+
+
+])
+\openout2 = `pisnicky/detijdoukamjeposlou.aux'.
+
+ (./pisnicky/detijdoukamjeposlou.tex [87
+
+
+
+])
+\openout2 = `pisnicky/dezo.aux'.
+
+
+(./pisnicky/dezo.tex [88
+
+
+
+])
+\openout2 = `pisnicky/digadigadoo.aux'.
+
+ (./pisnicky/digadigadoo.tex [89
+
+
+
+])
+\openout2 = `pisnicky/digadigadoplihal.aux'.
+
+
+(./pisnicky/digadigadoplihal.tex [90
+
+
+
+])
+\openout2 = `pisnicky/digadigadospiritual.aux'.
+
+ (./pisnicky/digadigadospiritual.tex
+[91
+
+
+
+])
+\openout2 = `pisnicky/dobreminenarada.aux'.
+
+ (./pisnicky/dobreminenarada.tex [92
+
+
+
+])
+\openout2 = `pisnicky/dobrodruzstvisbohempanem.aux'.
+
+
+(./pisnicky/dobrodruzstvisbohempanem.tex [93
+
+
+
+])
+\openout2 = `pisnicky/dokudsezpiva.aux'.
+
+ (./pisnicky/dokudsezpiva.tex
+[94
+
+
+
+])
+\openout2 = `pisnicky/donebes.aux'.
+
+ (./pisnicky/donebes.tex [95
+
+
+
+])
+\openout2 = `pisnicky/doneygal.aux'.
+
+ (./pisnicky/doneygal.tex [96
+
+
+
+])
+\openout2 = `pisnicky/dontstopmenow.aux'.
+
+
+(./pisnicky/dontstopmenow.tex [97
+
+
+
+])
+\openout2 = `pisnicky/dorajenevedemost.aux'.
+
+ (./pisnicky/dorajenevedemost.tex [98
+
+
+
+])
+\openout2 = `pisnicky/doyouhearthepeoplesing.aux'.
+
+
+(./pisnicky/doyouhearthepeoplesing.tex [99
+
+
+
+])
+\openout2 = `pisnicky/drakodbileskaly.aux'.
+
+ (./pisnicky/drakodbileskaly.tex
+[100
+
+
+
+])
+\openout2 = `pisnicky/drunkensailor.aux'.
+
+ (./pisnicky/drunkensailor.tex [101
+
+
+
+])
+\openout2 = `pisnicky/duhovavila.aux'.
+
+ (./pisnicky/duhovavila.tex [102
+
+
+
+])
+\openout2 = `pisnicky/dumuvychazejicihoslunce.aux'.
+
+
+(./pisnicky/dumuvychazejicihoslunce.tex [103
+
+
+
+])
+\openout2 = `pisnicky/dvahavrani.aux'.
+
+ (./pisnicky/dvahavrani.tex
+[104
+
+
+
+])
+\openout2 = `pisnicky/dvakrat.aux'.
+
+ (./pisnicky/dvakrat.tex
+<scores/dvakrat.pdf, id=1096, 572.93044pt x 69.9112pt>
+File: scores/dvakrat.pdf Graphic file (type pdf)
+<use scores/dvakrat.pdf>
+Package pdftex.def Info: scores/dvakrat.pdf  used on input line 9.
+(pdftex.def)             Requested size: 515.0pt x 62.848pt.
+ [105
+
+
+
+ <./scores/dvakrat.pdf>])
+\openout2 = `pisnicky/dvebaby.aux'.
+
+
+(./pisnicky/dvebaby.tex [106
+
+
+
+])
+\openout2 = `pisnicky/dablovynamluvy.aux'.
+
+ (./pisnicky/dablovynamluvy.tex [107
+
+
+
+])
+\openout2 = `pisnicky/eduvzalikfotografovi.aux'.
+
+
+(./pisnicky/eduvzalikfotografovi.tex [108
+
+
+
+])
+\openout2 = `pisnicky/elcondorpasa.aux'.
+
+ (./pisnicky/elcondorpasa.tex
+[109
+
+
+
+])
+\openout2 = `pisnicky/eldorado.aux'.
+
+ (./pisnicky/eldorado.tex [110
+
+
+
+])
+\openout2 = `pisnicky/elektrickyvalcik.aux'.
+
+ (./pisnicky/elektrickyvalcik.tex
+[111
+
+
+
+])
+\openout2 = `pisnicky/ejbozemuj.aux'.
+
+ (./pisnicky/ejbozemuj.tex [112
+
+
+
+])
+\openout2 = `pisnicky/ejhorahora.aux'.
+
+ (./pisnicky/ejhorahora.tex [113
+
+
+
+])
+\openout2 = `pisnicky/ejtahuckahospoda.aux'.
+
+
+(./pisnicky/ejtahuckahospoda.tex [114
+
+
+
+])
+\openout2 = `pisnicky/ejzomrelamizena.aux'.
+
+ (./pisnicky/ejzomrelamizena.tex
+[115
+
+
+
+])
+\openout2 = `pisnicky/escesijapoharvinazaplatim.aux'.
+
+ (./pisnicky/escesijapoharvinazaplatim.tex [116
+
+
+
+])
+\openout2 = `pisnicky/escesomsaneozenil.aux'.
+
+
+(./pisnicky/escesomsaneozenil.tex [117
+
+
+
+])
+\openout2 = `pisnicky/estebylystyrytydnedohodu.aux'.
+
+
+(./pisnicky/estebylystyrytydnedohodu.tex [118
+
+
+
+])
+\openout2 = `pisnicky/estevinkonevykyslo.aux'.
+
+
+(./pisnicky/estevinkonevykyslo.tex [119
+
+
+
+])
+\openout2 = `pisnicky/farao.aux'.
+
+ (./pisnicky/farao.tex [120
+
+
+
+])
+\openout2 = `pisnicky/feleenazelpasa.aux'.
+
+
+(./pisnicky/feleenazelpasa.tex [121
+
+
+
+])
+\openout2 = `pisnicky/felicita.aux'.
+
+ (./pisnicky/felicita.tex [122
+
+
+
+])
+\openout2 = `pisnicky/fi-li-mi.aux'.
+
+
+(./pisnicky/fi-li-mi.tex [123
+
+
+
+])
+\openout2 = `pisnicky/fiveshortminutes.aux'.
+
+ (./pisnicky/fiveshortminutes.tex [124
+
+
+
+])
+\openout2 = `pisnicky/flymetothemoon.aux'.
+
+
+(./pisnicky/flymetothemoon.tex [125
+
+
+
+])
+\openout2 = `pisnicky/folsomprisonblues.aux'.
+
+ (./pisnicky/folsomprisonblues.tex
+[126
+
+
+
+])
+\openout2 = `pisnicky/fornoone.aux'.
+
+ (./pisnicky/fornoone.tex [127
+
+
+
+])
+\openout2 = `pisnicky/fotbal.aux'.
+
+ (./pisnicky/fotbal.tex [128
+
+
+
+])
+\openout2 = `pisnicky/frankiedlouhan.aux'.
+
+
+(./pisnicky/frankiedlouhan.tex [129
+
+
+
+])
+\openout2 = `pisnicky/frantisek.aux'.
+
+ (./pisnicky/frantisek.tex [130
+
+
+
+])
+\openout2 = `pisnicky/frydekmistek.aux'.
+
+
+(./pisnicky/frydekmistek.tex [131
+
+
+
+])
+\openout2 = `pisnicky/gilotina.aux'.
+
+ (./pisnicky/gilotina.tex [132
+
+
+
+])
+\openout2 = `pisnicky/girl.aux'.
+
+
+(./pisnicky/girl.tex [133
+
+
+
+])
+\openout2 = `pisnicky/greensleeves.aux'.
+
+ (./pisnicky/greensleeves.tex [134
+
+
+
+])
+\openout2 = `pisnicky/gronskapisnicka.aux'.
+
+
+(./pisnicky/gronskapisnicka.tex [135
+
+
+
+])
+\openout2 = `pisnicky/guadalcanal.aux'.
+
+ (./pisnicky/guadalcanal.tex [136
+
+
+
+])
+\openout2 = `pisnicky/guantanamo.aux'.
+
+
+(./pisnicky/guantanamo.tex [137
+
+
+
+])
+\openout2 = `pisnicky/hadejkdomipise.aux'.
+
+ (./pisnicky/hadejkdomipise.tex [138
+
+
+
+])
+\openout2 = `pisnicky/hajnyjelesapan.aux'.
+
+
+(./pisnicky/hajnyjelesapan.tex [139
+
+
+
+])
+\openout2 = `pisnicky/harmonikarska.aux'.
+
+ (./pisnicky/harmonikarska.tex [140
+
+
+
+])
+\openout2 = `pisnicky/haubilouplani.aux'.
+
+
+(./pisnicky/haubilouplani.tex [141
+
+
+
+])
+\openout2 = `pisnicky/hejholazpivejsisam.aux'.
+
+ (./pisnicky/hejholazpivejsisam.tex
+[142
+
+
+
+])
+\openout2 = `pisnicky/hejpanekrali.aux'.
+
+ (./pisnicky/hejpanekrali.tex [143
+
+
+
+])
+\openout2 = `pisnicky/hejteto.aux'.
+
+ (./pisnicky/hejteto.tex [144
+
+
+
+])
+\openout2 = `pisnicky/help.aux'.
+
+
+(./pisnicky/help.tex [145
+
+
+
+])
+\openout2 = `pisnicky/herecomesthesun.aux'.
+
+ (./pisnicky/herecomesthesun.tex
+<scores/herecomesthesun.pdf, id=1507, 507.01419pt x 78.19212pt>
+File: scores/herecomesthesun.pdf Graphic file (type pdf)
+<use scores/herecomesthesun.pdf>
+Package pdftex.def Info: scores/herecomesthesun.pdf  used on input line 15.
+(pdftex.def)             Requested size: 460.93153pt x 71.08691pt.
+ [146
+
+
+
+ <./scores/herecomesthesun.pdf>])
+\openout2 = `pisnicky/heyhey.aux'.
+
+ (./pisnicky/heyhey.tex
+<scores/heyhey.pdf, id=1533, 570.73222pt x 314.71579pt>
+File: scores/heyhey.pdf Graphic file (type pdf)
+<use scores/heyhey.pdf>
+Package pdftex.def Info: scores/heyhey.pdf  used on input line 9.
+(pdftex.def)             Requested size: 512.14963pt x 282.43001pt.
+ [147
+
+
+
+ <./scores/heyhey.pdf>])
+\openout2 = `pisnicky/heyjude.aux'.
+
+
+(./pisnicky/heyjude.tex [148
+
+
+
+])
+\openout2 = `pisnicky/hittheroadjack.aux'.
+
+ (./pisnicky/hittheroadjack.tex [149
+
+
+
+])
+\openout2 = `pisnicky/hladiny.aux'.
+
+
+(./pisnicky/hladiny.tex [150
+
+
+
+])
+\openout2 = `pisnicky/hlavnezejsmenavzduchu.aux'.
+
+ (./pisnicky/hlavnezejsmenavzduchu.tex [151
+
+
+
+])
+\openout2 = `pisnicky/hledamdevcenanedeli.aux'.
+
+
+(./pisnicky/hledamdevcenanedeli.tex [152
+
+
+
+])
+\openout2 = `pisnicky/hledasezena.aux'.
+
+ (./pisnicky/hledasezena.tex [153
+
+
+
+])
+\openout2 = `pisnicky/hlidackrav.aux'.
+
+
+(./pisnicky/hlidackrav.tex [154
+
+
+
+])
+\openout2 = `pisnicky/hlupakunajdute.aux'.
+
+ (./pisnicky/hlupakunajdute.tex [155
+
+
+
+])
+\openout2 = `pisnicky/hodiljsemflintudozita.aux'.
+
+
+(./pisnicky/hodiljsemflintudozita.tex [156
+
+
+
+])
+\openout2 = `pisnicky/hohowatanay.aux'.
+
+ (./pisnicky/hohowatanay.tex
+[157
+
+
+
+])
+\openout2 = `pisnicky/hojahoj.aux'.
+
+ (./pisnicky/hojahoj.tex [158
+
+
+
+])
+\openout2 = `pisnicky/holkyznasiskolky.aux'.
+
+ (./pisnicky/holkyznasiskolky.tex [159
+
+
+
+])
+\openout2 = `pisnicky/holubidum.aux'.
+
+
+(./pisnicky/holubidum.tex [160
+
+
+
+])
+\openout2 = `pisnicky/honkytonkyblues.aux'.
+
+ (./pisnicky/honkytonkyblues.tex [161
+
+
+
+])
+\openout2 = `pisnicky/horelalipkahorela.aux'.
+
+
+(./pisnicky/horelalipkahorela.tex [162
+
+
+
+])
+\openout2 = `pisnicky/hornicka.aux'.
+
+ (./pisnicky/hornicka.tex [163
+
+
+
+])
+\openout2 = `pisnicky/houseoftherisingsun.aux'.
+
+
+(./pisnicky/houseoftherisingsun.tex [164
+
+
+
+])
+\openout2 = `pisnicky/housertetyrody.aux'.
+
+ (./pisnicky/housertetyrody.tex
+[165
+
+
+
+])
+\openout2 = `pisnicky/hrobar.aux'.
+
+ (./pisnicky/hrobar.tex [166
+
+
+
+])
+\openout2 = `pisnicky/hudsonskysify.aux'.
+
+ (./pisnicky/hudsonskysify.tex [167
+
+
+
+])
+\openout2 = `pisnicky/huslicky.aux'.
+
+
+(./pisnicky/huslicky.tex [168
+
+
+
+])
+\openout2 = `pisnicky/hvezdanavrbe.aux'.
+
+ (./pisnicky/hvezdanavrbe.tex [169
+
+
+
+])
+\openout2 = `pisnicky/hvezdyjsoujaksedmikraskynadbrnem.aux'.
+
+
+(./pisnicky/hvezdyjsoujaksedmikraskynadbrnem.tex [170
+
+
+
+])
+\openout2 = `pisnicky/chajdamala.aux'.
+
+
+(./pisnicky/chajdamala.tex [171
+
+
+
+])
+\openout2 = `pisnicky/chaloupka.aux'.
+
+ (./pisnicky/chaloupka.tex [172
+
+
+
+])
+\openout2 = `pisnicky/chattanoogachoochoo.aux'.
+
+
+(./pisnicky/chattanoogachoochoo.tex [173
+
+
+
+])
+\openout2 = `pisnicky/chcibytpritom.aux'.
+
+ (./pisnicky/chcibytpritom.tex
+[174
+
+
+
+])
+\openout2 = `pisnicky/childrengowhereisendthee.aux'.
+
+ (./pisnicky/childrengowhereisendthee.tex [175
+
+
+
+])
+\openout2 = `pisnicky/chirpychirpycheepcheep.aux'.
+
+
+(./pisnicky/chirpychirpycheepcheep.tex [176
+
+
+
+])
+\openout2 = `pisnicky/chodimechodime.aux'.
+
+ (./pisnicky/chodimechodime.tex
+[177
+
+
+
+])
+\openout2 = `pisnicky/chodimpobroadwayi.aux'.
+
+ (./pisnicky/chodimpobroadwayi.tex [178
+
+
+
+])
+\openout2 = `pisnicky/chvalimtezemema.aux'.
+
+ (./pisnicky/chvalimtezemema.tex [179
+
+
+
+])
+\openout2 = `pisnicky/chytilajsemnapasecemotylka.aux'.
+
+ (./pisnicky/chytilajsemnapasecemotylka.tex [180
+
+
+
+])
+\openout2 = `pisnicky/idzepostaridze.aux'.
+
+
+(./pisnicky/idzepostaridze.tex [181
+
+
+
+])
+\openout2 = `pisnicky/ififell.aux'.
+
+ (./pisnicky/ififell.tex [182
+
+
+
+])
+\openout2 = `pisnicky/illbethereforyou.aux'.
+
+
+(./pisnicky/illbethereforyou.tex
+<scores/friends.pdf, id=1893, 564.60938pt x 74.56859pt>
+File: scores/friends.pdf Graphic file (type pdf)
+<use scores/friends.pdf>
+Package pdftex.def Info: scores/friends.pdf  used on input line 10.
+(pdftex.def)             Requested size: 515.0pt x 68.02135pt.
+ [183
+
+
+
+ <./scores/friends.pdf>])
+\openout2 = `pisnicky/illfollowthesun.aux'.
+
+
+(./pisnicky/illfollowthesun.tex [184
+
+
+
+])
+\openout2 = `pisnicky/imagine.aux'.
+
+ (./pisnicky/imagine.tex [185
+
+
+
+])
+\openout2 = `pisnicky/intelektualky.aux'.
+
+
+(./pisnicky/intelektualky.tex [186
+
+
+
+])
+\openout2 = `pisnicky/inthesummertime.aux'.
+
+ (./pisnicky/inthesummertime.tex [187
+
+
+
+])
+\openout2 = `pisnicky/inzenyrska.aux'.
+
+
+(./pisnicky/inzenyrska.tex [188
+
+
+
+])
+\openout2 = `pisnicky/ionlywanttobewithyou.aux'.
+
+ (./pisnicky/ionlywanttobewithyou.tex [189
+
+
+
+])
+\openout2 = `pisnicky/irenegoodnight.aux'.
+
+
+(./pisnicky/irenegoodnight.tex [190
+
+
+
+])
+\openout2 = `pisnicky/isielmacekdomalacek.aux'.
+
+ (./pisnicky/isielmacekdomalacek.tex
+[191
+
+
+
+])
+\openout2 = `pisnicky/islamarina.aux'.
+
+ (./pisnicky/islamarina.tex [192
+
+
+
+])
+\openout2 = `pisnicky/italneznatenzazrak.aux'.
+
+ (./pisnicky/italneznatenzazrak.tex
+[193
+
+
+
+])
+\openout2 = `pisnicky/jabuduchoditpospickach.aux'.
+
+ (./pisnicky/jabuduchoditpospickach.tex [194
+
+
+
+])
+\openout2 = `pisnicky/jaharfumam.aux'.
+
+ (./pisnicky/jaharfumam.tex [195
+
+
+
+])
+\openout2 = `pisnicky/jachcipoezii.aux'.
+
+ (./pisnicky/jachcipoezii.tex [196
+
+
+
+])
+\openout2 = `pisnicky/jakejetohezke.aux'.
+
+ (./pisnicky/jakejetohezke.tex
+[197
+
+
+
+])
+\openout2 = `pisnicky/jaktosnamalaskobude.aux'.
+
+ (./pisnicky/jaktosnamalaskobude.tex [198
+
+
+
+])
+\openout2 = `pisnicky/japonecka.aux'.
+
+ (./pisnicky/japonecka.tex
+[199
+
+
+
+])
+\openout2 = `pisnicky/jarmila.aux'.
+
+ (./pisnicky/jarmila.tex [200
+
+
+
+])
+\openout2 = `pisnicky/jaro.aux'.
+
+ (./pisnicky/jaro.tex [201
+
+
+
+])
+\openout2 = `pisnicky/jarodelapokusy.aux'.
+
+
+(./pisnicky/jarodelapokusy.tex [202
+
+
+
+])
+\openout2 = `pisnicky/jarosovskypivovar.aux'.
+
+ (./pisnicky/jarosovskypivovar.tex
+[203
+
+
+
+])
+\openout2 = `pisnicky/jasetesimdonebe.aux'.
+
+ (./pisnicky/jasetesimdonebe.tex [204
+
+
+
+])
+\openout2 = `pisnicky/jastebouzitnebudu.aux'.
+
+ (./pisnicky/jastebouzitnebudu.tex [205
+
+
+
+])
+\openout2 = `pisnicky/jdemzpatkydolesu.aux'.
+
+ (./pisnicky/jdemzpatkydolesu.tex [206
+
+
+
+])
+\openout2 = `pisnicky/jdoupomnejdou.aux'.
+
+ (./pisnicky/jdoupomnejdou.tex
+[207
+
+
+
+])
+\openout2 = `pisnicky/jedesohajzvidna.aux'.
+
+ (./pisnicky/jedesohajzvidna.tex [208
+
+
+
+])
+\openout2 = `pisnicky/jednohodnesevratis.aux'.
+
+
+(./pisnicky/jednohodnesevratis.tex [209
+
+
+
+])
+\openout2 = `pisnicky/jednoubudemdal.aux'.
+
+ (./pisnicky/jednoubudemdal.tex
+[210
+
+
+
+])
+\openout2 = `pisnicky/jednourano.aux'.
+
+ (./pisnicky/jednourano.tex [211
+
+
+
+])
+\openout2 = `pisnicky/jenamteplo.aux'.
+
+ (./pisnicky/jenamteplo.tex [212
+
+
+
+])
+\openout2 = `pisnicky/jestemichvilkuzpivej.aux'.
+
+
+(./pisnicky/jestemichvilkuzpivej.tex [213
+
+
+
+])
+\openout2 = `pisnicky/jestlitonebudelaska.aux'.
+
+ (./pisnicky/jestlitonebudelaska.tex [214
+
+
+
+])
+\openout2 = `pisnicky/jez.aux'.
+
+ (./pisnicky/jez.tex [215
+
+
+
+])
+\openout2 = `pisnicky/jezisek.aux'.
+
+ (./pisnicky/jezisek.tex [216
+
+
+
+])
+\openout2 = `pisnicky/jinetonebude.aux'.
+
+
+(./pisnicky/jinetonebude.tex [217
+
+
+
+])
+\openout2 = `pisnicky/jozinzbazin.aux'.
+
+ (./pisnicky/jozinzbazin.tex [218
+
+
+
+])
+\openout2 = `pisnicky/jsemvasniva.aux'.
+
+
+(./pisnicky/jsemvasniva.tex [219
+
+
+
+])
+\openout2 = `pisnicky/karavanamraku.aux'.
+
+ (./pisnicky/karavanamraku.tex [220
+
+
+
+])
+\openout2 = `pisnicky/katce.aux'.
+
+
+(./pisnicky/katce.tex [221
+
+
+
+])
+\openout2 = `pisnicky/kayandra.aux'.
+
+ (./pisnicky/kayandra.tex [222
+
+
+
+])
+\openout2 = `pisnicky/kedsomisiel.aux'.
+
+
+(./pisnicky/kedsomisiel.tex [223
+
+
+
+])
+\openout2 = `pisnicky/kedsomisielzrana.aux'.
+
+ (./pisnicky/kedsomisielzrana.tex [224
+
+
+
+])
+\openout2 = `pisnicky/kdejsou.aux'.
+
+
+(./pisnicky/kdejsou.tex [225
+
+
+
+])
+\openout2 = `pisnicky/kdonaplninebe.aux'.
+
+ (./pisnicky/kdonaplninebe.tex [226
+
+
+
+])
+\openout2 = `pisnicky/kdovicobudepak.aux'.
+
+
+(./pisnicky/kdovicobudepak.tex [227
+
+
+
+])
+\openout2 = `pisnicky/kdybybylamorava.aux'.
+
+ (./pisnicky/kdybybylamorava.tex [228
+
+
+
+])
+\openout2 = `pisnicky/kdybybylbavorov.aux'.
+
+
+(./pisnicky/kdybybylbavorov.tex [229
+
+
+
+])
+\openout2 = `pisnicky/kdybychbylaptackem.aux'.
+
+ (./pisnicky/kdybychbylaptackem.tex
+[230
+
+
+
+])
+\openout2 = `pisnicky/kdybychbylavlastovkou.aux'.
+
+ (./pisnicky/kdybychbylavlastovkou.tex [231
+
+
+
+])
+\openout2 = `pisnicky/kdybysevkomnatach.aux'.
+
+
+(./pisnicky/kdybysevkomnatach.tex [232
+
+
+
+])
+\openout2 = `pisnicky/kdybytadybylatakovapanenka.aux'.
+
+
+(./pisnicky/kdybytadybylatakovapanenka.tex [233
+
+
+
+])
+\openout2 = `pisnicky/kdyzjsembylchlapecmalej.aux'.
+
+
+(./pisnicky/kdyzjsembylchlapecmalej.tex [234
+
+
+
+])
+\openout2 = `pisnicky/kdyzmebralizavojaka.aux'.
+
+
+(./pisnicky/kdyzmebralizavojaka.tex [235
+
+
+
+])
+\openout2 = `pisnicky/kdyznapavoukasedneblues.aux'.
+
+
+(./pisnicky/kdyznapavoukasedneblues.tex [236
+
+
+
+])
+\openout2 = `pisnicky/kdyzprijdouchvile.aux'.
+
+
+(./pisnicky/kdyzprijdouchvile.tex [237
+
+
+
+])
+\openout2 = `pisnicky/kdyzsemselzhradista.aux'.
+
+ (./pisnicky/kdyzsemselzhradista.tex
+[238
+
+
+
+])
+\openout2 = `pisnicky/kdyzsezamilujekun.aux'.
+
+ (./pisnicky/kdyzsezamilujekun.tex [239
+
+
+
+])
+\openout2 = `pisnicky/kloboukvekrovi.aux'.
+
+ (./pisnicky/kloboukvekrovi.tex
+[240
+
+
+
+])
+\openout2 = `pisnicky/kluciklucisklukama.aux'.
+
+ (./pisnicky/kluciklucisklukama.tex [241
+
+
+
+])
+\openout2 = `pisnicky/kluziste.aux'.
+
+ (./pisnicky/kluziste.tex
+[242
+
+
+
+])
+\openout2 = `pisnicky/koberecek.aux'.
+
+ (./pisnicky/koberecek.tex [243
+
+
+
+])
+\openout2 = `pisnicky/kocourseschoulilnatvujklin.aux'.
+
+
+(./pisnicky/kocourseschoulilnatvujklin.tex [244
+
+
+
+])
+\openout2 = `pisnicky/kockanaokne.aux'.
+
+ (./pisnicky/kockanaokne.tex
+[245
+
+
+
+])
+\openout2 = `pisnicky/kolenasejchalupecky.aux'.
+
+ (./pisnicky/kolenasejchalupecky.tex [246
+
+
+
+])
+\openout2 = `pisnicky/kolobezka.aux'.
+
+ (./pisnicky/kolobezka.tex
+[247
+
+
+
+])
+\openout2 = `pisnicky/kometa.aux'.
+
+ (./pisnicky/kometa.tex [248
+
+
+
+])
+\openout2 = `pisnicky/koukamjakcelazemevstava.aux'.
+
+ (./pisnicky/koukamjakcelazemevstava.tex
+[249
+
+
+
+])
+\openout2 = `pisnicky/kovbojuvnarek.aux'.
+
+ (./pisnicky/kovbojuvnarek.tex [250
+
+
+
+])
+\openout2 = `pisnicky/kozel.aux'.
+
+ (./pisnicky/kozel.tex [251
+
+
+
+])
+\openout2 = `pisnicky/krajinaposedlatmou.aux'.
+
+
+(./pisnicky/krajinaposedlatmou.tex [252
+
+
+
+])
+\openout2 = `pisnicky/kralaklaun.aux'.
+
+ (./pisnicky/kralaklaun.tex [253
+
+
+
+])
+\openout2 = `pisnicky/kratkypopisleta.aux'.
+
+
+(./pisnicky/kratkypopisleta.tex [254
+
+
+
+])
+\openout2 = `pisnicky/kravykravy.aux'.
+
+ (./pisnicky/kravykravy.tex [255
+
+
+
+])
+\openout2 = `pisnicky/krutavalka.aux'.
+
+
+(./pisnicky/krutavalka.tex [256
+
+
+
+])
+\openout2 = `pisnicky/kumbaya.aux'.
+
+ (./pisnicky/kumbaya.tex [257
+
+
+
+])
+\openout2 = `pisnicky/kuptesihrebeny.aux'.
+
+
+(./pisnicky/kuptesihrebeny.tex [258
+
+
+
+])
+\openout2 = `pisnicky/labamba.aux'.
+
+ (./pisnicky/labamba.tex [259
+
+
+
+])
+\openout2 = `pisnicky/ladovskazima.aux'.
+
+
+(./pisnicky/ladovskazima.tex
+<scores/ladovskazima.pdf, id=2644, 565.93433pt x 96.54068pt>
+File: scores/ladovskazima.pdf Graphic file (type pdf)
+<use scores/ladovskazima.pdf>
+Package pdftex.def Info: scores/ladovskazima.pdf  used on input line 6.
+(pdftex.def)             Requested size: 512.14963pt x 87.37338pt.
+ [260
+
+
+
+ <./scores/ladovskazima.pdf>])
+\openout2 = `pisnicky/ladycarneval.aux'.
+
+
+(./pisnicky/ladycarneval.tex [261
+
+
+
+])
+\openout2 = `pisnicky/lachtani.aux'.
+
+ (./pisnicky/lachtani.tex [262
+
+
+
+])
+\openout2 = `pisnicky/laskajetusnami.aux'.
+
+
+(./pisnicky/laskajetusnami.tex [263
+
+
+
+])
+\openout2 = `pisnicky/lasko.aux'.
+
+ (./pisnicky/lasko.tex [264
+
+
+
+])
+\openout2 = `pisnicky/laskomajastunu.aux'.
+
+
+(./pisnicky/laskomajastunu.tex [265
+
+
+
+])
+\openout2 = `pisnicky/laughingontheoutside.aux'.
+
+ (./pisnicky/laughingontheoutside.tex
+[266
+
+
+
+])
+\openout2 = `pisnicky/layla.aux'.
+
+ (./pisnicky/layla.tex [267
+
+
+
+])
+\openout2 = `pisnicky/leavingonajetplane.aux'.
+
+ (./pisnicky/leavingonajetplane.tex [268
+
+
+
+])
+\openout2 = `pisnicky/letadozravani.aux'.
+
+
+(./pisnicky/letadozravani.tex [269
+
+
+
+])
+\openout2 = `pisnicky/letelybacily.aux'.
+
+ (./pisnicky/letelybacily.tex [270
+
+
+
+])
+\openout2 = `pisnicky/letitbe.aux'.
+
+
+(./pisnicky/letitbe.tex [271
+
+
+
+])
+\openout2 = `pisnicky/letniukolebavka.aux'.
+
+ (./pisnicky/letniukolebavka.tex [272
+
+
+
+])
+\openout2 = `pisnicky/letochovahospudecka.aux'.
+
+
+(./pisnicky/letochovahospudecka.tex [273
+
+
+
+])
+\openout2 = `pisnicky/letosmonikou.aux'.
+
+ (./pisnicky/letosmonikou.tex
+[274
+
+
+
+])
+\openout2 = `pisnicky/linda.aux'.
+
+ (./pisnicky/linda.tex [275
+
+
+
+])
+\openout2 = `pisnicky/litaliano.aux'.
+
+ (./pisnicky/litaliano.tex [276
+
+
+
+])
+\openout2 = `pisnicky/littlebighorn.aux'.
+
+
+(./pisnicky/littlebighorn.tex [277
+
+
+
+])
+\openout2 = `pisnicky/livingnextdoortoalice.aux'.
+
+ (./pisnicky/livingnextdoortoalice.tex
+[278
+
+
+
+])
+\openout2 = `pisnicky/loddeti.aux'.
+
+ (./pisnicky/loddeti.tex [279
+
+
+
+])
+\openout2 = `pisnicky/lojzaaliza.aux'.
+
+ (./pisnicky/lojzaaliza.tex [280
+
+
+
+])
+\openout2 = `pisnicky/lonelystranger.aux'.
+
+
+(./pisnicky/lonelystranger.tex
+Underfull \hbox (badness 10000) in paragraph at lines 9--10
+
+ []
+
+[281
+
+
+
+])
+\openout2 = `pisnicky/lovemetender.aux'.
+
+ (./pisnicky/lovemetender.tex [282
+
+
+
+])
+\openout2 = `pisnicky/macpherson.aux'.
+
+ (./pisnicky/macpherson.tex [283
+
+
+
+])
+\openout2 = `pisnicky/majak.aux'.
+
+
+(./pisnicky/majak.tex [284
+
+
+
+])
+\openout2 = `pisnicky/maleceskeblues.aux'.
+
+ (./pisnicky/maleceskeblues.tex [285
+
+
+
+])
+\openout2 = `pisnicky/malekote.aux'.
+
+
+(./pisnicky/malekote.tex [286
+
+
+
+])
+\openout2 = `pisnicky/malujzaseobrazky.aux'.
+
+ (./pisnicky/malujzaseobrazky.tex [287
+
+
+
+])
+\openout2 = `pisnicky/mamdomakocku.aux'.
+
+
+(./pisnicky/mamdomakocku.tex [288
+
+
+
+])
+\openout2 = `pisnicky/mamincinpernik.aux'.
+
+ (./pisnicky/mamincinpernik.tex [289
+
+
+
+])
+\openout2 = `pisnicky/mammalystan.aux'.
+
+
+(./pisnicky/mammalystan.tex [290
+
+
+
+])
+\openout2 = `pisnicky/mamosvazmimujranec.aux'.
+
+ (./pisnicky/mamosvazmimujranec.tex [291
+
+
+
+])
+\openout2 = `pisnicky/mamprimaden.aux'.
+
+
+(./pisnicky/mamprimaden.tex [292
+
+
+
+])
+\openout2 = `pisnicky/mamutikrik.aux'.
+
+ (./pisnicky/mamutikrik.tex [293
+
+
+
+])
+\openout2 = `pisnicky/margot.aux'.
+
+
+(./pisnicky/margot.tex [294
+
+
+
+])
+\openout2 = `pisnicky/marjankomarjanko.aux'.
+
+ (./pisnicky/marjankomarjanko.tex [295
+
+
+
+])
+\openout2 = `pisnicky/marie.aux'.
+
+
+(./pisnicky/marie.tex [296
+
+
+
+])
+\openout2 = `pisnicky/marnivasestrenice.aux'.
+
+ (./pisnicky/marnivasestrenice.tex [297
+
+
+
+])
+\openout2 = `pisnicky/maschutmajoranky.aux'.
+
+
+(./pisnicky/maschutmajoranky.tex [298
+
+
+
+])
+\openout2 = `pisnicky/masirujunafrancuza.aux'.
+
+ (./pisnicky/masirujunafrancuza.tex
+[299
+
+
+
+])
+\openout2 = `pisnicky/mecvrucemam.aux'.
+
+ (./pisnicky/mecvrucemam.tex [300
+
+
+
+])
+\openout2 = `pisnicky/medicinman.aux'.
+
+ (./pisnicky/medicinman.tex [301
+
+
+
+])
+\openout2 = `pisnicky/medvedinevedi.aux'.
+
+
+(./pisnicky/medvedinevedi.tex [302
+
+
+
+])
+\openout2 = `pisnicky/melanaocichbryle.aux'.
+
+ (./pisnicky/melanaocichbryle.tex [303
+
+
+
+])
+\openout2 = `pisnicky/mezihorami.aux'.
+
+
+(./pisnicky/mezihorami.tex [304
+
+
+
+])
+\openout2 = `pisnicky/mezinarodni.aux'.
+
+ (./pisnicky/mezinarodni.tex [305
+
+
+
+])
+\openout2 = `pisnicky/mikymauz.aux'.
+
+
+(./pisnicky/mikymauz.tex [306
+
+
+
+])
+\openout2 = `pisnicky/milencivtexaskach.aux'.
+
+ (./pisnicky/milencivtexaskach.tex [307
+
+
+
+])
+\openout2 = `pisnicky/milionar.aux'.
+
+
+(./pisnicky/milionar.tex [308
+
+
+
+])
+\openout2 = `pisnicky/minulost.aux'.
+
+ (./pisnicky/minulost.tex [309
+
+
+
+])
+\openout2 = `pisnicky/mlecnybar.aux'.
+
+
+(./pisnicky/mlecnybar.tex [310
+
+
+
+])
+\openout2 = `pisnicky/mlyny.aux'.
+
+ (./pisnicky/mlyny.tex [311
+
+
+
+])
+\openout2 = `pisnicky/mnisijsoutisi.aux'.
+
+
+(./pisnicky/mnisijsoutisi.tex [312
+
+
+
+])
+\openout2 = `pisnicky/mobilizace.aux'.
+
+ (./pisnicky/mobilizace.tex [313
+
+
+
+])
+\openout2 = `pisnicky/mojiprvnimuze.aux'.
+
+
+(./pisnicky/mojiprvnimuze.tex [314
+
+
+
+])
+\openout2 = `pisnicky/montgomery.aux'.
+
+ (./pisnicky/montgomery.tex [315
+
+
+
+])
+\openout2 = `pisnicky/morituritesalutant.aux'.
+
+
+(./pisnicky/morituritesalutant.tex [316
+
+
+
+])
+\openout2 = `pisnicky/morseovka.aux'.
+
+ (./pisnicky/morseovka.tex
+<scores/morseovka_1.png, id=3212, 2294.5725pt x 365.365pt>
+File: scores/morseovka_1.png Graphic file (type png)
+<use scores/morseovka_1.png>
+Package pdftex.def Info: scores/morseovka_1.png  used on input line 16.
+(pdftex.def)             Requested size: 512.14963pt x 81.54572pt.
+<scores/morseovka_2.png, id=3214, 2292.565pt x 757.83125pt>
+File: scores/morseovka_2.png Graphic file (type png)
+<use scores/morseovka_2.png>
+Package pdftex.def Info: scores/morseovka_2.png  used on input line 30.
+(pdftex.def)             Requested size: 512.14963pt x 169.2905pt.
+ [317
+
+
+
+ <./scores/morseovka_1.png> <./scores/morseovka_2.png>])
+\openout2 = `pisnicky/moskevskavirtualka.aux'.
+
+
+(./pisnicky/moskevskavirtualka.tex [318
+
+
+
+])
+\openout2 = `pisnicky/mosty.aux'.
+
+ (./pisnicky/mosty.tex [319
+
+
+
+])
+\openout2 = `pisnicky/motyl.aux'.
+
+
+(./pisnicky/motyl.tex [320
+
+
+
+])
+\openout2 = `pisnicky/moudobrouzpravuhlasej.aux'.
+
+ (./pisnicky/moudobrouzpravuhlasej.tex [321
+
+
+
+])
+\openout2 = `pisnicky/mravencivkredenci.aux'.
+
+
+(./pisnicky/mravencivkredenci.tex [322
+
+
+
+])
+\openout2 = `pisnicky/mravenciukolebavka.aux'.
+
+ (./pisnicky/mravenciukolebavka.tex
+[323
+
+
+
+])
+\openout2 = `pisnicky/muzikanticodelate.aux'.
+
+ (./pisnicky/muzikanticodelate.tex [324
+
+
+
+])
+\openout2 = `pisnicky/muzinejvicslusisolo.aux'.
+
+
+(./pisnicky/muzinejvicslusisolo.tex [325
+
+
+
+])
+\openout2 = `pisnicky/mys.aux'.
+
+ (./pisnicky/mys.tex [326
+
+
+
+])
+\openout2 = `pisnicky/nacekane.aux'.
+
+
+(./pisnicky/nacekane.tex [327
+
+
+
+])
+\openout2 = `pisnicky/nacopojdemdomov.aux'.
+
+ (./pisnicky/nacopojdemdomov.tex [328
+
+
+
+])
+\openout2 = `pisnicky/nadejeatouhy.aux'.
+
+
+(./pisnicky/nadejeatouhy.tex [329
+
+
+
+])
+\openout2 = `pisnicky/nadejilaskouavirou.aux'.
+
+ (./pisnicky/nadejilaskouavirou.tex [330
+
+
+
+])
+\openout2 = `pisnicky/nagasakihirosima.aux'.
+
+
+(./pisnicky/nagasakihirosima.tex [331
+
+
+
+])
+\openout2 = `pisnicky/nahorachstudenky.aux'.
+
+ (./pisnicky/nahorachstudenky.tex
+[332
+
+
+
+])
+\openout2 = `pisnicky/nakamenikamen.aux'.
+
+ (./pisnicky/nakamenikamen.tex [333
+
+
+
+])
+\openout2 = `pisnicky/nakolena.aux'.
+
+ (./pisnicky/nakolena.tex [334
+
+
+
+])
+\openout2 = `pisnicky/namest.aux'.
+
+
+(./pisnicky/namest.tex [335
+
+
+
+])
+\openout2 = `pisnicky/namornicka.aux'.
+
+ (./pisnicky/namornicka.tex [336
+
+
+
+])
+\openout2 = `pisnicky/namornik.aux'.
+
+
+(./pisnicky/namornik.tex [337
+
+
+
+])
+\openout2 = `pisnicky/namsestalonecoprekrasneho.aux'.
+
+ (./pisnicky/namsestalonecoprekrasneho.tex
+[338
+
+
+
+])
+\openout2 = `pisnicky/nancymulligan.aux'.
+
+ (./pisnicky/nancymulligan.tex [339
+
+
+
+])
+\openout2 = `pisnicky/napradedusnezi.aux'.
+
+ (./pisnicky/napradedusnezi.tex
+[340
+
+
+
+])
+\openout2 = `pisnicky/narozloucenimypoteseni.aux'.
+
+ (./pisnicky/narozloucenimypoteseni.tex [341
+
+
+
+])
+\openout2 = `pisnicky/nashledanoukrokodyle.aux'.
+
+
+(./pisnicky/nashledanoukrokodyle.tex [342
+
+
+
+])
+\openout2 = `pisnicky/nashville.aux'.
+
+ (./pisnicky/nashville.tex [343
+
+
+
+])
+\openout2 = `pisnicky/natechpanskychlukach.aux'.
+
+
+(./pisnicky/natechpanskychlukach.tex [344
+
+
+
+])
+\openout2 = `pisnicky/natusvatukaterinu.aux'.
+
+ (./pisnicky/natusvatukaterinu.tex
+[345
+
+
+
+])
+\openout2 = `pisnicky/navode.aux'.
+
+ (./pisnicky/navode.tex [346
+
+
+
+])
+\openout2 = `pisnicky/nausniceztresni.aux'.
+
+ (./pisnicky/nausniceztresni.tex [347
+
+
+
+])
+\openout2 = `pisnicky/nebenazemi.aux'.
+
+
+(./pisnicky/nebenazemi.tex [348
+
+
+
+])
+\openout2 = `pisnicky/necoolasce.aux'.
+
+ (./pisnicky/necoolasce.tex [349
+
+
+
+])
+\openout2 = `pisnicky/nedalekoodtrencina.aux'.
+
+
+(./pisnicky/nedalekoodtrencina.tex [350
+
+
+
+])
+\openout2 = `pisnicky/nechtezvonyznit.aux'.
+
+ (./pisnicky/nechtezvonyznit.tex
+[351
+
+
+
+])
+\openout2 = `pisnicky/nejdelsivlak.aux'.
+
+ (./pisnicky/nejdelsivlak.tex [352
+
+
+
+])
+\openout2 = `pisnicky/nejlipjimbylo.aux'.
+
+ (./pisnicky/nejlipjimbylo.tex
+[353
+
+
+
+])
+\openout2 = `pisnicky/nekdopijelih.aux'.
+
+ (./pisnicky/nekdopijelih.tex [354
+
+
+
+])
+\openout2 = `pisnicky/nemusibejt.aux'.
+
+ (./pisnicky/nemusibejt.tex [355
+
+
+
+])
+\openout2 = `pisnicky/nenivsechnoparada.aux'.
+
+
+(./pisnicky/nenivsechnoparada.tex [356
+
+
+
+])
+\openout2 = `pisnicky/neopatrnykrecek.aux'.
+
+ (./pisnicky/neopatrnykrecek.tex
+[357
+
+
+
+])
+\openout2 = `pisnicky/nepijjanonepijvodu.aux'.
+
+ (./pisnicky/nepijjanonepijvodu.tex [358
+
+
+
+])
+\openout2 = `pisnicky/netusim.aux'.
+
+ (./pisnicky/netusim.tex
+[359
+
+
+
+])
+\openout2 = `pisnicky/nevadi.aux'.
+
+ (./pisnicky/nevadi.tex [360
+
+
+
+])
+\openout2 = `pisnicky/niagara.aux'.
+
+ (./pisnicky/niagara.tex [361
+
+
+
+])
+\openout2 = `pisnicky/nictolikneboli.aux'.
+
+
+(./pisnicky/nictolikneboli.tex [362
+
+
+
+])
+\openout2 = `pisnicky/noaco.aux'.
+
+ (./pisnicky/noaco.tex [363
+
+
+
+])
+\openout2 = `pisnicky/nobodyknowsyouwhenyouredownandout.aux'.
+
+
+(./pisnicky/nobodyknowsyouwhenyouredownandout.tex [364
+
+
+
+])
+\openout2 = `pisnicky/noe.aux'.
+
+ (./pisnicky/noe.tex
+[365
+
+
+
+])
+\openout2 = `pisnicky/nomoreauctionblockforme.aux'.
+
+ (./pisnicky/nomoreauctionblockforme.tex [366
+
+
+
+])
+\openout2 = `pisnicky/norwegianwood.aux'.
+
+
+(./pisnicky/norwegianwood.tex [367
+
+
+
+])
+\openout2 = `pisnicky/nosorozec.aux'.
+
+ (./pisnicky/nosorozec.tex [368
+
+
+
+])
+\openout2 = `pisnicky/nowhereman.aux'.
+
+
+(./pisnicky/nowhereman.tex [369
+
+
+
+])
+\openout2 = `pisnicky/obladioblada.aux'.
+
+ (./pisnicky/obladioblada.tex [370
+
+
+
+])
+\openout2 = `pisnicky/odecita.aux'.
+
+
+(./pisnicky/odecita.tex [371
+
+
+
+])
+\openout2 = `pisnicky/odopavyjeduvozy.aux'.
+
+ (./pisnicky/odopavyjeduvozy.tex [372
+
+
+
+])
+\openout2 = `pisnicky/ohfreedom.aux'.
+
+
+(./pisnicky/ohfreedom.tex [373
+
+
+
+])
+\openout2 = `pisnicky/ohsusanna.aux'.
+
+ (./pisnicky/ohsusanna.tex [374
+
+
+
+])
+\openout2 = `pisnicky/okolohradce.aux'.
+
+
+(./pisnicky/okolohradce.tex [375
+
+
+
+])
+\openout2 = `pisnicky/okor.aux'.
+
+ (./pisnicky/okor.tex [376
+
+
+
+])
+\openout2 = `pisnicky/oldtimereligion.aux'.
+
+
+(./pisnicky/oldtimereligion.tex [377
+
+
+
+])
+\openout2 = `pisnicky/olivertwist.aux'.
+
+ (./pisnicky/olivertwist.tex [378
+
+
+
+])
+\openout2 = `pisnicky/olomouc.aux'.
+
+
+(./pisnicky/olomouc.tex [379
+
+
+
+])
+\openout2 = `pisnicky/oneofus.aux'.
+
+ (./pisnicky/oneofus.tex [380
+
+
+
+])
+\openout2 = `pisnicky/oranzovyexpres.aux'.
+
+
+(./pisnicky/oranzovyexpres.tex [381
+
+
+
+])
+\openout2 = `pisnicky/orlice.aux'.
+
+ (./pisnicky/orlice.tex [382
+
+
+
+])
+\openout2 = `pisnicky/osmichu.aux'.
+
+
+(./pisnicky/osmichu.tex [383
+
+
+
+])
+\openout2 = `pisnicky/ostravo.aux'.
+
+ (./pisnicky/ostravo.tex [384
+
+
+
+])
+\openout2 = `pisnicky/outsiderwaltz.aux'.
+
+
+(./pisnicky/outsiderwaltz.tex [385
+
+
+
+])
+\openout2 = `pisnicky/padalyhvezdy.aux'.
+
+ (./pisnicky/padalyhvezdy.tex [386
+
+
+
+])
+\openout2 = `pisnicky/pandoktorjanousek.aux'.
+
+
+(./pisnicky/pandoktorjanousek.tex [387
+
+
+
+])
+\openout2 = `pisnicky/paneprezidente.aux'.
+
+ (./pisnicky/paneprezidente.tex
+[388
+
+
+
+])
+\openout2 = `pisnicky/panubohudooken.aux'.
+
+ (./pisnicky/panubohudooken.tex [389
+
+
+
+])
+\openout2 = `pisnicky/paradaI.aux'.
+
+ (./pisnicky/paradaI.tex [390
+
+
+
+])
+\openout2 = `pisnicky/paradaII.aux'.
+
+
+(./pisnicky/paradaII.tex [391
+
+
+
+])
+\openout2 = `pisnicky/parhavranichcopanku.aux'.
+
+ (./pisnicky/parhavranichcopanku.tex [392
+
+
+
+])
+\openout2 = `pisnicky/partazrancey.aux'.
+
+
+(./pisnicky/partazrancey.tex [393
+
+
+
+])
+\openout2 = `pisnicky/pata.aux'.
+
+ (./pisnicky/pata.tex [394
+
+
+
+])
+\openout2 = `pisnicky/peklavdolky.aux'.
+
+
+(./pisnicky/peklavdolky.tex [395
+
+
+
+])
+\openout2 = `pisnicky/pennylane.aux'.
+
+ (./pisnicky/pennylane.tex [396
+
+
+
+])
+\openout2 = `pisnicky/penzioncesko.aux'.
+
+
+(./pisnicky/penzioncesko.tex [397
+
+
+
+])
+\openout2 = `pisnicky/pepita.aux'.
+
+ (./pisnicky/pepita.tex [398
+
+
+
+])
+\openout2 = `pisnicky/perinamastyryrozky.aux'.
+
+
+(./pisnicky/perinamastyryrozky.tex [399
+
+
+
+])
+\openout2 = `pisnicky/pijtevodu.aux'.
+
+ (./pisnicky/pijtevodu.tex [400
+
+
+
+])
+\openout2 = `pisnicky/pisencomeucillistopad.aux'.
+
+
+(./pisnicky/pisencomeucillistopad.tex [401
+
+
+
+])
+\openout2 = `pisnicky/pisenokoni.aux'.
+
+ (./pisnicky/pisenokoni.tex
+[402
+
+
+
+])
+\openout2 = `pisnicky/pisenorose.aux'.
+
+ (./pisnicky/pisenorose.tex [403
+
+
+
+])
+\openout2 = `pisnicky/pisenprace.aux'.
+
+ (./pisnicky/pisenprace.tex [404
+
+
+
+])
+\openout2 = `pisnicky/pisenzhrzenehotrampa.aux'.
+
+
+(./pisnicky/pisenzhrzenehotrampa.tex [405
+
+
+
+])
+\openout2 = `pisnicky/piskajicicikan.aux'.
+
+ (./pisnicky/piskajicicikan.tex
+[406
+
+
+
+])
+\openout2 = `pisnicky/plavalahusickapodunaji.aux'.
+
+ (./pisnicky/plavalahusickapodunaji.tex [407
+
+
+
+])
+\openout2 = `pisnicky/pocestny.aux'.
+
+ (./pisnicky/pocestny.tex
+[408
+
+
+
+])
+\openout2 = `pisnicky/poddubemzadubem.aux'.
+
+ (./pisnicky/poddubemzadubem.tex [409
+
+
+
+])
+\openout2 = `pisnicky/podnasimokynkem.aux'.
+
+ (./pisnicky/podnasimokynkem.tex
+[410
+
+
+
+])
+\openout2 = `pisnicky/podzim.aux'.
+
+ (./pisnicky/podzim.tex [411
+
+
+
+])
+\openout2 = `pisnicky/podzimniplihal.aux'.
+
+ (./pisnicky/podzimniplihal.tex [412
+
+
+
+])
+\openout2 = `pisnicky/podzimnispiritual.aux'.
+
+
+(./pisnicky/podzimnispiritual.tex [413
+
+
+
+])
+\openout2 = `pisnicky/pohadka.aux'.
+
+ (./pisnicky/pohadka.tex
+<scores/pohadka.pdf, id=4133, 546.96344pt x 106.52798pt>
+File: scores/pohadka.pdf Graphic file (type pdf)
+<use scores/pohadka.pdf>
+Package pdftex.def Info: scores/pohadka.pdf  used on input line 12.
+(pdftex.def)             Requested size: 512.14963pt x 99.75105pt.
+<scores/pohadkaref.pdf, id=4134, 546.63223pt x 73.57487pt>
+File: scores/pohadkaref.pdf Graphic file (type pdf)
+<use scores/pohadkaref.pdf>
+Package pdftex.def Info: scores/pohadkaref.pdf  used on input line 46.
+(pdftex.def)             Requested size: 512.14963pt x 68.93361pt.
+ [414
+
+
+
+ <./scores/pohadka.pdf> <./scores/pohadkaref.pdf>])
+\openout2 = `pisnicky/pohoda.aux'.
+
+ (./pisnicky/pohoda.tex [415
+
+
+
+])
+\openout2 = `pisnicky/pochodamerickychnamorniku.aux'.
+
+
+(./pisnicky/pochodamerickychnamorniku.tex [416
+
+
+
+])
+\openout2 = `pisnicky/pochodmarodu.aux'.
+
+ (./pisnicky/pochodmarodu.tex
+[417
+
+
+
+])
+\openout2 = `pisnicky/pojdmespat.aux'.
+
+ (./pisnicky/pojdmespat.tex [418
+
+
+
+])
+\openout2 = `pisnicky/porekadla.aux'.
+
+ (./pisnicky/porekadla.tex [419
+
+
+
+])
+\openout2 = `pisnicky/poslednikovboj.aux'.
+
+
+(./pisnicky/poslednikovboj.tex [420
+
+
+
+])
+\openout2 = `pisnicky/potopa.aux'.
+
+ (./pisnicky/potopa.tex [421
+
+
+
+])
+\openout2 = `pisnicky/potrikratsomnaokenkotukal.aux'.
+
+
+(./pisnicky/potrikratsomnaokenkotukal.tex [422
+
+
+
+])
+\openout2 = `pisnicky/poutnikadivka.aux'.
+
+ (./pisnicky/poutnikadivka.tex
+[423
+
+
+
+])
+\openout2 = `pisnicky/povestehovejs.aux'.
+
+ (./pisnicky/povestehovejs.tex [424
+
+
+
+])
+\openout2 = `pisnicky/povidej.aux'.
+
+ (./pisnicky/povidej.tex [425
+
+
+
+])
+\openout2 = `pisnicky/prahaprcice.aux'.
+
+
+(./pisnicky/prahaprcice.tex [426
+
+
+
+])
+\openout2 = `pisnicky/prachovskeskaly.aux'.
+
+ (./pisnicky/prachovskeskaly.tex [427
+
+
+
+])
+\openout2 = `pisnicky/praminekvlasu.aux'.
+
+
+(./pisnicky/praminekvlasu.tex [428
+
+
+
+])
+\openout2 = `pisnicky/prazce.aux'.
+
+ (./pisnicky/prazce.tex [429
+
+
+
+])
+\openout2 = `pisnicky/pridijanoknam.aux'.
+
+
+(./pisnicky/pridijanoknam.tex [430
+
+
+
+])
+\openout2 = `pisnicky/prodavac.aux'.
+
+ (./pisnicky/prodavac.tex [431
+
+
+
+])
+\openout2 = `pisnicky/prodavacslonu.aux'.
+
+
+(./pisnicky/prodavacslonu.tex [432
+
+
+
+])
+\openout2 = `pisnicky/proklatejvuz.aux'.
+
+ (./pisnicky/proklatejvuz.tex [433
+
+
+
+])
+\openout2 = `pisnicky/promeny.aux'.
+
+
+(./pisnicky/promeny.tex [434
+
+
+
+])
+\openout2 = `pisnicky/prosimteholka.aux'.
+
+ (./pisnicky/prosimteholka.tex [435
+
+
+
+])
+\openout2 = `pisnicky/prsi.aux'.
+
+
+(./pisnicky/prsi.tex [436
+
+
+
+])
+\openout2 = `pisnicky/predsusedovym.aux'.
+
+ (./pisnicky/predsusedovym.tex [437
+
+
+
+])
+\openout2 = `pisnicky/prejelijsmeslepici.aux'.
+
+
+(./pisnicky/prejelijsmeslepici.tex [438
+
+
+
+])
+\openout2 = `pisnicky/privozskaput.aux'.
+
+ (./pisnicky/privozskaput.tex [439
+
+
+
+])
+\openout2 = `pisnicky/priznavam.aux'.
+
+
+(./pisnicky/priznavam.tex [440
+
+
+
+])
+\openout2 = `pisnicky/psicenazrzla.aux'.
+
+ (./pisnicky/psicenazrzla.tex [441
+
+
+
+])
+\openout2 = `pisnicky/pterodaktylus.aux'.
+
+
+(./pisnicky/pterodaktylus.tex [442
+
+
+
+])
+\openout2 = `pisnicky/puffthemagicdragon.aux'.
+
+ (./pisnicky/puffthemagicdragon.tex
+[443
+
+
+
+])
+\openout2 = `pisnicky/pulnocni.aux'.
+
+ (./pisnicky/pulnocni.tex [444
+
+
+
+])
+\openout2 = `pisnicky/radasemiluje.aux'.
+
+ (./pisnicky/radasemiluje.tex [445
+
+
+
+])
+\openout2 = `pisnicky/radchodimnapostu.aux'.
+
+
+(./pisnicky/radchodimnapostu.tex [446
+
+
+
+])
+\openout2 = `pisnicky/radsebrouzdamrosou.aux'.
+
+ (./pisnicky/radsebrouzdamrosou.tex
+[447
+
+
+
+])
+\openout2 = `pisnicky/raketounamars.aux'.
+
+ (./pisnicky/raketounamars.tex [448
+
+
+
+])
+\openout2 = `pisnicky/ranavtrave.aux'.
+
+ (./pisnicky/ranavtrave.tex [449
+
+
+
+])
+\openout2 = `pisnicky/rande.aux'.
+
+
+(./pisnicky/rande.tex [450
+
+
+
+])
+\openout2 = `pisnicky/reddwarftheme.aux'.
+
+ (./pisnicky/reddwarftheme.tex
+<scores/reddwarfthemeintro.pdf, id=4514, 567.7812pt x 64.7519pt>
+File: scores/reddwarfthemeintro.pdf Graphic file (type pdf)
+<use scores/reddwarfthemeintro.pdf>
+Package pdftex.def Info: scores/reddwarfthemeintro.pdf  used on input line 10.
+(pdftex.def)             Requested size: 512.14963pt x 58.40953pt.
+<scores/reddwarfthemeoutro.pdf, id=4515, 569.65826pt x 70.36287pt>
+File: scores/reddwarfthemeoutro.pdf Graphic file (type pdf)
+<use scores/reddwarfthemeoutro.pdf>
+Package pdftex.def Info: scores/reddwarfthemeoutro.pdf  used on input line 29.
+(pdftex.def)             Requested size: 512.14963pt x 63.26263pt.
+ [451
+
+
+
+ <./scores/reddwarfthemeintro.pdf> <./scores/reddwarfthemeoutro.pdf>])
+\openout2 = `pisnicky/redrivervalley.aux'.
+
+
+(./pisnicky/redrivervalley.tex [452
+
+
+
+])
+\openout2 = `pisnicky/reklamanaticho.aux'.
+
+ (./pisnicky/reklamanaticho.tex [453
+
+
+
+])
+\openout2 = `pisnicky/rezrezrez.aux'.
+
+
+(./pisnicky/rezrezrez.tex [454
+
+
+
+])
+\openout2 = `pisnicky/ringoffire.aux'.
+
+ (./pisnicky/ringoffire.tex [455
+
+
+
+])
+\openout2 = `pisnicky/rocknrollprobeethovena.aux'.
+
+
+(./pisnicky/rocknrollprobeethovena.tex [456
+
+
+
+])
+\openout2 = `pisnicky/rockyraccoon.aux'.
+
+ (./pisnicky/rockyraccoon.tex
+[457
+
+
+
+])
+\openout2 = `pisnicky/rodneudoli.aux'.
+
+ (./pisnicky/rodneudoli.tex [458
+
+
+
+])
+\openout2 = `pisnicky/romance16leta.aux'.
+
+ (./pisnicky/romance16leta.tex [459
+
+
+
+])
+\openout2 = `pisnicky/rosanakolejich.aux'.
+
+
+(./pisnicky/rosanakolejich.tex [460
+
+
+
+])
+\openout2 = `pisnicky/rovnoujotadyrovnou.aux'.
+
+ (./pisnicky/rovnoujotadyrovnou.tex
+[461
+
+
+
+])
+\openout2 = `pisnicky/roztrhanachalupka.aux'.
+
+ (./pisnicky/roztrhanachalupka.tex [462
+
+
+
+])
+\openout2 = `pisnicky/rubikovakostka.aux'.
+
+ (./pisnicky/rubikovakostka.tex
+[463
+
+
+
+])
+\openout2 = `pisnicky/rutysutyarizonatexas.aux'.
+
+ (./pisnicky/rutysutyarizonatexas.tex [464
+
+
+
+])
+\openout2 = `pisnicky/ruzeztexasu.aux'.
+
+ (./pisnicky/ruzeztexasu.tex
+[465
+
+
+
+])
+\openout2 = `pisnicky/ruzicka.aux'.
+
+ (./pisnicky/ruzicka.tex [466
+
+
+
+])
+\openout2 = `pisnicky/rychlikjededoprahy.aux'.
+
+ (./pisnicky/rychlikjededoprahy.tex
+[467
+
+
+
+])
+\openout2 = `pisnicky/ryljencelejdenryl.aux'.
+
+ (./pisnicky/ryljencelejdenryl.tex [468
+
+
+
+])
+\openout2 = `pisnicky/rekalasky.aux'.
+
+ (./pisnicky/rekalasky.tex
+[469
+
+
+
+])
+\openout2 = `pisnicky/reknikdetykytkyjsou.aux'.
+
+ (./pisnicky/reknikdetykytkyjsou.tex [470
+
+
+
+])
+\openout2 = `pisnicky/ridictentvrdejchlebama.aux'.
+
+
+(./pisnicky/ridictentvrdejchlebama.tex [471
+
+
+
+])
+\openout2 = `pisnicky/salome.aux'.
+
+ (./pisnicky/salome.tex [472
+
+
+
+])
+\openout2 = `pisnicky/samsnohaminastole.aux'.
+
+
+(./pisnicky/samsnohaminastole.tex [473
+
+
+
+])
+\openout2 = `pisnicky/samuraj.aux'.
+
+ (./pisnicky/samuraj.tex [474
+
+
+
+])
+\openout2 = `pisnicky/santalucia.aux'.
+
+
+(./pisnicky/santalucia.tex [475
+
+
+
+])
+\openout2 = `pisnicky/saraperchetiamo.aux'.
+
+ (./pisnicky/saraperchetiamo.tex [476
+
+
+
+])
+\openout2 = `pisnicky/saro.aux'.
+
+
+(./pisnicky/saro.tex [477
+
+
+
+])
+\openout2 = `pisnicky/sbohemgalanecko.aux'.
+
+ (./pisnicky/sbohemgalanecko.tex [478
+
+
+
+])
+\openout2 = `pisnicky/scarboroughfair.aux'.
+
+
+(./pisnicky/scarboroughfair.tex [479
+
+
+
+])
+\openout2 = `pisnicky/scarboroughfaircarthy.aux'.
+
+ (./pisnicky/scarboroughfaircarthy.tex
+<scores/scarboroughfaircarthy.pdf, id=4831, 554.89308pt x 313.80237pt>
+File: scores/scarboroughfaircarthy.pdf Graphic file (type pdf)
+<use scores/scarboroughfaircarthy.pdf>
+Package pdftex.def Info: scores/scarboroughfaircarthy.pdf  used on input line 6
+.
+(pdftex.def)             Requested size: 507.03093pt x 286.74329pt.
+
+[480
+
+
+
+ <./scores/scarboroughfaircarthy.pdf>])
+\openout2 = `pisnicky/seditopicupiana.aux'.
+
+ (./pisnicky/seditopicupiana.tex
+[481
+
+
+
+])
+\openout2 = `pisnicky/seeyoulateralligator.aux'.
+
+ (./pisnicky/seeyoulateralligator.tex [482
+
+
+
+])
+\openout2 = `pisnicky/senzaunperche.aux'.
+
+
+(./pisnicky/senzaunperche.tex [483
+
+
+
+])
+\openout2 = `pisnicky/severnivitr.aux'.
+
+ (./pisnicky/severnivitr.tex [484
+
+
+
+])
+\openout2 = `pisnicky/skaloskalo.aux'.
+
+
+(./pisnicky/skaloskalo.tex [485
+
+
+
+])
+\openout2 = `pisnicky/sklenickotysklenena.aux'.
+
+ (./pisnicky/sklenickotysklenena.tex [486
+
+
+
+])
+\openout2 = `pisnicky/slavicizmadridu.aux'.
+
+
+(./pisnicky/slavicizmadridu.tex [487
+
+
+
+])
+\openout2 = `pisnicky/slunecnyhrob.aux'.
+
+ (./pisnicky/slunecnyhrob.tex [488
+
+
+
+])
+\openout2 = `pisnicky/slunicko.aux'.
+
+
+(./pisnicky/slunicko.tex [489
+
+
+
+])
+\openout2 = `pisnicky/snebyvalouochotou.aux'.
+
+ (./pisnicky/snebyvalouochotou.tex [490
+
+
+
+])
+\openout2 = `pisnicky/snidanevtrave.aux'.
+
+
+(./pisnicky/snidanevtrave.tex [491
+
+
+
+])
+\openout2 = `pisnicky/soske.aux'.
+
+ (./pisnicky/soske.tex [492
+
+
+
+])
+\openout2 = `pisnicky/soudnyden.aux'.
+
+
+(./pisnicky/soudnyden.tex [493
+
+
+
+])
+\openout2 = `pisnicky/sousedovictonicek.aux'.
+
+ (./pisnicky/sousedovictonicek.tex [494
+
+
+
+])
+\openout2 = `pisnicky/spanembohemidemodvas.aux'.
+
+
+(./pisnicky/spanembohemidemodvas.tex [495
+
+
+
+])
+\openout2 = `pisnicky/spimvobili.aux'.
+
+ (./pisnicky/spimvobili.tex [496
+
+
+
+])
+\openout2 = `pisnicky/spinkej.aux'.
+
+
+(./pisnicky/spinkej.tex [497
+
+
+
+])
+\openout2 = `pisnicky/spravnyslovo.aux'.
+
+ (./pisnicky/spravnyslovo.tex [498
+
+
+
+])
+\openout2 = `pisnicky/sprostyadmindusan.aux'.
+
+
+(./pisnicky/sprostyadmindusan.tex [499
+
+
+
+])
+\openout2 = `pisnicky/stanky.aux'.
+
+ (./pisnicky/stanky.tex [500
+
+
+
+])
+\openout2 = `pisnicky/staraarcha.aux'.
+
+
+(./pisnicky/staraarcha.tex [501
+
+
+
+])
+\openout2 = `pisnicky/starypribeh.aux'.
+
+ (./pisnicky/starypribeh.tex [502
+
+
+
+])
+\openout2 = `pisnicky/statistika.aux'.
+
+
+(./pisnicky/statistika.tex [503
+
+
+
+])
+\openout2 = `pisnicky/stinkatedral.aux'.
+
+ (./pisnicky/stinkatedral.tex [504
+
+
+
+])
+\openout2 = `pisnicky/stojihruskavsirempoli.aux'.
+
+
+(./pisnicky/stojihruskavsirempoli.tex [505
+
+
+
+])
+\openout2 = `pisnicky/studentskahalenka.aux'.
+
+ (./pisnicky/studentskahalenka.tex
+[506
+
+
+
+])
+\openout2 = `pisnicky/summertime.aux'.
+
+ (./pisnicky/summertime.tex [507
+
+
+
+])
+\openout2 = `pisnicky/svatebnikosile.aux'.
+
+ (./pisnicky/svatebnikosile.tex
+[508
+
+
+
+])
+\openout2 = `pisnicky/svatoborskesirepole.aux'.
+
+ (./pisnicky/svatoborskesirepole.tex [509
+
+
+
+])
+\openout2 = `pisnicky/svazceskychbohemu.aux'.
+
+
+(./pisnicky/svazceskychbohemu.tex
+<scores/svazceskychbohemu.pdf, id=5150, 549.6234pt x 75.57234pt>
+File: scores/svazceskychbohemu.pdf Graphic file (type pdf)
+<use scores/svazceskychbohemu.pdf>
+Package pdftex.def Info: scores/svazceskychbohemu.pdf  used on input line 9.
+(pdftex.def)             Requested size: 512.14963pt x 70.42683pt.
+ [510
+
+
+
+ <./scores/svazceskychbohemu.pdf>])
+\openout2 = `pisnicky/svetsnamahoupa.aux'.
+
+
+(./pisnicky/svetsnamahoupa.tex [511
+
+
+
+])
+\openout2 = `pisnicky/swingmodrezdi.aux'.
+
+ (./pisnicky/swingmodrezdi.tex [512
+
+
+
+])
+\openout2 = `pisnicky/satydelajcloveka.aux'.
+
+
+(./pisnicky/satydelajcloveka.tex [513
+
+
+
+])
+\openout2 = `pisnicky/sirokyhluboky.aux'.
+
+ (./pisnicky/sirokyhluboky.tex [514
+
+
+
+])
+\openout2 = `pisnicky/siryproud.aux'.
+
+
+(./pisnicky/siryproud.tex [515
+
+
+
+])
+\openout2 = `pisnicky/skodalasky.aux'.
+
+ (./pisnicky/skodalasky.tex [516
+
+
+
+])
+\openout2 = `pisnicky/skrhola.aux'.
+
+
+(./pisnicky/skrhola.tex [517
+
+
+
+])
+\openout2 = `pisnicky/slapejdalspiritual.aux'.
+
+ (./pisnicky/slapejdalspiritual.tex [518
+
+
+
+])
+\openout2 = `pisnicky/slapejdaltucny.aux'.
+
+
+(./pisnicky/slapejdaltucny.tex [519
+
+
+
+])
+\openout2 = `pisnicky/slypanenkysilnici.aux'.
+
+ (./pisnicky/slypanenkysilnici.tex
+[520
+
+
+
+])
+\openout2 = `pisnicky/sroubyamatice.aux'.
+
+ (./pisnicky/sroubyamatice.tex [521
+
+
+
+])
+\openout2 = `pisnicky/sss.aux'.
+
+ (./pisnicky/sss.tex [522
+
+
+
+])
+\openout2 = `pisnicky/svagrmabagr.aux'.
+
+
+(./pisnicky/svagrmabagr.tex [523
+
+
+
+])
+\openout2 = `pisnicky/takabystetovedela.aux'.
+
+ (./pisnicky/takabystetovedela.tex [524
+
+
+
+])
+\openout2 = `pisnicky/takbytjednoubouri.aux'.
+
+
+(./pisnicky/takbytjednoubouri.tex [525
+
+
+
+])
+\openout2 = `pisnicky/takdavnojiz.aux'.
+
+ (./pisnicky/takdavnojiz.tex [526
+
+
+
+])
+\openout2 = `pisnicky/takjsemtady.aux'.
+
+
+(./pisnicky/takjsemtady.tex [527
+
+
+
+])
+\openout2 = `pisnicky/takjsmevandrovali.aux'.
+
+ (./pisnicky/takjsmevandrovali.tex [528
+
+
+
+])
+\openout2 = `pisnicky/takkratkoupisenjestenikdonenapsal.aux'.
+
+
+(./pisnicky/takkratkoupisenjestenikdonenapsal.tex [529
+
+
+
+])
+\openout2 = `pisnicky/takuzmimaholkamava.aux'.
+
+
+(./pisnicky/takuzmimaholkamava.tex [530
+
+
+
+])
+\openout2 = `pisnicky/tamokololevoci.aux'.
+
+ (./pisnicky/tamokololevoci.tex
+[531
+
+
+
+])
+\openout2 = `pisnicky/tamunebeskychbran.aux'.
+
+ (./pisnicky/tamunebeskychbran.tex [532
+
+
+
+])
+\openout2 = `pisnicky/tancujtancujvykrucaj.aux'.
+
+
+(./pisnicky/tancujtancujvykrucaj.tex [533
+
+
+
+])
+\openout2 = `pisnicky/tasidele.aux'.
+
+ (./pisnicky/tasidele.tex [534
+
+
+
+])
+\openout2 = `pisnicky/tearsinheaven.aux'.
+
+
+(./pisnicky/tearsinheaven.tex
+<scores/tearsinheavenintro.pdf, id=5402, 568.93553pt x 99.54189pt>
+File: scores/tearsinheavenintro.pdf Graphic file (type pdf)
+<use scores/tearsinheavenintro.pdf>
+Package pdftex.def Info: scores/tearsinheavenintro.pdf  used on input line 9.
+(pdftex.def)             Requested size: 515.0pt x 90.1139pt.
+ [535
+
+
+
+ <./scores/tearsinheavenintro.pdf>])
+\openout2 = `pisnicky/tecevodatece.aux'.
+
+
+(./pisnicky/tecevodatece.tex [536
+
+
+
+])
+\openout2 = `pisnicky/tenkdoneduma.aux'.
+
+ (./pisnicky/tenkdoneduma.tex [537
+
+
+
+])
+\openout2 = `pisnicky/tesar.aux'.
+
+
+(./pisnicky/tesar.tex [538
+
+
+
+])
+\openout2 = `pisnicky/tetkajulka.aux'.
+
+ (./pisnicky/tetkajulka.tex [539
+
+
+
+])
+\openout2 = `pisnicky/thesoundofsilence.aux'.
+
+
+(./pisnicky/thesoundofsilence.tex [540
+
+
+
+])
+\openout2 = `pisnicky/thetimestheyareachangin.aux'.
+
+
+(./pisnicky/thetimestheyareachangin.tex [541
+
+
+
+])
+\openout2 = `pisnicky/thewateriswide.aux'.
+
+ (./pisnicky/thewateriswide.tex
+[542
+
+
+
+])
+\openout2 = `pisnicky/tiamo.aux'.
+
+ (./pisnicky/tiamo.tex [543
+
+
+
+])
+\openout2 = `pisnicky/tikoberstisynci.aux'.
+
+ (./pisnicky/tikoberstisynci.tex [544
+
+
+
+])
+\openout2 = `pisnicky/timeinabottle.aux'.
+
+
+(./pisnicky/timeinabottle.tex [545
+
+
+
+])
+\openout2 = `pisnicky/tisicmil.aux'.
+
+ (./pisnicky/tisicmil.tex [546
+
+
+
+])
+\openout2 = `pisnicky/tocozbyvalasko.aux'.
+
+
+(./pisnicky/tocozbyvalasko.tex [547
+
+
+
+])
+\openout2 = `pisnicky/tophatbarandgrill.aux'.
+
+ (./pisnicky/tophatbarandgrill.tex
+[548
+
+
+
+])
+\openout2 = `pisnicky/totahelpa.aux'.
+
+ (./pisnicky/totahelpa.tex [549
+
+
+
+])
+\openout2 = `pisnicky/totenkratvctyricatompatom.aux'.
+
+
+(./pisnicky/totenkratvctyricatompatom.tex [550
+
+
+
+])
+\openout2 = `pisnicky/totenkratvsedesatomosmom.aux'.
+
+
+(./pisnicky/totenkratvsedesatomosmom.tex [551
+
+
+
+])
+\openout2 = `pisnicky/touha.aux'.
+
+ (./pisnicky/touha.tex [552
+
+
+
+])
+\openout2 = `pisnicky/tramvajacka.aux'.
+
+
+(./pisnicky/tramvajacka.tex [553
+
+
+
+])
+\openout2 = `pisnicky/trezor.aux'.
+
+ (./pisnicky/trezor.tex [554
+
+
+
+])
+\openout2 = `pisnicky/trhvescarborough.aux'.
+
+
+(./pisnicky/trhvescarborough.tex [555
+
+
+
+])
+\openout2 = `pisnicky/trpaslicisvatba.aux'.
+
+ (./pisnicky/trpaslicisvatba.tex
+[556
+
+
+
+])
+\openout2 = `pisnicky/trubadurska.aux'.
+
+ (./pisnicky/trubadurska.tex [557
+
+
+
+])
+\openout2 = `pisnicky/tresnezraly.aux'.
+
+ (./pisnicky/tresnezraly.tex [558
+
+
+
+])
+\openout2 = `pisnicky/tresnicky.aux'.
+
+
+(./pisnicky/tresnicky.tex [559
+
+
+
+])
+\openout2 = `pisnicky/triandele.aux'.
+
+ (./pisnicky/triandele.tex
+<scores/triandele.pdf, id=5672, 550.28584pt x 368.83797pt>
+File: scores/triandele.pdf Graphic file (type pdf)
+<use scores/triandele.pdf>
+Package pdftex.def Info: scores/triandele.pdf  used on input line 9.
+(pdftex.def)             Requested size: 512.14963pt x 343.29715pt.
+ [560
+
+
+
+ <./scores/triandele.pdf>])
+\openout2 = `pisnicky/tribratri.aux'.
+
+ (./pisnicky/tribratri.tex [561
+
+
+
+])
+\openout2 = `pisnicky/tricitronky.aux'.
+
+ (./pisnicky/tricitronky.tex
+[562
+
+
+
+])
+\openout2 = `pisnicky/tricunici.aux'.
+
+ (./pisnicky/tricunici.tex [563
+
+
+
+])
+\openout2 = `pisnicky/trikrize.aux'.
+
+ (./pisnicky/trikrize.tex [564
+
+
+
+])
+\openout2 = `pisnicky/tuneljmenemcas.aux'.
+
+
+(./pisnicky/tuneljmenemcas.tex [565
+
+
+
+])
+\openout2 = `pisnicky/tvojesnidane.aux'.
+
+ (./pisnicky/tvojesnidane.tex [566
+
+
+
+])
+\openout2 = `pisnicky/twistandshout.aux'.
+
+
+(./pisnicky/twistandshout.tex [567
+
+
+
+])
+\openout2 = `pisnicky/tyjamo.aux'.
+
+ (./pisnicky/tyjamo.tex [568
+
+
+
+])
+\openout2 = `pisnicky/ukolebavkaprokubualenku.aux'.
+
+
+(./pisnicky/ukolebavkaprokubualenku.tex [569
+
+
+
+])
+\openout2 = `pisnicky/unasnaseveru.aux'.
+
+ (./pisnicky/unasnaseveru.tex
+[570
+
+
+
+])
+\openout2 = `pisnicky/utekljsemodmanzelkykmamince.aux'.
+
+ (./pisnicky/utekljsemodmanzelkykmamince.tex [571
+
+
+
+])
+\openout2 = `pisnicky/uzkonicekpadi.aux'.
+
+
+(./pisnicky/uzkonicekpadi.tex [572
+
+
+
+])
+\openout2 = `pisnicky/uznechcisevdat.aux'.
+
+ (./pisnicky/uznechcisevdat.tex [573
+
+
+
+])
+\openout2 = `pisnicky/uzsenamcaskrati.aux'.
+
+
+(./pisnicky/uzsenamcaskrati.tex [574
+
+
+
+])
+\openout2 = `pisnicky/uztonenapravim.aux'.
+
+ (./pisnicky/uztonenapravim.tex [575
+
+
+
+])
+\openout2 = `pisnicky/uztypilkydorezaly.aux'.
+
+
+(./pisnicky/uztypilkydorezaly.tex [576
+
+
+
+])
+\openout2 = `pisnicky/vadinevadi.aux'.
+
+ (./pisnicky/vadinevadi.tex [577
+
+
+
+])
+\openout2 = `pisnicky/valcicek.aux'.
+
+
+(./pisnicky/valcicek.tex [578
+
+
+
+])
+\openout2 = `pisnicky/valkaruzi.aux'.
+
+ (./pisnicky/valkaruzi.tex [579
+
+
+
+])
+\openout2 = `pisnicky/vandrovani.aux'.
+
+
+(./pisnicky/vandrovani.tex [580
+
+
+
+])
+\openout2 = `pisnicky/vandrovni.aux'.
+
+ (./pisnicky/vandrovni.tex [581
+
+
+
+])
+\openout2 = `pisnicky/variacenarenesancnitema.aux'.
+
+
+(./pisnicky/variacenarenesancnitema.tex
+<scores/variacenarenesancnitema.pdf, id=5907, 411.136pt x 65.25378pt>
+File: scores/variacenarenesancnitema.pdf Graphic file (type pdf)
+<use scores/variacenarenesancnitema.pdf>
+Package pdftex.def Info: scores/variacenarenesancnitema.pdf  used on input line
+ 19.
+(pdftex.def)             Requested size: 450.0pt x 71.4229pt.
+ [582
+
+
+
+ <./scores/variacenarenesancnitema.pdf>])
+\openout2 = `pisnicky/vbufetu.aux'.
+
+ (./pisnicky/vbufetu.tex [583
+
+
+
+])
+\openout2 = `pisnicky/vcelkamaja.aux'.
+
+ (./pisnicky/vcelkamaja.tex [584
+
+
+
+])
+\openout2 = `pisnicky/vcera.aux'.
+
+
+(./pisnicky/vcera.tex [585
+
+
+
+])
+\openout2 = `pisnicky/vcerazvecera.aux'.
+
+ (./pisnicky/vcerazvecera.tex [586
+
+
+
+])
+\openout2 = `pisnicky/vdobrymizlym.aux'.
+
+
+(./pisnicky/vdobrymizlym.tex [587
+
+
+
+])
+\openout2 = `pisnicky/vecernicek.aux'.
+
+ (./pisnicky/vecernicek.tex [588
+
+
+
+])
+\openout2 = `pisnicky/vedmedalcestoma.aux'.
+
+
+(./pisnicky/vedmedalcestoma.tex [589
+
+
+
+])
+\openout2 = `pisnicky/velicenstvokat.aux'.
+
+ (./pisnicky/velicenstvokat.tex [590
+
+
+
+])
+\openout2 = `pisnicky/velkyvuz.aux'.
+
+
+(./pisnicky/velkyvuz.tex [591
+
+
+
+])
+\openout2 = `pisnicky/velrybarskavyprava.aux'.
+
+ (./pisnicky/velrybarskavyprava.tex [592
+
+
+
+])
+\openout2 = `pisnicky/veronika.aux'.
+
+
+(./pisnicky/veronika.tex [593
+
+
+
+])
+\openout2 = `pisnicky/veruncinapisen.aux'.
+
+ (./pisnicky/veruncinapisen.tex [594
+
+
+
+])
+\openout2 = `pisnicky/veskrini.aux'.
+
+
+(./pisnicky/veskrini.tex [595
+
+
+
+])
+\openout2 = `pisnicky/vesnickaromance.aux'.
+
+ (./pisnicky/vesnickaromance.tex [596
+
+
+
+])
+\openout2 = `pisnicky/vila.aux'.
+
+
+(./pisnicky/vila.tex [597
+
+
+
+])
+\openout2 = `pisnicky/vineckobile.aux'.
+
+ (./pisnicky/vineckobile.tex [598
+
+
+
+])
+\openout2 = `pisnicky/vinnetou.aux'.
+
+
+(./pisnicky/vinnetou.tex [599
+
+
+
+])
+\openout2 = `pisnicky/virginie.aux'.
+
+ (./pisnicky/virginie.tex [600
+
+
+
+])
+\openout2 = `pisnicky/vitrtovi.aux'.
+
+
+(./pisnicky/vitrtovi.tex [601
+
+
+
+])
+\openout2 = `pisnicky/vjednymdumku.aux'.
+
+ (./pisnicky/vjednymdumku.tex [602
+
+
+
+])
+\openout2 = `pisnicky/vlak.aux'.
+
+
+(./pisnicky/vlak.tex [603
+
+
+
+])
+\openout2 = `pisnicky/vlastovkolet.aux'.
+
+ (./pisnicky/vlastovkolet.tex [604
+
+
+
+])
+\openout2 = `pisnicky/vlese.aux'.
+
+
+(./pisnicky/vlese.tex [605
+
+
+
+])
+\openout2 = `pisnicky/vmorijemistadost.aux'.
+
+ (./pisnicky/vmorijemistadost.tex [606
+
+
+
+])
+\openout2 = `pisnicky/vodacomadrzinadvodou.aux'.
+
+
+(./pisnicky/vodacomadrzinadvodou.tex [607
+
+
+
+])
+\openout2 = `pisnicky/vodauzjesvarena.aux'.
+
+ (./pisnicky/vodauzjesvarena.tex
+[608
+
+
+
+])
+\openout2 = `pisnicky/vodavodenka.aux'.
+
+ (./pisnicky/vodavodenka.tex [609
+
+
+
+])
+\openout2 = `pisnicky/vor.aux'.
+
+ (./pisnicky/vor.tex [610
+
+
+
+])
+\openout2 = `pisnicky/vosa.aux'.
+
+
+(./pisnicky/vosa.tex [611
+
+
+
+])
+\openout2 = `pisnicky/vranabuty.aux'.
+
+ (./pisnicky/vranabuty.tex [612
+
+
+
+])
+\openout2 = `pisnicky/vranaplihal.aux'.
+
+
+(./pisnicky/vranaplihal.tex [613
+
+
+
+])
+\openout2 = `pisnicky/vsinidolinecka.aux'.
+
+ (./pisnicky/vsinidolinecka.tex [614
+
+
+
+])
+\openout2 = `pisnicky/vsichnijsouuzvmexiku.aux'.
+
+
+(./pisnicky/vsichnijsouuzvmexiku.tex [615
+
+
+
+])
+\openout2 = `pisnicky/vyletelaholubicka.aux'.
+
+ (./pisnicky/vyletelaholubicka.tex
+[616
+
+
+
+])
+\openout2 = `pisnicky/vysokyjalovec.aux'.
+
+ (./pisnicky/vysokyjalovec.tex [617
+
+
+
+])
+\openout2 = `pisnicky/wadeinthewater.aux'.
+
+ (./pisnicky/wadeinthewater.tex
+[618
+
+
+
+])
+\openout2 = `pisnicky/walkingbacktohappiness.aux'.
+
+ (./pisnicky/walkingbacktohappiness.tex [619
+
+
+
+])
+\openout2 = `pisnicky/waterloo.aux'.
+
+ (./pisnicky/waterloo.tex
+[620
+
+
+
+])
+\openout2 = `pisnicky/wearethechampions.aux'.
+
+ (./pisnicky/wearethechampions.tex [621
+
+
+
+])
+\openout2 = `pisnicky/wewillrockyou.aux'.
+
+ (./pisnicky/wewillrockyou.tex
+[622
+
+
+
+])
+\openout2 = `pisnicky/whenthesaintsgomarchingin.aux'.
+
+ (./pisnicky/whenthesaintsgomarchingin.tex [623
+
+
+
+])
+\openout2 = `pisnicky/workinatthecarwashblues.aux'.
+
+
+(./pisnicky/workinatthecarwashblues.tex [624
+
+
+
+])
+\openout2 = `pisnicky/www.idnes.aux'.
+
+ (./pisnicky/www.idnes.tex
+[625
+
+
+
+])
+\openout2 = `pisnicky/yellowsubmarine.aux'.
+
+ (./pisnicky/yellowsubmarine.tex [626
+
+
+
+])
+\openout2 = `pisnicky/yesterday.aux'.
+
+ (./pisnicky/yesterday.tex
+[627
+
+
+
+])
+\openout2 = `pisnicky/zabilizabili.aux'.
+
+ (./pisnicky/zabilizabili.tex [628
+
+
+
+])
+\openout2 = `pisnicky/zahradaticha.aux'.
+
+ (./pisnicky/zahradaticha.tex
+[629
+
+
+
+])
+\openout2 = `pisnicky/zapomenutytrumf.aux'.
+
+ (./pisnicky/zapomenutytrumf.tex [630
+
+
+
+])
+\openout2 = `pisnicky/zapomnetliva.aux'.
+
+ (./pisnicky/zapomnetliva.tex
+[631
+
+
+
+])
+\openout2 = `pisnicky/zasvoupravdoustat.aux'.
+
+ (./pisnicky/zasvoupravdoustat.tex [632
+
+
+
+])
+\openout2 = `pisnicky/zatimcosekoupes.aux'.
+
+ (./pisnicky/zatimcosekoupes.tex [633
+
+
+
+])
+\openout2 = `pisnicky/zavolejtestraze.aux'.
+
+ (./pisnicky/zavolejtestraze.tex [634
+
+
+
+])
+\openout2 = `pisnicky/zdaloseti.aux'.
+
+ (./pisnicky/zdaloseti.tex
+[635
+
+
+
+])
+\openout2 = `pisnicky/zejtramamzkousku.aux'.
+
+ (./pisnicky/zejtramamzkousku.tex [636
+
+
+
+])
+\openout2 = `pisnicky/zelenefrancouzskeplane.aux'.
+
+
+(./pisnicky/zelenefrancouzskeplane.tex [637
+
+
+
+])
+\openout2 = `pisnicky/zeleneplane.aux'.
+
+ (./pisnicky/zeleneplane.tex
+[638
+
+
+
+])
+\openout2 = `pisnicky/zeleneudoli.aux'.
+
+ (./pisnicky/zeleneudoli.tex [639
+
+
+
+])
+\openout2 = `pisnicky/zitraranovpet.aux'.
+
+ (./pisnicky/zitraranovpet.tex
+[640
+
+
+
+])
+\openout2 = `pisnicky/zklamanalaska.aux'.
+
+ (./pisnicky/zklamanalaska.tex [641
+
+
+
+])
+\openout2 = `pisnicky/zkratky.aux'.
+
+ (./pisnicky/zkratky.tex [642
+
+
+
+])
+\openout2 = `pisnicky/zlataklec.aux'.
+
+
+(./pisnicky/zlataklec.tex [643
+
+
+
+])
+\openout2 = `pisnicky/zlatestrevicky.aux'.
+
+ (./pisnicky/zlatestrevicky.tex [644
+
+
+
+])
+\openout2 = `pisnicky/zpatkydotrenek.aux'.
+
+
+(./pisnicky/zpatkydotrenek.tex [645
+
+
+
+])
+\openout2 = `pisnicky/zpivatatajan.aux'.
+
+ (./pisnicky/zpivatatajan.tex [646
+
+
+
+])
+\openout2 = `pisnicky/ztracenabackorka.aux'.
+
+
+(./pisnicky/ztracenabackorka.tex [647
+
+
+
+])
+\openout2 = `pisnicky/zumzumI.aux'.
+
+ (./pisnicky/zumzumI.tex [648
+
+
+
+])
+\openout2 = `pisnicky/zumzumII.aux'.
+
+
+(./pisnicky/zumzumII.tex [649
+
+
+
+])
+\openout2 = `pisnicky/zustan.aux'.
+
+ (./pisnicky/zustan.tex [650
+
+
+
+])
+\openout2 = `pisnicky/zuzana.aux'.
+
+
+(./pisnicky/zuzana.tex [651
+
+
+
+])
+\openout2 = `pisnicky/zvednetekotvy.aux'.
+
+ (./pisnicky/zvednetekotvy.tex [652
+
+
+
+])
+\openout2 = `pisnicky/zadnyjnevicosoudomazlice.aux'.
+
+
+(./pisnicky/zadnyjnevicosoudomazlice.tex [653
+
+
+
+])
+\openout2 = `pisnicky/zelviblues.aux'.
+
+ (./pisnicky/zelviblues.tex
+[654
+
+
+
+])
+\openout2 = `pisnicky/zivotjejennahoda.aux'.
+
+ (./pisnicky/zivotjejennahoda.tex [655
+
+
+
+])
+\openout2 = `pisnicky/zizen.aux'.
+
+ (./pisnicky/zizen.tex [656
+
+
+
+])
+\openout2 = `pisnicky/zizniva.aux'.
+
+
+(./pisnicky/zizniva.tex [657
+
+
+
+])
+\openout2 = `obsah.aux'.
+
+ (./obsah.tex [658
+
+
+
+] [659] [660] [661] [662]
+[663] [664] [665] [666] [667] [668] [669] [670] [671]) [672] (./zpevnik.aux
+(./preamble/obalka.aux) (./preamble/patitul.aux)
+(./preamble/vydavatelskyzaznam.aux) (./preamble/titulnilist.aux)
+(./preamble/dedikace.aux) (./preamble/uvod.aux) (./pisnicky/abychtuzil.aux)
+(./pisnicky/acrosstheuniverse.aux) (./pisnicky/ahorsewithnoname.aux)
+(./pisnicky/aintnograve.aux) (./pisnicky/ajatakadzivocka.aux)
+(./pisnicky/alenkavrisidivu.aux) (./pisnicky/alisongross.aux)
+(./pisnicky/allihavetodoisdream.aux) (./pisnicky/allmyloving.aux)
+(./pisnicky/allyouneedislove.aux) (./pisnicky/amazonka.aux)
+(./pisnicky/amerika.aux) (./pisnicky/andel.aux) (./pisnicky/andelska.aux)
+(./pisnicky/anickadusickanekasli.aux) (./pisnicky/apak.aux)
+(./pisnicky/auldlangsyne.aux) (./pisnicky/autobusyprijizdeji.aux)
+(./pisnicky/autumnleaves.aux) (./pisnicky/aznamprijdoumirubrat.aux)
+(./pisnicky/azseknampravovrati.aux) (./pisnicky/aztosemnusekne.aux)
+(./pisnicky/azvzletnouptaci.aux) (./pisnicky/babickamary.aux)
+(./pisnicky/bajecnazenska.aux) (./pisnicky/barbarskepobrezi.aux)
+(./pisnicky/barborapiseztabora.aux) (./pisnicky/basniktenmapravoveta.aux)
+(./pisnicky/batalion.aux) (./pisnicky/bednaodwhisky.aux)
+(./pisnicky/beranekavlk.aux) (./pisnicky/beskydebeskyde.aux)
+(./pisnicky/bigbangtheorytheme.aux) (./pisnicky/blackbird.aux)
+(./pisnicky/blaznovaukolebavka.aux) (./pisnicky/blazekI.aux)
+(./pisnicky/blazekII.aux) (./pisnicky/bluesfolsomskeveznice.aux)
+(./pisnicky/bonsoirmademoiselleparis.aux) (./pisnicky/botyprotilasce.aux)
+(./pisnicky/botyzkuzetoulavejchpsu.aux) (./pisnicky/bratrickuzavirejvratka.aux)
+(./pisnicky/breclavskakasarna.aux) (./pisnicky/brnojezlatalod.aux)
+(./pisnicky/budemilehkazem.aux) (./pisnicky/buraky.aux)
+(./pisnicky/carminaamorosa.aux) (./pisnicky/codelastodelejrad.aux)
+(./pisnicky/cojsemmeldneskobedu.aux) (./pisnicky/cojstehasici.aux)
+(./pisnicky/cosatosupoce.aux) (./pisnicky/coztebebude.aux)
+(./pisnicky/carodejnicezamesbury.aux) (./pisnicky/casysemeni.aux)
+(./pisnicky/ceresne.aux) (./pisnicky/ceresnicky.aux) (./pisnicky/cernadira.aux)
+(./pisnicky/cernaostrava.aux) (./pisnicky/cernejpasazer.aux)
+(./pisnicky/cerneocijdetespat.aux) (./pisnicky/cernosskeghetto.aux)
+(./pisnicky/cernymuz.aux) (./pisnicky/certvikdykotvyzvednem.aux)
+(./pisnicky/cervenareka.aux) (./pisnicky/cervenarekatucny.aux)
+(./pisnicky/ceskapisnicka.aux) (./pisnicky/cizesutokone.aux)
+(./pisnicky/cmelak.aux) (./pisnicky/ctrnactkubiku.aux) (./pisnicky/dajana.aux)
+(./pisnicky/daltouvodou.aux) (./pisnicky/dameklukoviskoly.aux)
+(./pisnicky/darmodej.aux) (./pisnicky/davidagolias.aux)
+(./pisnicky/deepriverblues.aux) (./pisnicky/dejmivicsvelasky.aux)
+(./pisnicky/delamecomuzem.aux) (./pisnicky/delani.aux) (./pisnicky/depese.aux)
+(./pisnicky/detijdoukamjeposlou.aux) (./pisnicky/dezo.aux)
+(./pisnicky/digadigadoo.aux) (./pisnicky/digadigadoplihal.aux)
+(./pisnicky/digadigadospiritual.aux) (./pisnicky/dobreminenarada.aux)
+(./pisnicky/dobrodruzstvisbohempanem.aux) (./pisnicky/dokudsezpiva.aux)
+(./pisnicky/donebes.aux) (./pisnicky/doneygal.aux)
+(./pisnicky/dontstopmenow.aux) (./pisnicky/dorajenevedemost.aux)
+(./pisnicky/doyouhearthepeoplesing.aux) (./pisnicky/drakodbileskaly.aux)
+(./pisnicky/drunkensailor.aux) (./pisnicky/duhovavila.aux)
+(./pisnicky/dumuvychazejicihoslunce.aux) (./pisnicky/dvahavrani.aux)
+(./pisnicky/dvakrat.aux) (./pisnicky/dvebaby.aux)
+(./pisnicky/dablovynamluvy.aux) (./pisnicky/eduvzalikfotografovi.aux)
+(./pisnicky/elcondorpasa.aux) (./pisnicky/eldorado.aux)
+(./pisnicky/elektrickyvalcik.aux) (./pisnicky/ejbozemuj.aux)
+(./pisnicky/ejhorahora.aux) (./pisnicky/ejtahuckahospoda.aux)
+(./pisnicky/ejzomrelamizena.aux) (./pisnicky/escesijapoharvinazaplatim.aux)
+(./pisnicky/escesomsaneozenil.aux) (./pisnicky/estebylystyrytydnedohodu.aux)
+(./pisnicky/estevinkonevykyslo.aux) (./pisnicky/farao.aux)
+(./pisnicky/feleenazelpasa.aux) (./pisnicky/felicita.aux)
+(./pisnicky/fi-li-mi.aux) (./pisnicky/fiveshortminutes.aux)
+(./pisnicky/flymetothemoon.aux) (./pisnicky/folsomprisonblues.aux)
+(./pisnicky/fornoone.aux) (./pisnicky/fotbal.aux)
+(./pisnicky/frankiedlouhan.aux) (./pisnicky/frantisek.aux)
+(./pisnicky/frydekmistek.aux) (./pisnicky/gilotina.aux) (./pisnicky/girl.aux)
+(./pisnicky/greensleeves.aux) (./pisnicky/gronskapisnicka.aux)
+(./pisnicky/guadalcanal.aux) (./pisnicky/guantanamo.aux)
+(./pisnicky/hadejkdomipise.aux) (./pisnicky/hajnyjelesapan.aux)
+(./pisnicky/harmonikarska.aux) (./pisnicky/haubilouplani.aux)
+(./pisnicky/hejholazpivejsisam.aux) (./pisnicky/hejpanekrali.aux)
+(./pisnicky/hejteto.aux) (./pisnicky/help.aux) (./pisnicky/herecomesthesun.aux)
+(./pisnicky/heyhey.aux) (./pisnicky/heyjude.aux) (./pisnicky/hittheroadjack.aux
+) (./pisnicky/hladiny.aux) (./pisnicky/hlavnezejsmenavzduchu.aux)
+(./pisnicky/hledamdevcenanedeli.aux) (./pisnicky/hledasezena.aux)
+(./pisnicky/hlidackrav.aux) (./pisnicky/hlupakunajdute.aux)
+(./pisnicky/hodiljsemflintudozita.aux) (./pisnicky/hohowatanay.aux)
+(./pisnicky/hojahoj.aux) (./pisnicky/holkyznasiskolky.aux)
+(./pisnicky/holubidum.aux) (./pisnicky/honkytonkyblues.aux)
+(./pisnicky/horelalipkahorela.aux) (./pisnicky/hornicka.aux)
+(./pisnicky/houseoftherisingsun.aux) (./pisnicky/housertetyrody.aux)
+(./pisnicky/hrobar.aux) (./pisnicky/hudsonskysify.aux) (./pisnicky/huslicky.aux
+) (./pisnicky/hvezdanavrbe.aux)
+(./pisnicky/hvezdyjsoujaksedmikraskynadbrnem.aux) (./pisnicky/chajdamala.aux)
+(./pisnicky/chaloupka.aux) (./pisnicky/chattanoogachoochoo.aux)
+(./pisnicky/chcibytpritom.aux) (./pisnicky/childrengowhereisendthee.aux)
+(./pisnicky/chirpychirpycheepcheep.aux) (./pisnicky/chodimechodime.aux)
+(./pisnicky/chodimpobroadwayi.aux) (./pisnicky/chvalimtezemema.aux)
+(./pisnicky/chytilajsemnapasecemotylka.aux) (./pisnicky/idzepostaridze.aux)
+(./pisnicky/ififell.aux) (./pisnicky/illbethereforyou.aux)
+(./pisnicky/illfollowthesun.aux) (./pisnicky/imagine.aux)
+(./pisnicky/intelektualky.aux) (./pisnicky/inthesummertime.aux)
+(./pisnicky/inzenyrska.aux) (./pisnicky/ionlywanttobewithyou.aux)
+(./pisnicky/irenegoodnight.aux) (./pisnicky/isielmacekdomalacek.aux)
+(./pisnicky/islamarina.aux) (./pisnicky/italneznatenzazrak.aux)
+(./pisnicky/jabuduchoditpospickach.aux) (./pisnicky/jaharfumam.aux)
+(./pisnicky/jachcipoezii.aux) (./pisnicky/jakejetohezke.aux)
+(./pisnicky/jaktosnamalaskobude.aux) (./pisnicky/japonecka.aux)
+(./pisnicky/jarmila.aux) (./pisnicky/jaro.aux) (./pisnicky/jarodelapokusy.aux)
+(./pisnicky/jarosovskypivovar.aux) (./pisnicky/jasetesimdonebe.aux)
+(./pisnicky/jastebouzitnebudu.aux) (./pisnicky/jdemzpatkydolesu.aux)
+(./pisnicky/jdoupomnejdou.aux) (./pisnicky/jedesohajzvidna.aux)
+(./pisnicky/jednohodnesevratis.aux) (./pisnicky/jednoubudemdal.aux)
+(./pisnicky/jednourano.aux) (./pisnicky/jenamteplo.aux)
+(./pisnicky/jestemichvilkuzpivej.aux) (./pisnicky/jestlitonebudelaska.aux)
+(./pisnicky/jez.aux) (./pisnicky/jezisek.aux) (./pisnicky/jinetonebude.aux)
+(./pisnicky/jozinzbazin.aux) (./pisnicky/jsemvasniva.aux)
+(./pisnicky/karavanamraku.aux) (./pisnicky/katce.aux) (./pisnicky/kayandra.aux)
+(./pisnicky/kedsomisiel.aux) (./pisnicky/kedsomisielzrana.aux)
+(./pisnicky/kdejsou.aux) (./pisnicky/kdonaplninebe.aux)
+(./pisnicky/kdovicobudepak.aux) (./pisnicky/kdybybylamorava.aux)
+(./pisnicky/kdybybylbavorov.aux) (./pisnicky/kdybychbylaptackem.aux)
+(./pisnicky/kdybychbylavlastovkou.aux) (./pisnicky/kdybysevkomnatach.aux)
+(./pisnicky/kdybytadybylatakovapanenka.aux)
+(./pisnicky/kdyzjsembylchlapecmalej.aux) (./pisnicky/kdyzmebralizavojaka.aux)
+(./pisnicky/kdyznapavoukasedneblues.aux) (./pisnicky/kdyzprijdouchvile.aux)
+(./pisnicky/kdyzsemselzhradista.aux) (./pisnicky/kdyzsezamilujekun.aux)
+(./pisnicky/kloboukvekrovi.aux) (./pisnicky/kluciklucisklukama.aux)
+(./pisnicky/kluziste.aux) (./pisnicky/koberecek.aux)
+(./pisnicky/kocourseschoulilnatvujklin.aux) (./pisnicky/kockanaokne.aux)
+(./pisnicky/kolenasejchalupecky.aux) (./pisnicky/kolobezka.aux)
+(./pisnicky/kometa.aux) (./pisnicky/koukamjakcelazemevstava.aux)
+(./pisnicky/kovbojuvnarek.aux) (./pisnicky/kozel.aux)
+(./pisnicky/krajinaposedlatmou.aux) (./pisnicky/kralaklaun.aux)
+(./pisnicky/kratkypopisleta.aux) (./pisnicky/kravykravy.aux)
+(./pisnicky/krutavalka.aux) (./pisnicky/kumbaya.aux)
+(./pisnicky/kuptesihrebeny.aux) (./pisnicky/labamba.aux)
+(./pisnicky/ladovskazima.aux) (./pisnicky/ladycarneval.aux)
+(./pisnicky/lachtani.aux) (./pisnicky/laskajetusnami.aux) (./pisnicky/lasko.aux
+) (./pisnicky/laskomajastunu.aux) (./pisnicky/laughingontheoutside.aux)
+(./pisnicky/layla.aux) (./pisnicky/leavingonajetplane.aux)
+(./pisnicky/letadozravani.aux) (./pisnicky/letelybacily.aux)
+(./pisnicky/letitbe.aux) (./pisnicky/letniukolebavka.aux)
+(./pisnicky/letochovahospudecka.aux) (./pisnicky/letosmonikou.aux)
+(./pisnicky/linda.aux) (./pisnicky/litaliano.aux) (./pisnicky/littlebighorn.aux
+) (./pisnicky/livingnextdoortoalice.aux) (./pisnicky/loddeti.aux)
+(./pisnicky/lojzaaliza.aux) (./pisnicky/lonelystranger.aux)
+(./pisnicky/lovemetender.aux) (./pisnicky/macpherson.aux) (./pisnicky/majak.aux
+) (./pisnicky/maleceskeblues.aux) (./pisnicky/malekote.aux)
+(./pisnicky/malujzaseobrazky.aux) (./pisnicky/mamdomakocku.aux)
+(./pisnicky/mamincinpernik.aux) (./pisnicky/mammalystan.aux)
+(./pisnicky/mamosvazmimujranec.aux) (./pisnicky/mamprimaden.aux)
+(./pisnicky/mamutikrik.aux) (./pisnicky/margot.aux)
+(./pisnicky/marjankomarjanko.aux) (./pisnicky/marie.aux)
+(./pisnicky/marnivasestrenice.aux) (./pisnicky/maschutmajoranky.aux)
+(./pisnicky/masirujunafrancuza.aux) (./pisnicky/mecvrucemam.aux)
+(./pisnicky/medicinman.aux) (./pisnicky/medvedinevedi.aux)
+(./pisnicky/melanaocichbryle.aux) (./pisnicky/mezihorami.aux)
+(./pisnicky/mezinarodni.aux) (./pisnicky/mikymauz.aux)
+(./pisnicky/milencivtexaskach.aux) (./pisnicky/milionar.aux)
+(./pisnicky/minulost.aux) (./pisnicky/mlecnybar.aux) (./pisnicky/mlyny.aux)
+(./pisnicky/mnisijsoutisi.aux) (./pisnicky/mobilizace.aux)
+(./pisnicky/mojiprvnimuze.aux) (./pisnicky/montgomery.aux)
+(./pisnicky/morituritesalutant.aux) (./pisnicky/morseovka.aux)
+(./pisnicky/moskevskavirtualka.aux) (./pisnicky/mosty.aux)
+(./pisnicky/motyl.aux) (./pisnicky/moudobrouzpravuhlasej.aux)
+(./pisnicky/mravencivkredenci.aux) (./pisnicky/mravenciukolebavka.aux)
+(./pisnicky/muzikanticodelate.aux) (./pisnicky/muzinejvicslusisolo.aux)
+(./pisnicky/mys.aux) (./pisnicky/nacekane.aux) (./pisnicky/nacopojdemdomov.aux)
+(./pisnicky/nadejeatouhy.aux) (./pisnicky/nadejilaskouavirou.aux)
+(./pisnicky/nagasakihirosima.aux) (./pisnicky/nahorachstudenky.aux)
+(./pisnicky/nakamenikamen.aux) (./pisnicky/nakolena.aux) (./pisnicky/namest.aux
+) (./pisnicky/namornicka.aux) (./pisnicky/namornik.aux)
+(./pisnicky/namsestalonecoprekrasneho.aux) (./pisnicky/nancymulligan.aux)
+(./pisnicky/napradedusnezi.aux) (./pisnicky/narozloucenimypoteseni.aux)
+(./pisnicky/nashledanoukrokodyle.aux) (./pisnicky/nashville.aux)
+(./pisnicky/natechpanskychlukach.aux) (./pisnicky/natusvatukaterinu.aux)
+(./pisnicky/navode.aux) (./pisnicky/nausniceztresni.aux)
+(./pisnicky/nebenazemi.aux) (./pisnicky/necoolasce.aux)
+(./pisnicky/nedalekoodtrencina.aux) (./pisnicky/nechtezvonyznit.aux)
+(./pisnicky/nejdelsivlak.aux) (./pisnicky/nejlipjimbylo.aux)
+(./pisnicky/nekdopijelih.aux) (./pisnicky/nemusibejt.aux)
+(./pisnicky/nenivsechnoparada.aux) (./pisnicky/neopatrnykrecek.aux)
+(./pisnicky/nepijjanonepijvodu.aux) (./pisnicky/netusim.aux)
+(./pisnicky/nevadi.aux) (./pisnicky/niagara.aux) (./pisnicky/nictolikneboli.aux
+) (./pisnicky/noaco.aux) (./pisnicky/nobodyknowsyouwhenyouredownandout.aux)
+(./pisnicky/noe.aux) (./pisnicky/nomoreauctionblockforme.aux)
+(./pisnicky/norwegianwood.aux) (./pisnicky/nosorozec.aux)
+(./pisnicky/nowhereman.aux) (./pisnicky/obladioblada.aux)
+(./pisnicky/odecita.aux) (./pisnicky/odopavyjeduvozy.aux)
+(./pisnicky/ohfreedom.aux) (./pisnicky/ohsusanna.aux)
+(./pisnicky/okolohradce.aux) (./pisnicky/okor.aux)
+(./pisnicky/oldtimereligion.aux) (./pisnicky/olivertwist.aux)
+(./pisnicky/olomouc.aux) (./pisnicky/oneofus.aux)
+(./pisnicky/oranzovyexpres.aux) (./pisnicky/orlice.aux) (./pisnicky/osmichu.aux
+) (./pisnicky/ostravo.aux) (./pisnicky/outsiderwaltz.aux)
+(./pisnicky/padalyhvezdy.aux) (./pisnicky/pandoktorjanousek.aux)
+(./pisnicky/paneprezidente.aux) (./pisnicky/panubohudooken.aux)
+(./pisnicky/paradaI.aux) (./pisnicky/paradaII.aux)
+(./pisnicky/parhavranichcopanku.aux) (./pisnicky/partazrancey.aux)
+(./pisnicky/pata.aux) (./pisnicky/peklavdolky.aux) (./pisnicky/pennylane.aux)
+(./pisnicky/penzioncesko.aux) (./pisnicky/pepita.aux)
+(./pisnicky/perinamastyryrozky.aux) (./pisnicky/pijtevodu.aux)
+(./pisnicky/pisencomeucillistopad.aux) (./pisnicky/pisenokoni.aux)
+(./pisnicky/pisenorose.aux) (./pisnicky/pisenprace.aux)
+(./pisnicky/pisenzhrzenehotrampa.aux) (./pisnicky/piskajicicikan.aux)
+(./pisnicky/plavalahusickapodunaji.aux) (./pisnicky/pocestny.aux)
+(./pisnicky/poddubemzadubem.aux) (./pisnicky/podnasimokynkem.aux)
+(./pisnicky/podzim.aux) (./pisnicky/podzimniplihal.aux)
+(./pisnicky/podzimnispiritual.aux) (./pisnicky/pohadka.aux)
+(./pisnicky/pohoda.aux) (./pisnicky/pochodamerickychnamorniku.aux)
+(./pisnicky/pochodmarodu.aux) (./pisnicky/pojdmespat.aux)
+(./pisnicky/porekadla.aux) (./pisnicky/poslednikovboj.aux)
+(./pisnicky/potopa.aux) (./pisnicky/potrikratsomnaokenkotukal.aux)
+(./pisnicky/poutnikadivka.aux) (./pisnicky/povestehovejs.aux)
+(./pisnicky/povidej.aux) (./pisnicky/prahaprcice.aux)
+(./pisnicky/prachovskeskaly.aux) (./pisnicky/praminekvlasu.aux)
+(./pisnicky/prazce.aux) (./pisnicky/pridijanoknam.aux) (./pisnicky/prodavac.aux
+) (./pisnicky/prodavacslonu.aux) (./pisnicky/proklatejvuz.aux)
+(./pisnicky/promeny.aux) (./pisnicky/prosimteholka.aux) (./pisnicky/prsi.aux)
+(./pisnicky/predsusedovym.aux) (./pisnicky/prejelijsmeslepici.aux)
+(./pisnicky/privozskaput.aux) (./pisnicky/priznavam.aux)
+(./pisnicky/psicenazrzla.aux) (./pisnicky/pterodaktylus.aux)
+(./pisnicky/puffthemagicdragon.aux) (./pisnicky/pulnocni.aux)
+(./pisnicky/radasemiluje.aux) (./pisnicky/radchodimnapostu.aux)
+(./pisnicky/radsebrouzdamrosou.aux) (./pisnicky/raketounamars.aux)
+(./pisnicky/ranavtrave.aux) (./pisnicky/rande.aux)
+(./pisnicky/reddwarftheme.aux) (./pisnicky/redrivervalley.aux)
+(./pisnicky/reklamanaticho.aux) (./pisnicky/rezrezrez.aux)
+(./pisnicky/ringoffire.aux) (./pisnicky/rocknrollprobeethovena.aux)
+(./pisnicky/rockyraccoon.aux) (./pisnicky/rodneudoli.aux)
+(./pisnicky/romance16leta.aux) (./pisnicky/rosanakolejich.aux)
+(./pisnicky/rovnoujotadyrovnou.aux) (./pisnicky/roztrhanachalupka.aux)
+(./pisnicky/rubikovakostka.aux) (./pisnicky/rutysutyarizonatexas.aux)
+(./pisnicky/ruzeztexasu.aux) (./pisnicky/ruzicka.aux)
+(./pisnicky/rychlikjededoprahy.aux) (./pisnicky/ryljencelejdenryl.aux)
+(./pisnicky/rekalasky.aux) (./pisnicky/reknikdetykytkyjsou.aux)
+(./pisnicky/ridictentvrdejchlebama.aux) (./pisnicky/salome.aux)
+(./pisnicky/samsnohaminastole.aux) (./pisnicky/samuraj.aux)
+(./pisnicky/santalucia.aux) (./pisnicky/saraperchetiamo.aux)
+(./pisnicky/saro.aux) (./pisnicky/sbohemgalanecko.aux)
+(./pisnicky/scarboroughfair.aux) (./pisnicky/scarboroughfaircarthy.aux)
+(./pisnicky/seditopicupiana.aux) (./pisnicky/seeyoulateralligator.aux)
+(./pisnicky/senzaunperche.aux) (./pisnicky/severnivitr.aux)
+(./pisnicky/skaloskalo.aux) (./pisnicky/sklenickotysklenena.aux)
+(./pisnicky/slavicizmadridu.aux) (./pisnicky/slunecnyhrob.aux)
+(./pisnicky/slunicko.aux) (./pisnicky/snebyvalouochotou.aux)
+(./pisnicky/snidanevtrave.aux) (./pisnicky/soske.aux) (./pisnicky/soudnyden.aux
+) (./pisnicky/sousedovictonicek.aux) (./pisnicky/spanembohemidemodvas.aux)
+(./pisnicky/spimvobili.aux) (./pisnicky/spinkej.aux)
+(./pisnicky/spravnyslovo.aux) (./pisnicky/sprostyadmindusan.aux)
+(./pisnicky/stanky.aux) (./pisnicky/staraarcha.aux) (./pisnicky/starypribeh.aux
+) (./pisnicky/statistika.aux) (./pisnicky/stinkatedral.aux)
+(./pisnicky/stojihruskavsirempoli.aux) (./pisnicky/studentskahalenka.aux)
+(./pisnicky/summertime.aux) (./pisnicky/svatebnikosile.aux)
+(./pisnicky/svatoborskesirepole.aux) (./pisnicky/svazceskychbohemu.aux)
+(./pisnicky/svetsnamahoupa.aux) (./pisnicky/swingmodrezdi.aux)
+(./pisnicky/satydelajcloveka.aux) (./pisnicky/sirokyhluboky.aux)
+(./pisnicky/siryproud.aux) (./pisnicky/skodalasky.aux) (./pisnicky/skrhola.aux)
+(./pisnicky/slapejdalspiritual.aux) (./pisnicky/slapejdaltucny.aux)
+(./pisnicky/slypanenkysilnici.aux) (./pisnicky/sroubyamatice.aux)
+(./pisnicky/sss.aux) (./pisnicky/svagrmabagr.aux)
+(./pisnicky/takabystetovedela.aux) (./pisnicky/takbytjednoubouri.aux)
+(./pisnicky/takdavnojiz.aux) (./pisnicky/takjsemtady.aux)
+(./pisnicky/takjsmevandrovali.aux)
+(./pisnicky/takkratkoupisenjestenikdonenapsal.aux)
+(./pisnicky/takuzmimaholkamava.aux) (./pisnicky/tamokololevoci.aux)
+(./pisnicky/tamunebeskychbran.aux) (./pisnicky/tancujtancujvykrucaj.aux)
+(./pisnicky/tasidele.aux) (./pisnicky/tearsinheaven.aux)
+(./pisnicky/tecevodatece.aux) (./pisnicky/tenkdoneduma.aux)
+(./pisnicky/tesar.aux) (./pisnicky/tetkajulka.aux)
+(./pisnicky/thesoundofsilence.aux) (./pisnicky/thetimestheyareachangin.aux)
+(./pisnicky/thewateriswide.aux) (./pisnicky/tiamo.aux)
+(./pisnicky/tikoberstisynci.aux) (./pisnicky/timeinabottle.aux)
+(./pisnicky/tisicmil.aux) (./pisnicky/tocozbyvalasko.aux)
+(./pisnicky/tophatbarandgrill.aux) (./pisnicky/totahelpa.aux)
+(./pisnicky/totenkratvctyricatompatom.aux)
+(./pisnicky/totenkratvsedesatomosmom.aux) (./pisnicky/touha.aux)
+(./pisnicky/tramvajacka.aux) (./pisnicky/trezor.aux)
+(./pisnicky/trhvescarborough.aux) (./pisnicky/trpaslicisvatba.aux)
+(./pisnicky/trubadurska.aux) (./pisnicky/tresnezraly.aux)
+(./pisnicky/tresnicky.aux) (./pisnicky/triandele.aux) (./pisnicky/tribratri.aux
+) (./pisnicky/tricitronky.aux) (./pisnicky/tricunici.aux)
+(./pisnicky/trikrize.aux) (./pisnicky/tuneljmenemcas.aux)
+(./pisnicky/tvojesnidane.aux) (./pisnicky/twistandshout.aux)
+(./pisnicky/tyjamo.aux) (./pisnicky/ukolebavkaprokubualenku.aux)
+(./pisnicky/unasnaseveru.aux) (./pisnicky/utekljsemodmanzelkykmamince.aux)
+(./pisnicky/uzkonicekpadi.aux) (./pisnicky/uznechcisevdat.aux)
+(./pisnicky/uzsenamcaskrati.aux) (./pisnicky/uztonenapravim.aux)
+(./pisnicky/uztypilkydorezaly.aux) (./pisnicky/vadinevadi.aux)
+(./pisnicky/valcicek.aux) (./pisnicky/valkaruzi.aux) (./pisnicky/vandrovani.aux
+) (./pisnicky/vandrovni.aux) (./pisnicky/variacenarenesancnitema.aux)
+(./pisnicky/vbufetu.aux) (./pisnicky/vcelkamaja.aux) (./pisnicky/vcera.aux)
+(./pisnicky/vcerazvecera.aux) (./pisnicky/vdobrymizlym.aux)
+(./pisnicky/vecernicek.aux) (./pisnicky/vedmedalcestoma.aux)
+(./pisnicky/velicenstvokat.aux) (./pisnicky/velkyvuz.aux)
+(./pisnicky/velrybarskavyprava.aux) (./pisnicky/veronika.aux)
+(./pisnicky/veruncinapisen.aux) (./pisnicky/veskrini.aux)
+(./pisnicky/vesnickaromance.aux) (./pisnicky/vila.aux)
+(./pisnicky/vineckobile.aux) (./pisnicky/vinnetou.aux) (./pisnicky/virginie.aux
+) (./pisnicky/vitrtovi.aux) (./pisnicky/vjednymdumku.aux) (./pisnicky/vlak.aux)
+(./pisnicky/vlastovkolet.aux) (./pisnicky/vlese.aux)
+(./pisnicky/vmorijemistadost.aux) (./pisnicky/vodacomadrzinadvodou.aux)
+(./pisnicky/vodauzjesvarena.aux) (./pisnicky/vodavodenka.aux)
+(./pisnicky/vor.aux) (./pisnicky/vosa.aux) (./pisnicky/vranabuty.aux)
+(./pisnicky/vranaplihal.aux) (./pisnicky/vsinidolinecka.aux)
+(./pisnicky/vsichnijsouuzvmexiku.aux) (./pisnicky/vyletelaholubicka.aux)
+(./pisnicky/vysokyjalovec.aux) (./pisnicky/wadeinthewater.aux)
+(./pisnicky/walkingbacktohappiness.aux) (./pisnicky/waterloo.aux)
+(./pisnicky/wearethechampions.aux) (./pisnicky/wewillrockyou.aux)
+(./pisnicky/whenthesaintsgomarchingin.aux)
+(./pisnicky/workinatthecarwashblues.aux) (./pisnicky/www.idnes.aux)
+(./pisnicky/yellowsubmarine.aux) (./pisnicky/yesterday.aux)
+(./pisnicky/zabilizabili.aux) (./pisnicky/zahradaticha.aux)
+(./pisnicky/zapomenutytrumf.aux) (./pisnicky/zapomnetliva.aux)
+(./pisnicky/zasvoupravdoustat.aux) (./pisnicky/zatimcosekoupes.aux)
+(./pisnicky/zavolejtestraze.aux) (./pisnicky/zdaloseti.aux)
+(./pisnicky/zejtramamzkousku.aux) (./pisnicky/zelenefrancouzskeplane.aux)
+(./pisnicky/zeleneplane.aux) (./pisnicky/zeleneudoli.aux)
+(./pisnicky/zitraranovpet.aux) (./pisnicky/zklamanalaska.aux)
+(./pisnicky/zkratky.aux) (./pisnicky/zlataklec.aux)
+(./pisnicky/zlatestrevicky.aux) (./pisnicky/zpatkydotrenek.aux)
+(./pisnicky/zpivatatajan.aux) (./pisnicky/ztracenabackorka.aux)
+(./pisnicky/zumzumI.aux) (./pisnicky/zumzumII.aux) (./pisnicky/zustan.aux)
+(./pisnicky/zuzana.aux) (./pisnicky/zvednetekotvy.aux)
+(./pisnicky/zadnyjnevicosoudomazlice.aux) (./pisnicky/zelviblues.aux)
+(./pisnicky/zivotjejennahoda.aux) (./pisnicky/zizen.aux)
+(./pisnicky/zizniva.aux) (./obsah.aux))
+Package rerunfilecheck Info: File `zpevnik.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+ ) 
+Here is how much of TeX's memory you used:
+ 32522 strings out of 478862
+ 650048 string characters out of 5858945
+ 944270 words of memory out of 6000000
+ 42893 multiletter control sequences out of 15000+600000
+ 439607 words of font info for 115 fonts, out of 8000000 for 9000
+ 1137 hyphenation exceptions out of 8191
+ 100i,14n,104p,1807b,3085s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{workingatthecarwashblues} has been referenced but
+ does not exist, replaced by a fixed one
+
+pdfTeX warning (dest): name{rockyracoon} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{mavarova} has been referenced but does not exist, r
+eplaced by a fixed one
+
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/frcursive/frcr14.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/cm-super/sfbi1440.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-su
+per/sfbx0700.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfb
+x0800.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfbx1000.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/cm-super/sfcc1200.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/cm-super/sfcc1440.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/cm-super/sfit1000.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/cm-super/sfrm0600.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/cm-super/sfrm0700.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-
+super/sfrm0800.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/s
+frm0900.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1000
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/cm-super/sfti0700.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/cm-super/sfti0800.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/cm-super/sfti0900.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/cm-super/sfti1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/c
+m-super/sfti1200.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super
+/sfti1440.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sftt10
+00.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/cm-super/sfxc2488.pfb>
+Output written on zpevnik.pdf (672 pages, 3936502 bytes).
+PDF statistics:
+ 8726 PDF objects out of 8907 (max. 8388607)
+ 7752 compressed objects within 78 object streams
+ 2233 named destinations out of 2487 (max. 500000)
+ 113 words of extra memory for PDF output out of 10000 (max. 10000000)
+
