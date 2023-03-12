@@ -19,7 +19,7 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 
 1. Ve složce `pisnicky` vytvořím soubor s názvem podle názvu písničky. Název souboru se tvoří odebráním diakritiky a mezer z názvu písničky a zapsáním tohoto názvu malými písmeny. Je-li potřeba odlišit dvě písničky se stejným názvem od různých interpretů, učiní se tak přidáním jména interpreta (pokud možno jednoslovně, tedy příjmení nebo název skupiny) za jméno písničky, opět bez mezer a diakritiky, malými písmeny. Je možné použít šablonu, která je umístěna v kořenovém adresáři zpěvníku.
 2. V souboru `zpevnik.tex` přidám řádek `\include{pisnicky/<nazevpisnicky>}` do patřičné sekce. Je potřeba písničku správně zařadit, aby se ve zpěvníku dodrželo řazení podle abecedy.
-3. V souboru `obsah.tex` přidám do patřičné sekce řádek `\hylo{lizatko}{<nazevpisnicky>}` a vytvořím tak v obsahu odkaz na danou písničku. Pokud má písnička známého interpreta, je potřeba přidat tento odkaz i do části obsahu řazené podle interpretů. Opět dbám na správné abecední zařazení.
+3. V souboru `obsah.tex` přidám do patřičné sekce řádek `\hylo{<nazevsouborupisnicky>}{<název písničky>}` a vytvořím tak v obsahu odkaz na danou písničku. Pokud má písnička známého interpreta, je potřeba přidat tento odkaz i do části obsahu řazené podle interpretů. Opět dbám na správné abecední zařazení.
 4. Otevřu si soubor s písničkou a začnu přepisovat. Více o přepisování písniček dále.
 5. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 6. Upravím číslo verze zvýšením o setinku.
@@ -68,3 +68,17 @@ V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různ�
 
 ### Další poznámky pro psaní písniček
 V případě, že má písnička známého interpreta, je potřeba uvést odkaz na sekci obsahu řazenou podle interpretů. To se vysází příkazem například `\interpret{clapton}{Eric Clapton}` pro Erica Claptona. V první závorce je uvedena kotva odkazu v obsahu, ve druhé závorce je jméno interpreta.
+
+### Doporučení pro psaní písniček
+Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu souborů příliš dlouho. Navykl jsem si proto používat k psaní písničky pouze zjednodušený soubor zpevnik.tex. Zjednodušení spočívá v tom, že namísto importování všech souborů s písničkami importuji pouze přepisovanou písničku. V praxi to funguje tak, že mám zjednodušený soubor zpevnik.tex na Overleafu a přepisuji písničky tam. Jakmile mám písničku přepsanou, provedu následující kroky. Používám editor vim, je však možné použít kterýkoli jiný textový editor.
+
+1. Vytvořím nový soubor písničky `vim pisnicky/<nazevpisnicky>.tex`.
+2. Překopíruju zdrojový text z Overleafu do tohoto souboru a uložím.
+3. Přidám import písničky do souboru zpevnik.tex.
+4. Přidám odkaz(y) na písničku do obsahu.
+5. Zvýším verzi zpěvníku ve vydavatelské poznámce o setinku.
+6. Zkompiluji zpěvník v terminálu `pdflatex zpevnik.tex`.
+
+### Šikovné příkazy
+- vyhledání souboru písničky `ls pisnicky | grep <nazevpisnicky>`
+- vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`
