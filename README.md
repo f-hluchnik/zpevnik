@@ -82,3 +82,4 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 ### Šikovné příkazy
 - vyhledání souboru písničky `ls pisnicky | grep <nazevpisnicky>`
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`
+- kontrola počtu písniček `ls pisnicky/*.tex | wc -l`
