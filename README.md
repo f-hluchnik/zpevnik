@@ -1,6 +1,6 @@
 # O zpěvníku
 Tento zpěvník se jmenuje "Ještě mi chvilku zpívej" a obsahuje různé písničky podle vůle mé a postupem času i dalších lidí, kteří z něj zpívali.
-Odkaz na Trello nástěnku s frontou písniček k přepsání: [nastenka-fronta-pinicek](https://trello.com/b/sJi9Cjii/ještě-mi-chvilku-zpívej).
+
 ## Filosofie zpěvníku
 Filosofie tohoto zpěvníku je taková, že by se z něj mělo dobře zpívat a hrát. To znamená několik principů, které se během tvorby snažím dodržovat.
 
@@ -67,7 +67,7 @@ V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různ�
 - `\2-9` - 2-9 akord, patřičně podle čísla
 
 ### Další poznámky pro psaní písniček
-V případě, že má písnička známého interpreta, je potřeba uvést odkaz na sekci obsahu řazenou podle interpretů. To se vysází příkazem například `\interpret{clapton}{Eric Clapton}` pro Erica Claptona. V první závorce je uvedena kotva odkazu v obsahu, ve druhé závorce je jméno interpreta.
+V případě, že má písnička známého interpreta, je potřeba uvést odkaz na sekci obsahu řazenou podle interpretů. To se vysází příkazem například `\interpret{ericclapton}{Eric Clapton}` pro Erica Claptona. V první závorce je uvedena kotva odkazu v obsahu, ve druhé závorce je jméno interpreta.
 
 ### Doporučení pro psaní písniček
 Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu souborů příliš dlouho. Navykl jsem si proto používat k psaní písničky pouze zjednodušený soubor zpevnik.tex. Zjednodušení spočívá v tom, že namísto importování všech souborů s písničkami importuji pouze přepisovanou písničku. V praxi to funguje tak, že mám zjednodušený soubor zpevnik.tex na Overleafu a přepisuji písničky tam. Jakmile mám písničku přepsanou, provedu následující kroky. Používám editor vim, je však možné použít kterýkoli jiný textový editor.
