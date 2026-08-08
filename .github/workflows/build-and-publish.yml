@@ -1,7 +1,7 @@
 name: Build songbook and publish to website
 on:
   push:
-    branches: [main]
+    branches: [main, master]
 
 jobs:
   build:
