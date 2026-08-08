@@ -37,12 +37,8 @@ jobs:
           token: ${{ secrets.WEBSITE_REPO_TOKEN }}
           path: website
 
-      - name: Render index.md from template
-        working-directory: website
-        run: |
-          set -euo pipefail
-          sed "s/__VERSION__/${{ steps.version.outputs.version }}/g" \
-            content/pages/index.md.tpl > content/pages/index.md
+      - name: Write version file
+        run: echo "${{ steps.version.outputs.version }}" > website/version.txt
 
       - name: Update PDF
         run: cp zpevnik.pdf website/static/files/zpevnik_last.pdf
@@ -64,6 +60,6 @@ jobs:
         run: |
           git config user.name "songbook-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add content/pages/index.md static/files/zpevnik_last.pdf
+          git add version.txt static/files/zpevnik_last.pdf
           git commit -m "Update songbook to v${{ steps.version.outputs.version }}" || echo "nothing to commit"
           git push
