@@ -24,6 +24,19 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 5. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 6. Upravím číslo verze zvýšením o setinku.
 
+## Automatické publikování
+
+Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
+
+1. Zkompiluje `zpevnik.tex` do PDF.
+2. Spočítá aktuální verzi zpěvníku podle počtu souborů ve složce `pisnicky` (stejný princip jako v postupu přidávání nové písničky výše).
+3. Vytvoří GitHub Release s tagem odpovídajícím verzi (např. `v8.19`) a přiloží k němu zkompilované PDF ke stažení.
+4. Zapíše aktuální verzi a zkompilované PDF do repozitáře webu ([zpevnik-web](https://github.com/f-hluchnik/zpevnik-web)) a tuto změnu tam commitne a pushne.
+
+Push do repozitáře webu následně spustí jeho vlastní publikační workflow, který web přebuilduje (mimo jiné vypíše aktuální verzi na hlavní stránku) a nasadí přes GitHub Pages. Odkaz ke stažení na webu tedy vždy směřuje na nejnovější verzi zpěvníku, a stažený soubor má ve svém názvu i příslušné číslo verze.
+
+Díky tomu stačí přidat písničku, zvýšit verzi a pushnout — o zbytek (kompilace, publikace, aktualizace webu) se postará automatizace.
+
 ## Přepisování písniček
 V této sekci popíšu postup a konvence přepisování písniček. Nejprve uvedu povinné součásti písničky:
 

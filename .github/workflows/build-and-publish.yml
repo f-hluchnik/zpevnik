@@ -43,6 +43,9 @@ jobs:
       - name: Update PDF
         run: cp zpevnik.pdf website/static/files/zpevnik_last.pdf
 
+      - name: Update recent songs list
+        run: cp recent_songs.txt website/content/recent_songs.txt
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -60,6 +63,6 @@ jobs:
         run: |
           git config user.name "songbook-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add version.txt static/files/zpevnik_last.pdf
+          git add version.txt static/files/zpevnik_last.pdf content/recent_songs.txt
           git commit -m "Update songbook to v${{ steps.version.outputs.version }}" || echo "nothing to commit"
           git push
