@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
@@ -30,6 +32,34 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "count=$count" >> "$GITHUB_OUTPUT"
 
+      - name: List newly added songs
+        id: new_songs
+        run: |
+          set -euo pipefail
+          base="${{ github.event.before }}"
+
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "$base" 2>/dev/null; then
+            added=""
+          else
+            added=$(git diff --name-status "$base" "${{ github.sha }}" -- pisnicky/ \
+                    | awk '$1=="A" {print $2}')
+          fi
+
+          {
+            echo "block<<SONGSEOF"
+            if [ -n "$added" ]; then
+              echo ""
+              echo "Nové písničky v této verzi:"
+              printf '%s\n' "$added" | while IFS= read -r f; do
+                [ -z "$f" ] && continue
+                title=$(grep -oP '(?<=\\song\{)[^}]*' "$f" | head -n1)
+                echo "- ${title:-$(basename "$f" .tex)}"
+              done
+            fi
+            echo "SONGSEOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Checkout website repo
         uses: actions/checkout@v4
         with:
@@ -43,18 +73,16 @@ jobs:
       - name: Update PDF
         run: cp zpevnik.pdf website/static/files/zpevnik_last.pdf
 
-      - name: Update recent songs list
-        run: cp recent_songs.txt website/content/recent_songs.txt
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
             tag_name: v${{ steps.version.outputs.version }}
             name: Zpěvník v${{ steps.version.outputs.version }}
             body: |
-                Zpěvník verze ${{ steps.version.outputs.version }}
+                ${{ steps.new_songs.outputs.block }}
                 
-                Počet písniček: ${{ steps.version.outputs.count }}
+                verze ${{ steps.version.outputs.version }}, ${{ steps.version.outputs.count }} písniček
+                
             files: zpevnik.pdf
             make_latest: true
 
@@ -63,6 +91,6 @@ jobs:
         run: |
           git config user.name "songbook-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add version.txt static/files/zpevnik_last.pdf content/recent_songs.txt
+          git add version.txt static/files/zpevnik_last.pdf
           git commit -m "Update songbook to v${{ steps.version.outputs.version }}" || echo "nothing to commit"
           git push
