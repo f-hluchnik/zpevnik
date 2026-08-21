@@ -50,7 +50,6 @@ jobs:
             echo "block<<SONGSEOF"
             if [ -n "$added" ]; then
               echo ""
-              echo "Nové písničky v této verzi:"
               printf '%s\n' "$added" | while IFS= read -r f; do
                 [ -z "$f" ] && continue
                 title=$(grep -oP '(?<=\\song\{)[^}]*' "$f" | head -n1)
@@ -80,8 +79,6 @@ jobs:
             name: Zpěvník v${{ steps.version.outputs.version }}
             body: |
                 ${{ steps.new_songs.outputs.block }}
-                
-                verze ${{ steps.version.outputs.version }}, ${{ steps.version.outputs.count }} písniček
                 
             files: zpevnik.pdf
             make_latest: true
