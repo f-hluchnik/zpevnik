@@ -25,6 +25,32 @@ jobs:
       - name: Check one song per page
         run: python3 tools/check_pages.py
 
+      # Pull requests only: build the base (the first parent of the merge
+      # commit) in the same job with the same TeX Live and report which songs
+      # differ (D-106). The report never fails the build.
+      - name: Check out base for the PDF diff
+        if: github.event_name == 'pull_request'
+        run: |
+          base=HEAD^1
+          git rev-parse --verify -q HEAD^2 >/dev/null || base="${{ github.event.pull_request.base.sha }}"
+          git worktree add base "$base"
+
+      - name: Compile base
+        if: github.event_name == 'pull_request'
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: zpevnik.tex
+          working_directory: base
+          texlive_version: 2023
+
+      - name: Install poppler
+        if: github.event_name == 'pull_request'
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      - name: Song-by-song PDF diff
+        if: github.event_name == 'pull_request'
+        run: python3 tools/pdfdiff.py --base base --head . | tee -a "$GITHUB_STEP_SUMMARY"
+
       - name: Compute version
         id: version
         run: |
