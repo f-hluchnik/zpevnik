@@ -12,6 +12,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Derived .tex files are build outputs, not committed (D-104).
+      - name: Generate derived files
+        run: python3 tools/generate.py
+
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
@@ -45,6 +49,11 @@ jobs:
           base=HEAD^1
           git rev-parse --verify -q HEAD^2 >/dev/null || base="${{ github.event.pull_request.base.sha }}"
           git worktree add base "$base"
+
+      # The base only has a generator once an earlier ticket has added one.
+      - name: Generate derived files for base
+        if: github.event_name == 'pull_request'
+        run: if [ -f base/tools/generate.py ]; then python3 base/tools/generate.py base; fi
 
       - name: Compile base
         if: github.event_name == 'pull_request'

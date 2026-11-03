@@ -97,3 +97,23 @@
 \newcommand{\interpret}[2]{\AddToShipoutPictureFG*{\put(\LenToUnit{0.9\paperwidth},\LenToUnit{0.98\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\parbox{\linewidth}{\hyperlink{#1}{$\rightarrow$~#2}}}\end{minipage}}}}}
 
 \newcommand{\interpretdva}[2]{\AddToShipoutPictureFG*{\put(\LenToUnit{0.7\paperwidth},\LenToUnit{0.98\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\parbox{\linewidth}{\hyperlink{#1}{$\rightarrow$~#2}}}\end{minipage}}}}}
+
+%ARTISTS REGISTRY
+% generated/artists.tex (tools/generate.py) registers every artist by slug.
+% The lookups print nothing for an unknown slug, and a missing file is fine,
+% so a single song still compiles without the generator (Overleaf, D-005).
+\makeatletter
+\newcommand{\zpregisterartist}[4]{%
+  \expandafter\gdef\csname zp@name@#1\endcsname{#2}%
+  \expandafter\gdef\csname zp@label@#1\endcsname{#3}%
+  \ifnum#4=1
+    \expandafter\gdef\csname zp@section@#1\endcsname{\@firstoftwo}%
+  \else
+    \expandafter\gdef\csname zp@section@#1\endcsname{\@secondoftwo}%
+  \fi}
+\newcommand{\artistname}[1]{\ifcsname zp@name@#1\endcsname\csname zp@name@#1\endcsname\fi}%
+\newcommand{\artistlabel}[1]{\ifcsname zp@label@#1\endcsname\csname zp@label@#1\endcsname\fi}%
+\newcommand{\ifartistsection}[3]{%
+  \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}
+\makeatother
+\InputIfFileExists{generated/artists}{}{}
