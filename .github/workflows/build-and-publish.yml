@@ -25,6 +25,17 @@ jobs:
       - name: Check one song per page
         run: python3 tools/check_pages.py
 
+      # Overleaf setup (D-005): zpevnik.sty and one song, nothing else.
+      - name: Prepare single-song test
+        run: bash tests/single-song.sh tests/build
+
+      - name: Compile single-song test
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: single-song.tex
+          working_directory: tests/build
+          texlive_version: 2023
+
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
       # differ (D-106). The report never fails the build.
