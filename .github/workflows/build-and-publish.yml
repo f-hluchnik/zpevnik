@@ -16,11 +16,11 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: zpevnik.tex
-          # Pinned to the image that built the published v8.33 (TeX Live 2026,
-          # pdfTeX 1.40.29). `texlive_version` cannot express this: v3 knows
-          # only 2020-2025, and "2025"/"latest" both mean the moving :latest.
-          # Bump deliberately (and expect layout differences) when updating.
-          docker_image: ghcr.io/xu-cheng/texlive-full@sha256:11383430b9a3e48c0b79339f34d8092f942f897d91ab3749d4899d06731fea7f
+          # Pinned to TeX Live 2023 (pdfTeX 1.40.25): a frozen release, and the
+          # one the dev workspace uses, so local builds match CI (D-105).
+          # Moving to another year changes the layout; use the song-by-song
+          # diff (S3) to review it.
+          texlive_version: 2023
 
       - name: Check one song per page
         run: python3 tools/check_pages.py
