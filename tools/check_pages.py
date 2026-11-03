@@ -40,15 +40,15 @@ def checkpoint_page(aux: Path, song: str) -> int | None:
     return int(p.group(1)) if p else None
 
 
-def main() -> int:
-    root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
-    allow = read_allowlist(root / "tools" / "multipage-allowlist.txt")
-    errors: list[str] = []
-    notes: list[str] = []
-    prev: int | None = None
-    checked = 0
-    seen_allowed: set[str] = set()
+def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
+    """(song id, first page, page count) in include order, plus problems.
 
+    Page numbers are the LaTeX page counter, which equals the PDF page index.
+    Shared with tools/pdfdiff.py.
+    """
+    songs: list[tuple[str, int, int]] = []
+    errors: list[str] = []
+    prev: int | None = None
     for raw in (root / "zpevnik.tex").read_text(encoding="utf-8").splitlines():
         line = raw.split("%", 1)[0]  # commented-out includes do not count
         m = re.search(r"\\setcounter\{page\}\{(\d+)\}", line)
@@ -58,7 +58,6 @@ def main() -> int:
         if not m:
             continue
         song = m.group(1)
-        checked += 1
         if prev is None:
             errors.append(f"{song}: no \\setcounter{{page}} before the first song")
             continue
@@ -66,8 +65,19 @@ def main() -> int:
         if cur is None:
             errors.append(f"{song}: no page checkpoint in pisnicky/{song}.aux (not compiled?)")
             continue
-        pages = cur - prev
+        songs.append((song, prev, cur - prev))
         prev = cur
+    return songs, errors
+
+
+def main() -> int:
+    root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
+    allow = read_allowlist(root / "tools" / "multipage-allowlist.txt")
+    songs, errors = song_pages(root)
+    notes: list[str] = []
+    seen_allowed: set[str] = set()
+
+    for song, _start, pages in songs:
         limit = MAX_PAGES_ALLOWLISTED if song in allow else MAX_PAGES
         if song in allow:
             seen_allowed.add(song)
@@ -85,6 +95,7 @@ def main() -> int:
         print(f"note: {n}")
     for e in errors:
         print(f"ERROR: {e}")
+    checked = len(songs)
     if checked == 0:
         print("ERROR: no \\include{pisnicky/...} found in zpevnik.tex")
         return 1
