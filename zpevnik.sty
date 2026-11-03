@@ -117,3 +117,9 @@
   \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}
 \makeatother
 \InputIfFileExists{generated/artists}{}{}
+
+%VERSION
+% generated/version.tex (tools/generate.py) sets the real version: song count + 100.
+% Without it the colophon shows a visibly wrong placeholder.
+\newcommand{\zpversion}{?.??}
+\InputIfFileExists{generated/version}{}{}
