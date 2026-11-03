@@ -2,6 +2,7 @@ name: Build songbook and publish to website
 on:
   push:
     branches: [main, master]
+  pull_request:
 
 jobs:
   build:
@@ -15,6 +16,11 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: zpevnik.tex
+          # Pinned to the image that built the published v8.33 (TeX Live 2026,
+          # pdfTeX 1.40.29). `texlive_version` cannot express this: v3 knows
+          # only 2020-2025, and "2025"/"latest" both mean the moving :latest.
+          # Bump deliberately (and expect layout differences) when updating.
+          docker_image: ghcr.io/xu-cheng/texlive-full@sha256:11383430b9a3e48c0b79339f34d8092f942f897d91ab3749d4899d06731fea7f
 
       - name: Compute version
         id: version
@@ -60,6 +66,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Checkout website repo
+        if: github.event_name == 'push'
         uses: actions/checkout@v4
         with:
           repository: f-hluchnik/zpevnik-web
@@ -67,12 +74,15 @@ jobs:
           path: website
 
       - name: Write version file
+        if: github.event_name == 'push'
         run: echo "${{ steps.version.outputs.version }}" > website/version.txt
 
       - name: Update PDF
+        if: github.event_name == 'push'
         run: cp zpevnik.pdf website/static/files/zpevnik_last.pdf
 
       - name: Create GitHub Release
+        if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
             tag_name: v${{ steps.version.outputs.version }}
@@ -84,6 +94,7 @@ jobs:
             make_latest: true
 
       - name: Commit and push
+        if: github.event_name == 'push'
         working-directory: website
         run: |
           git config user.name "songbook-bot"
