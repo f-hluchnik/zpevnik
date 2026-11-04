@@ -7,7 +7,8 @@ Run from the repository root. Edits pisnicky/<id>.tex in place; --dry-run only p
 --list prints just the ids of the songs whose chords or spacing would change (it implies
 --dry-run). Four steps per song:
 
-1. A plain \\textbf{...} that holds only chord names becomes \\chords{...}.
+1. A plain \\textbf{...} that holds only chord names becomes \\chords{...}, one per line
+   when the list has line breaks (`\\\\`), since \\chords sets one line.
 2. A whole chord-only line (also inside \\intro{}, \\solo{}, ...) becomes \\chords{...}.
 3. Each run of manual spacing (\\nc \\mm \\sm \\bc) is classified by where it stands:
    - after a chord, before lyrics: a pause (the chord is struck, then the singing starts)
