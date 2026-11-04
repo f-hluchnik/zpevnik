@@ -31,6 +31,14 @@ class FindArguments(unittest.TestCase):
         self.assertEqual(find_arguments(text, "alttitle"), ["B {c}", "D"])
 
 
+class Groups(unittest.TestCase):
+    def test_artists_then_collections_without_repeats(self):
+        self.assertEqual(Song("a", "A", None, (), ("x", "y"), ("filmy", "x")).groups, ("x", "y", "filmy"))
+
+    def test_song_without_tags_has_no_group(self):
+        self.assertEqual(Song("a", "A", None).groups, ())
+
+
 class SortTitle(unittest.TestCase):
     def test_toctitle_wins_over_song(self):
         self.assertEqual(Song("a", "Marie", "Marie (Klus)").sort_title, "Marie (Klus)")
@@ -49,6 +57,17 @@ class ReadSongs(unittest.TestCase):
             (songs_dir / "a.tex").write_text("\\song{A}\n", encoding="utf-8")
             self.assertEqual(read_songs(Path(tmp)),
                              [Song("a", "A", None), Song("b", "B", "B (x)", ("b1", "b2"))])
+
+    def test_reads_the_artist_and_collection_tags(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            songs_dir = Path(tmp) / "pisnicky"
+            songs_dir.mkdir()
+            (songs_dir / "a.tex").write_text(
+                "\\song{A} \\artist[Label]{x}\\artist{y}\n\\collection{filmy}\n", encoding="utf-8")
+            (songs_dir / "b.tex").write_text("\\song{B}\n\\artist{}\n", encoding="utf-8")
+            a, b = read_songs(Path(tmp))
+            self.assertEqual((a.artists, a.collections), (("x", "y"), ("filmy",)))
+            self.assertEqual((b.artists, b.collections), ((), ()))
 
     def test_song_without_title_is_an_error(self):
         with tempfile.TemporaryDirectory() as tmp:

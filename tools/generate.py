@@ -6,8 +6,9 @@ Reads data/artists.toml and writes generated/artists.tex: one
 zpevnik.sty turns into lookups by slug. Also writes generated/version.tex
 with the songbook version (R13), and generated/include.tex: the \\include list
 of all songs in the Czech collation order of D-107 (R9), and
-generated/obsah-letters.tex: the letter part of the contents (R10). Generated files are
-build outputs (gitignored); `make` runs this before compiling.
+generated/obsah-letters.tex: the letter part of the contents (R10), and
+generated/obsah-artists.tex: the artist index and the artist sections (R11).
+Generated files are build outputs (gitignored); `make` runs this before compiling.
 
 Usage: python3 tools/generate.py [repo-root]
        python3 tools/generate.py --version [repo-root]   (print the version only)
@@ -18,6 +19,7 @@ import sys
 import tomllib
 from pathlib import Path
 
+from artist_toc import HEADING_BREAK, artist_part_tex
 from check_registry import check_entries, normalise
 from collation import section, sort_key
 from songs import Song, read_songs
@@ -34,7 +36,8 @@ def artists_tex(entries: list[dict]) -> str:
     for e in map(normalise, entries):
         lines.append(
             "\\zpregisterartist{%s}{%s}{%s}{%s}{%d}\n"
-            % (e["slug"], tex(e["name"]), tex(e["label"]), tex(e["link_label"]),
+            % (e["slug"], tex(e["name"].replace(HEADING_BREAK, " ")), tex(e["label"]),
+               tex(e["link_label"]),
                1 if e["section"] else 0)
         )
     return "".join(lines)
@@ -87,12 +90,15 @@ def main() -> int:
     (out / "include.tex").write_text(include_tex(songs), encoding="utf-8")
     (out / "obsah-letters.tex").write_text(
         header("pisnicky/*.tex") + letters_tex(songs), encoding="utf-8")
+    (out / "obsah-artists.tex").write_text(
+        header("data/artists.toml and pisnicky/*.tex")
+        + artist_part_tex([normalise(e) for e in entries], songs), encoding="utf-8")
     ver = version(root)
     (out / "version.tex").write_text(
         header("pisnicky/*.tex") + "\\renewcommand{\\zpversion}{%s}\n" % ver, encoding="utf-8")
     print(f"generated/artists.tex: {len(entries)} entries; generated/version.tex: {ver}; "
           f"generated/include.tex: {len(songs)} songs; "
-          "generated/obsah-letters.tex")
+          "generated/obsah-letters.tex; generated/obsah-artists.tex")
     return 0
 
 
