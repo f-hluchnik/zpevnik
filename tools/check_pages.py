@@ -40,6 +40,17 @@ def checkpoint_page(aux: Path, song: str) -> int | None:
     return int(p.group(1)) if p else None
 
 
+def book_lines(root: Path) -> list[str]:
+    """Lines of zpevnik.tex, with \\input{generated/include} (R9) expanded."""
+    lines: list[str] = []
+    for raw in (root / "zpevnik.tex").read_text(encoding="utf-8").splitlines():
+        if re.match(r"\\input\{generated/include\}", raw):
+            lines += (root / "generated" / "include.tex").read_text(encoding="utf-8").splitlines()
+        else:
+            lines.append(raw)
+    return lines
+
+
 def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
     """(song id, first page, page count) in include order, plus problems.
 
@@ -49,7 +60,7 @@ def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
     songs: list[tuple[str, int, int]] = []
     errors: list[str] = []
     prev: int | None = None
-    for raw in (root / "zpevnik.tex").read_text(encoding="utf-8").splitlines():
+    for raw in book_lines(root):
         line = raw.split("%", 1)[0]  # commented-out includes do not count
         m = re.search(r"\\setcounter\{page\}\{(\d+)\}", line)
         if m:
@@ -89,7 +100,7 @@ def main() -> int:
             notes.append(f"{song}: allow-listed but fits on one page")
 
     for song in sorted(allow - seen_allowed):
-        notes.append(f"{song}: in allow-list but not included in zpevnik.tex")
+        notes.append(f"{song}: in allow-list but not included in the book")
 
     for n in notes:
         print(f"note: {n}")
@@ -97,7 +108,7 @@ def main() -> int:
         print(f"ERROR: {e}")
     checked = len(songs)
     if checked == 0:
-        print("ERROR: no \\include{pisnicky/...} found in zpevnik.tex")
+        print("ERROR: no \\include{pisnicky/...} found in zpevnik.tex or generated/include.tex")
         return 1
     print(f"checked {checked} songs, {len(errors)} problem(s)")
     return 1 if errors else 0
