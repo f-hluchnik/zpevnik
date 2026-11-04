@@ -35,8 +35,111 @@
 \def\everypar{\parindent=-10mm} %předsazení prvního řádku odstavce
 \definecolor{chordred}{RGB}{184, 39, 39}
 \definecolor{chordblack}{RGB}{0, 0, 0}
-\newcommand{\chord}[2][l]{\makebox[0pt][#1]{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#2}\\
-				\mbox{}\end{tabular}}}} %příkaz pro akordy
+%AKORDY: \chord{X}text (D-123)
+% Akord má nulovou šířku, ale nepřekryje další akord na stejném řádku.
+% Pravidlo: akord a jeho text zabírají max(šířka textu, šířka akordu + \chordsep);
+% mezi dvěma akordy bez textu je šířka akordu + \chordrunsep.
+% Místo, kde by se akordy překrývaly, se rozšíří; text se jinak nehýbe.
+% \chord přečte text až k dalšímu akordu, změří ho a vrátí beze změny (jeden
+% průchod, nic se neukládá do .aux). Zapíná se v písni příkazem \autochords
+% (dočasně, odstraní ho C4); \song ho vypíná.
+\newcommand*{\chordsep}{0.5em}
+\newcommand*{\chordrunsep}{1em}
+\newcommand*{\gapunit}{0.5em}
+\newcommand*{\zp@hyphenroom}{.3em} % o kolik je mezera se spojovníkem širší než spojovník
+\newcommand*{\zp@notext}{.5pt}     % užší text mezi akordy se nepočítá (akordy hned za sebou)
+\newif\ifzpchordspacing
+\newcommand{\autochords}{\zpchordspacingtrue}
+\newsavebox\zp@chordbox
+\newsavebox\zp@segbox
+\newtoks\zp@segtoks
+\newdimen\zp@pend % mezera, kterou si před sebe vloží další akord (nastavuje ji předchozí)
+\newdimen\zp@pad
+\newif\ifzp@afterletter
+\newif\ifzp@nextletter
+\newif\ifzp@split % mezera rozdělí slovo
+% Poloha každého akordu se zapisuje do \jobname.chords pro tools/chord_gaps.py.
+\newwrite\zp@trace
+\AtBeginDocument{\immediate\openout\zp@trace=\jobname.chords\relax}
+\def\zp@tracechord{%
+  \pdfsavepos
+  \edef\zp@tmp{\write\zp@trace{\noexpand\the\noexpand\pdflastxpos\space\noexpand\the\noexpand\pdflastypos\space\noexpand\thepage\space\number\wd\zp@chordbox}}%
+  \zp@tmp}
+\edef\zp@utftwo{\expandafter\string\csname UTFviii@two@octets\endcsname}
+% je následující token \zp@next písmeno (ASCII, nebo dvoubajtové UTF-8 jako č, ž, é)?
+\def\zp@testnextletter{%
+  \zp@nextletterfalse
+  \ifcat\noexpand\zp@next a\zp@nextlettertrue\fi
+  \edef\zp@tmp{\noexpand\in@{\zp@utftwo}{\meaning\zp@next}}\zp@tmp
+  \ifin@\zp@nextlettertrue\fi}
+% mezera \zp@pad; uvnitř slova s vystředěným spojovníkem (mezera se rozšíří, aby se vešel)
+\def\zp@space{%
+  \ifzp@split
+    \settowidth\dimen@{-}\advance\dimen@\zp@hyphenroom\relax
+    \ifdim\zp@pad>\dimen@ \dimen@\zp@pad\fi
+    \hbox to\dimen@{\hss-\hss}%
+  \else\hskip\zp@pad\relax\fi}
+\newcommand{\chord}[2][l]{%
+  \leavevmode
+  \zp@afterletterfalse
+  \ifnum\lastnodetype=\z@ \zp@afterlettertrue\fi % před akordem je znak
+  \ifnum\lastnodetype=7 \zp@afterlettertrue\fi   % nebo ligatura
+  \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#2}\\
+				\mbox{}\end{tabular}}}%
+  \def\zp@align{#1}%
+  \zp@pad\zp@pend \global\zp@pend\z@
+  \zp@segtoks{}%
+  \futurelet\zp@next\zp@chordfirst}
+\def\zp@chordfirst{\zp@testnextletter\zp@scan@}
+% sbírá tokeny až k dalšímu \chord, \chords, \\, }, \par, \end nebo \begin
+\def\zp@scan{\futurelet\zp@next\zp@scan@}
+\def\zp@scan@{%
+  \let\zp@do\zp@grabtok
+  \ifx\zp@next\@sptoken \let\zp@do\zp@grabspace\fi
+  \ifx\zp@next\bgroup \let\zp@do\zp@grabgroup\fi
+  \ifx\zp@next\chord \def\zp@do{\zp@finish\@ne}\fi
+  \ifx\zp@next\chords \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\\\def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\egroup \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\par \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\end \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\begin \def\zp@do{\zp@finish\z@}\fi
+  \zp@do}
+\def\zp@grabtok#1{\zp@segtoks\expandafter{\the\zp@segtoks#1}\zp@scan}
+\def\zp@grabgroup#1{\zp@segtoks\expandafter{\the\zp@segtoks{#1}}\zp@scan}
+\expandafter\def\expandafter\zp@grabspace\space{\zp@segtoks\expandafter{\the\zp@segtoks\space}\zp@scan}
+% #1 = 1, když text končí dalším akordem na stejném řádku
+\def\zp@finish#1{%
+  \ifzpchordspacing
+    \ifnum#1=\@ne
+      \sbox\zp@segbox{\let\footnote\@gobble\the\zp@segtoks}% změřit bez vedlejších účinků
+      \ifdim\wd\zp@segbox<\zp@notext\relax
+        \global\zp@pend\dimexpr\wd\zp@chordbox+\chordrunsep-\wd\zp@segbox\relax
+      \else
+        \global\zp@pend\dimexpr\wd\zp@chordbox+\chordsep-\wd\zp@segbox\relax
+      \fi
+      \ifdim\zp@pend<\z@ \global\zp@pend\z@\fi
+    \fi
+    \ifdim\zp@pad>\z@
+      \zp@splitfalse
+      \ifzp@afterletter\ifzp@nextletter\zp@splittrue\fi\fi
+      \zp@space
+    \fi
+  \fi
+  \zp@tracechord
+  \makebox[0pt][\zp@align]{\usebox\zp@chordbox}%
+  \the\zp@segtoks}
+% záměrná mezera (pauza), #1 znaků po \gapunit
+\newcommand{\gap}[1]{\hspace{\dimexpr\gapunit*#1\relax}}
+% akordy v řádku textu bez slov (intro, konec řádku), červeně, od sebe \chordrunsep
+\newcommand{\chords}[1]{\leavevmode\zp@chords@#1 \zp@chordsend{} }
+\def\zp@chords@#1 {\ifx\zp@chordsend#1\else
+  \textbf{\textcolor{chordred}{#1}}\zp@chordsnext\fi}
+\def\zp@chordsnext#1\fi{\fi\zp@chordsmore}
+\def\zp@chordsmore{\futurelet\zp@next\zp@chordsmore@}
+\def\zp@chordsmore@{\ifx\zp@next\zp@chordsend\expandafter\zp@chordsstop\else\hskip\chordrunsep\relax\expandafter\zp@chords@\fi}
+\def\zp@chordsstop\zp@chordsend#1 {}
+\def\zp@chordsend{}
 %\newcommand{\chord}[2][l]{} % alternativní příkaz pro akordy pro zpěvních bez akordů
 \pdfminorversion=7
 
@@ -76,7 +179,7 @@
 \newcommand{\lsp}[1]{\vspace{-13pt}\hspace{25pt}\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
 
 %MAIN
-\newcommand{\song}[1]{\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
+\newcommand{\song}[1]{\zpsongtarget\zpartistreset\zpchordspacingfalse\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
 \newcommand{\sub}[1]{\vspace{-10mm}\subsection*{\large\expandafter\sc{#1}}}%podnázev
 \newcommand{\refrain}[1]{\vspace{20pt}\textbf{{R:}}\hspace{0.5em}{#1}}%refrain

@@ -110,3 +110,4 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - kontrola písniček a registru interpretů `python3 tools/lint.py`
 - unit testy nástrojů `python3 -m unittest discover -s tools`
 - kontrola, že každá písnička je na jedné stránce `python3 tools/check_pages.py` (po `make`)
+- kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; chybou je překryv jen v písničce s `\autochords`, jinde se jen vypíše)

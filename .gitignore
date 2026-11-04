@@ -312,3 +312,6 @@ generated/
 
 # Python bytecode of tools/
 __pycache__/
+
+# Chord positions written by every build (tools/chord_gaps.py, C3a)
+*.chords
