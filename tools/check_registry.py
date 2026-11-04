@@ -15,20 +15,34 @@ import sys
 import tomllib
 from pathlib import Path
 
-FIELDS = {
-    "slug": str,
-    "name": str,
-    "song_label": str,
-    "index_label": str,
-    "sort": str,
-    "kind": str,
-    "section": bool,
-}
+REQUIRED = {"slug": str, "name": str}
+OPTIONAL = {"label": str, "link_label": str, "sort": str, "kind": str, "section": bool}
 KINDS = {"artist", "collection"}
+PERSON = re.compile(r"([^,&]+), ([^,&]+)")
 ARTIST = re.compile(r"\\artist(?:\[[^\]]*\])?\{([^}]*)\}")
 ARTIST_LINE = re.compile(r"\\artist\b")
 OLD_MACRO = re.compile(r"\\interpret(?:dva)?\b")
 MAX_ARTISTS = 2  # per song, see \artist in zpevnik.sty
+
+
+def derive_label(name: str) -> str:
+    """"Plíhal, Karel" gives "Karel Plíhal"; any other name is its own label."""
+    m = PERSON.fullmatch(name)
+    return f"{m.group(2)} {m.group(1)}" if m else name
+
+
+def normalise(entry: dict) -> dict:
+    """The entry with every default filled in (see the header of artists.toml)."""
+    label = entry.get("label", derive_label(entry["name"]))
+    return {
+        "slug": entry["slug"],
+        "name": entry["name"],
+        "label": label,
+        "link_label": entry.get("link_label", label),
+        "sort": entry.get("sort", entry["name"]),
+        "kind": entry.get("kind", "artist"),
+        "section": entry.get("section", True),
+    }
 
 
 def check_entries(entries: list) -> tuple[list[str], set[str]]:
@@ -36,16 +50,19 @@ def check_entries(entries: list) -> tuple[list[str], set[str]]:
     seen = set()
     for n, entry in enumerate(entries, 1):
         where = f"entry {n} ({entry.get('slug', '?')})"
-        for field, typ in FIELDS.items():
+        for field, typ in REQUIRED.items():
             if field not in entry:
                 errors.append(f"{where}: missing '{field}'")
-            elif not isinstance(entry[field], typ):
+        for field, typ in {**REQUIRED, **OPTIONAL}.items():
+            if field not in entry:
+                continue
+            if not isinstance(entry[field], typ):
                 errors.append(f"{where}: '{field}' must be {typ.__name__}")
             elif typ is str and not entry[field].strip():
                 errors.append(f"{where}: '{field}' is empty")
-        for field in entry.keys() - FIELDS.keys():
+        for field in entry.keys() - REQUIRED.keys() - OPTIONAL.keys():
             errors.append(f"{where}: unknown field '{field}'")
-        if entry.get("kind") not in KINDS:
+        if entry.get("kind", "artist") not in KINDS:
             errors.append(f"{where}: 'kind' must be one of {sorted(KINDS)}")
         slug = entry.get("slug")
         if slug in seen:
@@ -92,7 +109,7 @@ def main() -> int:
     warnings = [
         f"entry '{e['slug']}' has a section but no song refers to it"
         for e in entries
-        if e.get("section") is True and e.get("slug") not in used
+        if e.get("section", True) is True and e.get("slug") not in used
     ]
 
     for w in warnings:

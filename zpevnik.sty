@@ -101,23 +101,23 @@
 \makeatletter
 \newcommand{\zpregisterartist}[5]{%
   \expandafter\gdef\csname zp@name@#1\endcsname{#2}%
-  \expandafter\gdef\csname zp@songlabel@#1\endcsname{#3}%
-  \expandafter\gdef\csname zp@label@#1\endcsname{#4}%
+  \expandafter\gdef\csname zp@label@#1\endcsname{#3}%
+  \expandafter\gdef\csname zp@link@#1\endcsname{#4}%
   \ifnum#5=1
     \expandafter\gdef\csname zp@section@#1\endcsname{\@firstoftwo}%
   \else
     \expandafter\gdef\csname zp@section@#1\endcsname{\@secondoftwo}%
   \fi}
 \newcommand{\artistname}[1]{\ifcsname zp@name@#1\endcsname\csname zp@name@#1\endcsname\fi}%
-\newcommand{\artistsonglabel}[1]{\ifcsname zp@songlabel@#1\endcsname\csname zp@songlabel@#1\endcsname\fi}%
 \newcommand{\artistlabel}[1]{\ifcsname zp@label@#1\endcsname\csname zp@label@#1\endcsname\fi}%
+\newcommand{\artistlinklabel}[1]{\ifcsname zp@link@#1\endcsname\csname zp@link@#1\endcsname\fi}%
 \newcommand{\ifartistsection}[3]{%
   \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}
 
 % \artist[label]{slug}: link to the artist's section in the top-right corner
 % of the song's page (D-003). Put it on the line of \song, once per song; for
 % two artists write \artist{a}\artist{b} (the first is rightmost, a third is
-% ignored). The label comes from the registry unless given. An empty or
+% ignored). The text comes from the registry (link_label, else label) unless given. An empty or
 % unknown slug, or an artist without a section, prints nothing.
 % The links are right-aligned to the right margin (D-113). The list is built
 % here and typeset at shipout; \song starts a new list.
@@ -142,14 +142,14 @@
       \ifnum\zp@artistcount=0
         \AddToShipoutPictureFG*{\zp@artistpicture}%
         \ifx\zp@given\zp@nolabeldefault
-          \gdef\zp@itema{\hyperlink{#2}{$\rightarrow$~\artistsonglabel{#2}}}%
+          \gdef\zp@itema{\hyperlink{#2}{$\rightarrow$~\artistlinklabel{#2}}}%
         \else
           \gdef\zp@itema{\hyperlink{#2}{$\rightarrow$~#1}}%
         \fi
         \global\let\zp@artistlist\zp@itema
       \else
         \ifx\zp@given\zp@nolabeldefault
-          \gdef\zp@itemb{\hyperlink{#2}{$\rightarrow$~\artistsonglabel{#2}}}%
+          \gdef\zp@itemb{\hyperlink{#2}{$\rightarrow$~\artistlinklabel{#2}}}%
         \else
           \gdef\zp@itemb{\hyperlink{#2}{$\rightarrow$~#1}}%
         \fi

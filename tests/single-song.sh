@@ -31,7 +31,7 @@ echo "single-song OK ($song, 1 page)"
 # \artist: an empty or unknown slug, or an artist without a section, prints
 # nothing and is not an error (D-003); labels, two artists, a third ignored.
 pdflatex -interaction=nonstopmode -halt-on-error artist.tex >/dev/null
-[ "$(pdfinfo artist.pdf | awk '/^Pages:/ {print $2}')" = 8 ] || { echo "artist.tex: expected 8 pages" >&2; exit 1; }
+[ "$(pdfinfo artist.pdf | awk '/^Pages:/ {print $2}')" = 9 ] || { echo "artist.tex: expected 9 pages" >&2; exit 1; }
 page() { pdftotext -f "$1" -l "$1" artist.pdf -; }
 expect() { # page, "has"|"lacks", text
   if page "$1" | grep -qF -- "$3"; then found=has; else found=lacks; fi
@@ -47,4 +47,5 @@ arrows 4 2; expect 4 has "Own label"; expect 4 lacks "A. Test"
 arrows 5 3; expect 5 has "A. Test"; expect 5 has "B. Test"
 arrows 6 3; expect 6 lacks "C. Test"
 expect 8 lacks "Own label"
-echo "artist OK (8 pages)"
+arrows 9 2; expect 9 has "D. L. Test"; expect 9 lacks "Dee Long"
+echo "artist OK (9 pages)"

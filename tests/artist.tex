@@ -2,10 +2,12 @@
 % Run through tests/single-song.sh --build, which checks what each page prints.
 \documentclass[a4paper, 10pt]{article}
 \usepackage{zpevnik}
-\zpregisterartist{testa}{Test, A}{A. Test}{Test}{1}
-\zpregisterartist{testb}{Test, B}{B. Test}{Test}{1}
-\zpregisterartist{testc}{Test, C}{C. Test}{Test}{1}
-\zpregisterartist{nosection}{Nosection, N}{N. Nosection}{Nosection}{0}
+% \zpregisterartist{slug}{name}{label}{link label}{section}
+\zpregisterartist{testa}{Test, A}{A. Test}{A. Test}{1}
+\zpregisterartist{testb}{Test, B}{B. Test}{B. Test}{1}
+\zpregisterartist{testc}{Test, C}{C. Test}{C. Test}{1}
+\zpregisterartist{testd}{Test, Dee Long}{Dee Long Test}{D. L. Test}{1}
+\zpregisterartist{nosection}{Nosection, N}{N. Nosection}{N. Nosection}{0}
 
 \begin{document}
 \pagestyle{plain}
@@ -25,5 +27,7 @@
 \song{7 artist without a section} \artist{nosection}
 \newpage
 \song{8 unknown slug with a label} \artist[Own label]{doesnotexist}
+\newpage
+\song{9 link label is used, not the label} \artist{testd}
 \end{Large}
 \end{document}
