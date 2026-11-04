@@ -1,414 +1,228 @@
-# Artists and collections of the songbook (D-002).
+# Artists and collections of the songbook (D-002, D-114).
 #
 # One [[entry]] per section of the artist index. Song files refer to an entry
-# by its slug only.
+# by its slug only. Write only what differs from the default.
 #
-#   slug         anchor used by \interpret: lowercase ASCII name, no spaces, no leading article
-#   name         heading of the section ("Surname, First" for people)
-#   index_label  text in the index block; \u00A0 is a non-breaking space
-#   sort         collation key (D-107). Artists sort by it first; collections
-#                come after all artists, ordered by their own key
-#   kind         "artist" or "collection" (songs grouped by theme, not by author)
-#   section      true if the book has a section for this entry
+#   slug        (required) anchor used by \artist: lowercase ASCII name, no spaces,
+#               no leading article
+#   name        (required) heading of the section; people as "Surname, First"
+#   label       how the artist is named in the index and, unless link_label is
+#               set, in the link on the artist's songs.
+#               Default: "First Surname" for a name of the form "Surname, First",
+#               otherwise the name itself
+#   link_label  shorter text for the link on the artist's songs. Default: label
+#   sort        collation key (D-107). Default: name. Collections come after all
+#               artists, ordered by their own key
+#   kind        "artist" (default), or "collection" (songs grouped by theme, not by author)
+#   section     true (default) if the book has a section for this entry
 #
 # The text is plain: no TeX markup (the generator escapes it).
 
 [[entry]]
 slug = "abba"
 name = "ABBA"
-index_label = "ABBA"
-sort = "ABBA"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "asonance"
 name = "Asonance"
-index_label = "Asonance"
-sort = "Asonance"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "beatles"
 name = "The Beatles"
-index_label = "Beatles"
 sort = "Beatles"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "buty"
 name = "Buty"
-index_label = "Buty"
-sort = "Buty"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "johnnycash"
 name = "Cash, Johnny"
-index_label = "Cash"
-sort = "Cash, Johnny"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "ericclapton"
 name = "Clapton, Eric"
-index_label = "Clapton"
-sort = "Clapton, Eric"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "jimcroce"
 name = "Croce, Jim"
-index_label = "Croce"
-sort = "Croce, Jim"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "cechomor"
 name = "Čechomor"
-index_label = "Čechomor"
-sort = "Čechomor"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "wabidanek"
 name = "Daněk, Wabi"
-index_label = "Daněk"
-sort = "Daněk, Wabi"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "paveldobes"
 name = "Dobeš, Pavel"
-index_label = "Dobeš"
-sort = "Dobeš, Pavel"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "bobdylan"
 name = "Dylan, Bob"
-index_label = "Dylan"
-sort = "Dylan, Bob"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "karelgott"
 name = "Gott, Karel"
-index_label = "Gott"
-sort = "Gott, Karel"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "hapkahoracek"
 name = "Hapka & Horáček"
-index_label = "Hapka\u00A0&\u00A0Horáček"
-sort = "Hapka & Horáček"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "hoptrop"
 name = "Hop trop"
-index_label = "Hop trop"
-sort = "Hop trop"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "michalhorak"
 name = "Horák, Michal"
-index_label = "Horák"
-sort = "Horák, Michal"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "raycharles"
 name = "Charles, Ray"
-index_label = "Ray Charles"
-sort = "Charles, Ray"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "billyjoel"
 name = "Joel, Billy"
-index_label = "Billy Joel"
-sort = "Joel, Billy"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "tomasklus"
 name = "Klus, Tomáš"
-index_label = "Klus"
-sort = "Klus, Tomáš"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "karelkryl"
 name = "Kryl, Karel"
-index_label = "Kryl"
-sort = "Kryl, Karel"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "martakubisova"
 name = "Kubišová, Marta"
-index_label = "Kubišová"
-sort = "Kubišová, Marta"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "jaroslavsamsonlenk"
 name = "Lenk, Jaroslav Samson"
-index_label = "Lenk"
-sort = "Lenk, Jaroslav Samson"
-kind = "artist"
-section = true
+link_label = "J. S. Lenk"
 
 [[entry]]
 slug = "waldemarmatuska"
 name = "Matuška, Waldemar"
-index_label = "Matuška"
-sort = "Matuška, Waldemar"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "ivanmladek"
 name = "Mládek, Ivan"
-index_label = "Mládek"
-sort = "Mládek, Ivan"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "mnagaazdorp"
 name = "Mňága a Žďorp"
-index_label = "Mňága a Žďorp"
-sort = "Mňága a Žďorp"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "zuzananavarova"
 name = "Navarová, Zuzana"
-index_label = "Navarová"
-sort = "Navarová, Zuzana"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "nedvedi"
 name = "Nedvědi"
-index_label = "Nedvědi"
-sort = "Nedvědi"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "nezmari"
 name = "Nezmaři"
-index_label = "Nezmaři"
-sort = "Nezmaři"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "jaromirnohavica"
-name = "Nohavica, Jarek"
-index_label = "Nohavica"
-sort = "Nohavica, Jarek"
-kind = "artist"
-section = true
+name = "Nohavica, Jaromír"
 
 [[entry]]
 slug = "olympic"
 name = "Olympic"
-index_label = "Olympic"
-sort = "Olympic"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "karelplihal"
 name = "Plíhal, Karel"
-index_label = "Plíhal"
-sort = "Plíhal, Karel"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "pokac"
 name = "Pokáč"
-index_label = "Pokáč"
-sort = "Pokáč"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "queen"
 name = "Queen"
-index_label = "Queen"
-sort = "Queen"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "rangers"
 name = "Rangers (Plavci)"
-index_label = "Rangers"
-sort = "Rangers (Plavci)"
-kind = "artist"
-section = true
+label = "Rangers"
 
 [[entry]]
 slug = "vlastaredl"
 name = "Redl, Vlasta"
-index_label = "Redl"
-sort = "Redl, Vlasta"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "ricchiepoveri"
 name = "Ricchi e Poveri"
-index_label = "Ricchi\u00A0e\u00A0Poveri"
-sort = "Ricchi e Poveri"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "marierottrova"
 name = "Rottrová, Marie"
-index_label = "Rottrová"
-sort = "Rottrová, Marie"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "wabiryvola"
 name = "Ryvola, Wabi"
-index_label = "Ryvola"
-sort = "Ryvola, Wabi"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "simongarfunkel"
 name = "Simon & Garfunkel"
-index_label = "Simon\u00A0&\u00A0Garfunkel"
-sort = "Simon & Garfunkel"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "spiritualkvintet"
 name = "Spirituál kvintet"
-index_label = "Spirituál\u00A0kvintet"
-sort = "Spirituál kvintet"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "suchyslitr"
 name = "Suchý & Šlitr"
-index_label = "Suchý & Šlitr"
-sort = "Suchý & Šlitr"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "veraspinarova"
 name = "Špinarová, Věra"
-index_label = "Špinarová"
-sort = "Špinarová, Věra"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "traband"
 name = "Traband"
-index_label = "Traband"
-sort = "Traband"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "trikyapovery"
 name = "Triky a pověry"
-index_label = "Triky\u00A0a\u00A0pověry"
-sort = "Triky a pověry"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "michaltucny"
 name = "Tučný, Michal & Greenhorns"
-index_label = "Tučný"
-sort = "Tučný, Michal & Greenhorns"
-kind = "artist"
-section = true
+label = "Michal Tučný & Greenhorns"
 
 [[entry]]
 slug = "uhlirsverak"
 name = "Uhlíř & Svěrák"
-index_label = "Uhlíř\u00A0&\u00A0Svěrák"
-sort = "Uhlíř & Svěrák"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "voskovecwerich"
 name = "Voskovec & Werich"
-index_label = "Voskovec\u00A0&\u00A0Werich"
-sort = "Voskovec & Werich"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "karelzich"
 name = "Zich, Karel"
-index_label = "Zich"
-sort = "Zich, Karel"
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "zalmanspol"
 name = "Žalman & spol."
-index_label = "Žalman"
-sort = "Žalman & spol."
-kind = "artist"
-section = true
 
 [[entry]]
 slug = "filmy"
 name = "z pohádek, filmů, muzikálů, her a seriálů"
-index_label = "filmová\u00A0hudba"
+label = "filmová hudba"
 sort = "filmy"
 kind = "collection"
-section = true
 
 [[entry]]
 slug = "lidove"
 name = "lidové"
-index_label = "lidové"
 sort = "lidove"
 kind = "collection"
-section = true
