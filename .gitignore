@@ -315,3 +315,6 @@ __pycache__/
 
 # Chord positions written by every build (tools/chord_gaps.py, C3a)
 *.chords
+
+# Output of make song (R14)
+/build/
