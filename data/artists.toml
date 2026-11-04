@@ -3,7 +3,7 @@
 # One [[entry]] per section of the artist index. Song files refer to an entry
 # by its slug only.
 #
-#   slug         anchor used by \interpret today (renames happen in R6)
+#   slug         anchor used by \interpret: lowercase ASCII name, no spaces, no leading article
 #   name         heading of the section ("Surname, First" for people)
 #   index_label  text in the index block; \u00A0 is a non-breaking space
 #   sort         collation key (D-107). Artists sort by it first; collections
@@ -31,7 +31,7 @@ section = true
 
 [[entry]]
 slug = "beatles"
-name = "Beatles"
+name = "The Beatles"
 index_label = "Beatles"
 sort = "Beatles"
 kind = "artist"
@@ -150,7 +150,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "klus"
+slug = "tomasklus"
 name = "Klus, Tomáš"
 index_label = "Klus"
 sort = "Klus, Tomáš"
@@ -158,7 +158,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "kryl"
+slug = "karelkryl"
 name = "Kryl, Karel"
 index_label = "Kryl"
 sort = "Kryl, Karel"
@@ -166,7 +166,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "kubisova"
+slug = "martakubisova"
 name = "Kubišová, Marta"
 index_label = "Kubišová"
 sort = "Kubišová, Marta"
@@ -174,7 +174,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "lenk"
+slug = "jaroslavsamsonlenk"
 name = "Lenk, Jaroslav Samson"
 index_label = "Lenk"
 sort = "Lenk, Jaroslav Samson"
@@ -230,7 +230,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "nohavica"
+slug = "jaromirnohavica"
 name = "Nohavica, Jarek"
 index_label = "Nohavica"
 sort = "Nohavica, Jarek"
@@ -246,7 +246,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "plihal"
+slug = "karelplihal"
 name = "Plíhal, Karel"
 index_label = "Plíhal"
 sort = "Plíhal, Karel"
@@ -278,7 +278,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "redl"
+slug = "vlastaredl"
 name = "Redl, Vlasta"
 index_label = "Redl"
 sort = "Redl, Vlasta"
@@ -286,7 +286,15 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "rottrova"
+slug = "ricchiepoveri"
+name = "Ricchi e Poveri"
+index_label = "Ricchi\u00A0e\u00A0Poveri"
+sort = "Ricchi e Poveri"
+kind = "artist"
+section = true
+
+[[entry]]
+slug = "marierottrova"
 name = "Rottrová, Marie"
 index_label = "Rottrová"
 sort = "Rottrová, Marie"
@@ -326,7 +334,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "spinarova"
+slug = "veraspinarova"
 name = "Špinarová, Věra"
 index_label = "Špinarová"
 sort = "Špinarová, Věra"
@@ -343,17 +351,17 @@ section = true
 
 [[entry]]
 slug = "trikyapovery"
-name = "Triky a pověry (Ricchi e Poveri)"
+name = "Triky a pověry"
 index_label = "Triky\u00A0a\u00A0pověry"
-sort = "Triky a pověry (Ricchi e Poveri)"
+sort = "Triky a pověry"
 kind = "artist"
 section = true
 
 [[entry]]
 slug = "michaltucny"
-name = "Tučný, Michal, Greenhorns, Fešáci"
+name = "Tučný, Michal & Greenhorns"
 index_label = "Tučný"
-sort = "Tučný, Michal, Greenhorns, Fešáci"
+sort = "Tučný, Michal & Greenhorns"
 kind = "artist"
 section = true
 
@@ -374,7 +382,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "zich"
+slug = "karelzich"
 name = "Zich, Karel"
 index_label = "Zich"
 sort = "Zich, Karel"
@@ -382,7 +390,7 @@ kind = "artist"
 section = true
 
 [[entry]]
-slug = "zalman"
+slug = "zalmanspol"
 name = "Žalman & spol."
 index_label = "Žalman"
 sort = "Žalman & spol."
