@@ -71,7 +71,7 @@
 \newcommand{\lsp}[1]{\vspace{-13pt}\hspace{25pt}\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
 
 %MAIN
-\newcommand{\song}[1]{\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
+\newcommand{\song}[1]{\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
 \newcommand{\sub}[1]{\vspace{-10mm}\subsection*{\large\expandafter\sc{#1}}}%podnázev
 \newcommand{\refrain}[1]{\vspace{20pt}\textbf{{R:}}\hspace{0.5em}{#1}}%refrain
@@ -94,27 +94,71 @@
 
 \newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{\hspace{22pt}#3}\end{large}}\end{minipage}}}}}
 
-\newcommand{\interpret}[2]{\AddToShipoutPictureFG*{\put(\LenToUnit{0.9\paperwidth},\LenToUnit{0.98\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\parbox{\linewidth}{\hyperlink{#1}{$\rightarrow$~#2}}}\end{minipage}}}}}
-
-\newcommand{\interpretdva}[2]{\AddToShipoutPictureFG*{\put(\LenToUnit{0.7\paperwidth},\LenToUnit{0.98\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\parbox{\linewidth}{\hyperlink{#1}{$\rightarrow$~#2}}}\end{minipage}}}}}
-
 %ARTISTS REGISTRY
 % generated/artists.tex (tools/generate.py) registers every artist by slug.
 % The lookups print nothing for an unknown slug, and a missing file is fine,
 % so a single song still compiles without the generator (Overleaf, D-005).
 \makeatletter
-\newcommand{\zpregisterartist}[4]{%
+\newcommand{\zpregisterartist}[5]{%
   \expandafter\gdef\csname zp@name@#1\endcsname{#2}%
-  \expandafter\gdef\csname zp@label@#1\endcsname{#3}%
-  \ifnum#4=1
+  \expandafter\gdef\csname zp@songlabel@#1\endcsname{#3}%
+  \expandafter\gdef\csname zp@label@#1\endcsname{#4}%
+  \ifnum#5=1
     \expandafter\gdef\csname zp@section@#1\endcsname{\@firstoftwo}%
   \else
     \expandafter\gdef\csname zp@section@#1\endcsname{\@secondoftwo}%
   \fi}
 \newcommand{\artistname}[1]{\ifcsname zp@name@#1\endcsname\csname zp@name@#1\endcsname\fi}%
+\newcommand{\artistsonglabel}[1]{\ifcsname zp@songlabel@#1\endcsname\csname zp@songlabel@#1\endcsname\fi}%
 \newcommand{\artistlabel}[1]{\ifcsname zp@label@#1\endcsname\csname zp@label@#1\endcsname\fi}%
 \newcommand{\ifartistsection}[3]{%
   \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}
+
+% \artist[label]{slug}: link to the artist's section in the top-right corner
+% of the song's page (D-003). Put it on the line of \song, once per song; for
+% two artists write \artist{a}\artist{b} (the first is rightmost, a third is
+% ignored). The label comes from the registry unless given. An empty or
+% unknown slug, or an artist without a section, prints nothing.
+% The links are right-aligned to the right margin (D-113). The list is built
+% here and typeset at shipout; \song starts a new list.
+\newcount\zp@artistcount
+\newbox\zp@artistbox
+% minipage and parbox are nested like in the old \interpret, which keeps its
+% vertical placement and the font in effect at shipout (\Large in the book);
+% \noindent cancels the negative \parindent of this style.
+% The box around it puts the right edge of the links 1cm from the page edge.
+\newcommand{\zp@artistpicture}{%
+  \setbox\zp@artistbox\hbox{\zp@artistlist}%
+  \put(0,\LenToUnit{0.98\paperheight}){\vtop{{\null}\hbox to \paperwidth{\hss
+    \begin{minipage}{\wd\zp@artistbox}\noindent{\parbox{\wd\zp@artistbox}{\noindent\unhcopy\zp@artistbox}}\end{minipage}\kern1cm}}}}
+\newcommand{\zpartistreset}{\global\zp@artistcount=0 \global\let\zp@artistlist\@empty}
+\zpartistreset
+\newcommand{\zp@nolabel}{}
+\def\zp@nolabeldefault{\zp@nolabel}% what #1 expands to when no label is given
+\newcommand{\artist}[2][\zp@nolabel]{%
+  \def\zp@given{#1}%
+  \ifartistsection{#2}{%
+    \ifnum\zp@artistcount<2
+      \ifnum\zp@artistcount=0
+        \AddToShipoutPictureFG*{\zp@artistpicture}%
+        \ifx\zp@given\zp@nolabeldefault
+          \gdef\zp@itema{\hyperlink{#2}{$\rightarrow$~\artistsonglabel{#2}}}%
+        \else
+          \gdef\zp@itema{\hyperlink{#2}{$\rightarrow$~#1}}%
+        \fi
+        \global\let\zp@artistlist\zp@itema
+      \else
+        \ifx\zp@given\zp@nolabeldefault
+          \gdef\zp@itemb{\hyperlink{#2}{$\rightarrow$~\artistsonglabel{#2}}}%
+        \else
+          \gdef\zp@itemb{\hyperlink{#2}{$\rightarrow$~#1}}%
+        \fi
+        \gdef\zp@artistlist{\zp@itemb\hspace{1.5em}\zp@itema}%
+      \fi
+      \global\advance\zp@artistcount by 1
+    \fi
+  }{}%
+}
 \makeatother
 \InputIfFileExists{generated/artists}{}{}
 

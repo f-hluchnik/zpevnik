@@ -79,7 +79,7 @@ V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různ�
 - `\2-9` - 2-9 akord, patřičně podle čísla
 
 ### Další poznámky pro psaní písniček
-V případě, že má písnička známého interpreta, je potřeba uvést odkaz na sekci obsahu řazenou podle interpretů. To se vysází příkazem například `\interpret{ericclapton}{Eric Clapton}` pro Erica Claptona. V první závorce je uvedena kotva odkazu v obsahu, ve druhé závorce je jméno interpreta.
+Každá písnička má na řádku s `\song{}` příkaz `\artist{<kotva>}`, například `\artist{ericclapton}` pro Erica Claptona. Kotva je záznam v souboru `data/artists.toml`; odtud se bere i jméno interpreta, které se vysází vpravo nahoře jako odkaz na sekci obsahu řazenou podle interpretů. Jméno lze u jedné písničky přepsat: `\artist[Jiné jméno]{ericclapton}`. Má-li písnička dva interprety, napíšu `\artist{prvni}\artist{druhy}` (první je vpravo, třetí se nevysází). Písnička bez známého interpreta má `\artist{}`; prázdná nebo neznámá kotva nevysází nic.
 
 ### Doporučení pro psaní písniček
 Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu souborů příliš dlouho. Navykl jsem si proto používat k psaní písničky pouze zjednodušený soubor zpevnik.tex. Zjednodušení spočívá v tom, že namísto importování všech souborů s písničkami importuji pouze přepisovanou písničku. V praxi to funguje tak, že mám zjednodušený soubor zpevnik.tex na Overleafu a přepisuji písničky tam. Jakmile mám písničku přepsanou, provedu následující kroky. Používám editor vim, je však možné použít kterýkoli jiný textový editor.

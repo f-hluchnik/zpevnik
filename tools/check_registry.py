@@ -3,8 +3,8 @@
 
 Checks data/artists.toml:
   errors   - a field is missing or has the wrong type or value, a slug is
-             used twice, or a song refers (\\interpret / \\interpretdva) to a
-             slug that is not in the registry;
+             used twice, a song refers (\\artist) to a slug that is not in the
+             registry, or a song does not have exactly one \\artist line;
   warnings - an entry with section = true that no song refers to.
 
 Usage: python3 tools/check_registry.py [repo-root]
@@ -18,13 +18,17 @@ from pathlib import Path
 FIELDS = {
     "slug": str,
     "name": str,
+    "song_label": str,
     "index_label": str,
     "sort": str,
     "kind": str,
     "section": bool,
 }
 KINDS = {"artist", "collection"}
-INTERPRET = re.compile(r"\\interpret(?:dva)?\{([^}]*)\}")
+ARTIST = re.compile(r"\\artist(?:\[[^\]]*\])?\{([^}]*)\}")
+ARTIST_LINE = re.compile(r"\\artist\b")
+OLD_MACRO = re.compile(r"\\interpret(?:dva)?\b")
+MAX_ARTISTS = 2  # per song, see \artist in zpevnik.sty
 
 
 def check_entries(entries: list) -> tuple[list[str], set[str]]:
@@ -50,14 +54,28 @@ def check_entries(entries: list) -> tuple[list[str], set[str]]:
     return errors, seen
 
 
-def song_slugs(root: Path) -> dict[str, list[str]]:
-    """slug -> song files that refer to it."""
+def song_slugs(root: Path) -> tuple[dict[str, list[str]], list[str]]:
+    """(slug -> song files that refer to it, problems with the \\artist lines).
+
+    Every song has exactly one line with \\artist (it holds one or two
+    \\artist commands); an empty slug is allowed and is not counted as used.
+    """
     used: dict[str, list[str]] = {}
+    problems: list[str] = []
     for path in sorted((root / "pisnicky").glob("*.tex")):
         text = path.read_text(encoding="utf-8")
-        for slug in INTERPRET.findall(text):
-            used.setdefault(slug, []).append(path.stem)
-    return used
+        lines = [ln for ln in text.splitlines() if ARTIST_LINE.search(ln)]
+        if len(lines) != 1:
+            problems.append(f"{path.stem}: {len(lines)} lines with \\artist, expected exactly 1")
+        if OLD_MACRO.search(text):
+            problems.append(f"{path.stem}: still uses \\interpret / \\interpretdva")
+        slugs = ARTIST.findall(text)
+        if len(slugs) > MAX_ARTISTS:
+            problems.append(f"{path.stem}: {len(slugs)} artists, at most {MAX_ARTISTS} are printed")
+        for slug in slugs:
+            if slug:
+                used.setdefault(slug, []).append(path.stem)
+    return used, problems
 
 
 def main() -> int:
@@ -66,7 +84,8 @@ def main() -> int:
         entries = tomllib.load(f).get("entry", [])
 
     errors, slugs = check_entries(entries)
-    used = song_slugs(root)
+    used, problems = song_slugs(root)
+    errors.extend(problems)
     for slug, songs in sorted(used.items()):
         if slug not in slugs:
             errors.append(f"unknown slug '{slug}' used by {len(songs)} song(s), e.g. {songs[0]}")

@@ -2,7 +2,7 @@
 """Generate the TeX files derived from the registry (D-104, ticket R5).
 
 Reads data/artists.toml and writes generated/artists.tex: one
-\\zpregisterartist{slug}{name}{index label}{1 or 0} line per entry, which
+\\zpregisterartist{slug}{name}{song label}{index label}{1 or 0} line per entry, which
 zpevnik.sty turns into lookups by slug. Also writes generated/version.tex
 with the songbook version (R13). Generated files are build outputs
 (gitignored); `make` runs this before compiling.
@@ -43,8 +43,9 @@ def artists_tex(entries: list[dict]) -> str:
     lines = [HEADER]
     for e in entries:
         lines.append(
-            "\\zpregisterartist{%s}{%s}{%s}{%d}\n"
-            % (e["slug"], tex(e["name"]), tex(e["index_label"]), 1 if e["section"] else 0)
+            "\\zpregisterartist{%s}{%s}{%s}{%s}{%d}\n"
+            % (e["slug"], tex(e["name"]), tex(e["song_label"]), tex(e["index_label"]),
+               1 if e["section"] else 0)
         )
     return "".join(lines)
 

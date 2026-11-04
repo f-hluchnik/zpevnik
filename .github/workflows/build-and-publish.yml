@@ -40,6 +40,15 @@ jobs:
           working_directory: tests/build
           texlive_version: 2023
 
+      # Edge cases of \artist (D-003): tests/single-song.sh --build checks
+      # what each page prints; CI checks that the file compiles.
+      - name: Compile artist test
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: artist.tex
+          working_directory: tests/build
+          texlive_version: 2023
+
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
       # differ (D-106). The report never fails the build.

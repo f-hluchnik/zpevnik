@@ -1,0 +1,29 @@
+% Artist links (D-003, D-005): zpevnik.sty alone, with a registry written by hand.
+% Run through tests/single-song.sh --build, which checks what each page prints.
+\documentclass[a4paper, 10pt]{article}
+\usepackage{zpevnik}
+\zpregisterartist{testa}{Test, A}{A. Test}{Test}{1}
+\zpregisterartist{testb}{Test, B}{B. Test}{Test}{1}
+\zpregisterartist{testc}{Test, C}{C. Test}{Test}{1}
+\zpregisterartist{nosection}{Nosection, N}{N. Nosection}{Nosection}{0}
+
+\begin{document}
+\pagestyle{plain}
+\begin{Large}
+\song{1 empty slug} \artist{}
+\newpage
+\song{2 unknown slug} \artist{doesnotexist}
+\newpage
+\song{3 one artist} \artist{testa}
+\newpage
+\song{4 label override} \artist[Own label]{testa}
+\newpage
+\song{5 two artists} \artist{testa}\artist{testb}
+\newpage
+\song{6 third artist is ignored} \artist{testa}\artist{testb}\artist{testc}
+\newpage
+\song{7 artist without a section} \artist{nosection}
+\newpage
+\song{8 unknown slug with a label} \artist[Own label]{doesnotexist}
+\end{Large}
+\end{document}
