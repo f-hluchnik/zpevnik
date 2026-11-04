@@ -35,8 +35,86 @@
 \def\everypar{\parindent=-10mm} %předsazení prvního řádku odstavce
 \definecolor{chordred}{RGB}{184, 39, 39}
 \definecolor{chordblack}{RGB}{0, 0, 0}
-\newcommand{\chord}[2][l]{\makebox[0pt][#1]{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#2}\\
-				\mbox{}\end{tabular}}}} %příkaz pro akordy
+%příkaz pro akordy (C1 prototyp): akord má nulovou šířku jako dřív, ale
+% nepřekryje předchozí akord na stejném řádku. Každý \chord si uloží svou
+% polohu do .aux (\pdfsavepos); v dalším běhu se před akord vloží mezera,
+% pokud předchozí akord na stejném řádku začíná blíž než jeho šířka + \chordsep.
+% Rule: a chord and its text occupy max(text width, chord width + \chordsep).
+% Needs a second LaTeX pass (latexmk does it; LaTeX warns "Rerun" otherwise).
+\newcommand*{\chordsep}{0.5em}
+% gap between chords with no text between them (chord-only lines, runs)
+\newcommand*{\chordrunsep}{1.5em}
+\newcounter{zpchord}
+% \zpchordspacingfalse: no pads, positions are still recorded (for measuring)
+\newif\ifzpchordspacing \zpchordspacingtrue
+% \zpchordhyphenfalse: no hyphen in a pad that splits a word
+\newif\ifzpchordhyphen \zpchordhyphentrue
+\newif\ifzp@afterletter
+\newsavebox\zp@chordbox
+\newdimen\zp@prevchordw
+\newdimen\zp@chordpad
+\def\zp@load#1{\expandafter\expandafter\expandafter\zp@load@\csname zpc@#1\endcsname}
+\def\zp@load@#1#2#3#4#5{\def\zp@lx{#1}\def\zp@ly{#2}\def\zp@lpg{#3}\def\zp@lpad{#4}}
+\def\zp@computepad{%
+  \global\zp@chordpad\z@
+  \edef\zp@cur{\the\c@zpchord}%
+  \edef\zp@prev{\number\numexpr\c@zpchord-1\relax}%
+  \@ifundefined{zpc@\zp@cur}{}{\@ifundefined{zpc@\zp@prev}{}{%
+    \zp@load\zp@prev
+    \let\zp@px\zp@lx \let\zp@py\zp@ly \let\zp@ppg\zp@lpg \let\zp@ppad\zp@lpad
+    \zp@load\zp@cur
+    \ifnum\zp@ly=\zp@py\relax\ifx\zp@lpg\zp@ppg
+      % text width between the two chord starts (last run; independent of pads)
+      \dimen@=\dimexpr\zp@lx sp-\zp@px sp-\zp@ppad sp\relax
+      \ifdim\dimen@<\z@\else
+        \ifdim\dimen@<.5pt % no text between the chords
+          \global\zp@chordpad=\dimexpr\zp@prevchordw+\chordrunsep-\dimen@\relax
+        \else
+          \global\zp@chordpad=\dimexpr\zp@prevchordw+\chordsep-\dimen@\relax
+        \fi
+        \ifdim\zp@chordpad<\z@ \global\zp@chordpad\z@ \fi
+      \fi
+    \fi\fi
+    % hysteresis: on stretched lines positions depend on the pads, so keep
+    % the previous pad when the new one is within 0.5pt (converges)
+    \dimen@=\dimexpr\zp@chordpad-\zp@lpad sp\relax
+    \ifdim\dimen@<\z@ \dimen@-\dimen@ \fi
+    \ifdim\dimen@<.5pt \global\zp@chordpad\zp@lpad sp\relax \fi}}}
+\newcommand{\chord}[2][l]{%
+  \leavevmode
+  \zp@afterletterfalse
+  \ifnum\lastnodetype=\z@ \zp@afterlettertrue \fi % last item is a character
+  \ifnum\lastnodetype=7 \zp@afterlettertrue \fi   % or a ligature
+  \stepcounter{zpchord}%
+  \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#2}\\
+				\mbox{}\end{tabular}}}%
+  \ifzpchordspacing\zp@computepad\else\global\zp@chordpad\z@\fi
+  \edef\zp@padsp{\number\zp@chordpad}%
+  \pdfsavepos
+  \protected@write\@auxout{}{\string\@newl@bel{zpc}{\the\c@zpchord}%
+    {{\noexpand\the\pdflastxpos}{\noexpand\the\pdflastypos}{\thepage}{\zp@padsp}{\number\wd\zp@chordbox}}}%
+  \def\zp@align{#1}%
+  \futurelet\zp@next\zp@chordout}
+% the pad goes before the chord; a hyphen fills it when it splits a word
+% (letter before the chord and a letter or an accented UTF-8 letter after it)
+\def\zp@chordout{%
+  \ifdim\zp@chordpad>\z@
+    \zp@hyphenfalse
+    \ifzpchordhyphen\ifzp@afterletter
+      \ifcat\noexpand\zp@next a\zp@hyphentrue\fi
+      \edef\zp@tmp{\noexpand\in@{\zp@utftwo}{\meaning\zp@next}}\zp@tmp
+      \ifin@\zp@hyphentrue\fi % č, ř, ž, é, ... (two-byte UTF-8 letter)
+    \fi\fi
+    \ifzp@hyphen
+      \settowidth\dimen@{-}%
+      \ifdim\zp@chordpad<\dimexpr\dimen@+2pt\relax \zp@hyphenfalse \fi
+    \fi
+    \ifzp@hyphen \hbox to\zp@chordpad{\hss-\hss}\else \kern\zp@chordpad \fi
+  \fi
+  \makebox[0pt][\zp@align]{\usebox\zp@chordbox}%
+  \global\zp@prevchordw\wd\zp@chordbox}
+\newif\ifzp@hyphen
+\edef\zp@utftwo{\expandafter\string\csname UTFviii@two@octets\endcsname}
 %\newcommand{\chord}[2][l]{} % alternativní příkaz pro akordy pro zpěvních bez akordů
 \pdfminorversion=7
 
