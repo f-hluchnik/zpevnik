@@ -49,6 +49,14 @@ jobs:
           working_directory: tests/build
           texlive_version: 2023
 
+      # \alttitle, \toctitle and \collection print nothing (R8).
+      - name: Compile metadata test
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: metadata.tex
+          working_directory: tests/build
+          texlive_version: 2023
+
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
       # differ (D-106). The report never fails the build.

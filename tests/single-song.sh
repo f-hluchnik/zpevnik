@@ -5,10 +5,11 @@
 #
 # Fills DIR with exactly what an Overleaf project has: zpevnik.sty,
 # single-song.tex and the one song it includes, plus artist.tex (the edge
-# cases of \artist). With --build it also compiles both with pdflatex and
-# checks them: the song takes one page, and each page of artist.tex prints
-# the artist links it should. CI only prepares DIR and compiles it with the
-# pinned TeX Live action.
+# cases of \artist) and metadata.tex (\alttitle, \toctitle, \collection).
+# With --build it also compiles them with pdflatex and checks them: the song
+# takes one page, each page of artist.tex prints the artist links it should,
+# and metadata.tex prints none of its metadata. CI only prepares DIR and
+# compiles it with the pinned TeX Live action.
 set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
@@ -17,7 +18,7 @@ song=$(grep -oP '(?<=\\include\{pisnicky/)[^}]+' "$root/tests/single-song.tex")
 
 rm -rf "$dir"
 mkdir -p "$dir/pisnicky"
-cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$dir/"
+cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$dir/"
 cp "$root/pisnicky/$song.tex" "$dir/pisnicky/"
 
 [ "${2:-}" = "--build" ] || exit 0
@@ -49,3 +50,13 @@ arrows 6 3; expect 6 lacks "C. Test"
 expect 8 lacks "Own label"
 arrows 9 2; expect 9 has "D. L. Test"; expect 9 lacks "Dee Long"
 echo "artist OK (9 pages)"
+
+# \alttitle, \toctitle, \collection: no output, one page, the song is intact.
+pdflatex -interaction=nonstopmode -halt-on-error metadata.tex >/dev/null
+[ "$(pdfinfo metadata.pdf | awk '/^Pages:/ {print $2}')" = 1 ] || { echo "metadata.tex: expected 1 page" >&2; exit 1; }
+text=$(pdftotext metadata.pdf -)
+grep -qF "Lyrics stay" <<<"$text" || { echo "metadata.tex: lyrics missing" >&2; exit 1; }
+for t in "other title" "Metadata test (TOC)" "filmy" "break"; do
+  ! grep -qF -- "$t" <<<"$text" || { echo "metadata.tex: '$t' should not be printed" >&2; exit 1; }
+done
+echo "metadata OK"
