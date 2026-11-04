@@ -20,6 +20,10 @@ jobs:
       - name: Unit tests
         run: python3 -m unittest discover -s tools
 
+      # Songs against the artists registry (R12): errors fail, warnings are listed.
+      - name: Lint songs and registry
+        run: python3 tools/lint.py
+
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:

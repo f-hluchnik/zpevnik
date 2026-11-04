@@ -57,16 +57,23 @@ def read_title(text: str, command: str, where: str) -> str | None:
     return found[0] if found else None
 
 
+def song_paths(root: Path) -> list[Path]:
+    """The song files of pisnicky/, in file-name order (not the songbook order)."""
+    return sorted((root / "pisnicky").glob("*.tex"))
+
+
+def parse_song(song_id: str, text: str) -> Song:
+    """The song of one file; ValueError if it has no `\\song` or a metadata line is repeated."""
+    where = song_id + ".tex"
+    title = read_title(text, "song", where)
+    if title is None:
+        raise ValueError(f"{where}: no \\song")
+    return Song(song_id, title, read_title(text, "toctitle", where),
+                tuple(find_arguments(text, "alttitle")),
+                tuple(slug for slug in ARTIST.findall(text) if slug),
+                tuple(find_arguments(text, "collection")))
+
+
 def read_songs(root: Path) -> list[Song]:
     """All songs in pisnicky/, in file-name order (not the songbook order)."""
-    songs = []
-    for path in sorted((root / "pisnicky").glob("*.tex")):
-        text = path.read_text(encoding="utf-8")
-        title = read_title(text, "song", path.name)
-        if title is None:
-            raise ValueError(f"{path.name}: no \\song")
-        songs.append(Song(path.stem, title, read_title(text, "toctitle", path.name),
-                          tuple(find_arguments(text, "alttitle")),
-                          tuple(slug for slug in ARTIST.findall(text) if slug),
-                          tuple(find_arguments(text, "collection"))))
-    return songs
+    return [parse_song(path.stem, path.read_text(encoding="utf-8")) for path in song_paths(root)]
