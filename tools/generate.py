@@ -49,7 +49,7 @@ def ordered(songs: list[Song]) -> list[Song]:
 
 
 def include_tex(songs: list[Song]) -> str:
-    """One \\include per song, with a %-comment for each first-pass letter."""
+    """One \\songinclude per song, with a %-comment for each first-pass letter."""
     lines = [header("pisnicky/*.tex")]
     current = None
     for song in ordered(songs):
@@ -57,7 +57,7 @@ def include_tex(songs: list[Song]) -> str:
         if letter != current:
             lines.append(("" if current is None else "\n") + "%" + letter + "\n")
             current = letter
-        lines.append("\\include{pisnicky/%s}\n" % song.id)
+        lines.append("\\songinclude{%s}\n" % song.id)
     return "".join(lines)
 
 

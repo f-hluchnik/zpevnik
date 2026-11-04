@@ -26,6 +26,11 @@
 \newcommand{\hyl}[2]{\vspace{-15pt}\hspace{28pt}\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
 \newcommand{\hyt}[1]{\hypertarget{#1}{}}
 
+%id písničky pro \song: nastavuje ho \songinclude (generated/include.tex), bez něj se cíl odkazu nevytvoří
+\newcommand{\zpsongid}{}
+\newcommand{\songinclude}[1]{\gdef\zpsongid{#1}\include{pisnicky/#1}}
+\newcommand{\zpsongtarget}{\ifx\zpsongid\empty\else\hyt{\zpsongid}\gdef\zpsongid{}\fi}
+
 
 \def\everypar{\parindent=-10mm} %předsazení prvního řádku odstavce
 \definecolor{chordred}{RGB}{184, 39, 39}
@@ -71,7 +76,7 @@
 \newcommand{\lsp}[1]{\vspace{-13pt}\hspace{25pt}\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
 
 %MAIN
-\newcommand{\song}[1]{\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
+\newcommand{\song}[1]{\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
 \newcommand{\sub}[1]{\vspace{-10mm}\subsection*{\large\expandafter\sc{#1}}}%podnázev
 \newcommand{\refrain}[1]{\vspace{20pt}\textbf{{R:}}\hspace{0.5em}{#1}}%refrain

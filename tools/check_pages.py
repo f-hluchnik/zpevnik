@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Fail if a song takes more than one page (D-105, ticket S2).
 
-Every song is pulled in with ``\\include{pisnicky/<id>}``, and LaTeX writes
+Every song is pulled in with ``\\songinclude{<id>}`` (before H3: ``\\include{pisnicky/<id>}``),
+which ends in ``\\include{pisnicky/<id>}``, and LaTeX writes
 ``pisnicky/<id>.aux`` with a checkpoint that records the page counter *after*
 the song. The pages of a song are therefore the difference between its
 checkpoint and the previous one. Songs listed in
@@ -16,6 +17,9 @@ from pathlib import Path
 
 MAX_PAGES = 1
 MAX_PAGES_ALLOWLISTED = 2
+# The older \include{pisnicky/<id>} form is still read, because tools/pdfdiff.py
+# also reads builds of base commits from before H3.
+SONG_INCLUDE = re.compile(r"\\(?:songinclude\{|include\{pisnicky/)([^}]+)\}")
 
 
 def read_allowlist(path: Path) -> set[str]:
@@ -65,7 +69,7 @@ def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
         m = re.search(r"\\setcounter\{page\}\{(\d+)\}", line)
         if m:
             prev = int(m.group(1))  # the first song starts here
-        m = re.search(r"\\include\{pisnicky/([^}]+)\}", line)
+        m = SONG_INCLUDE.search(line)
         if not m:
             continue
         song = m.group(1)
@@ -108,7 +112,7 @@ def main() -> int:
         print(f"ERROR: {e}")
     checked = len(songs)
     if checked == 0:
-        print("ERROR: no \\include{pisnicky/...} found in zpevnik.tex or generated/include.tex")
+        print("ERROR: no \\songinclude{...} (or \\include{pisnicky/...}) found in zpevnik.tex or generated/include.tex")
         return 1
     print(f"checked {checked} songs, {len(errors)} problem(s)")
     return 1 if errors else 0
