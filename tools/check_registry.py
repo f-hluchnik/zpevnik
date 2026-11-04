@@ -14,12 +14,14 @@ import re
 import sys
 import tomllib
 from pathlib import Path
+from typing import TypedDict
+
+from songs import ARTIST
 
 REQUIRED = {"slug": str, "name": str}
 OPTIONAL = {"label": str, "link_label": str, "sort": str, "kind": str, "section": bool}
 KINDS = {"artist", "collection"}
 PERSON = re.compile(r"([^,&]+), ([^,&]+)")
-ARTIST = re.compile(r"\\artist(?:\[[^\]]*\])?\{([^}]*)\}")
 ARTIST_LINE = re.compile(r"\\artist\b")
 OLD_MACRO = re.compile(r"\\interpret(?:dva)?\b")
 MAX_ARTISTS = 2  # per song, see \artist in zpevnik.sty
@@ -31,7 +33,18 @@ def derive_label(name: str) -> str:
     return f"{m.group(2)} {m.group(1)}" if m else name
 
 
-def normalise(entry: dict) -> dict:
+class Artist(TypedDict):
+    """A registry entry with every default filled in."""
+    slug: str
+    name: str
+    label: str
+    link_label: str
+    sort: str
+    kind: str
+    section: bool
+
+
+def normalise(entry: dict) -> Artist:
     """The entry with every default filled in (see the header of artists.toml)."""
     label = entry.get("label", derive_label(entry["name"]))
     return {

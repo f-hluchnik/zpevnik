@@ -1,7 +1,9 @@
 """Read the songs in pisnicky/*.tex (shared by the generators, D-107).
 
 A song file has one `\\song{Title}`, optionally one `\\toctitle{TOC title}` and
-any number of `\\alttitle{Other title}`, each at the start of a line.
+any number of `\\alttitle{Other title}`, each at the start of a line. The song
+line carries its `\\artist{slug}` tags (up to two); `\\collection{slug}` is on
+a line of its own (D-113, D-116).
 
 Python >= 3.11, standard library only.
 """
@@ -13,17 +15,32 @@ from pathlib import Path
 from tex_text import brace_group, plain_text
 
 
+ARTIST = re.compile(r"\\artist(?:\[[^\]]*\])?\{([^}]*)\}")  # \artist[label]{slug}
+
+
 @dataclass(frozen=True)
 class Song:
     id: str                  # file name without .tex, as used in \include
     title: str               # \song, as written in TeX
     toctitle: str | None     # \toctitle, if the TOC and the order need another
     alttitles: tuple[str, ...] = ()  # \alttitle, other names the song is known by
+    artists: tuple[str, ...] = ()    # \artist slugs, empty ones left out
+    collections: tuple[str, ...] = ()  # \collection slugs
+
+    @property
+    def groups(self) -> tuple[str, ...]:
+        """Registry slugs of the artist sections the song is listed under."""
+        return tuple(dict.fromkeys(self.artists + self.collections))
+
+    @cached_property
+    def plain_title(self) -> str:
+        """Plain text of the title printed on the song's page."""
+        return plain_text(self.title)
 
     @cached_property
     def sort_title(self) -> str:
         """Plain text of the title that orders and lists the song (D-107)."""
-        return plain_text(self.title if self.toctitle is None else self.toctitle)
+        return self.plain_title if self.toctitle is None else plain_text(self.toctitle)
 
 
 def find_arguments(text: str, command: str) -> list[str]:
@@ -49,5 +66,7 @@ def read_songs(root: Path) -> list[Song]:
         if title is None:
             raise ValueError(f"{path.name}: no \\song")
         songs.append(Song(path.stem, title, read_title(text, "toctitle", path.name),
-                          tuple(find_arguments(text, "alttitle"))))
+                          tuple(find_arguments(text, "alttitle")),
+                          tuple(slug for slug in ARTIST.findall(text) if slug),
+                          tuple(find_arguments(text, "collection"))))
     return songs

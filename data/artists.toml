@@ -5,7 +5,9 @@
 #
 #   slug        (required) anchor used by \artist: lowercase ASCII name, no spaces,
 #               no leading article
-#   name        (required) heading of the section; people as "Surname, First"
+#   name        (required) heading of the section and name in the artist index;
+#               people as "Surname, First". A line break (\n) is a forced line
+#               break in the heading (a long heading does not wrap by itself)
 #   label       how the artist is named in the index and, unless link_label is
 #               set, in the link on the artist's songs.
 #               Default: "First Surname" for a name of the form "Surname, First",
@@ -216,7 +218,7 @@ name = "Žalman & spol."
 
 [[entry]]
 slug = "filmy"
-name = "z pohádek, filmů, muzikálů, her a seriálů"
+name = "z pohádek, filmů, muzikálů,\nher a seriálů"
 label = "filmová hudba"
 sort = "filmy"
 kind = "collection"

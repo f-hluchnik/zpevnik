@@ -7,7 +7,7 @@ alternative title, ordered by that title under its own letter.
 Python >= 3.11, standard library only.
 """
 import unicodedata
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from itertools import groupby
 
@@ -26,10 +26,18 @@ class Entry:
     sort_text: str   # plain text the entry is ordered by
 
 
-def entries(songs: list[Song]) -> Iterator[Entry]:
+TitleOf = Callable[[Song], str]
+
+
+def contents_title(song: Song) -> str:
+    """The title the letter sections list: the TOC title, if the song has one."""
+    return song.sort_title
+
+
+def entries(songs: list[Song], title_of: TitleOf = contents_title) -> Iterator[Entry]:
     """The entry of each song and one for each of its alternative titles."""
     for song in songs:
-        title = song.sort_title
+        title = title_of(song)
         yield Entry(song.id, tex(title), title)
         for alttitle in map(plain_text, song.alttitles):
             yield Entry(song.id, f"\\emph{{{tex(alttitle)}}} ({tex(title)})", alttitle)
@@ -48,9 +56,14 @@ def link(target: str, text: str) -> str:
     return f"\\hylo{{{target}}}{{{text}}}"
 
 
+def sorted_entries(songs: list[Song], title_of: TitleOf = contents_title) -> list[Entry]:
+    """The entries of the songs in the order of D-107 (the song id breaks a tie)."""
+    return sorted(entries(songs, title_of), key=lambda e: (sort_key(e.sort_text), e.song_id))
+
+
 def letters_tex(songs: list[Song]) -> str:
     """The letter row, the link to the artist index and the letter sections."""
-    ordered = sorted(entries(songs), key=lambda e: (sort_key(e.sort_text), e.song_id))
+    ordered = sorted_entries(songs)
     sections = [(letter, list(group))
                 for letter, group in groupby(ordered, key=lambda e: section(e.sort_text))]
     row = "\\hfill ".join(link(anchor(letter), letter) for letter, _ in sections)
