@@ -48,11 +48,9 @@ Díky tomu stačí přidat písničku a pushnout — o zbytek (kompilace, publik
 ## Přepisování písniček
 V této sekci popíšu postup a konvence přepisování písniček. Nejprve uvedu povinné součásti písničky:
 
-1. cíl odkazu
-    - Na začátku každé písničky musí být příkaz `\hyt{}`, který označuje cíl pro odkaz z obsahu.
-2. název a interpret
-    - Následuje příkaz `\song`, který vytváří název písničky. Tento příkaz udělá z názvu automaticky odkaz na obsah. Na stejný řádek patří `\artist{}` s interpretem (viz níže).
-Na konec písničky žádný příkaz pro novou stranu nepatří: každá písnička se vkládá příkazem `\include`, který sám začíná novou stranu.
+1. název a interpret
+    - Na začátku písničky je příkaz `\song`, který vytváří název písničky. Tento příkaz udělá z názvu automaticky odkaz na obsah. Na stejný řádek patří `\artist{}` s interpretem (viz níže).
+Na konec písničky žádný příkaz pro novou stranu nepatří: každá písnička se vkládá příkazem `\songinclude{id}` (generuje se do `generated/include.tex`, `id` je název souboru bez `.tex`), který sám začíná novou stranu. Stejné `id` použije `\song` jako cíl odkazu z obsahu, takže `\hyt` se do písničky nepíše.
 
 Následuje popis důležitých součástí písničky.
 
