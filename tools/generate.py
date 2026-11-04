@@ -17,10 +17,9 @@ import sys
 import tomllib
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from check_registry import check_entries, normalise  # noqa: E402
-from collation import section, sort_key  # noqa: E402
-from songs import Song, read_songs  # noqa: E402
+from check_registry import check_entries, normalise
+from collation import section, sort_key
+from songs import Song, read_songs
 
 
 def header(source: str) -> str:

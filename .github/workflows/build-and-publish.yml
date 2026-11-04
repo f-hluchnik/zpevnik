@@ -18,7 +18,7 @@ jobs:
 
       # Song order (D-107): unit tests of the Czech collation (R9).
       - name: Unit tests
-        run: python3 -m unittest discover -s tests -p 'test_*.py'
+        run: python3 -m unittest discover -s tools
 
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3

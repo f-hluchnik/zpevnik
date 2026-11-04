@@ -22,8 +22,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from check_pages import song_pages  # noqa: E402
+from check_pages import song_pages
 
 FOOTER_TOP_PT = 805.0  # the page number sits at y = 808-817 pt on an A4 page
 MONTHS = {
