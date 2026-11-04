@@ -1,7 +1,8 @@
-"""Turn a fragment of TeX text, such as a song title, into plain Unicode text.
+"""Convert between TeX text, such as a song title, and plain Unicode text.
 
-Footnotes are removed; `\\uv{}`, `\\textit{}` and accent macros are resolved.
-A macro this module does not know is an error, not a guess.
+`plain_text`: footnotes are removed; `\\uv{}`, `\\textit{}` and accent macros are
+resolved. A macro this module does not know is an error, not a guess.
+`tex`: plain text to TeX, escaping the special characters.
 
 Python >= 3.11, standard library only.
 """
@@ -103,3 +104,22 @@ def plain_text(tex: str) -> str:
             else:
                 raise ValueError(f"unknown macro \\{symbol} in title: {tex}")
     return unicodedata.normalize("NFC", "".join(out))
+
+
+TEX_ESCAPES = {
+    "\\": r"\textbackslash{}",
+    "&": r"\&",
+    "%": r"\%",
+    "$": r"\$",
+    "#": r"\#",
+    "_": r"\_",
+    "{": r"\{",
+    "}": r"\}",
+    "~": r"\textasciitilde{}",
+    "^": r"\textasciicircum{}",
+    "\u00a0": "~",  # a non-breaking space in the registry is a tie in TeX
+}
+
+
+def tex(text: str) -> str:
+    return "".join(TEX_ESCAPES.get(ch, ch) for ch in text)

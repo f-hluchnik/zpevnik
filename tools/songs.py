@@ -1,7 +1,7 @@
 """Read the songs in pisnicky/*.tex (shared by the generators, D-107).
 
-A song file has one `\\song{Title}` and optionally `\\toctitle{TOC title}` at
-the start of a line.
+A song file has one `\\song{Title}`, optionally one `\\toctitle{TOC title}` and
+any number of `\\alttitle{Other title}`, each at the start of a line.
 
 Python >= 3.11, standard library only.
 """
@@ -18,6 +18,7 @@ class Song:
     id: str                  # file name without .tex, as used in \include
     title: str               # \song, as written in TeX
     toctitle: str | None     # \toctitle, if the TOC and the order need another
+    alttitles: tuple[str, ...] = ()  # \alttitle, other names the song is known by
 
     @cached_property
     def sort_title(self) -> str:
@@ -25,12 +26,18 @@ class Song:
         return plain_text(self.title if self.toctitle is None else self.toctitle)
 
 
+def find_arguments(text: str, command: str) -> list[str]:
+    """The arguments of every `\\command{...}` at the start of a line."""
+    return [brace_group(text, m.end())[0]
+            for m in re.finditer(r"^\\" + command + r"(?=\{)", text, re.M)]
+
+
 def read_title(text: str, command: str, where: str) -> str | None:
-    """The argument of `\\command{...}` at the start of a line, or None."""
-    found = [m.end() for m in re.finditer(r"^\\" + command + r"(?=\{)", text, re.M)]
+    """The argument of the one `\\command{...}` at the start of a line, or None."""
+    found = find_arguments(text, command)
     if len(found) > 1:
         raise ValueError(f"{where}: {len(found)} lines with \\{command}, expected at most 1")
-    return brace_group(text, found[0])[0] if found else None
+    return found[0] if found else None
 
 
 def read_songs(root: Path) -> list[Song]:
@@ -41,5 +48,6 @@ def read_songs(root: Path) -> list[Song]:
         title = read_title(text, "song", path.name)
         if title is None:
             raise ValueError(f"{path.name}: no \\song")
-        songs.append(Song(path.stem, title, read_title(text, "toctitle", path.name)))
+        songs.append(Song(path.stem, title, read_title(text, "toctitle", path.name),
+                          tuple(find_arguments(text, "alttitle"))))
     return songs
