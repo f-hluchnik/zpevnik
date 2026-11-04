@@ -309,3 +309,6 @@ tests/build/
 
 # Build outputs of tools/generate.py (D-104)
 generated/
+
+# Python bytecode of tools/
+__pycache__/
