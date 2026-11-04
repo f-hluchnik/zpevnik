@@ -36,85 +36,120 @@
 \definecolor{chordred}{RGB}{184, 39, 39}
 \definecolor{chordblack}{RGB}{0, 0, 0}
 %příkaz pro akordy (C1 prototyp): akord má nulovou šířku jako dřív, ale
-% nepřekryje předchozí akord na stejném řádku. Každý \chord si uloží svou
-% polohu do .aux (\pdfsavepos); v dalším běhu se před akord vloží mezera,
-% pokud předchozí akord na stejném řádku začíná blíž než jeho šířka + \chordsep.
-% Rule: a chord and its text occupy max(text width, chord width + \chordsep).
-% Needs a second LaTeX pass (latexmk does it; LaTeX warns "Rerun" otherwise).
+% nepřekryje následující akord na stejném řádku. \chord si přečte text až
+% k dalšímu akordu (nebo ke konci řádku), změří ho a vrátí beze změny; pokud
+% by se další akord překrýval, vloží se před něj mezera (uvnitř slova se
+% spojovníkem). Jeden průchod, nic se neukládá do .aux.
+% Rule: a chord and its text occupy max(text width, chord width + \chordsep);
+% with no text between two chords, chord width + \chordrunsep.
 \newcommand*{\chordsep}{0.5em}
-% gap between chords with no text between them (chord-only lines, runs)
-\newcommand*{\chordrunsep}{1.5em}
-\newcounter{zpchord}
-% \zpchordspacingfalse: no pads, positions are still recorded (for measuring)
+\newcommand*{\chordrunsep}{1em}
+% \zpchordspacingfalse: old behaviour (no pads)
 \newif\ifzpchordspacing \zpchordspacingtrue
-% \zpchordhyphenfalse: no hyphen in a pad that splits a word
+% \zpchordhyphenfalse: no hyphen in a pad or \gap that splits a word
 \newif\ifzpchordhyphen \zpchordhyphentrue
-\newif\ifzp@afterletter
 \newsavebox\zp@chordbox
-\newdimen\zp@prevchordw
-\newdimen\zp@chordpad
-\def\zp@load#1{\expandafter\expandafter\expandafter\zp@load@\csname zpc@#1\endcsname}
-\def\zp@load@#1#2#3#4#5{\def\zp@lx{#1}\def\zp@ly{#2}\def\zp@lpg{#3}\def\zp@lpad{#4}}
-\def\zp@computepad{%
-  \global\zp@chordpad\z@
-  \edef\zp@cur{\the\c@zpchord}%
-  \edef\zp@prev{\number\numexpr\c@zpchord-1\relax}%
-  \@ifundefined{zpc@\zp@cur}{}{\@ifundefined{zpc@\zp@prev}{}{%
-    \zp@load\zp@prev
-    \let\zp@px\zp@lx \let\zp@py\zp@ly \let\zp@ppg\zp@lpg \let\zp@ppad\zp@lpad
-    \zp@load\zp@cur
-    \ifnum\zp@ly=\zp@py\relax\ifx\zp@lpg\zp@ppg
-      % text width between the two chord starts (last run; independent of pads)
-      \dimen@=\dimexpr\zp@lx sp-\zp@px sp-\zp@ppad sp\relax
-      \ifdim\dimen@<\z@\else
-        \ifdim\dimen@<.5pt % no text between the chords
-          \global\zp@chordpad=\dimexpr\zp@prevchordw+\chordrunsep-\dimen@\relax
-        \else
-          \global\zp@chordpad=\dimexpr\zp@prevchordw+\chordsep-\dimen@\relax
-        \fi
-        \ifdim\zp@chordpad<\z@ \global\zp@chordpad\z@ \fi
-      \fi
-    \fi\fi
-    % hysteresis: on stretched lines positions depend on the pads, so keep
-    % the previous pad when the new one is within 0.5pt (converges)
-    \dimen@=\dimexpr\zp@chordpad-\zp@lpad sp\relax
-    \ifdim\dimen@<\z@ \dimen@-\dimen@ \fi
-    \ifdim\dimen@<.5pt \global\zp@chordpad\zp@lpad sp\relax \fi}}}
+\newsavebox\zp@segbox
+\newtoks\zp@segtoks
+\newdimen\zp@pend  % pad the next chord puts before itself (set by this chord)
+\newdimen\zp@pad
+\newdimen\zp@gapw
+\newif\ifzp@afterletter
+\newif\ifzp@nextletter
+\newif\ifzp@hyphen
+\newif\ifzp@chordafterletter
+% \zpchordtracetrue (before \begin{document}): write every chord's position to
+% \jobname.chords for tools/chord_gaps.py; nothing reads it back
+\newif\ifzpchordtrace
+\newwrite\zp@trace
+\AtBeginDocument{\ifzpchordtrace\immediate\openout\zp@trace=\jobname.chords\fi}
+\edef\zp@utftwo{\expandafter\string\csname UTFviii@two@octets\endcsname}
+% is the peeked token \zp@next a letter (ASCII, or a two-byte UTF-8 letter such as č, ž, é)?
+\def\zp@testnextletter{%
+  \zp@nextletterfalse
+  \ifcat\noexpand\zp@next a\zp@nextlettertrue\fi
+  \edef\zp@tmp{\noexpand\in@{\zp@utftwo}{\meaning\zp@next}}\zp@tmp
+  \ifin@\zp@nextlettertrue\fi}
+% space #1 wide; when it splits a word (#2 = 1) a centred hyphen, and the
+% space is widened to fit it (a bare gap inside a word reads as a word break)
+\def\zp@space#1#2{%
+  \zp@hyphenfalse
+  \ifzpchordhyphen\ifnum#2=\@ne\zp@hyphentrue\fi\fi
+  \ifzp@hyphen
+    \settowidth\dimen@{-}\advance\dimen@ .3em
+    \ifdim#1>\dimen@ \dimen@#1\relax\fi
+    \hbox to\dimen@{\hss-\hss}%
+  \else\hskip#1\relax\fi}
 \newcommand{\chord}[2][l]{%
   \leavevmode
   \zp@afterletterfalse
-  \ifnum\lastnodetype=\z@ \zp@afterlettertrue \fi % last item is a character
-  \ifnum\lastnodetype=7 \zp@afterlettertrue \fi   % or a ligature
-  \stepcounter{zpchord}%
+  \ifnum\lastnodetype=\z@ \zp@afterlettertrue\fi % character before the chord
+  \ifnum\lastnodetype=7 \zp@afterlettertrue\fi   % or a ligature
   \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#2}\\
 				\mbox{}\end{tabular}}}%
-  \ifzpchordspacing\zp@computepad\else\global\zp@chordpad\z@\fi
-  \edef\zp@padsp{\number\zp@chordpad}%
-  \pdfsavepos
-  \protected@write\@auxout{}{\string\@newl@bel{zpc}{\the\c@zpchord}%
-    {{\noexpand\the\pdflastxpos}{\noexpand\the\pdflastypos}{\thepage}{\zp@padsp}{\number\wd\zp@chordbox}}}%
   \def\zp@align{#1}%
-  \futurelet\zp@next\zp@chordout}
-% the pad goes before the chord; a hyphen fills it when it splits a word
-% (letter before the chord and a letter or an accented UTF-8 letter after it)
-\def\zp@chordout{%
-  \ifdim\zp@chordpad>\z@
-    \zp@hyphenfalse
-    \ifzpchordhyphen\ifzp@afterletter
-      \ifcat\noexpand\zp@next a\zp@hyphentrue\fi
-      \edef\zp@tmp{\noexpand\in@{\zp@utftwo}{\meaning\zp@next}}\zp@tmp
-      \ifin@\zp@hyphentrue\fi % č, ř, ž, é, ... (two-byte UTF-8 letter)
-    \fi\fi
-    \ifzp@hyphen
-      \settowidth\dimen@{-}%
-      \ifdim\zp@chordpad<\dimexpr\dimen@+2pt\relax \zp@hyphenfalse \fi
+  \zp@pad\zp@pend \global\zp@pend\z@
+  \zp@segtoks{}%
+  \futurelet\zp@next\zp@chordfirst}
+\def\zp@chordfirst{\zp@testnextletter\zp@scan@}
+% collect the tokens up to the next \chord, \chords, \\, }, \par, \end or \begin
+\def\zp@scan{\futurelet\zp@next\zp@scan@}
+\def\zp@scan@{%
+  \let\zp@do\zp@grabtok
+  \ifx\zp@next\@sptoken \let\zp@do\zp@grabspace\fi
+  \ifx\zp@next\bgroup \let\zp@do\zp@grabgroup\fi
+  \ifx\zp@next\chord \def\zp@do{\zp@finish\@ne}\fi
+  \ifx\zp@next\chords \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\\\def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\egroup \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\par \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\end \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\begin \def\zp@do{\zp@finish\z@}\fi
+  \zp@do}
+\def\zp@grabtok#1{\zp@segtoks\expandafter{\the\zp@segtoks#1}\zp@scan}
+\def\zp@grabgroup#1{\zp@segtoks\expandafter{\the\zp@segtoks{#1}}\zp@scan}
+\expandafter\def\expandafter\zp@grabspace\space{\zp@segtoks\expandafter{\the\zp@segtoks\space}\zp@scan}
+% #1 = 1 when the text ends at another chord on the same line
+\def\zp@finish#1{%
+  \ifzpchordspacing
+    \ifnum#1=\@ne
+      \sbox\zp@segbox{\let\footnote\@gobble\the\zp@segtoks}% measure, no side effects
+      \ifdim\wd\zp@segbox<.5pt
+        \global\zp@pend\dimexpr\wd\zp@chordbox+\chordrunsep-\wd\zp@segbox\relax
+      \else
+        \global\zp@pend\dimexpr\wd\zp@chordbox+\chordsep-\wd\zp@segbox\relax
+      \fi
+      \ifdim\zp@pend<\z@ \global\zp@pend\z@\fi
     \fi
-    \ifzp@hyphen \hbox to\zp@chordpad{\hss-\hss}\else \kern\zp@chordpad \fi
+    \ifdim\zp@pad>\z@
+      \zp@space\zp@pad{\ifzp@afterletter\ifzp@nextletter1\else0\fi\else0\fi}%
+    \fi
   \fi
+  \ifzpchordtrace\pdfsavepos\edef\zp@tmp{\write\zp@trace{\noexpand\the\noexpand\pdflastxpos\space\noexpand\the\noexpand\pdflastypos\space\noexpand\thepage\space\number\wd\zp@chordbox}}\zp@tmp\fi
   \makebox[0pt][\zp@align]{\usebox\zp@chordbox}%
-  \global\zp@prevchordw\wd\zp@chordbox}
-\newif\ifzp@hyphen
-\edef\zp@utftwo{\expandafter\string\csname UTFviii@two@octets\endcsname}
+  \ifzp@afterletter\global\zp@chordafterlettertrue\else\global\zp@chordafterletterfalse\fi
+  \the\zp@segtoks}
+% deliberate gap (a pause), #1 in characters of 0.5em; right after a chord
+% inside a word it gets a hyphen
+\newcommand{\gap}[1]{%
+  \leavevmode
+  \zp@gapw\dimexpr.5em*#1\relax
+  \zp@hyphenfalse
+  \ifnum\lastnodetype=\@ne\ifzp@chordafterletter\zp@hyphentrue\fi\fi
+  \futurelet\zp@next\zp@gapout}
+\def\zp@gapout{%
+  \zp@testnextletter
+  \edef\zp@tmp{\ifzp@hyphen\ifzp@nextletter1\else0\fi\else0\fi}%
+  \zp@space\zp@gapw\zp@tmp}
+% chords set inline on one line without lyrics (intros, endings of lines)
+\newcommand{\chords}[1]{\leavevmode\zp@chords@#1 \zp@chordsend{} }
+\def\zp@chords@#1 {\ifx\zp@chordsend#1\else
+  \textbf{\textcolor{chordred}{#1}}\zp@chordsnext\fi}
+\def\zp@chordsnext#1\fi{\fi\zp@chordsmore}
+\def\zp@chordsmore{\futurelet\zp@next\zp@chordsmore@}
+\def\zp@chordsmore@{\ifx\zp@next\zp@chordsend\expandafter\zp@chordsstop\else\hskip\chordrunsep\relax\expandafter\zp@chords@\fi}
+\def\zp@chordsstop\zp@chordsend#1 {}
+\def\zp@chordsend{}
 %\newcommand{\chord}[2][l]{} % alternativní příkaz pro akordy pro zpěvních bez akordů
 \pdfminorversion=7
 
