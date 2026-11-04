@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from songs import Song, read_songs, read_title
+from songs import Song, find_arguments, read_songs, read_title
 
 
 class ReadTitle(unittest.TestCase):
@@ -25,6 +25,12 @@ class ReadTitle(unittest.TestCase):
             read_title("\\song{A}\n\\song{B}\n", "song", "x.tex")
 
 
+class FindArguments(unittest.TestCase):
+    def test_every_line_with_the_command(self):
+        text = "\\song{A}\n\\alttitle{B {c}}\nx \\alttitle{no}\n\\alttitle{D}\n"
+        self.assertEqual(find_arguments(text, "alttitle"), ["B {c}", "D"])
+
+
 class SortTitle(unittest.TestCase):
     def test_toctitle_wins_over_song(self):
         self.assertEqual(Song("a", "Marie", "Marie (Klus)").sort_title, "Marie (Klus)")
@@ -38,10 +44,11 @@ class ReadSongs(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             songs_dir = Path(tmp) / "pisnicky"
             songs_dir.mkdir()
-            (songs_dir / "b.tex").write_text("\\song{B}\n\\toctitle{B (x)}\n", encoding="utf-8")
+            (songs_dir / "b.tex").write_text(
+                "\\song{B}\n\\toctitle{B (x)}\n\\alttitle{b1}\n\\alttitle{b2}\n", encoding="utf-8")
             (songs_dir / "a.tex").write_text("\\song{A}\n", encoding="utf-8")
             self.assertEqual(read_songs(Path(tmp)),
-                             [Song("a", "A", None), Song("b", "B", "B (x)")])
+                             [Song("a", "A", None), Song("b", "B", "B (x)", ("b1", "b2"))])
 
     def test_song_without_title_is_an_error(self):
         with tempfile.TemporaryDirectory() as tmp:
