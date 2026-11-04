@@ -1,0 +1,19 @@
+% Song metadata (R8): \alttitle, \toctitle and \collection print nothing.
+% Run through tests/single-song.sh --build, which checks the page text.
+\documentclass[a4paper, 10pt]{article}
+\usepackage{zpevnik}
+
+\begin{document}
+\pagestyle{plain}
+\begin{Large}
+\song{Metadata test}
+\alttitle{First other title}
+\alttitle{Rock'n'roll, \emph{second} other title\\with a break}
+\toctitle{Metadata test (TOC)}
+\collection{filmy}
+
+\vers{1}{
+\chord{C}Lyrics stay \chord{G}where they are.
+}
+\end{Large}
+\end{document}

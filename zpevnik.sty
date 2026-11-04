@@ -94,6 +94,15 @@
 
 \newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{\hspace{22pt}#3}\end{large}}\end{minipage}}}}}
 
+%SONG METADATA (print nothing; read by the generator and the converter, D-001, D-107)
+% \alttitle{Other title}   other name the song is known by; repeatable.
+% \toctitle{TOC title}     title in the contents and the sort key when it must
+%                          differ from \song, e.g. "Marie (Klus)".
+% \collection{slug}        collection the song belongs to, e.g. filmy.
+\newcommand{\alttitle}[1]{}
+\newcommand{\toctitle}[1]{}
+\newcommand{\collection}[1]{}
+
 %ARTISTS REGISTRY
 % generated/artists.tex (tools/generate.py) registers every artist by slug.
 % The lookups print nothing for an unknown slug, and a missing file is fine,
