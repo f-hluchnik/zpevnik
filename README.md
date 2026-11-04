@@ -52,8 +52,7 @@ V této sekci popíšu postup a konvence přepisování písniček. Nejprve uved
     - Na začátku každé písničky musí být příkaz `\hyt{}`, který označuje cíl pro odkaz z obsahu.
 2. název a interpret
     - Následuje příkaz `\song`, který vytváří název písničky. Tento příkaz udělá z názvu automaticky odkaz na obsah. Na stejný řádek patří `\artist{}` s interpretem (viz níže).
-3. \newpage
-    - Aby každá písnička byla na nové stránce, je potřeba na konec každé písničky přidat příkaz pro novou stranu.    
+Na konec písničky žádný příkaz pro novou stranu nepatří: každá písnička se vkládá příkazem `\include`, který sám začíná novou stranu.
 
 Následuje popis důležitých součástí písničky.
 
