@@ -26,6 +26,14 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 
 Na kompilaci potřebuji Python 3.11 a novější, `latexmk` a TeX Live 2023 s češtinou (ve stejné verzi kompiluje zpěvník i GitHub Actions).
 
+### Lokální sestavení
+Na kompilaci potřebuji Python 3.11 a novější a TeX Live s češtinou, `latexmk` a několik balíků (`csquotes`, `dashrule`, `eso-pic`, `setspace`, `pgf`, `geometry`, `xcolor`, `hyperref`, `cm-super`).
+
+- **Linux (Debian, Ubuntu):** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra latexmk`. Na kontrolu stran a porovnání PDF (`tools/check_pages.py`, `tools/pdfdiff.py`) navíc `poppler-utils`.
+- **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic setspace pgf geometry xcolor hyperref cm-super latexmk`. Python 3.11 a novější je například z Homebrew (`brew install python`).
+
+`make` zkompiluje celý zpěvník, `make song SONG=<id>` jen jednu písničku. `<id>` je název souboru bez `.tex`, například `make song SONG=lonelystranger`. Hotové PDF je v `build/<id>.pdf` (složka `build` se necommituje) a trvá to pár sekund. Je to stejné nastavení jako na Overleafu: bez obsahu a bez odkazů na interprety. Lokální sestavení s novější verzí TeX Live se může od GitHub Actions mírně lišit; rozhodující je vždy GitHub Actions.
+
 ### Název písničky v obsahu
 Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky na začátku řádku za `\song{}` na stránce nic nevysází, jen řídí obsah:
 - `\alttitle{<jiný název>}` - jiný název, pod kterým se písnička zpívá (třeba první řádek textu). V obsahu má vlastní kurzívou psanou položku pod svým písmenem. Je možné jich uvést víc.
@@ -107,6 +115,7 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`
 - kontrola počtu písniček `ls pisnicky/*.tex | wc -l`
 - vygenerování obsahu a kompilace zpěvníku `make` (jen generování: `make generate`)
+- kompilace jedné písničky `make song SONG=<id>` (výsledek `build/<id>.pdf`)
 - kontrola písniček a registru interpretů `python3 tools/lint.py`
 - unit testy nástrojů `python3 -m unittest discover -s tools`
 - kontrola, že každá písnička je na jedné stránce `python3 tools/check_pages.py` (po `make`)
