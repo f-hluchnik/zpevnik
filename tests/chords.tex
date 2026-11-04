@@ -1,0 +1,24 @@
+% Automatic chord spacing (C3a, D-123): \autochords, \gap, \chords and the chord trace.
+% Run through tests/single-song.sh --build: page 1 and 3 are songs without \autochords
+% (chords overlap, \song switches the spacing off), page 2 has it (no overlap).
+\documentclass[a4paper, 10pt]{article}
+\usepackage{zpevnik}
+
+\newcommand{\overlapping}{\chord{F\kk m\7}ab\chord{Am\7}cd \chord{Dm\7}\chord{Em\7}x \chord{C}in\chord{F\kk m\7}vi\chord{Am\7}sible}
+
+\begin{document}
+\pagestyle{plain}
+\begin{Large}
+\song{Spacing off}
+\vers{1}{\overlapping}
+\newpage
+\song{Spacing on}
+\autochords
+\vers{1}{\overlapping\\
+\chord{C}Pause\gap{4}here, \chord{G}ends\\
+\chords{Am F\maj{} G\7}}
+\newpage
+\song{Spacing off again}
+\vers{1}{\overlapping}
+\end{Large}
+\end{document}
