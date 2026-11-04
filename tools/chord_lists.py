@@ -24,6 +24,7 @@ CHORD_ONLY_LINE = re.compile(
     r"(?P<tail>(?:\\\\)?[ \t]*\}*[ \t]*(?:%.*)?)$"
 )
 TEXTBF = re.compile(r"\\textbf\{((?:[^{}]|\{[^{}]*\})*)\}")
+LINE_BREAK = re.compile(r"(\\\\\s*)")  # keeps the line break and the blanks after it
 GLUED_CHORDS = re.compile(r"\\[A-Za-z]+ (?=[A-H(\\])")  # TeX swallows that space
 
 
@@ -42,20 +43,25 @@ def join_chords(names: list[str]) -> str:
     )
 
 
+def chord_rows(body: str) -> list[str] | None:
+    """The chord names of each line of a plain `\\textbf{body}` (lines end at `\\\\`), or None."""
+    rows = [chord_names(row) for row in LINE_BREAK.split(body)[::2]]
+    return None if None in rows else rows
+
+
 def chordify_textbf(src: str, song: str, report: Report) -> str:
     def convert(m: re.Match) -> str:
-        names = chord_names(m.group(1))
-        line = line_of(src, m.start())
-        if names is None:
-            if "\\\\" in m.group(1) and chord_names(m.group(1).replace("\\\\", " ")):
-                report.note("textbf-left", song, line, "chords with a line break, left as \\textbf",
-                            clean(m.group()[:60]))
+        rows = chord_rows(m.group(1))
+        if rows is None:
             return m.group()
-        if GLUED_CHORDS.search(names):
-            report.note("glued", song, line, "CHECK, TeX glues two chords (a control word swallows the space)",
-                        clean(names))
-        report.note("textbf", song, line, "\\textbf of chord names -> \\chords", clean(names))
-        return f"\\chords{{{names}}}"
+        line = line_of(src, m.start())
+        for names in rows:
+            if GLUED_CHORDS.search(names):
+                report.note("glued", song, line, "CHECK, TeX glues two chords (a control word swallows the space)",
+                            clean(names))
+        report.note("textbf", song, line, "\\textbf of chord names -> \\chords", clean(" \\\\ ".join(rows)))
+        breaks = LINE_BREAK.split(m.group(1))[1::2]
+        return "".join(f"{sep}\\chords{{{names}}}" for sep, names in zip(["", *breaks], rows))
 
     return TEXTBF.sub(convert, src)
 

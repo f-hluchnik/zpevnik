@@ -75,11 +75,13 @@ class TextbfChords(unittest.TestCase):
         src = "\\textbf{Pozor} a \\textbf{1.}"
         self.assertEqual(chordify_textbf(src, "song", Report()), src)
 
-    def test_chords_with_a_line_break_stay_and_are_reported(self):  # blackbird, kluziste
-        src = "\\textbf{C G\\\\\nD Em}"
-        report = Report()
-        self.assertEqual(chordify_textbf(src, "song", report), src)
-        self.assertEqual(report.stats["textbf-left"], 1)
+    def test_each_line_of_a_list_with_line_breaks_becomes_a_row(self):  # blackbird, kluziste
+        out = chordify_textbf("\\textbf{C G\\\\\nD Em\\\\ F}", "song", Report())
+        self.assertEqual(out, "\\chords{C G}\\\\\n\\chords{D Em}\\\\ \\chords{F}")
+
+    def test_a_line_break_with_other_text_is_not_a_chord_list(self):
+        src = "\\textbf{C G\\\\Pozor}"
+        self.assertEqual(chordify_textbf(src, "song", Report()), src)
 
     def test_two_chords_glued_by_tex_are_reported(self):  # timeinabottle: Dm Dm\maj Dm\7
         report = Report()
