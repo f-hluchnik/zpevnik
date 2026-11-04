@@ -3,12 +3,15 @@
 
 Reads data/artists.toml and writes generated/artists.tex: one
 \\zpregisterartist{slug}{name}{index label}{1 or 0} line per entry, which
-zpevnik.sty turns into lookups by slug. Generated files are build outputs
+zpevnik.sty turns into lookups by slug. Also writes generated/version.tex
+with the songbook version (R13). Generated files are build outputs
 (gitignored); `make` runs this before compiling.
 
 Usage: python3 tools/generate.py [repo-root]
+       python3 tools/generate.py --version [repo-root]   (print the version only)
 Python >= 3.11, standard library only.
 """
+import argparse
 import sys
 import tomllib
 from pathlib import Path
@@ -46,8 +49,21 @@ def artists_tex(entries: list[dict]) -> str:
     return "".join(lines)
 
 
+def version(root: Path) -> str:
+    """Song count + 100, as major.minor: 733 songs give 8.33."""
+    n = len(list((root / "pisnicky").glob("*.tex"))) + 100
+    return f"{n // 100}.{n % 100:02d}"
+
+
 def main() -> int:
-    root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser.add_argument("root", nargs="?", type=Path, default=Path(__file__).resolve().parent.parent)
+    parser.add_argument("--version", action="store_true", help="print the songbook version and exit")
+    args = parser.parse_args()
+    root = args.root
+    if args.version:
+        print(version(root))
+        return 0
     with open(root / "data" / "artists.toml", "rb") as f:
         entries = tomllib.load(f).get("entry", [])
     errors, _ = check_entries(entries)
@@ -58,7 +74,10 @@ def main() -> int:
     out = root / "generated"
     out.mkdir(exist_ok=True)
     (out / "artists.tex").write_text(artists_tex(entries), encoding="utf-8")
-    print(f"generated/artists.tex: {len(entries)} entries")
+    ver = version(root)
+    (out / "version.tex").write_text(
+        HEADER + "\\renewcommand{\\zpversion}{%s}\n" % ver, encoding="utf-8")
+    print(f"generated/artists.tex: {len(entries)} entries; generated/version.tex: {ver}")
     return 0
 
 

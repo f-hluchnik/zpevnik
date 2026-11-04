@@ -22,20 +22,19 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 3. V souboru `obsah.tex` přidám do patřičné sekce řádek `\hylo{<nazevsouborupisnicky>}{<název písničky>}` a vytvořím tak v obsahu odkaz na danou písničku. Pokud má písnička známého interpreta, je potřeba přidat tento odkaz i do části obsahu řazené podle interpretů. Opět dbám na správné abecední zařazení.
 4. Otevřu si soubor s písničkou a začnu přepisovat. Více o přepisování písniček dále.
 5. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
-6. Upravím číslo verze zvýšením o setinku.
 
 ## Automatické publikování
 
 Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
 
 1. Zkompiluje `zpevnik.tex` do PDF.
-2. Spočítá aktuální verzi zpěvníku podle počtu souborů ve složce `pisnicky` (stejný princip jako v postupu přidávání nové písničky výše).
+2. Spočítá aktuální verzi zpěvníku podle počtu souborů ve složce `pisnicky` (počet písniček + 100, tedy 733 písniček dává verzi 8.33; počítá to `tools/generate.py`, stejně jako verzi v tiráži).
 3. Vytvoří GitHub Release s tagem odpovídajícím verzi (např. `v8.19`) a přiloží k němu zkompilované PDF ke stažení.
 4. Zapíše aktuální verzi a zkompilované PDF do repozitáře webu ([zpevnik-web](https://github.com/f-hluchnik/zpevnik-web)) a tuto změnu tam commitne a pushne.
 
 Push do repozitáře webu následně spustí jeho vlastní publikační workflow, který web přebuilduje (mimo jiné vypíše aktuální verzi na hlavní stránku) a nasadí přes GitHub Pages. Odkaz ke stažení na webu tedy vždy směřuje na nejnovější verzi zpěvníku, a stažený soubor má ve svém názvu i příslušné číslo verze.
 
-Díky tomu stačí přidat písničku, zvýšit verzi a pushnout — o zbytek (kompilace, publikace, aktualizace webu) se postará automatizace.
+Díky tomu stačí přidat písničku a pushnout — o zbytek (kompilace, publikace, aktualizace webu) se postará automatizace.
 
 ## Přepisování písniček
 V této sekci popíšu postup a konvence přepisování písniček. Nejprve uvedu povinné součásti písničky:
@@ -89,8 +88,7 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 2. Překopíruju zdrojový text z Overleafu do tohoto souboru a uložím.
 3. Přidám import písničky do souboru zpevnik.tex.
 4. Přidám odkaz(y) na písničku do obsahu.
-5. Zvýším verzi zpěvníku ve vydavatelské poznámce o setinku.
-6. Zkompiluji zpěvník v terminálu `pdflatex zpevnik.tex`.
+5. Zkompiluji zpěvník v terminálu `pdflatex zpevnik.tex`.
 
 ### Šikovné příkazy
 - vyhledání souboru písničky `ls pisnicky | grep <nazevpisnicky>`
