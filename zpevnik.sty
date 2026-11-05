@@ -182,6 +182,10 @@
 \newcommand{\ns}{\vspace{-20pt}}%no space - zrušení mezery mezi slokami
 \newcommand{\cns}{\vspace{-35pt}}%no space - zrušení mezery mezi slokami
 \newcommand{\lsp}[1]{\vspace{-13pt}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
+%oddělovače: nahrazují mezeru před dalším blokem (\zp@nogap), ne ji rušují
+\newcommand{\groupbreak}{\\\vspace{-2mm}\\}%mezera uvnitř sloky mezi skupinami řádků (dnes \vinv)
+\newcommand{\blockrule}[1]{\vspace{-13pt}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{-3pt}\zp@nogaptrue}%čárkovaná čára mezi těsnými slokami (dnes \lsp)
+\newcommand{\partrule}{\begin{center}\rule{\textwidth}{0.03cm}\end{center}\par\zp@nogaptrue}%plná čára mezi částmi písně; \par: další blok začíná nový odstavec (jako prázdný řádek za center, H6)
 
 %MAIN
 \newcommand{\song}[1]{\zp@nogapfalse\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
@@ -200,7 +204,8 @@
 \newcommand{\solon}[2]{\zp@blockgap\lbl{S{#1}:}{#2}}%solo
 \newcommand{\solosm}[1]{\zp@blockgap\lbl{S{#1}.}}%solo
 \newcommand{\cod}[1]{\zp@blockgap\lbl{C:}{#1}}%coda
-\newcommand{\vers}[2]{\zp@blockgap\lbl{#1.}{#2}}%sloka
+%prázdné číslo = neočíslovaná sloka (bez štítku, text zarovnaný jako u ostatních)
+\newcommand{\vers}[2]{\zp@blockgap\lbl{\if\relax\detokenize{#1}\relax\else#1.\fi}{#2}}%sloka
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitativ
 

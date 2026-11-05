@@ -1,0 +1,37 @@
+% Vertical spacing (V4): \vers with an empty number, the separators and the
+% \song reset of the "no gap" flag. Run through tests/single-song.sh --build.
+\documentclass[a4paper, 10pt]{article}
+\usepackage{zpevnik}
+
+\begin{document}
+\pagestyle{plain}
+\begin{Large}
+% page 1: numbered and unnumbered verse, every separator, a song ending with a separator
+\song{Spacing test}
+\vers{1}{Alpha}
+
+\vers{}{Beta}
+
+\vers{2}{Gamma\groupbreak Delta}
+
+\blockrule{5}
+
+\vers{3}{Epsilon}
+
+\partrule
+
+\vers{4}{Zeta}
+
+\blockrule{5}
+
+\newpage
+% pages 2 and 3: the same first verse; page 2 follows a song that ended with a separator, page 3 does not
+\song{Reset test}
+\vers{1}{Verse}
+
+\newpage
+\song{Reset test}
+\vers{1}{Verse}
+
+\end{Large}
+\end{document}

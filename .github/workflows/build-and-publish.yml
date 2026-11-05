@@ -79,6 +79,15 @@ jobs:
           working_directory: tests/build
           texlive_version: 2023
 
+      # \vers{}, the separators and the reset of the "no gap" flag (V4);
+      # tests/single-song.sh --build checks the positions, CI checks that the file compiles.
+      - name: Compile spacing test
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: spacing.tex
+          working_directory: tests/build
+          texlive_version: 2023
+
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
       # differ (D-106). The report never fails the build.

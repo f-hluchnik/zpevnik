@@ -10,7 +10,7 @@
 # With --build it also compiles them with pdflatex and checks them: the song
 # takes one page, each page of artist.tex prints the artist links it should,
 # metadata.tex prints none of its metadata, and chords.tex has no overlapping
-# chords. CI only prepares DIR and compiles it with the pinned TeX Live action.
+# chords, and spacing.tex keeps its separators and unnumbered verses in line. CI only prepares DIR and compiles it with the pinned TeX Live action.
 set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
@@ -19,7 +19,7 @@ song=$(grep -oP '(?<=\\include\{pisnicky/)[^}]+' "$root/tests/single-song.tex")
 
 rm -rf "$dir"
 mkdir -p "$dir/pisnicky"
-cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$root/tests/chords.tex" "$dir/"
+cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$root/tests/chords.tex" "$root/tests/spacing.tex" "$dir/"
 cp "$root/pisnicky/$song.tex" "$dir/pisnicky/"
 
 [ "${2:-}" = "--build" ] || exit 0
@@ -75,3 +75,17 @@ ends=$(pdftotext -f 1 -l 1 -bbox chords.pdf - | awk -F'"' '/>Rc</ {print $6}')
 [ "$(wc -l <<<"$ends")" = 2 ] && awk -v a="$(head -1 <<<"$ends")" -v b="$(tail -1 <<<"$ends")" 'BEGIN {exit !(b+0 < a-5)}' \
   || { echo "chords.tex: \\chords[0.2em] should be narrower than \\chords" >&2; exit 1; }
 echo "chords OK"
+
+# Vertical spacing: \vers{}{...} prints no label but the text starts where a labelled one does;
+# a separator at the end of a song does not swallow the first gap of the next song (\song resets it).
+pdflatex -interaction=nonstopmode -halt-on-error spacing.tex >/dev/null
+[ "$(pdfinfo spacing.pdf | awk '/^Pages:/ {print $2}')" = 3 ] || { echo "spacing.tex: expected 3 pages" >&2; exit 1; }
+word() { # page, word, bbox attribute (xMin or yMin)
+  pdftotext -f "$1" -l "$1" -bbox spacing.pdf - | awk -F'"' -v w="$2" -v a="$3" '$0 ~ ">" w "<" {print (a == "x" ? $2 : $4); exit}'
+}
+[ -n "$(word 1 Beta x)" ] && [ "$(word 1 Alpha x)" = "$(word 1 Beta x)" ] \
+  || { echo "spacing.tex: unnumbered verse is not aligned with a numbered one" >&2; exit 1; }
+! pdftotext -f 1 -l 1 spacing.pdf - | grep -qx '\.' || { echo "spacing.tex: unnumbered verse prints a stray label" >&2; exit 1; }
+[ -n "$(word 2 Verse y)" ] && [ "$(word 2 Verse y)" = "$(word 3 Verse y)" ] \
+  || { echo "spacing.tex: a separator at the end of a song changed the next song" >&2; exit 1; }
+echo "spacing OK"
