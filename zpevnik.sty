@@ -131,13 +131,16 @@
   \the\zp@segtoks}
 % záměrná mezera (pauza), #1 znaků po \gapunit
 \newcommand{\gap}[1]{\hspace{\dimexpr\gapunit*#1\relax}}
-% akordy v řádku textu bez slov (intro, konec řádku), červeně, od sebe \chordrunsep
-\newcommand{\chords}[1]{\leavevmode\zp@chords@#1 \zp@chordsend{} }
+% akordy v řádku textu bez slov (intro, konec řádku), červeně, od sebe \chordrunsep;
+% \chords[0.55em]{...} zúží mezery jen v tomto řádku (dlouhý řádek, který se jinak zalomí)
+\newcommand{\chords}[2][\chordrunsep]{\begingroup
+  \edef\zp@rowsep{\the\dimexpr#1\relax}%
+  \leavevmode\zp@chords@#2 \zp@chordsend{} \endgroup}
 \def\zp@chords@#1 {\ifx\zp@chordsend#1\else
   \textbf{\textcolor{chordred}{#1}}\zp@chordsnext\fi}
 \def\zp@chordsnext#1\fi{\fi\zp@chordsmore}
 \def\zp@chordsmore{\futurelet\zp@next\zp@chordsmore@}
-\def\zp@chordsmore@{\ifx\zp@next\zp@chordsend\expandafter\zp@chordsstop\else\hskip\chordrunsep\relax\expandafter\zp@chords@\fi}
+\def\zp@chordsmore@{\ifx\zp@next\zp@chordsend\expandafter\zp@chordsstop\else\hskip\zp@rowsep\relax\expandafter\zp@chords@\fi}
 \def\zp@chordsstop\zp@chordsend#1 {}
 \def\zp@chordsend{}
 %\newcommand{\chord}[2][l]{} % alternativní příkaz pro akordy pro zpěvních bez akordů

@@ -1,4 +1,5 @@
 % Automatic chord spacing (C3a, D-123): \autochords, \gap, \chords and the chord trace.
+% \chords[sep]{...} narrows one row (the two Ra Rb Rc rows differ in width).
 % Run through tests/single-song.sh --build: page 1 and 3 are songs without \autochords
 % (chords overlap, \song switches the spacing off), page 2 has it (no overlap).
 \documentclass[a4paper, 10pt]{article}
@@ -16,7 +17,9 @@
 \autochords
 \vers{1}{\overlapping\\
 \chord{C}Pause\gap{4}here, \chord{G}ends\\
-\chords{Am F\maj{} G\7}}
+\chords{Am F\maj{} G\7}\\
+\chords{Ra Rb Rc}\\
+\chords[0.2em]{Ra Rb Rc}}
 \newpage
 \song{Spacing off again}
 \vers{1}{\overlapping}

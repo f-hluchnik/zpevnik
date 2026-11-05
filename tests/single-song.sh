@@ -75,4 +75,8 @@ overlaps_on() { grep -c "^p\. $1:" <<<"$overlaps" || true; }
 text=$(pdftotext -f 2 -l 2 chords.pdf -)
 grep -qF "Pause" <<<"$text" && grep -qF "here" <<<"$text" || { echo "chords.tex: lyrics missing on page 2" >&2; exit 1; }
 grep -qF "G7" <<<"$text" || { echo "chords.tex: \\chords did not print its chords" >&2; exit 1; }
+# \chords[sep]{...} changes the spacing of its row only: the narrow row ends left of the normal one.
+ends=$(pdftotext -f 2 -l 2 -bbox chords.pdf - | awk -F'"' '/>Rc</ {print $6}')
+[ "$(wc -l <<<"$ends")" = 2 ] && awk -v a="$(head -1 <<<"$ends")" -v b="$(tail -1 <<<"$ends")" 'BEGIN {exit !(b+0 < a-5)}' \
+  || { echo "chords.tex: \\chords[0.2em] should be narrower than \\chords" >&2; exit 1; }
 echo "chords OK (overlaps only without \\autochords)"
