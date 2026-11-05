@@ -83,11 +83,16 @@ class TextbfChords(unittest.TestCase):
         src = "\\textbf{C G\\\\Pozor}"
         self.assertEqual(chordify_textbf(src, "song", Report()), src)
 
-    def test_two_chords_glued_by_tex_are_reported(self):  # timeinabottle: Dm Dm\maj Dm\7
+    def test_two_chords_glued_by_tex_are_separated(self):  # timeinabottle: Dm Dm\maj Dm\7
         report = Report()
-        chordify_textbf("\\textbf{Dm Dm\\maj Dm\\7}", "song", report)
+        out = chordify_textbf("\\textbf{Dm Dm\\maj Dm\\7}", "song", report)
+        self.assertEqual(out, "\\chords{Dm Dm\\maj{} Dm\\7}")
         self.assertEqual(report.stats["glued"], 1)
-        self.assertIn("CHECK", report.lines[0])
+
+    def test_a_chord_list_without_glue_is_left_alone(self):
+        report = Report()
+        chordify_textbf("\\textbf{Dm Dm\\7 G}", "song", report)
+        self.assertEqual(report.stats["glued"], 0)
 
 
 class ChordOnlyLines(unittest.TestCase):

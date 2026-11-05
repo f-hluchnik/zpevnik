@@ -23,11 +23,13 @@ JOINED_BY_OWNER = frozenset({
     ("to", "mu"),  # tomu (letadozravani)
     ("po", "há"), ("za", "mí"),  # pohání, zamíří (batalion)
     ("setmě", "lo"), ("nebu", "de"), ("krát", "ká"), ("berán", "ka"),  # bratrickuzavirejvratka
+    ("le", "luja"),  # haleluja (jasetesimdonebe)
 })
 KEPT_APART_BY_OWNER = frozenset({
     ("sněhy", "za"), ("fare", "and"), ("ledový", "přinesl"), ("listopadový", "písni"),
     ("ráš", "rosu"), ("já", "panenku"), ("jen", "pouhý"), ("je", "soudný"),
     ("vadrovali", "po"),
+    ("entregar", "a"),  # conselho
 })
 
 

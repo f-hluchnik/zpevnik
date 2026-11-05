@@ -25,7 +25,7 @@ CHORD_ONLY_LINE = re.compile(
 )
 TEXTBF = re.compile(r"\\textbf\{((?:[^{}]|\{[^{}]*\})*)\}")
 LINE_BREAK = re.compile(r"(\\\\\s*)")  # keeps the line break and the blanks after it
-GLUED_CHORDS = re.compile(r"\\[A-Za-z]+ (?=[A-H(\\])")  # TeX swallows that space
+GLUED_CHORDS = re.compile(r"(\\[A-Za-z]+) (?=[A-H(\\])")  # TeX swallows that space
 
 
 def chord_names(body: str) -> str | None:
@@ -43,6 +43,14 @@ def join_chords(names: list[str]) -> str:
     )
 
 
+def unglue(names: str, song: str, line: int, report: Report) -> str:
+    """`{}` after a control word that TeX would glue to the next chord (owner's answer, D-123)."""
+    fixed = GLUED_CHORDS.sub(r"\1{} ", names)
+    if fixed != names:
+        report.note("glued", song, line, "TeX glued two chords (a control word swallows the space) -> {}", clean(fixed))
+    return fixed
+
+
 def chord_rows(body: str) -> list[str] | None:
     """The chord names of each line of a plain `\\textbf{body}` (lines end at `\\\\`), or None."""
     rows = [chord_names(row) for row in LINE_BREAK.split(body)[::2]]
@@ -55,10 +63,7 @@ def chordify_textbf(src: str, song: str, report: Report) -> str:
         if rows is None:
             return m.group()
         line = line_of(src, m.start())
-        for names in rows:
-            if GLUED_CHORDS.search(names):
-                report.note("glued", song, line, "CHECK, TeX glues two chords (a control word swallows the space)",
-                            clean(names))
+        rows = [unglue(names, song, line, report) for names in rows]
         report.note("textbf", song, line, "\\textbf of chord names -> \\chords", clean(" \\\\ ".join(rows)))
         breaks = LINE_BREAK.split(m.group(1))[1::2]
         return "".join(f"{sep}\\chords{{{names}}}" for sep, names in zip(["", *breaks], rows))
