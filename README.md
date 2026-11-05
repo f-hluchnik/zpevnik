@@ -78,6 +78,8 @@ Následuje popis důležitých součástí písničky.
     - Příkaz `\sub{}` vysází podnázev písničky.
     - Příkaz `\rep{}` vysází označení repetice v textu.
     - Příkaz `\rec{}` vysází označení recitativu v textu.
+
+Štítky (`1.`, `R:`, `I:`, `S:`, ...) mají společnou pevnou šířku `\labelw` (25 pt), takže text za štítkem vždy začíná na stejném místě. Příkaz `\nv` odsadí řádek přesně o tuto šířku, tedy pod text za štítkem; používá se pro neoznačené řádky a místo ručního `\hspace`.
     
 ### Psaní akordů
 V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různých akordových značek. Základním příkazem pro psaní akordů je příkaz `\chord{}`. Tento příkaz vysází akord nad bezprostředně následující text. Do složených závorek uvádím název akordu velkým písmenem. Charakteristiku akordu uvádím za akord příkazem podle následujícího seznamu. Výjimkou je mollový akord, který označím jednoduše písmenem "m".
