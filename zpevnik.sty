@@ -163,7 +163,7 @@
 \newcommand{\6}{\textsuperscript{6}}%6
 \newcommand{\7}{\textsuperscript{7}}%7
 \newcommand{\9}{\textsuperscript{9}}%9
-\newcommand{\note}[1]{\emph{#1}\vspace{\noteshift}}
+\newcommand{\note}[1]{\emph{#1}\global\zp@nogaptrue}%poznámka patří k následujícímu bloku: ten nemá mezeru (jako za oddělovačem)
 
 %MEZERY
 %horizontální
@@ -175,14 +175,15 @@
 %mezera mezi bloky (sloka, refrén, ...): 20 pt, smrštitelná až na nulu, aby se píseň vešla na stránku (D-124)
 \newlength{\blocksep}
 \setlength{\blocksep}{20pt minus 20pt}
+%ve sloupcích (multicols) se mezera nesmršťuje: multicol by při vyvažování sloupců stlačil bloky na nulu
+\AddToHook{env/multicols/begin}{\setlength{\blocksep}{20pt}}
 %posuny zabudované v makrech (záporné = nahoru); hodnoty jsou ty, které makra měla dosud napevno (V6)
-\newlength{\noteshift}\setlength{\noteshift}{-20pt}%\note: za řádkem poznámky ruší mezeru před dalším blokem, poznámka patří k následujícímu bloku
 \newlength{\subshift}\setlength{\subshift}{-10mm}%\sub: podnázev se posune nahoru k názvu písně
 \newlength{\hylshift}\setlength{\hylshift}{-15pt}%\hyl: řádek s odkazem se posune nahoru k předchozímu bloku
 \newlength{\ruleshiftbefore}\setlength{\ruleshiftbefore}{-13pt}%\blockrule: čára se posune nahoru, blíž k poslednímu řádku předchozího bloku
 \newlength{\ruleshiftafter}\setlength{\ruleshiftafter}{-3pt}%\blockrule: za čárou; mezeru před dalším blokem nahrazuje \zp@nogap
-\newif\ifzp@nogap % následující blok nemá mezeru (oddělovač už ji nahradil); \song vlajku shodí
-\newcommand{\zp@blockgap}{\ifzp@nogap\zp@nogapfalse\else\vspace{\blocksep}\fi}
+\newif\ifzp@nogap % následující blok nemá mezeru (oddělovač nebo poznámka ji už nahradily); vždy se nastavuje globálně (i uvnitř skupiny, např. argumentu \solo); \song vlajku shodí
+\newcommand{\zp@blockgap}{\ifzp@nogap\global\zp@nogapfalse\else\vspace{\blocksep}\fi}
 \newcommand{\vnv}{\vspace{25pt}}%vertical no verse - svislé odsazení
 \newcommand{\vinv}{\vspace{-2mm}\\}%vertical in verse - svislé odsazení
 \newcommand{\ns}{\vspace{-20pt}}%no space - zrušení mezery mezi slokami
@@ -190,11 +191,11 @@
 \newcommand{\lsp}[1]{\vspace{-13pt}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
 %oddělovače: nahrazují mezeru před dalším blokem (\zp@nogap), ne ji rušují
 \newcommand{\groupbreak}{\\\vspace{-2mm}\\}%mezera uvnitř sloky mezi skupinami řádků (dnes \vinv)
-\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{\ruleshiftafter}\zp@nogaptrue}%čárkovaná čára mezi těsnými slokami (dnes \lsp)
-\newcommand{\partrule}{\begin{center}\rule{\textwidth}{0.03cm}\end{center}\par\zp@nogaptrue}%plná čára mezi částmi písně; \par: další blok začíná nový odstavec (jako prázdný řádek za center, H6)
+\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{\ruleshiftafter}\global\zp@nogaptrue}%čárkovaná čára mezi těsnými slokami (dnes \lsp)
+\newcommand{\partrule}{\begin{center}\rule{\textwidth}{0.03cm}\end{center}\par\global\zp@nogaptrue}%plná čára mezi částmi písně; \par: další blok začíná nový odstavec (jako prázdný řádek za center, H6)
 
 %MAIN
-\newcommand{\song}[1]{\zp@nogapfalse\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
+\newcommand{\song}[1]{\global\zp@nogapfalse\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
 % \@nobreakfalse: hned za nadpisem (\song) by LaTeX vynechal mezeru nad \subsection*; podnázev ji má (H6)
 \newcommand{\sub}[1]{\vspace{\subshift}\@nobreakfalse\subsection*{\large\expandafter\sc{#1}}}%podnázev
