@@ -23,7 +23,7 @@
 
 %příkazy pro hypertextové odkazy
 \newcommand{\hylo}[2]{\hyperlink{#1}{#2}}
-\newcommand{\hyl}[2]{\vspace{-15pt}\hspace{28pt}\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
+\newcommand{\hyl}[2]{\vspace{-15pt}\nv\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
 \newcommand{\hyt}[1]{\hypertarget{#1}{}}
 
 %id písničky pro \song: nastavuje ho \songinclude (generated/include.tex), bez něj se cíl odkazu nevytvoří
@@ -164,31 +164,34 @@
 
 %MEZERY
 %horizontální
-\newcommand{\nv}{\hspace{28pt}}%no verse - odsazení prvního řádku pro neoznačené texty
+%šířka štítku (R:, 1., I:, ...): text za štítkem vždy začíná na stejném místě (C5); musí se do ní vejít nejširší štítek (R1:, 24 pt)
+\newcommand*{\labelw}{25pt}
+\newcommand{\lbl}[1]{\makebox[\labelw][l]{\textbf{#1}}}
+\newcommand{\nv}{\hspace*{\labelw}}%no verse - odsazení prvního řádku pro neoznačené texty, pod text za štítkem
 %vertikální
 \newcommand{\vnv}{\vspace{25pt}}%vertical no verse - svislé odsazení
 \newcommand{\vinv}{\vspace{-2mm}\\}%vertical in verse - svislé odsazení
 \newcommand{\ns}{\vspace{-20pt}}%no space - zrušení mezery mezi slokami
 \newcommand{\cns}{\vspace{-35pt}}%no space - zrušení mezery mezi slokami
-\newcommand{\lsp}[1]{\vspace{-13pt}\hspace{25pt}\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
+\newcommand{\lsp}[1]{\vspace{-13pt}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
 
 %MAIN
 \newcommand{\song}[1]{\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
 \newcommand{\sub}[1]{\vspace{-10mm}\subsection*{\large\expandafter\sc{#1}}}%podnázev
-\newcommand{\refrain}[1]{\vspace{20pt}\textbf{{R:}}\hspace{0.5em}{#1}}%refrain
-\newcommand{\refrainn}[2]{\vspace{20pt}\textbf{{R{#1}:}}\hspace{-0.1em}{#2}}%číslovaný refrain
+\newcommand{\refrain}[1]{\vspace{20pt}\lbl{R:}{#1}}%refrain
+\newcommand{\refrainn}[2]{\vspace{20pt}\lbl{R{#1}:}{#2}}%číslovaný refrain
 \newcommand{\refsm}[1]{\textbf{R{#1}.}}%malý refrain
 \newcommand{\refsme}[1]{\vspace{20pt}\textbf{R{#1}.}}%malý refrain oddělený od sloky
-\newcommand{\intro}[1]{\vspace{20pt}\textbf{I:}\hspace{0.9em}{#1}}%intro
-\newcommand{\bridge}[1]{\vspace{20pt}\textbf{B:}\hspace{0.6em}{#1}}%bridge
+\newcommand{\intro}[1]{\vspace{20pt}\lbl{I:}{#1}}%intro
+\newcommand{\bridge}[1]{\vspace{20pt}\lbl{B:}{#1}}%bridge
 \newcommand{\bridgesm}[1]{\textbf{B.}}%malý bridge
-\newcommand{\prechorus}[1]{\vspace{20pt}\textbf{P:}\hspace{0.6em}{#1}}%pre-chorus
-\newcommand{\solo}[1]{\vspace{20pt}\textbf{S:}\hspace{1.2em}{#1}}%solo
-\newcommand{\solon}[2]{\vspace{20pt}\textbf{S{#1}:}{#2}}%solo
-\newcommand{\solosm}[1]{\vspace{20pt}\textbf{S{#1}.}\hspace{1.2em}}%solo
-\newcommand{\cod}[1]{\vspace{20pt}\textbf{C:}\hspace{0.6em}{#1}}%coda
-\newcommand{\vers}[2]{\vspace{20pt}\textbf{#1.}\hspace{0.7em}{#2}}%sloka
+\newcommand{\prechorus}[1]{\vspace{20pt}\lbl{P:}{#1}}%pre-chorus
+\newcommand{\solo}[1]{\vspace{20pt}\lbl{S:}{#1}}%solo
+\newcommand{\solon}[2]{\vspace{20pt}\lbl{S{#1}:}{#2}}%solo
+\newcommand{\solosm}[1]{\vspace{20pt}\lbl{S{#1}.}}%solo
+\newcommand{\cod}[1]{\vspace{20pt}\lbl{C:}{#1}}%coda
+\newcommand{\vers}[2]{\vspace{20pt}\lbl{#1.}{#2}}%sloka
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitativ
 
