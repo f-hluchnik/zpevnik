@@ -29,7 +29,8 @@
 
 %id písničky pro \song: nastavuje ho \songinclude (generated/include.tex), bez něj se cíl odkazu nevytvoří
 \newcommand{\zpsongid}{}
-\newcommand{\songinclude}[1]{\gdef\zpsongid{#1}\include{pisnicky/#1}}
+%skupina: písmo (např. \large v písni, která se jinak nevejde) neprosakuje do dalších písní
+\newcommand{\songinclude}[1]{\begingroup\gdef\zpsongid{#1}\include{pisnicky/#1}\endgroup}
 \newcommand{\zpsongtarget}{\ifx\zpsongid\empty\else\hyt{\zpsongid}\gdef\zpsongid{}\fi}
 
 
