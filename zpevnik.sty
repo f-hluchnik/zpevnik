@@ -17,6 +17,7 @@
 \RequirePackage{dashrule}
 \RequirePackage{amssymb}
 \RequirePackage{xcolor}
+\RequirePackage{indentfirst}
 %poslední balík
 \RequirePackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true, linkcolor=gray}
@@ -32,7 +33,9 @@
 \newcommand{\zpsongtarget}{\ifx\zpsongid\empty\else\hyt{\zpsongid}\gdef\zpsongid{}\fi}
 
 
-\def\everypar{\parindent=-10mm} %předsazení prvního řádku odstavce
+% předsazení prvního řádku odstavce: štítek (\lbl) visí v levém okraji; díky indentfirst
+% i v prvním odstavci za nadpisem (H6)
+\setlength{\parindent}{-10mm}
 \definecolor{chordred}{RGB}{184, 39, 39}
 \definecolor{chordblack}{RGB}{0, 0, 0}
 %AKORDY: \chord{X}text (D-123)
@@ -178,7 +181,8 @@
 %MAIN
 \newcommand{\song}[1]{\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
-\newcommand{\sub}[1]{\vspace{-10mm}\subsection*{\large\expandafter\sc{#1}}}%podnázev
+% \@nobreakfalse: hned za nadpisem (\song) by LaTeX vynechal mezeru nad \subsection*; podnázev ji má (H6)
+\newcommand{\sub}[1]{\vspace{-10mm}\@nobreakfalse\subsection*{\large\expandafter\sc{#1}}}%podnázev
 \newcommand{\refrain}[1]{\vspace{20pt}\lbl{R:}{#1}}%refrain
 \newcommand{\refrainn}[2]{\vspace{20pt}\lbl{R{#1}:}{#2}}%číslovaný refrain
 \newcommand{\refsm}[1]{\textbf{R{#1}.}}%malý refrain
@@ -195,7 +199,8 @@
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitativ
 
-\newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{\hspace{22pt}#3}\end{large}}\end{minipage}}}}}
+% \placetextbox{x}{y}{text}: text psaným strojem na pozici (x\paperwidth, y\paperheight) stránky
+\newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\noindent\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{#3}\end{large}}\end{minipage}}}}}
 
 %SONG METADATA (print nothing; read by the generator and the converter, D-001, D-107)
 % \alttitle{Other title}   other name the song is known by; repeatable.
