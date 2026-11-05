@@ -92,6 +92,10 @@ V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různ�
 - `\kk` - křížek
 - `\2-9` - 2-9 akord, patřičně podle čísla
 
+Mezery mezi akordy a texty se nepíšou ručně, o rozestup se stará sazba: akord a jeho text zabírají aspoň šířku akordu plus půl em (mezi dvěma akordy bez textu je to šířka akordu plus 1 em), takže se akordy nikdy nepřekryjí a text se hýbe jen tam, kde by se akord srazil s dalším. Uvnitř slova se v takovém místě vysází vystředěný spojovník. Starší příkazy `\nc`, `\mm`, `\sm` a `\bc` už neexistují a `tools/lint.py` je v písničce nahlásí jako chybu.
+- `\gap{n}` - záměrná pauza (akord zazní a zpívá se až za chvíli), `n` je počet znaků po půl em, například `\chord{G}\gap{4}text`. Uvnitř slova pauzu nepíšu.
+- `\chords{}` - řádek samých akordů bez slov (intro, konec řádku, `\intro{\chords{Am F G}}`), akordy se píšou oddělené mezerou a vysázejí se červeně. Jeden řádek lze zúžit nebo rozšířit volitelným parametrem, např. `\chords[0.55em]{Am F G}`.
+
 ### Interpreti a registr interpretů
 Každá písnička má na řádku s `\song{}` příkaz `\artist{<kotva>}`, například `\artist{ericclapton}` pro Erica Claptona. Kotva je záznam v souboru `data/artists.toml`; odtud se bere i jméno interpreta, které se vysází vpravo nahoře jako odkaz na jeho sekci v obsahu. Jméno lze u jedné písničky přepsat: `\artist[Jiné jméno]{ericclapton}`. Má-li písnička dva interprety, napíšu `\artist{prvni}\artist{druhy}` (první je vpravo, třetí se nevysází). Písnička bez známého interpreta má `\artist{}`; prázdná nebo neznámá kotva nevysází nic (kontrola `tools/lint.py` ale neznámou kotvu nahlásí jako chybu).
 
@@ -119,4 +123,4 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - kontrola písniček a registru interpretů `python3 tools/lint.py`
 - unit testy nástrojů `python3 -m unittest discover -s tools`
 - kontrola, že každá písnička je na jedné stránce `python3 tools/check_pages.py` (po `make`)
-- kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; chybou je překryv jen v písničce s `\autochords`, jinde se jen vypíše)
+- kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; překryv akordů kdekoli v knize je chyba)

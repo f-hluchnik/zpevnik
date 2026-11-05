@@ -8,7 +8,7 @@ from pathlib import Path
 
 from check_registry import Artist
 from lint import (artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
-                  lint, text_problems, unknown_slugs)
+                  chord_warnings, lint, text_problems, unknown_slugs)
 from songs import Song
 
 
@@ -23,6 +23,20 @@ def song(song_id: str, title: str = "T", toctitle: str | None = None,
 
 
 class TextProblems(unittest.TestCase):
+    def test_manual_chord_spacing_is_an_error(self):
+        for macro in ("\\nc", "\\mm", "\\sm", "\\bc"):
+            with self.subTest(macro=macro):
+                (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n\\chord{{C}}a{macro} b\n")
+                self.assertIn("manual chord spacing", problem)
+
+    def test_commands_that_only_start_like_the_old_macros_are_fine(self):
+        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\\smash{a}\\ncol \\sub{b}\n"), [])
+
+    def test_chords_or_chord_rows_silence_the_chord_warning(self):
+        self.assertEqual(chord_warnings("a", "\\chord{C}x"), [])
+        self.assertEqual(chord_warnings("a", "\\chords{C G}"), [])
+        self.assertEqual(len(chord_warnings("a", "\\textbf{C G}")), 1)
+
     def test_valid_song(self):
         self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\\artist{y}\n"), [])
 
@@ -106,9 +120,15 @@ class LintTree(unittest.TestCase):
         return tmp
 
     def test_clean_tree(self):
-        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n")
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\chord{C}a\n")
         findings = lint(root)
         self.assertEqual((findings.errors, findings.warnings), ([], []))
+
+    def test_song_without_chords_is_a_warning(self):
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n")
+        findings = lint(root)
+        self.assertEqual(findings.errors, [])
+        self.assertEqual(findings.warnings, ["a: no \\chord or \\chords"])
 
     def test_song_without_song_command_is_an_error_and_does_not_stop_the_others(self):
         root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n',

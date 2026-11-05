@@ -41,15 +41,13 @@
 % mezi dvěma akordy bez textu je šířka akordu + \chordrunsep.
 % Místo, kde by se akordy překrývaly, se rozšíří; text se jinak nehýbe.
 % \chord přečte text až k dalšímu akordu, změří ho a vrátí beze změny (jeden
-% průchod, nic se neukládá do .aux). Zapíná se v písni příkazem \autochords
-% (dočasně, odstraní ho C4); \song ho vypíná.
+% průchod, nic se neukládá do .aux). Platí ve všech písních; mezery v textu
+% se nepíšou ručně, pauza je \gap{n}, řádek samých akordů je \chords{...}.
 \newcommand*{\chordsep}{0.5em}
 \newcommand*{\chordrunsep}{1em}
 \newcommand*{\gapunit}{0.5em}
 \newcommand*{\zp@hyphenroom}{.3em} % o kolik je mezera se spojovníkem širší než spojovník
 \newcommand*{\zp@notext}{.5pt}     % užší text mezi akordy se nepočítá (akordy hned za sebou)
-\newif\ifzpchordspacing
-\newcommand{\autochords}{\zpchordspacingtrue}
 \newsavebox\zp@chordbox
 \newsavebox\zp@segbox
 \newtoks\zp@segtoks
@@ -79,14 +77,13 @@
     \ifdim\zp@pad>\dimen@ \dimen@\zp@pad\fi
     \hbox to\dimen@{\hss-\hss}%
   \else\hskip\zp@pad\relax\fi}
-\newcommand{\chord}[2][l]{%
+\newcommand{\chord}[1]{%
   \leavevmode
   \zp@afterletterfalse
   \ifnum\lastnodetype=\z@ \zp@afterlettertrue\fi % před akordem je znak
   \ifnum\lastnodetype=7 \zp@afterlettertrue\fi   % nebo ligatura
-  \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#2}\\
+  \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#1}\\
 				\mbox{}\end{tabular}}}%
-  \def\zp@align{#1}%
   \zp@pad\zp@pend \global\zp@pend\z@
   \zp@segtoks{}%
   \futurelet\zp@next\zp@chordfirst}
@@ -110,24 +107,22 @@
 \expandafter\def\expandafter\zp@grabspace\space{\zp@segtoks\expandafter{\the\zp@segtoks\space}\zp@scan}
 % #1 = 1, když text končí dalším akordem na stejném řádku
 \def\zp@finish#1{%
-  \ifzpchordspacing
-    \ifnum#1=\@ne
-      \sbox\zp@segbox{\let\footnote\@gobble\the\zp@segtoks}% změřit bez vedlejších účinků
-      \ifdim\wd\zp@segbox<\zp@notext\relax
-        \global\zp@pend\dimexpr\wd\zp@chordbox+\chordrunsep-\wd\zp@segbox\relax
-      \else
-        \global\zp@pend\dimexpr\wd\zp@chordbox+\chordsep-\wd\zp@segbox\relax
-      \fi
-      \ifdim\zp@pend<\z@ \global\zp@pend\z@\fi
+  \ifnum#1=\@ne
+    \sbox\zp@segbox{\let\footnote\@gobble\the\zp@segtoks}% změřit bez vedlejších účinků
+    \ifdim\wd\zp@segbox<\zp@notext\relax
+      \global\zp@pend\dimexpr\wd\zp@chordbox+\chordrunsep-\wd\zp@segbox\relax
+    \else
+      \global\zp@pend\dimexpr\wd\zp@chordbox+\chordsep-\wd\zp@segbox\relax
     \fi
-    \ifdim\zp@pad>\z@
-      \zp@splitfalse
-      \ifzp@afterletter\ifzp@nextletter\zp@splittrue\fi\fi
-      \zp@space
-    \fi
+    \ifdim\zp@pend<\z@ \global\zp@pend\z@\fi
+  \fi
+  \ifdim\zp@pad>\z@
+    \zp@splitfalse
+    \ifzp@afterletter\ifzp@nextletter\zp@splittrue\fi\fi
+    \zp@space
   \fi
   \zp@tracechord
-  \makebox[0pt][\zp@align]{\usebox\zp@chordbox}%
+  \makebox[0pt][l]{\usebox\zp@chordbox}%
   \the\zp@segtoks}
 % záměrná mezera (pauza), #1 znaků po \gapunit
 \newcommand{\gap}[1]{\hspace{\dimexpr\gapunit*#1\relax}}
@@ -169,10 +164,6 @@
 
 %MEZERY
 %horizontální
-\newcommand{\bc}{\hspace{60pt}}%velký akord navíc
-\newcommand{\nc}{\hspace{30pt}}%akordy navíc
-\newcommand{\sm}{\hspace{7pt}}%extra mezera malá
-\newcommand{\mm}{\hspace{15pt}}%extra mezera střední
 \newcommand{\nv}{\hspace{28pt}}%no verse - odsazení prvního řádku pro neoznačené texty
 %vertikální
 \newcommand{\vnv}{\vspace{25pt}}%vertical no verse - svislé odsazení
@@ -182,7 +173,7 @@
 \newcommand{\lsp}[1]{\vspace{-13pt}\hspace{25pt}\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
 
 %MAIN
-\newcommand{\song}[1]{\zpsongtarget\zpartistreset\zpchordspacingfalse\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
+\newcommand{\song}[1]{\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
 }%název
 \newcommand{\sub}[1]{\vspace{-10mm}\subsection*{\large\expandafter\sc{#1}}}%podnázev
 \newcommand{\refrain}[1]{\vspace{20pt}\textbf{{R:}}\hspace{0.5em}{#1}}%refrain
@@ -200,8 +191,6 @@
 \newcommand{\vers}[2]{\vspace{20pt}\textbf{#1.}\hspace{0.7em}{#2}}%sloka
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitativ
-
-\newcommand{\placepic}[4]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\includegraphics[width=#3pt]{#4}}}}}
 
 \newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{\hspace{22pt}#3}\end{large}}\end{minipage}}}}}
 

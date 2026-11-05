@@ -37,8 +37,8 @@ jobs:
       - name: Check one song per page
         run: python3 tools/check_pages.py
 
-      # Chord positions are written by every build (zpevnik.chords). An overlap
-      # in a song with \autochords fails; in the others it is only reported (C3a).
+      # Chord positions are written by every build (zpevnik.chords). Any overlap
+      # in the book fails (C4).
       - name: Check chord overlaps
         run: python3 tools/chord_gaps.py
 
@@ -70,7 +70,7 @@ jobs:
           working_directory: tests/build
           texlive_version: 2023
 
-      # \autochords, \gap and \chords (C3a); tests/single-song.sh --build
+      # The chord spacing, \gap and \chords (C3a, C4); tests/single-song.sh --build
       # checks the overlaps, CI checks that the file compiles.
       - name: Compile chords test
         uses: xu-cheng/latex-action@v3

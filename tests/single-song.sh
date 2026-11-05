@@ -9,9 +9,8 @@
 # chords.tex (automatic chord spacing).
 # With --build it also compiles them with pdflatex and checks them: the song
 # takes one page, each page of artist.tex prints the artist links it should,
-# metadata.tex prints none of its metadata, and in chords.tex only the song with
-# \autochords has no overlapping chords. CI only prepares DIR and compiles it with
-# the pinned TeX Live action.
+# metadata.tex prints none of its metadata, and chords.tex has no overlapping
+# chords. CI only prepares DIR and compiles it with the pinned TeX Live action.
 set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
@@ -63,20 +62,16 @@ for t in "other title" "Metadata test (TOC)" "filmy" "break"; do
 done
 echo "metadata OK"
 
-# \autochords: chords overlap on the pages of the songs without it (\song switches the
-# spacing off) and not on the page of the song with it; \gap and \chords print their text.
+# Automatic chord spacing: no chords overlap on the page; \gap and \chords print their text.
 pdflatex -interaction=nonstopmode -halt-on-error chords.tex >/dev/null
-[ "$(pdfinfo chords.pdf | awk '/^Pages:/ {print $2}')" = 3 ] || { echo "chords.tex: expected 3 pages" >&2; exit 1; }
-overlaps=$(python3 "$root/tools/chord_gaps.py" --trace chords.chords || true)
-overlaps_on() { grep -c "^p\. $1:" <<<"$overlaps" || true; }
-[ "$(overlaps_on 1)" -ge 1 ] || { echo "chords.tex: page 1 (spacing off) should have overlapping chords" >&2; exit 1; }
-[ "$(overlaps_on 2)" = 0 ] || { echo "chords.tex: page 2 (\\autochords) has overlapping chords" >&2; exit 1; }
-[ "$(overlaps_on 3)" -ge 1 ] || { echo "chords.tex: page 3 (\\song switches it off) should have overlapping chords" >&2; exit 1; }
-text=$(pdftotext -f 2 -l 2 chords.pdf -)
-grep -qF "Pause" <<<"$text" && grep -qF "here" <<<"$text" || { echo "chords.tex: lyrics missing on page 2" >&2; exit 1; }
+[ "$(pdfinfo chords.pdf | awk '/^Pages:/ {print $2}')" = 1 ] || { echo "chords.tex: expected 1 page" >&2; exit 1; }
+python3 "$root/tools/chord_gaps.py" --trace chords.chords >/dev/null \
+  || { echo "chords.tex: chords overlap" >&2; exit 1; }
+text=$(pdftotext -f 1 -l 1 chords.pdf -)
+grep -qF "Pause" <<<"$text" && grep -qF "here" <<<"$text" || { echo "chords.tex: lyrics missing" >&2; exit 1; }
 grep -qF "G7" <<<"$text" || { echo "chords.tex: \\chords did not print its chords" >&2; exit 1; }
 # \chords[sep]{...} changes the spacing of its row only: the narrow row ends left of the normal one.
-ends=$(pdftotext -f 2 -l 2 -bbox chords.pdf - | awk -F'"' '/>Rc</ {print $6}')
+ends=$(pdftotext -f 1 -l 1 -bbox chords.pdf - | awk -F'"' '/>Rc</ {print $6}')
 [ "$(wc -l <<<"$ends")" = 2 ] && awk -v a="$(head -1 <<<"$ends")" -v b="$(tail -1 <<<"$ends")" 'BEGIN {exit !(b+0 < a-5)}' \
   || { echo "chords.tex: \\chords[0.2em] should be narrower than \\chords" >&2; exit 1; }
-echo "chords OK (overlaps only without \\autochords)"
+echo "chords OK"
