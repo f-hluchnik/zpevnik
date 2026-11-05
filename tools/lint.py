@@ -5,9 +5,12 @@ Errors fail the build:
   - a registry entry is invalid (see check_registry.py);
   - a song has no `\\song`, or not exactly one line with `\\artist`, or more than
     two artists, or still uses `\\interpret`;
+  - a song still uses the manual chord spacing `\\nc \\mm \\sm \\bc` (C4; pauses are
+    `\\gap{n}`, chord-only lines `\\chords{...}`);
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs.
 Warnings are listed and do not fail:
+  - a song has no `\\chord` or `\\chords` (K1);
   - an artist without a section has MIN_SONGS_FOR_SECTION songs or more;
   - several songs have the same title in the contents and none tells them apart
     with a `\\toctitle`.
@@ -30,6 +33,8 @@ MIN_SONGS_FOR_SECTION = 3  # owner's decision, session 7: "3 or more"
 MAX_ARTISTS = 2            # per song, see \artist in zpevnik.sty
 ARTIST_LINE = re.compile(r"\\artist\b")
 OLD_MACRO = re.compile(r"\\interpret(?:dva)?\b")
+MANUAL_SPACING = re.compile(r"\\(?:nc|mm|sm|bc)(?![A-Za-z])")  # removed in C4
+CHORD_USE = re.compile(r"\\chords?\b")
 
 
 def text_problems(song_id: str, text: str) -> list[str]:
@@ -43,7 +48,15 @@ def text_problems(song_id: str, text: str) -> list[str]:
     artists = len(ARTIST.findall(text))
     if artists > MAX_ARTISTS:
         problems.append(f"{song_id}: {artists} artists, at most {MAX_ARTISTS} are printed")
+    spacing = len(MANUAL_SPACING.findall(text))
+    if spacing:
+        problems.append(f"{song_id}: {spacing} manual chord spacings (\\nc \\mm \\sm \\bc); "
+                        "use \\gap{n} for a pause, \\chords{...} for a line of chords")
     return problems
+
+
+def chord_warnings(song_id: str, text: str) -> list[str]:
+    return [] if CHORD_USE.search(text) else [f"{song_id}: no \\chord or \\chords"]
 
 
 def songs_by_group(songs: list[Song]) -> dict[str, list[Song]]:
@@ -90,17 +103,18 @@ def empty_artist_info(songs: list[Song]) -> str:
     return f"{len(without)} songs have an empty \\artist{{}} ({in_collection} of them are in a collection)"
 
 
-def load_songs(root: Path) -> tuple[list[Song], list[str]]:
-    """Every readable song and the problems of all song files."""
-    songs, problems = [], []
+def load_songs(root: Path) -> tuple[list[Song], list[str], list[str]]:
+    """Every readable song, and the problems and warnings of all song files."""
+    songs, problems, warnings = [], [], []
     for path in song_paths(root):
         text = path.read_text(encoding="utf-8")
         problems += text_problems(path.stem, text)
+        warnings += chord_warnings(path.stem, text)
         try:
             songs.append(parse_song(path.stem, text))
         except ValueError as error:
             problems.append(str(error))
-    return songs, problems
+    return songs, problems, warnings
 
 
 @dataclass
@@ -114,13 +128,12 @@ def lint(root: Path) -> Findings:
     with open(root / "data" / "artists.toml", "rb") as f:
         entries = tomllib.load(f).get("entry", [])
     errors, _ = check_entries(entries)
-    songs, problems = load_songs(root)
+    songs, problems, warnings = load_songs(root)
     errors += problems
-    warnings: list[str] = []
     if not errors:  # the lints below need valid entries and readable songs
         registry = [normalise(entry) for entry in entries]
         errors += unknown_slugs(songs, registry) + empty_sections(songs, registry)
-        warnings = artists_ready_for_section(songs, registry) + duplicate_titles(songs)
+        warnings += artists_ready_for_section(songs, registry) + duplicate_titles(songs)
     return Findings(errors, warnings, empty_artist_info(songs))
 
 

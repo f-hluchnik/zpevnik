@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Check that no two chords on the same line overlap (ticket C3a, D-123).
+"""Check that no two chords on the same line overlap (tickets C3a and C4, D-123).
 
 Every build writes the position of each chord to <job>.chords (\\chord does it, see
 zpevnik.sty): one line "x y page width" in sp per chord, in document order. Two
 consecutive chords with the same y on the same page stand on one line; they overlap when
 the second starts before the first one ends.
 
-Book mode (default, run after compiling zpevnik.tex): an overlap in a song that opted in
-with \\autochords is an error (exit 1); overlaps in other songs are only counted, because
-their spacing is still manual (removed song by song in C3b, switched on for all in C4).
+Book mode (default, run after compiling zpevnik.tex): any overlap in the book is an
+error (exit 1).
 
-    python3 tools/chord_gaps.py [repo-root] [--list N]
+    python3 tools/chord_gaps.py [repo-root]
 
 Trace mode: print every overlapping pair of one trace file, exit 1 if there is any.
 
@@ -19,15 +18,12 @@ Trace mode: print every overlapping pair of one trace file, exit 1 if there is a
 Python >= 3.11, standard library only.
 """
 import sys
-from collections import Counter
 from pathlib import Path
 from typing import NamedTuple
 
 from check_pages import song_pages
-from chord_syntax import has_autochords
 
 SP_PER_PT = 65536
-DEFAULT_LIST_LENGTH = 10
 TRACE_NAME = "zpevnik.chords"
 
 
@@ -65,28 +61,16 @@ def song_of_page(root: Path) -> dict[int, str]:
     return {page: song for song, first, count in songs for page in range(first, first + count)}
 
 
-def check_book(root: Path, list_length: int) -> int:
+def check_book(root: Path) -> int:
     chords = read_trace(root / TRACE_NAME)
     pairs = same_line_pairs(chords)
     overlaps = overlapping(pairs)
     song_at = song_of_page(root)
     print(f"{len(chords)} chords, {len(pairs)} pairs on the same line, {len(overlaps)} overlapping")
-
-    errors = 0
-    manual = Counter()
     for pair in overlaps:
-        song = song_at.get(pair.page, "")
-        text = (root / "pisnicky" / f"{song}.tex").read_text(encoding="utf-8") if song else ""
-        if has_autochords(text):
-            print(f"ERROR: {song}: chords overlap by {-pair.gap:.2f} pt on p. {pair.page}")
-            errors += 1
-        else:
-            manual[song or f"p. {pair.page} (outside the songs)"] += 1
-    if manual:
-        print(f"note: {sum(manual.values())} overlaps in {len(manual)} songs without \\autochords (manual spacing)")
-        for song, count in manual.most_common(list_length):
-            print(f"  {song}: {count}")
-    return 1 if errors else 0
+        song = song_at.get(pair.page) or "outside the songs"
+        print(f"ERROR: {song}: chords overlap by {-pair.gap:.2f} pt on p. {pair.page}")
+    return 1 if overlaps else 0
 
 
 def check_trace(trace: Path) -> int:
@@ -100,9 +84,7 @@ def main() -> int:
     args = sys.argv[1:]
     if "--trace" in args:
         return check_trace(Path(args[args.index("--trace") + 1]))
-    list_length = int(args[args.index("--list") + 1]) if "--list" in args else DEFAULT_LIST_LENGTH
-    positional = [a for i, a in enumerate(args) if not a.startswith("--") and (i == 0 or args[i - 1] != "--list")]
-    return check_book(Path(positional[0] if positional else ".").resolve(), list_length)
+    return check_book(Path(args[0] if args else ".").resolve())
 
 
 if __name__ == "__main__":
