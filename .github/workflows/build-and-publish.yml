@@ -12,15 +12,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Derived .tex files are build outputs, not committed (D-104).
+      # Derived .tex files are build outputs, not committed.
       - name: Generate derived files
         run: python3 tools/generate.py
 
-      # Song order (D-107): unit tests of the Czech collation (R9).
+      # Unit tests: the Czech collation (song order), the generator and the lints.
       - name: Unit tests
         run: python3 -m unittest discover -s tools
 
-      # Songs against the artists registry (R12): errors fail, warnings are listed.
+      # Songs against the artists registry: errors fail, warnings are listed.
       - name: Lint songs and registry
         run: python3 tools/lint.py
 
@@ -29,68 +29,35 @@ jobs:
         with:
           root_file: zpevnik.tex
           # Pinned to TeX Live 2023 (pdfTeX 1.40.25): a frozen release, and the
-          # one the dev workspace uses, so local builds match CI (D-105).
+          # one the dev workspace uses, so local builds match CI.
           # Moving to another year changes the layout; use the song-by-song
-          # diff (S3) to review it.
+          # diff to review it.
           texlive_version: 2023
 
       - name: Check one song per page
         run: python3 tools/check_pages.py
 
       # Chord positions are written by every build (zpevnik.chords). Any overlap
-      # in the book fails (C4).
+      # in the book fails.
       - name: Check chord overlaps
         run: python3 tools/chord_gaps.py
 
-      # Overleaf setup (D-005): zpevnik.sty and one song, nothing else.
-      - name: Prepare single-song test
-        run: bash tests/single-song.sh tests/build
-
-      - name: Compile single-song test
-        uses: xu-cheng/latex-action@v3
+      # Overleaf setup: zpevnik.sty and one song, nothing else. The script builds
+      # the five test documents (single song, \artist, metadata, chords, spacing)
+      # and checks what they print; a failed check fails the job. It needs bash, a
+      # GNU grep (-P), poppler (pdfinfo, pdftotext) and python3, which the
+      # Alpine-based TeX Live image may lack, hence the apk line.
+      - name: Test documents (single song, artist, metadata, chords, spacing)
+        uses: xu-cheng/texlive-action@v2
         with:
-          root_file: single-song.tex
-          working_directory: tests/build
           texlive_version: 2023
-
-      # Edge cases of \artist (D-003): tests/single-song.sh --build checks
-      # what each page prints; CI checks that the file compiles.
-      - name: Compile artist test
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: artist.tex
-          working_directory: tests/build
-          texlive_version: 2023
-
-      # \alttitle, \toctitle and \collection print nothing (R8).
-      - name: Compile metadata test
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: metadata.tex
-          working_directory: tests/build
-          texlive_version: 2023
-
-      # The chord spacing, \gap and \chords (C3a, C4); tests/single-song.sh --build
-      # checks the overlaps, CI checks that the file compiles.
-      - name: Compile chords test
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: chords.tex
-          working_directory: tests/build
-          texlive_version: 2023
-
-      # \vers{}, the separators and the reset of the "no gap" flag (V4);
-      # tests/single-song.sh --build checks the positions, CI checks that the file compiles.
-      - name: Compile spacing test
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: spacing.tex
-          working_directory: tests/build
-          texlive_version: 2023
+          run: |
+            apk add --no-cache bash grep poppler-utils python3
+            bash tests/single-song.sh tests/build --build
 
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
-      # differ (D-106). The report never fails the build.
+      # differ. The report never fails the build.
       - name: Check out base for the PDF diff
         if: github.event_name == 'pull_request'
         run: |
