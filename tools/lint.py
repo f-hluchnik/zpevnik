@@ -7,6 +7,8 @@ Errors fail the build:
     two artists, or still uses `\\interpret`;
   - a song still uses the manual chord spacing `\\nc \\mm \\sm \\bc` (C4; pauses are
     `\\gap{n}`, chord-only lines `\\chords{...}`);
+  - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (V8; the gap between blocks
+    is automatic, see the README);
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs.
 Warnings are listed and do not fail:
@@ -34,6 +36,8 @@ MAX_ARTISTS = 2            # per song, see \artist in zpevnik.sty
 ARTIST_LINE = re.compile(r"\\artist\b")
 OLD_MACRO = re.compile(r"\\interpret(?:dva)?\b")
 MANUAL_SPACING = re.compile(r"\\(?:nc|mm|sm|bc)(?![A-Za-z])")  # removed in C4
+OLD_SPACING = re.compile(r"\\(?:ns|cns|vnv|vinv|lsp)(?![A-Za-z])")  # removed in V8
+COMMENT = re.compile(r"(?<!\\)%.*")
 CHORD_USE = re.compile(r"\\chords?\b")
 
 
@@ -52,6 +56,10 @@ def text_problems(song_id: str, text: str) -> list[str]:
     if spacing:
         problems.append(f"{song_id}: {spacing} manual chord spacings (\\nc \\mm \\sm \\bc); "
                         "use \\gap{n} for a pause, \\chords{...} for a line of chords")
+    old_spacing = len(OLD_SPACING.findall(COMMENT.sub("", text)))
+    if old_spacing:
+        problems.append(f"{song_id}: {old_spacing} uses of the removed spacing macros "
+                        "(\\ns \\cns \\vnv \\vinv \\lsp); the gap between blocks is automatic")
     return problems
 
 

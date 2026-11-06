@@ -181,19 +181,14 @@
 %posuny zabudované v makrech (záporné = nahoru); hodnoty jsou ty, které makra měla dosud napevno (V6)
 \newlength{\subshift}\setlength{\subshift}{-10mm}%\sub: podnázev se posune nahoru k názvu písně
 \newlength{\hylshift}\setlength{\hylshift}{-15pt}%\hyl: řádek s odkazem se posune nahoru k předchozímu bloku
-%posuny čáry jsou zlomky řádkování (\baselineskip), ne pevné body, aby čára seděla i v písni s menším písmem (\large); při \Large (18 pt) jsou to dosavadních -13 pt a -3 pt
+%posuny čáry jsou zlomky řádkování (\baselineskip), ne pevné body, aby čára seděla i v písni s menším písmem (\large); před čárou -13/18 řádku (při \Large 13 pt), za ní +4/18 (akordy dalšího bloku se čáry nedotýkají)
 \newcommand{\ruleshiftbefore}{\dimexpr-\baselineskip*13/18\relax}%\blockrule: čára se posune nahoru, blíž k poslednímu řádku předchozího bloku
-\newcommand{\ruleshiftafter}{\dimexpr-\baselineskip*3/18\relax}%\blockrule: za čárou; mezeru před dalším blokem nahrazuje \zp@nogap
+\newcommand{\ruleshiftafter}{\dimexpr\baselineskip*4/18\relax}%\blockrule: za čárou; mezeru před dalším blokem nahrazuje \zp@nogap
 \newif\ifzp@nogap % následující blok nemá mezeru (oddělovač nebo poznámka ji už nahradily); vždy se nastavuje globálně (i uvnitř skupiny, např. argumentu \solo); \song vlajku shodí
 \newcommand{\zp@blockgap}{\ifzp@nogap\global\zp@nogapfalse\else\vspace{\blocksep}\fi}
-\newcommand{\vnv}{\vspace{25pt}}%vertical no verse - svislé odsazení
-\newcommand{\vinv}{\vspace{-2mm}\\}%vertical in verse - svislé odsazení
-\newcommand{\ns}{\vspace{-20pt}}%no space - zrušení mezery mezi slokami
-\newcommand{\cns}{\vspace{-35pt}}%no space - zrušení mezery mezi slokami
-\newcommand{\lsp}[1]{\vspace{-13pt}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{-23pt}}%oddělení slok linkou
 %oddělovače: nahrazují mezeru před dalším blokem (\zp@nogap), ne ji rušují
-\newcommand{\groupbreak}{\\\vspace{-2mm}\\}%mezera uvnitř sloky mezi skupinami řádků (dnes \vinv)
-\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{\ruleshiftafter}\global\zp@nogaptrue}%čárkovaná čára mezi těsnými slokami (dnes \lsp)
+\newcommand{\groupbreak}{\\\vspace{-2mm}\\}%mezera uvnitř sloky mezi skupinami řádků
+\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{\ruleshiftafter}\global\zp@nogaptrue}%čárkovaná čára mezi těsnými slokami
 \newcommand{\partrule}{\begin{center}\rule{\textwidth}{0.03cm}\end{center}\par\global\zp@nogaptrue}%plná čára mezi částmi písně; \par: další blok začíná nový odstavec (jako prázdný řádek za center, H6)
 
 %MAIN
