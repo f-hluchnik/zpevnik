@@ -34,8 +34,8 @@
 % holds for the first paragraph after a heading.
 \newcommand*{\zp@labelhang}{10mm}
 \setlength{\parindent}{-\zp@labelhang}
-% Width of a label: the text after it always starts at the same place. It must
-% hold the widest label (R1., 24 pt).
+% Width of the box a label is right-aligned in. It must hold the widest label
+% (R1., 24 pt) and be narrower than the hang.
 \newcommand*{\labelw}{25pt}
 % Gap between blocks (verse, chorus, ...). It can shrink to zero so that a song
 % still fits on its page.
@@ -139,16 +139,18 @@
 
 %BLOCKS AND LABELS
 % The label is right-aligned in the box \labelw, so that the dots line up (9.
-% above 10.) and a short label such as "R." stays next to its text. A fixed gap
+% above 10.) and a short label such as "R." stays next to its text. The gap
 % completes the hang, so the text starts at the margin like the lines under it.
-\newcommand{\zp@labelbox}[1]{\makebox[\labelw][r]{#1}\hspace{\dimexpr\zp@labelhang-\labelw\relax}}
+\newcommand*{\zp@labelgap}{\dimexpr\zp@labelhang-\labelw\relax}
+\newcommand{\zp@labelbox}[1]{\makebox[\labelw][r]{#1}\hspace{\zp@labelgap}}
 \newcommand{\lbl}[1]{\zp@labelbox{\textbf{#1}}}
-\newcommand{\nv}{\hspace*{\labelw}}%no verse: indents the first line of unlabelled text under the text after a label
+% No label: indents the line by the hang, so that its text starts where the text after a label does.
+\newcommand{\nv}{\hspace*{\zp@labelhang}}
 % A block is a labelled paragraph with the block gap above it.
 % \ignorespaces: whether the text starts on a new line of the source must not matter.
 \newcommand{\zp@block}[2]{\zp@blockgap\lbl{#1}{\ignorespaces#2}}
-% The optional number of a part (\chorus[2]) follows its letter: "R2.". Every label ends with a dot. Without
-% a number, or with an empty one, only the letter is printed.
+% The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
+% a number, only the letter is printed. Every label ends with a dot.
 \newcommand*{\zp@number}[1]{\IfNoValueTF{#1}{}{#1}}
 % The text may contain empty lines (+m), as it did with \newcommand.
 \NewDocumentCommand{\chorus}{o +m}{\zp@block{R\zp@number{#1}.}{#2}}

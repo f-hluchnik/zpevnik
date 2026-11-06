@@ -112,4 +112,6 @@ same "$(edge 6 R. max)" "$(edge 6 9. max)" \
   || { echo "spacing.tex: a standalone cue is not aligned with the labels" >&2; exit 1; }
 same "$(edge 6 A: max)" "$(edge 6 9. max)" 1 && same "$(edge 6 Speaker min)" "$(edge 6 Nine min)" \
   || { echo "spacing.tex: a speaker name is not aligned with the labels (the italic colon may be 1 pt off)" >&2; exit 1; }
+same "$(edge 6 Unlabelled min)" "$(edge 6 Nine min)" \
+  || { echo "spacing.tex: text after \\nv does not start where the text of a labelled block does" >&2; exit 1; }
 echo "spacing OK"
