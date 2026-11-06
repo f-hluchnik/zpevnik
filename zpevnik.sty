@@ -47,8 +47,8 @@
 \AddToHook{env/multicols/begin}{\setlength{\blocksep}{\zp@blockgapsize}}
 % Shifts built into the macros (negative = up). The values are the ones the
 % macros used to hard-code.
-\newlength{\subshift}\setlength{\subshift}{-10mm}   % \sub: subtitle moves up to the title
-\newlength{\hylshift}\setlength{\hylshift}{-15pt}   % \hyl: link line moves up to the previous block
+\newlength{\subtitleshift}\setlength{\subtitleshift}{-10mm}   % \subtitle: moves up to the title
+\newlength{\seealsoshift}\setlength{\seealsoshift}{-15pt}   % \seealso: link line moves up to the previous block
 \newlength{\groupshift}\setlength{\groupshift}{-2mm} % \groupbreak: space between line groups in a verse
 \newlength{\songlinkgap}\setlength{\songlinkgap}{2mm} % \song: title to the "obsah" link
 % The shifts of the dashed rule are fractions of the line height, not fixed
@@ -76,15 +76,12 @@
 \newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\noindent\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{#3}\end{large}}\end{minipage}}}}}
 
 %SONG HEADER
-% Links: \hylo links to a target, \hyt creates one.
-\newcommand{\hylo}[2]{\hyperlink{#1}{#2}}
-\newcommand{\hyt}[1]{\hypertarget{#1}{}}
 % Id of the song for \song, set by \songinclude (generated/include.tex). Without
 % it no link target is created. The group keeps a font change inside a song
 % (e.g. \large in a song that does not fit otherwise) from leaking into the next one.
 \newcommand{\zp@songid}{}
 \newcommand{\songinclude}[1]{\begingroup\gdef\zp@songid{#1}\include{pisnicky/#1}\endgroup}
-\newcommand{\zp@songtarget}{\ifx\zp@songid\empty\else\hyt{\zp@songid}\gdef\zp@songid{}\fi}
+\newcommand{\zp@songtarget}{\ifx\zp@songid\empty\else\hypertarget{\zp@songid}{}\gdef\zp@songid{}\fi}
 % Small capitals as the old \sc did: \normalfont also drops the bold that the
 % headings set, so only the title (\textbf in \song) stays bold.
 \newcommand*{\zp@smallcaps}{\normalfont\scshape}
@@ -94,7 +91,7 @@
 }
 % \@nobreakfalse: right after a heading (\song) LaTeX would drop the space above
 % \subsection*; the subtitle needs it.
-\newcommand{\sub}[1]{\vspace{\subshift}\@nobreakfalse\subsection*{\large\zp@smallcaps{#1}}}
+\newcommand{\subtitle}[1]{\vspace{\subtitleshift}\@nobreakfalse\subsection*{\large\zp@smallcaps{#1}}}
 
 % \artist[label]{slug}: link to the artist's section in the top-right corner
 % of the song's page. Put it on the line of \song, once per song; for two
@@ -140,23 +137,29 @@
 %BLOCKS AND LABELS
 \newcommand{\lbl}[1]{\makebox[\labelw][l]{\textbf{#1}}}
 \newcommand{\nv}{\hspace*{\labelw}}%no verse: indents the first line of unlabelled text under the text after a label
-\newcommand{\refrain}[1]{\zp@blockgap\lbl{R:}{#1}}%refrain
-\newcommand{\refrainn}[2]{\zp@blockgap\lbl{R{#1}:}{#2}}%numbered refrain
-\newcommand{\refsm}[1]{\textbf{R{#1}.}}%small refrain
-\newcommand{\refsme}[1]{\zp@blockgap\textbf{R{#1}.}}%small refrain, separated from the verse
-\newcommand{\intro}[1]{\zp@blockgap\lbl{I:}{#1}}%intro
-\newcommand{\bridge}[1]{\zp@blockgap\lbl{B:}{#1}}%bridge
-\newcommand{\bridgesm}[1]{\textbf{B.}}%small bridge
-\newcommand{\prechorus}[1]{\zp@blockgap\lbl{P:}{#1}}%pre-chorus
-\newcommand{\solo}[1]{\zp@blockgap\lbl{S:}{#1}}%solo
-\newcommand{\solon}[2]{\zp@blockgap\lbl{S{#1}:}{#2}}%numbered solo
-\newcommand{\solosm}[1]{\zp@blockgap\lbl{S{#1}.}}%small solo
-\newcommand{\cod}[1]{\zp@blockgap\lbl{C:}{#1}}%coda
-% An empty number makes an unnumbered verse (no label, text aligned like the others).
-\newcommand{\vers}[2]{\zp@blockgap\lbl{\if\relax\detokenize{#1}\relax\else#1.\fi}{#2}}%verse
+% A block is a labelled paragraph with the block gap above it.
+\newcommand{\zp@block}[2]{\zp@blockgap\lbl{#1}{#2}}
+% The optional number of a part (\chorus[2]) follows its letter: "R2:". Without
+% a number, or with an empty one, only the letter is printed.
+\newcommand*{\zp@number}[1]{\IfNoValueTF{#1}{}{#1}}
+% The text may contain empty lines (+m), as it did with \newcommand.
+\NewDocumentCommand{\chorus}{o +m}{\zp@block{R\zp@number{#1}:}{#2}}
+\NewDocumentCommand{\bridge}{o +m}{\zp@block{B\zp@number{#1}:}{#2}}
+\NewDocumentCommand{\prechorus}{o +m}{\zp@block{P\zp@number{#1}:}{#2}}
+\NewDocumentCommand{\solo}{o +m}{\zp@block{S\zp@number{#1}:}{#2}}
+\newcommand{\intro}[1]{\zp@block{I:}{#1}}
+\newcommand{\coda}[1]{\zp@block{C:}{#1}}
+% A verse is numbered "n." by its optional number; without one it has no label
+% and its text is aligned like the others.
+\NewDocumentCommand{\vers}{o +m}{%
+  \zp@block{\IfNoValueTF{#1}{}{\if\relax\detokenize{#1}\relax\else#1.\fi}}{#2}}
+% A cue marks where a part that is written out elsewhere starts again ("R.",
+% "B.", "1."). After an empty line it is a block of its own with the block gap;
+% after a block or inside one it is appended to the line.
+\newcommand{\cue}[1]{\ifvmode\zp@blockgap\fi\textbf{#1.}}
 % Change of singer: the name in italics right in the text (it is wider than
 % \labelw), with the normal gap above the block.
-\newcommand{\spk}[2]{\zp@blockgap\emph{#1:} #2}%speaker
+\newcommand{\speaker}[2]{\zp@blockgap\emph{#1:} #2}
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repeat
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitative
 % A note belongs to the block that follows: that block gets no gap (as after a
@@ -164,10 +167,10 @@
 % of a song.
 \newcommand{\note}[1]{\ifvmode\ifzp@top\else\zp@blockgap\fi\fi\emph{#1}\global\zp@nogaptrue\global\zp@topfalse}
 % Link line to another song, pulled up to the previous block.
-\newcommand{\hyl}[2]{\global\zp@topfalse\vspace{\hylshift}\nv\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
+\newcommand{\seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\nv\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
 
 %SEPARATORS AND VERTICAL SPACING
-\newif\ifzp@top % nothing after the song title (and subtitle) yet: a note above has no gap. \song raises the flag; a block, a note and \hyl lower it.
+\newif\ifzp@top % nothing after the song title (and subtitle) yet: a note above has no gap. \song raises the flag; a block, a note and \seealso lower it.
 \newif\ifzp@nogap % the next block has no gap (a separator or a note already replaced it). Always set globally (also inside a group, e.g. the argument of \solo); \song lowers it.
 \newcommand{\zp@blockgap}{\global\zp@topfalse\ifzp@nogap\global\zp@nogapfalse\else\vspace{\blocksep}\fi}
 % Separators replace the gap before the next block (via \zp@nogap), they do not remove it.

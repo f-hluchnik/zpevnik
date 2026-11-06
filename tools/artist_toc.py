@@ -10,7 +10,7 @@ of the song files, not from a second list.
 Python >= 3.11, standard library only.
 """
 from collation import sort_key
-from letter_toc import ARTIST_INDEX_ANCHOR, link, sorted_entries
+from letter_toc import ARTIST_INDEX_ANCHOR, link, link_target, sorted_entries
 from registry import Artist
 from songs import Song
 from tex_text import escape_tex
@@ -44,7 +44,7 @@ def index_text(artist: Artist) -> str:
 
 def index_tex(artists: list[Artist]) -> str:
     """The artist index: the link target of the letter part and one line per artist."""
-    lines = [f"\\hyt{{{ARTIST_INDEX_ANCHOR}}}\n",
+    lines = [link_target(ARTIST_INDEX_ANCHOR) + "\n",
              "\\begin{Large}\n",
              f"\\begin{{multicols}}{{{COLUMNS}}}\\raggedright\n"]
     lines += [link(a["slug"], escape_tex(index_text(a))) + "\\par\n" for a in artists]
@@ -57,7 +57,7 @@ def sections_tex(artists: list[Artist], songs: list[Song]) -> str:
     lines = [f"\\begin{{multicols}}{{{COLUMNS}}}\n"]
     for artist in artists:
         members = [song for song in songs if artist["slug"] in song.groups]
-        lines.append(f"\\subsection*{{{heading_tex(artist)}}}\n\\hyt{{{artist['slug']}}}\n")
+        lines.append(f"\\subsection*{{{heading_tex(artist)}}}\n{link_target(artist['slug'])}\n")
         lines += [link(e.song_id, e.text) + "\n\n" for e in sorted_entries(members, page_title)]
     lines.append("\\end{multicols}\n")
     return "".join(lines)

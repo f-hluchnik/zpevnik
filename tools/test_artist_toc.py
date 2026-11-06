@@ -51,9 +51,9 @@ class IndexText(unittest.TestCase):
 class IndexTex(unittest.TestCase):
     def test_one_linked_line_per_artist_in_two_columns(self):
         tex = index_tex([ABBA, artist("simongarfunkel", "Simon & Garfunkel")])
-        self.assertIn("\\hyt{podleinterpreta}\n", tex)
+        self.assertIn("\\hypertarget{podleinterpreta}{}\n", tex)
         self.assertIn("\\begin{multicols}{2}", tex)
-        self.assertIn("\\hylo{abba}{ABBA}\\par\n\\hylo{simongarfunkel}{Simon \\& Garfunkel}\\par\n", tex)
+        self.assertIn("\\hyperlink{abba}{ABBA}\\par\n\\hyperlink{simongarfunkel}{Simon \\& Garfunkel}\\par\n", tex)
 
 
 class HeadingTex(unittest.TestCase):
@@ -69,12 +69,12 @@ class SectionsTex(unittest.TestCase):
         songs = [song("b", "Beta", artists=("abba",)), song("a", "Alfa", artists=("abba",)),
                  song("c", "Other", artists=("karelkryl",))]
         tex = sections_tex([ABBA], songs)
-        self.assertIn("\\subsection*{ABBA}\n\\hyt{abba}\n\\hylo{a}{Alfa}\n\n\\hylo{b}{Beta}\n\n", tex)
+        self.assertIn("\\subsection*{ABBA}\n\\hypertarget{abba}{}\n\\hyperlink{a}{Alfa}\n\n\\hyperlink{b}{Beta}\n\n", tex)
         self.assertNotIn("Other", tex)
 
     def test_songs_are_listed_under_their_page_title_not_the_toc_title(self):
         tex = sections_tex([ABBA], [song("w", "Waterloo", toctitle="Waterloo (ABBA)", artists=("abba",))])
-        self.assertIn("\\hylo{w}{Waterloo}\n", tex)
+        self.assertIn("\\hyperlink{w}{Waterloo}\n", tex)
 
     def test_alternative_title_has_its_own_entry_in_order(self):
         songs = [song("a", "Zebra", alttitles=("Alfa",), artists=("abba",)),
@@ -86,23 +86,23 @@ class SectionsTex(unittest.TestCase):
     def test_song_with_two_artists_is_listed_in_both_sections(self):
         songs = [song("m", "Mojí", artists=("abba", "karelkryl"))]
         tex = sections_tex([ABBA, KRYL], songs)
-        self.assertEqual(tex.count("\\hylo{m}{Mojí}"), 2)
+        self.assertEqual(tex.count("\\hyperlink{m}{Mojí}"), 2)
 
     def test_collection_songs_are_listed_in_the_collection_section(self):
         tex = sections_tex([FILMY], [song("t", "Theme", artists=(), collections=("filmy",))])
-        self.assertIn("\\subsection*{z pohádek,\\\\her}\n\\hyt{filmy}\n\\hylo{t}{Theme}\n", tex)
+        self.assertIn("\\subsection*{z pohádek,\\\\her}\n\\hypertarget{filmy}{}\n\\hyperlink{t}{Theme}\n", tex)
 
     def test_song_without_artist_is_in_no_section(self):
-        self.assertNotIn("\\hylo", sections_tex([ABBA], [song("a", "Alfa")]))
+        self.assertNotIn("\\hyperlink", sections_tex([ABBA], [song("a", "Alfa")]))
 
     def test_artist_without_songs_keeps_its_heading(self):
-        self.assertIn("\\hyt{abba}\n\\end{multicols}", sections_tex([ABBA], []))
+        self.assertIn("\\hypertarget{abba}{}\n\\end{multicols}", sections_tex([ABBA], []))
 
 
 class ArtistPartTex(unittest.TestCase):
     def test_index_rule_sections_in_this_order(self):
         tex = artist_part_tex([KRYL, ABBA], [song("a", "Alfa", artists=("abba",))])
-        self.assertLess(tex.index("\\hylo{abba}{ABBA}\\par"), tex.index("\\zprule{10cm}"))
+        self.assertLess(tex.index("\\hyperlink{abba}{ABBA}\\par"), tex.index("\\zprule{10cm}"))
         self.assertLess(tex.index("\\zprule{10cm}"), tex.index("\\subsection*{ABBA}"))
         self.assertLess(tex.index("\\subsection*{ABBA}"), tex.index("\\subsection*{Kryl, Karel}"))
 

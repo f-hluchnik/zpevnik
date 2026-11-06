@@ -48,27 +48,27 @@ class LettersTex(unittest.TestCase):
 
     def test_sections_follow_the_alphabet_and_ch_follows_h(self):
         tex = letters_tex(self.SONGS)
-        order = [line for line in tex.splitlines() if line.startswith("\\hyt{")]
-        self.assertEqual(order, ["\\hyt{A}", "\\hyt{C}", "\\hyt{Cc}", "\\hyt{D}", "\\hyt{CH}", "\\hyt{Z}"])
+        order = [line for line in tex.splitlines() if line.startswith("\\hypertarget{")]
+        self.assertEqual(order, ["\\hypertarget{A}{}", "\\hypertarget{C}{}", "\\hypertarget{Cc}{}", "\\hypertarget{D}{}", "\\hypertarget{CH}{}", "\\hypertarget{Z}{}"])
 
     def test_no_section_for_d_caron(self):
         self.assertNotIn("\\subsection*{Ď}", letters_tex(self.SONGS))
 
     def test_letter_row_links_to_every_section_and_the_artist_index(self):
         tex = letters_tex(self.SONGS)
-        self.assertIn(r"\hylo{A}{A}\hfill \hylo{C}{C}\hfill \hylo{Cc}{Č}\hfill "
-                      r"\hylo{D}{D}\hfill \hylo{CH}{CH}\hfill \hylo{Z}{Z}", tex)
-        self.assertIn(r"\hylo{podleinterpreta}{řazení podle interpretů}", tex)
+        self.assertIn(r"\hyperlink{A}{A}\hfill \hyperlink{C}{C}\hfill \hyperlink{Cc}{Č}\hfill "
+                      r"\hyperlink{D}{D}\hfill \hyperlink{CH}{CH}\hfill \hyperlink{Z}{Z}", tex)
+        self.assertIn(r"\hyperlink{podleinterpreta}{řazení podle interpretů}", tex)
 
     def test_alternative_title_is_listed_under_its_own_letter(self):
         tex = letters_tex(self.SONGS)
-        a_section = tex.split("\\hyt{A}")[1].split("\\hyt{C}")[0]
-        self.assertIn(r"\hylo{cerny}{\emph{Abeceda} (Černá)}", a_section)
+        a_section = tex.split("\\hypertarget{A}")[1].split("\\hypertarget{C}")[0]
+        self.assertIn(r"\hyperlink{cerny}{\emph{Abeceda} (Černá)}", a_section)
 
     def test_entries_are_ordered_within_a_section(self):
         tex = letters_tex([song("b", "Beta"), song("a", "Alfa"), song("ab", "A beta")])
-        entry_lines = [line for line in tex.splitlines() if line.startswith("\\hylo{") and "}{" in line][-3:]
-        self.assertEqual(entry_lines, [r"\hylo{ab}{A beta}", r"\hylo{a}{Alfa}", r"\hylo{b}{Beta}"])
+        entry_lines = [line for line in tex.splitlines() if line.startswith("\\hyperlink{") and "}{" in line][-3:]
+        self.assertEqual(entry_lines, [r"\hyperlink{ab}{A beta}", r"\hyperlink{a}{Alfa}", r"\hyperlink{b}{Beta}"])
 
 
 if __name__ == "__main__":
