@@ -1,18 +1,29 @@
-"""Validate the entries of the artists registry (D-002, ticket R4).
+"""The artists registry (data/artists.toml): loading, defaults and validation.
 
+`read_entries` loads the entries as written; `normalise` fills in every default.
 `check_entries` reports a field that is missing or has the wrong type or value,
 an unknown field and a slug used twice. The lints that compare the registry with
-the songs are in lint.py (R12).
+the songs are in lint.py.
 
 Python >= 3.11, standard library only.
 """
 import re
+import tomllib
+from pathlib import Path
 from typing import TypedDict
+
+from paths import REGISTRY_FILE
 
 REQUIRED = {"slug": str, "name": str}
 OPTIONAL = {"label": str, "link_label": str, "sort": str, "kind": str, "section": bool}
 KINDS = {"artist", "collection"}
 PERSON = re.compile(r"([^,&]+), ([^,&]+)")
+
+
+def read_entries(root: Path) -> list[dict]:
+    """The entries of the registry as written in the file."""
+    with open(root / REGISTRY_FILE, "rb") as f:
+        return tomllib.load(f).get("entry", [])
 
 
 def derive_label(name: str) -> str:
@@ -46,12 +57,13 @@ def normalise(entry: dict) -> Artist:
     }
 
 
-def check_entries(entries: list) -> tuple[list[str], set[str]]:
+def check_entries(entries: list) -> list[str]:
+    """Every problem of the entries, one message each; none if they are valid."""
     errors = []
     seen = set()
     for n, entry in enumerate(entries, 1):
         where = f"entry {n} ({entry.get('slug', '?')})"
-        for field, typ in REQUIRED.items():
+        for field in REQUIRED:
             if field not in entry:
                 errors.append(f"{where}: missing '{field}'")
         for field, typ in {**REQUIRED, **OPTIONAL}.items():
@@ -69,4 +81,4 @@ def check_entries(entries: list) -> tuple[list[str], set[str]]:
         if slug in seen:
             errors.append(f"{where}: duplicate slug")
         seen.add(slug)
-    return errors, seen
+    return errors

@@ -2,7 +2,7 @@
 
 `plain_text`: footnotes are removed; `\\uv{}`, `\\textit{}` and accent macros are
 resolved. A macro this module does not know is an error, not a guess.
-`tex`: plain text to TeX, escaping the special characters.
+`escape_tex`: plain text to TeX, escaping the special characters.
 
 Python >= 3.11, standard library only.
 """
@@ -121,5 +121,6 @@ TEX_ESCAPES = {
 }
 
 
-def tex(text: str) -> str:
+def escape_tex(text: str) -> str:
+    """Plain text as TeX: every special character escaped."""
     return "".join(TEX_ESCAPES.get(ch, ch) for ch in text)

@@ -1,11 +1,11 @@
-"""Unit tests for the artist part of the contents (R11).
+"""Unit tests for the artist part of the contents .
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
 import unittest
 
 from artist_toc import artist_part_tex, heading_tex, index_tex, index_text, ordered_artists, sections_tex
-from check_registry import Artist
+from registry import Artist
 from songs import Song
 
 

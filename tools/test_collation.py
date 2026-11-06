@@ -1,4 +1,4 @@
-"""Unit tests for the song order (D-107).
+"""Unit tests for the song order.
 
 Run from the repository root: python3 -m unittest discover -s tools
 """

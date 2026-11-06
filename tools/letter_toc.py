@@ -1,7 +1,7 @@
-"""The letter part of the table of contents (ticket R10, DECISIONS D-107, D-116).
+"""The letter part of the table of contents.
 
 `letters_tex` returns the letter row and the letter sections of obsah.tex:
-one `\\hylo` per song, in the order of D-107, and an italic entry for each
+one `\\hylo` per song, in songbook order, and an italic entry for each
 alternative title, ordered by that title under its own letter.
 
 Python >= 3.11, standard library only.
@@ -13,7 +13,7 @@ from itertools import groupby
 
 from collation import section, sort_key
 from songs import Song
-from tex_text import plain_text, tex
+from tex_text import escape_tex, plain_text
 
 ARTIST_INDEX_ANCHOR = "podleinterpreta"
 ARTIST_INDEX_LINK = "řazení podle interpretů"
@@ -38,9 +38,9 @@ def entries(songs: list[Song], title_of: TitleOf = contents_title) -> Iterator[E
     """The entry of each song and one for each of its alternative titles."""
     for song in songs:
         title = title_of(song)
-        yield Entry(song.id, tex(title), title)
+        yield Entry(song.id, escape_tex(title), title)
         for alttitle in map(plain_text, song.alttitles):
-            yield Entry(song.id, f"\\emph{{{tex(alttitle)}}} ({tex(title)})", alttitle)
+            yield Entry(song.id, f"\\emph{{{escape_tex(alttitle)}}} ({escape_tex(title)})", alttitle)
 
 
 def anchor(letter: str) -> str:
@@ -57,7 +57,7 @@ def link(target: str, text: str) -> str:
 
 
 def sorted_entries(songs: list[Song], title_of: TitleOf = contents_title) -> list[Entry]:
-    """The entries of the songs in the order of D-107 (the song id breaks a tie)."""
+    """The entries of the songs in songbook order (the song id breaks a tie)."""
     return sorted(entries(songs, title_of), key=lambda e: (sort_key(e.sort_text), e.song_id))
 
 

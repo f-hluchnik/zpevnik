@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""Generate the TeX files derived from the registry (D-104, ticket R5).
+"""Generate the TeX files derived from the registry and the songs.
 
-Reads data/artists.toml and writes generated/artists.tex: one
-\\zpregisterartist{slug}{name}{label}{link label}{1 or 0} line per entry, which
-zpevnik.sty turns into lookups by slug. Also writes generated/version.tex
-with the songbook version (R13), and generated/include.tex: the \\include list
-of all songs in the Czech collation order of D-107 (R9), and
-generated/obsah-letters.tex: the letter part of the contents (R10), and
-generated/obsah-artists.tex: the artist index and the artist sections (R11).
+Writes into generated/: artists.tex (one \\zpregisterartist{slug}{name}{label}
+{link label}{1 or 0} line per registry entry, which zpevnik.sty turns into lookups
+by slug), include.tex (the \\songinclude list of all songs in the Czech collation
+order), obsah-letters.tex (the letter part of the contents), obsah-artists.tex (the
+artist index and the artist sections) and version.tex (the songbook version).
 Generated files are build outputs (gitignored); `make` runs this before compiling.
 
 Usage: python3 tools/generate.py [repo-root]
@@ -16,15 +14,19 @@ Python >= 3.11, standard library only.
 """
 import argparse
 import sys
-import tomllib
 from pathlib import Path
 
 from artist_toc import HEADING_BREAK, artist_part_tex
-from check_registry import check_entries, normalise
 from collation import section, sort_key
-from songs import Song, read_songs
-from tex_text import tex
-from toc import letters_tex
+from letter_toc import letters_tex
+from paths import (ARTIST_PART_TEX, ARTISTS_TEX, INCLUDE_TEX, LETTERS_TEX, REGISTRY_FILE, SONGS_DIR,
+                   VERSION_TEX, add_root_argument)
+from registry import check_entries, normalise, read_entries
+from songs import Song, read_songs, song_paths
+from tex_text import escape_tex
+
+SONGS_SOURCE = f"{SONGS_DIR}/*.tex"
+VERSION_BASE = 100  # the version is the song count plus this: 733 songs give 8.33
 
 
 def header(source: str) -> str:
@@ -32,73 +34,77 @@ def header(source: str) -> str:
 
 
 def artists_tex(entries: list[dict]) -> str:
-    lines = [header("data/artists.toml")]
-    for e in map(normalise, entries):
-        lines.append(
-            "\\zpregisterartist{%s}{%s}{%s}{%s}{%d}\n"
-            % (e["slug"], tex(e["name"].replace(HEADING_BREAK, " ")), tex(e["label"]),
-               tex(e["link_label"]),
-               1 if e["section"] else 0)
-        )
+    lines = [header(str(REGISTRY_FILE))]
+    for artist in map(normalise, entries):
+        name = escape_tex(artist["name"].replace(HEADING_BREAK, " "))
+        label = escape_tex(artist["label"])
+        link_label = escape_tex(artist["link_label"])
+        has_section = int(artist["section"])
+        lines.append(f"\\zpregisterartist{{{artist['slug']}}}{{{name}}}{{{label}}}"
+                     f"{{{link_label}}}{{{has_section}}}\n")
     return "".join(lines)
 
 
 def ordered(songs: list[Song]) -> list[Song]:
-    """Songs in songbook order (D-107): by title, the file name only breaks a tie."""
+    """Songs in songbook order: by title, the file name only breaks a tie."""
     return sorted(songs, key=lambda s: (sort_key(s.sort_title), s.id))
 
 
 def include_tex(songs: list[Song]) -> str:
     """One \\songinclude per song, with a %-comment for each first-pass letter."""
-    lines = [header("pisnicky/*.tex")]
+    lines = [header(SONGS_SOURCE)]
     current = None
     for song in ordered(songs):
         letter = section(song.sort_title)
         if letter != current:
             lines.append(("" if current is None else "\n") + "%" + letter + "\n")
             current = letter
-        lines.append("\\songinclude{%s}\n" % song.id)
+        lines.append(f"\\songinclude{{{song.id}}}\n")
     return "".join(lines)
 
 
-def version(root: Path) -> str:
-    """Song count + 100, as major.minor: 733 songs give 8.33."""
-    n = len(list((root / "pisnicky").glob("*.tex"))) + 100
+def version(song_count: int) -> str:
+    """Song count + VERSION_BASE, as major.minor."""
+    n = song_count + VERSION_BASE
     return f"{n // 100}.{n % 100:02d}"
+
+
+def generated_files(entries: list[dict], songs: list[Song]) -> dict[Path, str]:
+    """The text of every generated file, by its path relative to the repository root."""
+    return {
+        ARTISTS_TEX: artists_tex(entries),
+        INCLUDE_TEX: include_tex(songs),
+        LETTERS_TEX: header(SONGS_SOURCE) + letters_tex(songs),
+        ARTIST_PART_TEX: (header(f"{REGISTRY_FILE} and {SONGS_SOURCE}")
+                          + artist_part_tex([normalise(e) for e in entries], songs)),
+        VERSION_TEX: (header(SONGS_SOURCE)
+                      + f"\\renewcommand{{\\zpversion}}{{{version(len(songs))}}}\n"),
+    }
+
+
+def write_files(root: Path, files: dict[Path, str]) -> None:
+    for path, text in files.items():
+        (root / path).parent.mkdir(exist_ok=True)
+        (root / path).write_text(text, encoding="utf-8")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    parser.add_argument("root", nargs="?", type=Path, default=Path(__file__).resolve().parent.parent)
+    add_root_argument(parser)
     parser.add_argument("--version", action="store_true", help="print the songbook version and exit")
     args = parser.parse_args()
-    root = args.root
     if args.version:
-        print(version(root))
+        print(version(len(song_paths(args.root))))
         return 0
-    with open(root / "data" / "artists.toml", "rb") as f:
-        entries = tomllib.load(f).get("entry", [])
-    errors, _ = check_entries(entries)
+    entries = read_entries(args.root)
+    errors = check_entries(entries)
     if errors:
-        print("data/artists.toml is invalid:", *errors, sep="\n  ", file=sys.stderr)
+        print(f"{REGISTRY_FILE} is invalid:", *errors, sep="\n  ", file=sys.stderr)
         return 1
-
-    out = root / "generated"
-    out.mkdir(exist_ok=True)
-    (out / "artists.tex").write_text(artists_tex(entries), encoding="utf-8")
-    songs = read_songs(root)
-    (out / "include.tex").write_text(include_tex(songs), encoding="utf-8")
-    (out / "obsah-letters.tex").write_text(
-        header("pisnicky/*.tex") + letters_tex(songs), encoding="utf-8")
-    (out / "obsah-artists.tex").write_text(
-        header("data/artists.toml and pisnicky/*.tex")
-        + artist_part_tex([normalise(e) for e in entries], songs), encoding="utf-8")
-    ver = version(root)
-    (out / "version.tex").write_text(
-        header("pisnicky/*.tex") + "\\renewcommand{\\zpversion}{%s}\n" % ver, encoding="utf-8")
-    print(f"generated/artists.tex: {len(entries)} entries; generated/version.tex: {ver}; "
-          f"generated/include.tex: {len(songs)} songs; "
-          "generated/obsah-letters.tex; generated/obsah-artists.tex")
+    songs = read_songs(args.root)
+    write_files(args.root, generated_files(entries, songs))
+    print(f"{ARTISTS_TEX}: {len(entries)} entries; {VERSION_TEX}: {version(len(songs))}; "
+          f"{INCLUDE_TEX}: {len(songs)} songs; {LETTERS_TEX}; {ARTIST_PART_TEX}")
     return 0
 
 

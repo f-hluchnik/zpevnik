@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Song-by-song PDF diff between two builds of the songbook (D-106, ticket S3).
+"""Song-by-song PDF diff between two builds of the songbook.
 
 Usage: python3 tools/pdfdiff.py --base BASE_DIR --head HEAD_DIR [--dpi 72]
 
@@ -23,6 +23,7 @@ import tempfile
 from pathlib import Path
 
 from check_pages import song_pages
+from paths import BOOK_PDF
 
 FOOTER_TOP_PT = 805.0  # the page number sits at y = 808-817 pt on an A4 page
 MONTHS = {
@@ -36,7 +37,7 @@ class Build:
     def __init__(self, root: Path, dpi: int, tmp: Path, label: str):
         self.root = root
         self.dpi = dpi
-        self.pdf = root / "zpevnik.pdf"
+        self.pdf = root / BOOK_PDF
         if not self.pdf.exists():
             raise SystemExit(f"ERROR: {self.pdf} not found")
         ranges, errors = song_pages(root)

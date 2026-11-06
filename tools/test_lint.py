@@ -1,4 +1,4 @@
-"""Unit tests for the lints (R12).
+"""Unit tests for the lints .
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from check_registry import Artist
+from registry import Artist
 from lint import (artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
                   chord_warnings, lint, text_problems, unknown_slugs)
 from songs import Song

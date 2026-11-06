@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail if a song takes more than one page (D-105, ticket S2).
+"""Fail if a song takes more than one page.
 
 Every song is pulled in with ``\\songinclude{<id>}``, which ends in
 ``\\include{pisnicky/<id>}``, and LaTeX writes
@@ -11,13 +11,18 @@ checkpoint and the previous one. Songs listed in
 Usage: python3 tools/check_pages.py [repo-root]   (run after compiling)
 Python >= 3.11, standard library only.
 """
+import argparse
 import re
 import sys
 from pathlib import Path
 
+from paths import BOOK_TEX, INCLUDE_TEX, MULTIPAGE_ALLOWLIST, SONGS_DIR, add_root_argument
+
 MAX_PAGES = 1
 MAX_PAGES_ALLOWLISTED = 2
 SONG_INCLUDE = re.compile(r"\\songinclude\{([^}]+)\}")
+INPUT_INCLUDE_LIST = re.compile(r"\\input\{" + re.escape(str(INCLUDE_TEX.with_suffix(""))) + r"\}")
+PAGE_COUNTER = re.compile(r"\\setcounter\{page\}\{(\d+)\}")
 
 
 def read_allowlist(path: Path) -> set[str]:
@@ -33,21 +38,21 @@ def read_allowlist(path: Path) -> set[str]:
 def checkpoint_page(aux: Path, song: str) -> int | None:
     """Page counter recorded by the song's own \\@setckpt block."""
     text = aux.read_text(encoding="utf-8", errors="replace")
-    m = re.search(
-        r"\\@setckpt\{pisnicky/" + re.escape(song) + r"\}\{(.*?)\n\}", text, re.S
+    block = re.search(
+        r"\\@setckpt\{" + re.escape(f"{SONGS_DIR}/{song}") + r"\}\{(.*?)\n\}", text, re.S
     )
-    if not m:
+    if not block:
         return None
-    p = re.search(r"\\setcounter\{page\}\{(\d+)\}", m.group(1))
-    return int(p.group(1)) if p else None
+    page = PAGE_COUNTER.search(block.group(1))
+    return int(page.group(1)) if page else None
 
 
 def book_lines(root: Path) -> list[str]:
-    """Lines of zpevnik.tex, with \\input{generated/include} (R9) expanded."""
+    """Lines of zpevnik.tex, with \\input{generated/include} expanded."""
     lines: list[str] = []
-    for raw in (root / "zpevnik.tex").read_text(encoding="utf-8").splitlines():
-        if re.match(r"\\input\{generated/include\}", raw):
-            lines += (root / "generated" / "include.tex").read_text(encoding="utf-8").splitlines()
+    for raw in (root / BOOK_TEX).read_text(encoding="utf-8").splitlines():
+        if INPUT_INCLUDE_LIST.match(raw):
+            lines += (root / INCLUDE_TEX).read_text(encoding="utf-8").splitlines()
         else:
             lines.append(raw)
     return lines
@@ -64,19 +69,19 @@ def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
     prev: int | None = None
     for raw in book_lines(root):
         line = raw.split("%", 1)[0]  # commented-out includes do not count
-        m = re.search(r"\\setcounter\{page\}\{(\d+)\}", line)
-        if m:
-            prev = int(m.group(1))  # the first song starts here
-        m = SONG_INCLUDE.search(line)
-        if not m:
+        counter = PAGE_COUNTER.search(line)
+        if counter:
+            prev = int(counter.group(1))  # the first song starts here
+        include = SONG_INCLUDE.search(line)
+        if not include:
             continue
-        song = m.group(1)
+        song = include.group(1)
         if prev is None:
             errors.append(f"{song}: no \\setcounter{{page}} before the first song")
             continue
-        cur = checkpoint_page(root / "pisnicky" / f"{song}.aux", song)
+        cur = checkpoint_page(root / SONGS_DIR / f"{song}.aux", song)
         if cur is None:
-            errors.append(f"{song}: no page checkpoint in pisnicky/{song}.aux (not compiled?)")
+            errors.append(f"{song}: no page checkpoint in {SONGS_DIR}/{song}.aux (not compiled?)")
             continue
         songs.append((song, prev, cur - prev))
         prev = cur
@@ -84,8 +89,10 @@ def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
 
 
 def main() -> int:
-    root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
-    allow = read_allowlist(root / "tools" / "multipage-allowlist.txt")
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    add_root_argument(parser)
+    root = parser.parse_args().root
+    allow = read_allowlist(root / MULTIPAGE_ALLOWLIST)
     songs, errors = song_pages(root)
     notes: list[str] = []
     seen_allowed: set[str] = set()
@@ -110,7 +117,7 @@ def main() -> int:
         print(f"ERROR: {e}")
     checked = len(songs)
     if checked == 0:
-        print("ERROR: no \\songinclude{...} found in zpevnik.tex or generated/include.tex")
+        print(f"ERROR: no \\songinclude{{...}} found in {BOOK_TEX} or {INCLUDE_TEX}")
         return 1
     print(f"checked {checked} songs, {len(errors)} problem(s)")
     return 1 if errors else 0

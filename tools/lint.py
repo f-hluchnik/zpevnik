@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
-"""Lints for the songs and the artists registry (ticket R12, DECISIONS D-002, D-003, D-004).
+"""Lints for the songs and the artists registry.
 
 Errors fail the build:
-  - a registry entry is invalid (see check_registry.py);
+  - a registry entry is invalid (see registry.py);
   - a song has no `\\song`, or not exactly one line with `\\artist`, or more than
     two artists, or still uses `\\interpret`;
-  - a song still uses the manual chord spacing `\\nc \\mm \\sm \\bc` (C4; pauses are
+  - a song still uses the manual chord spacing `\\nc \\mm \\sm \\bc` (pauses are
     `\\gap{n}`, chord-only lines `\\chords{...}`);
-  - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (V8; the gap between blocks
+  - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (the gap between blocks
     is automatic, see the README);
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs.
 Warnings are listed and do not fail:
-  - a song has no `\\chord` or `\\chords` (K1);
+  - a song has no `\\chord` or `\\chords`;
   - an artist without a section has MIN_SONGS_FOR_SECTION songs or more;
   - several songs have the same title in the contents and none tells them apart
     with a `\\toctitle`.
@@ -21,22 +21,23 @@ Info: how many songs have an empty `\\artist{}`.
 Usage: python3 tools/lint.py [repo-root]
 Exits 1 on errors. Python >= 3.11, standard library only.
 """
+import argparse
 import re
 import sys
-import tomllib
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from check_registry import Artist, check_entries, normalise
+from paths import add_root_argument
+from registry import Artist, check_entries, normalise, read_entries
 from songs import ARTIST, Song, parse_song, song_paths
 
-MIN_SONGS_FOR_SECTION = 3  # owner's decision, session 7: "3 or more"
+MIN_SONGS_FOR_SECTION = 3  # an artist with this many songs or more gets a section
 MAX_ARTISTS = 2            # per song, see \artist in zpevnik.sty
 ARTIST_LINE = re.compile(r"\\artist\b")
 OLD_MACRO = re.compile(r"\\interpret(?:dva)?\b")
-MANUAL_SPACING = re.compile(r"\\(?:nc|mm|sm|bc)(?![A-Za-z])")  # removed in C4
-OLD_SPACING = re.compile(r"\\(?:ns|cns|vnv|vinv|lsp)(?![A-Za-z])")  # removed in V8
+MANUAL_SPACING = re.compile(r"\\(?:nc|mm|sm|bc)(?![A-Za-z])")  # replaced by \gap and \chords
+OLD_SPACING = re.compile(r"\\(?:ns|cns|vnv|vinv|lsp)(?![A-Za-z])")  # the gap between blocks is automatic
 COMMENT = re.compile(r"(?<!\\)%.*")
 CHORD_USE = re.compile(r"\\chords?\b")
 
@@ -133,9 +134,8 @@ class Findings:
 
 
 def lint(root: Path) -> Findings:
-    with open(root / "data" / "artists.toml", "rb") as f:
-        entries = tomllib.load(f).get("entry", [])
-    errors, _ = check_entries(entries)
+    entries = read_entries(root)
+    errors = check_entries(entries)
     songs, problems, warnings = load_songs(root)
     errors += problems
     if not errors:  # the lints below need valid entries and readable songs
@@ -146,8 +146,9 @@ def lint(root: Path) -> Findings:
 
 
 def main() -> int:
-    root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parent.parent
-    findings = lint(root)
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    add_root_argument(parser)
+    findings = lint(parser.parse_args().root)
     for line in findings.warnings:
         print(f"warning: {line}")
     for line in findings.errors:

@@ -1,9 +1,9 @@
-"""Read the songs in pisnicky/*.tex (shared by the generators, D-107).
+"""Read the songs in pisnicky/*.tex (shared by the generators).
 
 A song file has one `\\song{Title}`, optionally one `\\toctitle{TOC title}` and
 any number of `\\alttitle{Other title}`, each at the start of a line. The song
 line carries its `\\artist{slug}` tags (up to two); `\\collection{slug}` is on
-a line of its own (D-113, D-116).
+a line of its own.
 
 Python >= 3.11, standard library only.
 """
@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from functools import cached_property
 from pathlib import Path
 
+from paths import SONGS_DIR
 from tex_text import brace_group, plain_text
 
 
@@ -39,7 +40,7 @@ class Song:
 
     @cached_property
     def sort_title(self) -> str:
-        """Plain text of the title that orders and lists the song (D-107)."""
+        """Plain text of the title that orders and lists the song."""
         return self.plain_title if self.toctitle is None else plain_text(self.toctitle)
 
 
@@ -59,7 +60,7 @@ def read_title(text: str, command: str, where: str) -> str | None:
 
 def song_paths(root: Path) -> list[Path]:
     """The song files of pisnicky/, in file-name order (not the songbook order)."""
-    return sorted((root / "pisnicky").glob("*.tex"))
+    return sorted((root / SONGS_DIR).glob("*.tex"))
 
 
 def parse_song(song_id: str, text: str) -> Song:

@@ -1,11 +1,11 @@
-"""Unit tests for the letter part of the contents (R10).
+"""Unit tests for the letter part of the contents .
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
 import unittest
 
+from letter_toc import anchor, entries, letters_tex
 from songs import Song
-from toc import anchor, entries, letters_tex
 
 
 def song(song_id: str, title: str, toctitle: str | None = None, *alttitles: str) -> Song:
