@@ -65,6 +65,8 @@ for t in "other title" "Metadata test (TOC)" "filmy" "break"; do
   ! grep -qF -- "$t" <<<"$text" || { echo "metadata.tex: '$t' should not be printed" >&2; exit 1; }
 done
 echo "metadata OK"
+# DELIBERATELY BROKEN ASSERTION (to be reverted)
+grep -qF "this text is not on the page" <<<"$text" || { echo "deliberately broken assertion" >&2; exit 1; }
 
 # Automatic chord spacing: no chords overlap on the page; \gap and \chords print their text.
 pdflatex -interaction=nonstopmode -halt-on-error chords.tex >/dev/null
