@@ -85,9 +85,10 @@ Následuje popis důležitých součástí písničky.
 Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
 
 - Mezi bloky (sloka, refrain, intro, ...) je jedna mezera `\blocksep` (20 pt), která se smrští až na nulu, když by se písnička jinak nevešla na stranu. Blok bez štítku je `\vers{}{...}`.
+- Střídání zpěváků (`On:`, `Ona:`) je `\spk{On}{text}`: kurzívní jméno přímo v textu a normální mezera nad blokem. Jméno je širší než štítek, proto se nepíše přes `\vers`.
 - Skupiny řádků uvnitř sloky odděluje `\groupbreak`.
 - Čárkovaná čára mezi těsnými slokami je `\blockrule{délka v cm}`, plná čára mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem.
-- `\note{}` (capo apod.) patří k následujícímu bloku, mezeru před ním nemá. Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
+- `\note{}` (capo apod.) patří k následujícímu bloku: mezeru pod sebou nemá, nad sebou ji má (kromě začátku písničky a místa za `\sub`/`\hyl`). Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
 - Celý zpěvník je v `\Large`. Když se písnička nevejde na stranu ani s mezerami smrštěnými na nulu, přidá se za hlavičku `\large` a komentář proč. Velikost písma se do dalších písniček nepřenáší (každá písnička běží ve skupině).
 - Ruční `\vspace` zůstává jen u zarovnání not (záporná hodnota u obrázku s notami) a v pár dalších případech, vždy s komentářem `% KEEP: důvod`. Přehled všech: `docs/vertical-spacing/remaining-vspace.md` v dokumentaci projektu.
 
