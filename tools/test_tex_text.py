@@ -4,7 +4,7 @@ Run from the repository root: python3 -m unittest discover -s tools
 """
 import unittest
 
-from tex_text import brace_group, plain_text, tex
+from tex_text import brace_group, escape_tex, plain_text
 
 
 class PlainText(unittest.TestCase):
@@ -34,14 +34,14 @@ class PlainText(unittest.TestCase):
 
 class Tex(unittest.TestCase):
     def test_special_characters_are_escaped(self):
-        self.assertEqual(tex("R&B 100% #1 a_b {x} ~ ^ $ \\"),
+        self.assertEqual(escape_tex("R&B 100% #1 a_b {x} ~ ^ $ \\"),
                          r"R\&B 100\% \#1 a\_b \{x\} \textasciitilde{} \textasciicircum{} \$ \textbackslash{}")
 
     def test_non_breaking_space_is_a_tie(self):
-        self.assertEqual(tex("a\u00a0b"), "a~b")
+        self.assertEqual(escape_tex("a\u00a0b"), "a~b")
 
     def test_plain_text_and_accents_stay(self):
-        self.assertEqual(tex("Eště, Žaba - Praha--Prčice"), "Eště, Žaba - Praha--Prčice")
+        self.assertEqual(escape_tex("Eště, Žaba - Praha--Prčice"), "Eště, Žaba - Praha--Prčice")
 
 
 class BraceGroup(unittest.TestCase):

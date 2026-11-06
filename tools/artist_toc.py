@@ -1,19 +1,19 @@
-"""The artist part of the table of contents (ticket R11, DECISIONS D-115, D-116).
+"""The artist part of the table of contents.
 
 `artist_part_tex` returns the artist index, a column list of every artist that has a
 section, and the sections themselves: the songs of each artist in the order of
-D-107 under the title of their page (the `\\toctitle` only tells songs of the same name
+songbook order under the title of their page (the `\\toctitle` only tells songs of the same name
 apart in the letter sections), with the alternative titles.
 Which songs belong to an artist comes from the `\\artist` and `\\collection` tags
 of the song files, not from a second list.
 
 Python >= 3.11, standard library only.
 """
-from check_registry import Artist
 from collation import sort_key
+from letter_toc import ARTIST_INDEX_ANCHOR, link, sorted_entries
+from registry import Artist
 from songs import Song
-from toc import ARTIST_INDEX_ANCHOR, link, sorted_entries
-from tex_text import tex
+from tex_text import escape_tex
 
 COLLECTION = "collection"
 COLUMNS = 2  # the index and the sections are both set in two columns
@@ -27,7 +27,7 @@ def page_title(song: Song) -> str:
 
 
 def heading_tex(artist: Artist) -> str:
-    return "\\\\".join(tex(line) for line in artist["name"].split(HEADING_BREAK))
+    return "\\\\".join(escape_tex(line) for line in artist["name"].split(HEADING_BREAK))
 
 
 def ordered_artists(registry: list[Artist]) -> list[Artist]:
@@ -47,7 +47,7 @@ def index_tex(artists: list[Artist]) -> str:
     lines = [f"\\hyt{{{ARTIST_INDEX_ANCHOR}}}\n",
              "\\begin{Large}\n",
              f"\\begin{{multicols}}{{{COLUMNS}}}\\raggedright\n"]
-    lines += [link(a["slug"], tex(index_text(a))) + "\\par\n" for a in artists]
+    lines += [link(a["slug"], escape_tex(index_text(a))) + "\\par\n" for a in artists]
     lines.append("\\end{multicols}\n\\end{Large}\n")
     return "".join(lines)
 

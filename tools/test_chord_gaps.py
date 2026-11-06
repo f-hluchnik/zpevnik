@@ -1,4 +1,4 @@
-"""Unit tests for the chord-overlap check (C3a, C4).
+"""Unit tests for the chord-overlap check.
 
 Run from the repository root: python3 -m unittest discover -s tools
 """

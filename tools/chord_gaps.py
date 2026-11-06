@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that no two chords on the same line overlap (tickets C3a and C4, D-123).
+"""Check that no two chords on the same line overlap.
 
 Every build writes the position of each chord to <job>.chords (\\chord does it, see
 zpevnik.sty): one line "x y page width" in sp per chord, in document order. Two
@@ -17,14 +17,15 @@ Trace mode: print every overlapping pair of one trace file, exit 1 if there is a
 
 Python >= 3.11, standard library only.
 """
+import argparse
 import sys
 from pathlib import Path
 from typing import NamedTuple
 
 from check_pages import song_pages
+from paths import CHORD_TRACE, add_root_argument
 
 SP_PER_PT = 65536
-TRACE_NAME = "zpevnik.chords"
 
 
 class Chord(NamedTuple):
@@ -62,7 +63,7 @@ def song_of_page(root: Path) -> dict[int, str]:
 
 
 def check_book(root: Path) -> int:
-    chords = read_trace(root / TRACE_NAME)
+    chords = read_trace(root / CHORD_TRACE)
     pairs = same_line_pairs(chords)
     overlaps = overlapping(pairs)
     song_at = song_of_page(root)
@@ -81,10 +82,12 @@ def check_trace(trace: Path) -> int:
 
 
 def main() -> int:
-    args = sys.argv[1:]
-    if "--trace" in args:
-        return check_trace(Path(args[args.index("--trace") + 1]))
-    return check_book(Path(args[0] if args else ".").resolve())
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    add_root_argument(parser)
+    parser.add_argument("--trace", type=Path, metavar="FILE",
+                        help="check this trace file instead of the book")
+    args = parser.parse_args()
+    return check_trace(args.trace) if args.trace else check_book(args.root)
 
 
 if __name__ == "__main__":

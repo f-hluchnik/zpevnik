@@ -1,4 +1,4 @@
-"""Unit tests for reading the include lines (H3).
+"""Unit tests for reading the include lines .
 
 Run from the repository root: python3 -m unittest discover -s tools
 """

@@ -1,4 +1,4 @@
-"""Czech collation of song titles (DECISIONS D-107).
+"""Czech collation of song titles.
 
 Implemented here, not with locale.strxfrm: locale collation depends on the
 locales installed on the machine, so local runs and CI could disagree.
@@ -11,7 +11,7 @@ A title is compared in four passes, each only for titles equal so far:
  3. case: a lowercase letter before an uppercase one.
  4. punctuation, only to break a remaining tie.
 
-Not covered by D-107, decided here: ł sorts as l in pass 1 and after l in
+Beyond the Czech rules, decided here: ł sorts as l in pass 1 and after l in
 pass 2; any other accent sorts after the Czech ones, by code point; a letter
 that is neither Latin nor in LETTER_WITHOUT_DECOMPOSITION raises an error,
 so a new song cannot silently get a wrong position.
@@ -91,7 +91,7 @@ def tokens(text: str) -> list[Token]:
 
 
 def sort_key(title: str) -> tuple:
-    """Sort key of a plain-text title; sorted() gives the D-107 order."""
+    """Sort key of a plain-text title; sorted() gives the songbook order."""
     parts = tokens(title)
     return (tuple(t.weight for t in parts),   # pass 1
             tuple(t.accent for t in parts),   # pass 2
