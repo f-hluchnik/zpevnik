@@ -39,7 +39,8 @@ class TextProblems(unittest.TestCase):
                          ("\\hyl{x}{a}", "\\seealso"), ("\\refsm{}", "\\cue{R}"),
                          ("\\refsme{}", "\\cue{R}"), ("\\bridgesm{}", "\\cue{B}"),
                          ("\\solosm{1}", "\\cue{S}"), ("\\hyt{x}", "\\hypertarget"),
-                         ("\\hylo{x}{a}", "\\hyperlink")):
+                         ("\\hylo{x}{a}", "\\hyperlink"),
+                         ("\\nv{a}", "\\vers{...}"), ("\\lbl{A:}", "\\speaker{A}{...}")):
             with self.subTest(old=old):
                 (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n{old}\n")
                 self.assertIn(f"removed {old.split('{')[0]}", problem)

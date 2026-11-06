@@ -168,8 +168,14 @@
 % after a block or inside one it is appended to the line.
 \newcommand{\cue}[1]{\ifvmode\zp@blockgap\lbl{#1.}\ignorespaces\else\textbf{#1.}\fi}
 % Change of singer: the name in italics in the label column (a name wider than
-% the box sticks out to the left), with the normal gap above the block.
-\newcommand{\speaker}[2]{\zp@blockgap\zp@labelbox{\emph{#1:}}{\ignorespaces#2}}
+% the box sticks out to the left), with the normal gap above the block. Inside
+% a block (a verse with numbered label, for instance) there is no label column
+% free, so the name stands in front of the line instead.
+\newcommand{\speaker}[2]{\ifvmode
+  \zp@blockgap\zp@labelbox{\emph{#1:}}{\ignorespaces#2}%
+\else
+  \emph{#1:}\nobreakspace#2%
+\fi}
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repeat
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitative
 % A note belongs to the block that follows: that block gets no gap (as after a
