@@ -53,7 +53,7 @@ jobs:
           texlive_version: 2023
           run: |
             apk add --no-cache bash grep poppler-utils python3
-            bash tests/single-song.sh tests/build --build
+            bash tests/single-song.sh tests/build --build || { pdftotext -f 3 -l 3 tests/build/artist.pdf - | od -c; pdftotext -v; exit 1; }
 
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
