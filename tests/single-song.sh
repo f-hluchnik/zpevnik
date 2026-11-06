@@ -36,8 +36,11 @@ echo "single-song OK ($song, 1 page)"
 pdflatex -interaction=nonstopmode -halt-on-error artist.tex >/dev/null
 [ "$(pdfinfo artist.pdf | awk '/^Pages:/ {print $2}')" = 9 ] || { echo "artist.tex: expected 9 pages" >&2; exit 1; }
 page() { pdftotext -f "$1" -l "$1" artist.pdf -; }
+# The page text goes through a variable: with pipefail, `grep -q` ending the pipe early can
+# make pdftotext fail with SIGPIPE, so the pipeline reports "no match" for a match.
 expect() { # page, "has"|"lacks", text
-  if page "$1" | grep -qF -- "$3"; then found=has; else found=lacks; fi
+  local text; text=$(page "$1")
+  if grep -qF -- "$3" <<<"$text"; then found=has; else found=lacks; fi
   [ "$found" = "$2" ] || { echo "artist.tex page $1 should $2 '$3'" >&2; exit 1; }
 }
 arrows() { # page, number of arrows: 1 for the "obsah" link in the title + 1 per artist
@@ -86,7 +89,8 @@ word() { # page, word, bbox attribute (xMin or yMin)
 }
 [ -n "$(word 1 Beta x)" ] && [ "$(word 1 Alpha x)" = "$(word 1 Beta x)" ] \
   || { echo "spacing.tex: unnumbered verse is not aligned with a numbered one" >&2; exit 1; }
-! pdftotext -f 1 -l 1 spacing.pdf - | grep -qx '\.' || { echo "spacing.tex: unnumbered verse prints a stray label" >&2; exit 1; }
+text=$(pdftotext -f 1 -l 1 spacing.pdf -)
+! grep -qx '\.' <<<"$text" || { echo "spacing.tex: unnumbered verse prints a stray label" >&2; exit 1; }
 [ -n "$(word 2 Verse y)" ] && [ "$(word 2 Verse y)" = "$(word 3 Verse y)" ] \
   || { echo "spacing.tex: a separator at the end of a song changed the next song" >&2; exit 1; }
 echo "spacing OK"
