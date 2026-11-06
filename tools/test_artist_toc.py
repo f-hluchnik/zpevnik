@@ -102,8 +102,8 @@ class SectionsTex(unittest.TestCase):
 class ArtistPartTex(unittest.TestCase):
     def test_index_rule_sections_in_this_order(self):
         tex = artist_part_tex([KRYL, ABBA], [song("a", "Alfa", artists=("abba",))])
-        self.assertLess(tex.index("\\hylo{abba}{ABBA}\\par"), tex.index("\\rule{10cm}"))
-        self.assertLess(tex.index("\\rule{10cm}"), tex.index("\\subsection*{ABBA}"))
+        self.assertLess(tex.index("\\hylo{abba}{ABBA}\\par"), tex.index("\\zprule{10cm}"))
+        self.assertLess(tex.index("\\zprule{10cm}"), tex.index("\\subsection*{ABBA}"))
         self.assertLess(tex.index("\\subsection*{ABBA}"), tex.index("\\subsection*{Kryl, Karel}"))
 
 
