@@ -29,7 +29,7 @@
 \pdfminorversion=7
 
 %PAGE LAYOUT AND NAMED LENGTHS
-% The label (R., 1., I:, ...) hangs in the left margin by this much: the first
+% The label (R., 1., I., ...) hangs in the left margin by this much: the first
 % line of a paragraph starts left of the text block. With indentfirst this also
 % holds for the first paragraph after a heading.
 \newcommand*{\zp@labelhang}{10mm}
@@ -142,16 +142,16 @@
 \newcommand{\nv}{\hspace*{\labelw}}%no verse: indents the first line of unlabelled text under the text after a label
 % A block is a labelled paragraph with the block gap above it.
 \newcommand{\zp@block}[2]{\zp@blockgap\lbl{#1}{#2}}
-% The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
+% The optional number of a part (\chorus[2]) follows its letter: "R2.". Every label ends with a dot. Without
 % a number, or with an empty one, only the letter is printed.
 \newcommand*{\zp@number}[1]{\IfNoValueTF{#1}{}{#1}}
 % The text may contain empty lines (+m), as it did with \newcommand.
 \NewDocumentCommand{\chorus}{o +m}{\zp@block{R\zp@number{#1}.}{#2}}
-\NewDocumentCommand{\bridge}{o +m}{\zp@block{B\zp@number{#1}:}{#2}}
-\NewDocumentCommand{\prechorus}{o +m}{\zp@block{P\zp@number{#1}:}{#2}}
-\NewDocumentCommand{\solo}{o +m}{\zp@block{S\zp@number{#1}:}{#2}}
-\newcommand{\intro}[1]{\zp@block{I:}{#1}}
-\newcommand{\coda}[1]{\zp@block{C:}{#1}}
+\NewDocumentCommand{\bridge}{o +m}{\zp@block{B\zp@number{#1}.}{#2}}
+\NewDocumentCommand{\prechorus}{o +m}{\zp@block{P\zp@number{#1}.}{#2}}
+\NewDocumentCommand{\solo}{o +m}{\zp@block{S\zp@number{#1}.}{#2}}
+\newcommand{\intro}[1]{\zp@block{I.}{#1}}
+\newcommand{\coda}[1]{\zp@block{C.}{#1}}
 % A verse is numbered "n." by its optional number; without one it has no label
 % and its text is aligned like the others.
 \NewDocumentCommand{\vers}{o +m}{%
