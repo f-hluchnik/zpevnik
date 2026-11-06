@@ -9,6 +9,9 @@ Errors fail the build:
     `\\gap{n}`, chord-only lines `\\chords{...}`);
   - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (the gap between blocks
     is automatic, see the README);
+  - a song has a block without text (`\\bridge{}`, `\\vers[3]{}`); a label alone is `\\cue{...}`;
+  - a song still uses a renamed command (`\\refrain`, `\\sub`, `\\refsm`, ... see
+    RENAMED_COMMANDS) or the old two-brace `\\vers{n}{...}`;
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs.
 Warnings are listed and do not fail:
@@ -24,7 +27,7 @@ Exits 1 on errors. Python >= 3.11, standard library only.
 import argparse
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -38,6 +41,18 @@ ARTIST_LINE = re.compile(r"\\artist\b")
 OLD_MACRO = re.compile(r"\\interpret(?:dva)?\b")
 MANUAL_SPACING = re.compile(r"\\(?:nc|mm|sm|bc)(?![A-Za-z])")  # replaced by \gap and \chords
 OLD_SPACING = re.compile(r"\\(?:ns|cns|vnv|vinv|lsp)(?![A-Za-z])")  # the gap between blocks is automatic
+# Commands that were renamed or replaced; the value is what to write instead.
+RENAMED_COMMANDS = {
+    "refrain": "\\chorus", "refrainn": "\\chorus[n]", "solon": "\\solo[n]", "cod": "\\coda",
+    "sub": "\\subtitle", "spk": "\\speaker", "hyl": "\\seealso",
+    "refsm": "\\cue{R}", "refsme": "\\cue{R}", "bridgesm": "\\cue{B}", "solosm": "\\cue{S}",
+    "hyt": "\\hypertarget", "hylo": "\\hyperlink",
+}
+RENAMED_COMMAND = re.compile(r"(?<!\\)\\(" + "|".join(RENAMED_COMMANDS) + r")(?![A-Za-z])")
+# A block without text only prints its label, which is what \cue is for. A second group after the
+# empty one is text that was written next to the block instead of in it.
+EMPTY_BLOCK = re.compile(r"\\(?:vers|chorus|bridge|prechorus|solo|intro|coda)(?:\[[^\]]*\])?\{\s*\}")
+OLD_VERS = re.compile(r"\\vers\{[^{}]*\}\s*\{")  # \vers{n}{text}: the number is now \vers[n]{text}
 COMMENT = re.compile(r"(?<!\\)%.*")
 CHORD_USE = re.compile(r"\\chords?\b")
 
@@ -61,6 +76,15 @@ def text_problems(song_id: str, text: str) -> list[str]:
     if old_spacing:
         problems.append(f"{song_id}: {old_spacing} uses of the removed spacing macros "
                         "(\\ns \\cns \\vnv \\vinv \\lsp); the gap between blocks is automatic")
+    code = COMMENT.sub("", text)
+    for name, count in Counter(RENAMED_COMMAND.findall(code)).items():
+        problems.append(f"{song_id}: {count} uses of the removed \\{name}; write {RENAMED_COMMANDS[name]}")
+    old_vers = len(OLD_VERS.findall(code))
+    if old_vers:
+        problems.append(f"{song_id}: {old_vers} uses of the old \\vers{{n}}{{text}}; write \\vers[n]{{text}}")
+    empty_blocks = len(EMPTY_BLOCK.findall(code))
+    if empty_blocks:
+        problems.append(f"{song_id}: {empty_blocks} blocks without text; a label alone is \\cue{{...}}")
     return problems
 
 

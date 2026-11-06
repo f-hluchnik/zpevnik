@@ -30,7 +30,45 @@ class TextProblems(unittest.TestCase):
                 self.assertIn("manual chord spacing", problem)
 
     def test_commands_that_only_start_like_the_old_macros_are_fine(self):
-        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\\smash{a}\\ncol \\sub{b}\n"), [])
+        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\\smash{a}\\ncol \\subtitle{b}\\coda{c}\n"), [])
+
+    def test_renamed_commands_are_errors(self):
+        for old, new in (("\\refrain{a}", "\\chorus"), ("\\refrainn{1}{a}", "\\chorus[n]"),
+                         ("\\solon{1}{a}", "\\solo[n]"), ("\\cod{a}", "\\coda"),
+                         ("\\sub{a}", "\\subtitle"), ("\\spk{On}{a}", "\\speaker"),
+                         ("\\hyl{x}{a}", "\\seealso"), ("\\refsm{}", "\\cue{R}"),
+                         ("\\refsme{}", "\\cue{R}"), ("\\bridgesm{}", "\\cue{B}"),
+                         ("\\solosm{1}", "\\cue{S}"), ("\\hyt{x}", "\\hypertarget"),
+                         ("\\hylo{x}{a}", "\\hyperlink")):
+            with self.subTest(old=old):
+                (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n{old}\n")
+                self.assertIn(f"removed {old.split('{')[0]}", problem)
+                self.assertIn(f"write {new}", problem)
+
+    def test_renamed_commands_are_counted_per_command(self):
+        (problem,) = text_problems("a", "\\song{A} \\artist{x}\n\\cod{a}\\cod{b}\n")
+        self.assertIn("2 uses", problem)
+
+    def test_renamed_commands_in_comments_or_after_a_line_break_are_fine(self):
+        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n% \\sub{a}\n\\vers{a}\\\\sub\n"), [])
+
+    def test_old_two_brace_verse_is_an_error(self):
+        for old in ("\\vers{1}{a}", "\\vers{}{a}", "\\vers{1}\n{a}"):
+            with self.subTest(old=old):
+                problems = text_problems("a", f"\\song{{A}} \\artist{{x}}\n{old}\n")
+                self.assertTrue(any("old \\vers" in problem for problem in problems))
+
+    def test_block_without_text_is_an_error(self):
+        for empty in ("\\bridge{}", "\\vers[3]{}", "\\chorus[2]{ }", "\\solo[1]{\n}", "\\chorus{}{text}"):
+            with self.subTest(empty=empty):
+                (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n{empty}\n")
+                self.assertIn("without text", problem)
+
+    def test_cues_and_blocks_with_text_are_fine(self):
+        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\\cue{B}\n\\bridge{\\cue{R}}\n\\vers[3]{=\\gap{2}\\cue{1}}\n"), [])
+
+    def test_new_verses_are_fine(self):
+        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\\vers[1]{a {b}}\n\\vers{a}\n"), [])
 
     def test_chords_or_chord_rows_silence_the_chord_warning(self):
         self.assertEqual(chord_warnings("a", "\\chord{C}x"), [])

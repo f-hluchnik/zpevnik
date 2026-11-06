@@ -1,7 +1,7 @@
 """The letter part of the table of contents.
 
 `letters_tex` returns the letter row and the letter sections of obsah.tex:
-one `\\hylo` per song, in songbook order, and an italic entry for each
+one `\\hyperlink` per song, in songbook order, and an italic entry for each
 alternative title, ordered by that title under its own letter.
 
 Python >= 3.11, standard library only.
@@ -52,8 +52,12 @@ def anchor(letter: str) -> str:
     return base + base.lower()
 
 
+def link_target(name: str) -> str:
+    return f"\\hypertarget{{{name}}}{{}}"
+
+
 def link(target: str, text: str) -> str:
-    return f"\\hylo{{{target}}}{{{text}}}"
+    return f"\\hyperlink{{{target}}}{{{text}}}"
 
 
 def sorted_entries(songs: list[Song], title_of: TitleOf = contents_title) -> list[Entry]:
@@ -76,7 +80,7 @@ def letters_tex(songs: list[Song]) -> str:
         "\\begin{multicols}{2}\n",
     ]
     for letter, group in sections:
-        lines.append(f"\\hyt{{{anchor(letter)}}}\n\\subsection*{{{letter}}}\n")
+        lines.append(f"{link_target(anchor(letter))}\n\\subsection*{{{letter}}}\n")
         lines += [link(e.song_id, e.text) + "\n\n" for e in group]
     lines.append("\\end{multicols}\n")
     return "".join(lines)

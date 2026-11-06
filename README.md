@@ -58,39 +58,68 @@ V této sekci popíšu postup a konvence přepisování písniček. Nejprve uved
 
 1. název a interpret
     - Na začátku písničky je příkaz `\song`, který vytváří název písničky. Tento příkaz udělá z názvu automaticky odkaz na obsah. Na stejný řádek patří `\artist{}` s interpretem (viz níže).
-Na konec písničky žádný příkaz pro novou stranu nepatří: každá písnička se vkládá příkazem `\songinclude{id}` (generuje se do `generated/include.tex`, `id` je název souboru bez `.tex`), který sám začíná novou stranu. Stejné `id` použije `\song` jako cíl odkazu z obsahu, takže `\hyt` se do písničky nepíše.
+Na konec písničky žádný příkaz pro novou stranu nepatří: každá písnička se vkládá příkazem `\songinclude{id}` (generuje se do `generated/include.tex`, `id` je název souboru bez `.tex`), který sám začíná novou stranu. Stejné `id` použije `\song` jako cíl odkazu z obsahu, takže cíl odkazu se do písničky nepíše.
 
-Následuje popis důležitých součástí písničky.
+Následuje přehled příkazů, které se v písničce používají. Příkazy pro akordy jsou v sekci „Psaní akordů“ níže, metadata (`\alttitle`, `\toctitle`, `\collection`) a `\artist` výše.
 
-1. sloka
-    - Příkaz `\vers{}{}` vysází číslo sloky s tečkou a sloku. Používá s pro sloku. V prvních složených závorkách je číslo sloky, ve druhých složených závorkách je text sloky.
-2. refrain
-    - Příkaz `\refrain{}`vysází R s tečkou. Používá se pro refrain.
-    - Příkaz `\refrainn{}{}` vysází R s tečkou a číslem. Používá se pro číslovaný refrain. V první závorce je číslo refrainu a ve druhé samotný refrain.
-3. ostatní části písničky
-    - Přkaz `\intro{}` vysází I s tečkou. Používá se pro úvodní část písničky.
-    - Příkaz `\bridge{}` vysází B s tečkou. Používá se pro bridge.
-    - Příkaz `\solo{}` vysází S s tečkou. Používá se pro označení sóla.
-    - Příkaz `\solon{}{}` vysází S s tečkou. Používá se pro označení číslovaného sóla. V první závorce je číslo sóla, ve druhé samotné sólo.
-    - Příkaz `\cod{}` vysází C s tečkou. Používá se pro označení cody.
-    - Příkaz `\refsm{}` vysází R s tečkou. Používá se pro označení místa, kde se začíná zpívat refrain, který už byl uveden dříve. Pokud je refrain nečíslovaný, jsou složené závorky prázdné. Pokud je refrain číslovaný, vepíšeme číslo refrainu do složených závorek.
-    - Příkaz `\solsm{}` vysází S s tečkou. Používá se pro označení místa, kde začíná sólo, které už bylo uvedeno dříve. Pokud je sólo nečíslované, jsou složené závorky prázdné. Pokud je sólo číslované, vepíšeme číslo sóla do složených závorek.
-    - Příkaz `\sub{}` vysází podnázev písničky.
-    - Příkaz `\rep{}` vysází označení repetice v textu.
-    - Příkaz `\rec{}` vysází označení recitativu v textu.
+#### Hlavička
 
-Štítky (`1.`, `R:`, `I:`, `S:`, ...) mají společnou pevnou šířku `\labelw` (25 pt), takže text za štítkem vždy začíná na stejném místě. Příkaz `\nv` odsadí řádek přesně o tuto šířku, tedy pod text za štítkem; používá se pro neoznačené řádky a místo ručního `\hspace`.
-    
+| Příkaz | Co dělá | Příklad |
+|---|---|---|
+| `\song{}` | název písničky, odkaz do obsahu | `\song{Hotel California} \artist{eagles}` |
+| `\subtitle{}` | podnázev pod názvem | `\subtitle{(Pomalu)}` |
+| `\seealso{id}{}` | řádek s odkazem na jinou písničku | `\seealso{folsomprisonblues}{Folsom Prison Blues}` |
+
+#### Bloky
+
+Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Text bloku se píše do složených závorek a smí obsahovat prázdné řádky. Číslo je volitelný parametr v hranatých závorkách; prázdný nebo vynechaný parametr znamená bez čísla.
+
+| Příkaz | Štítek | Příklad |
+|---|---|---|
+| `\vers{}` | bez štítku (sloka bez čísla, poznámka) | `\vers{\emph{Mluvené.}}` |
+| `\vers[n]{}` | `n.` | `\vers[2]{\chord{C}Text}` |
+| `\chorus{}` | `R.` | `\chorus{\chord{G}Text}` |
+| `\chorus[n]{}` | `Rn.` | `\chorus[2]{\chord{G}Text}` |
+| `\prechorus{}`, `\prechorus[n]{}` | `P.`, `Pn.` | `\prechorus{\chord{F}Text}` |
+| `\bridge{}`, `\bridge[n]{}` | `B.`, `Bn.` | `\bridge{\chord{Am}Text}` |
+| `\solo{}`, `\solo[n]{}` | `S.`, `Sn.` | `\solo[1]{\chords{C G Am F}}` |
+| `\intro{}` | `I.` | `\intro{\chords{Am F G}}` |
+| `\coda{}` | `C.` | `\coda{\chords{C G C}}` |
+| `\speaker{jméno}{}` | kurzívní jméno s dvojtečkou ve sloupci štítků, zarovnané doprava | `\speaker{On}{Text}` |
+
+Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnané doprava, takže tečky jsou pod sebou (`9.` nad `10.`) a krátký štítek jako `R.` stojí těsně u textu. Štítek má pevnou šířku `\labelw` (25 pt) a za ním pevnou mezeru, takže text bloku vždy začíná na levém okraji, stejně jako řádky pod ním; na tom, jestli text ve složených závorkách začíná na novém řádku, nezáleží. Příkaz `\nv` odsadí řádek o šířku štítku i s mezerou, takže jeho text začíná tam, kde text označeného bloku; používá se pro neoznačené řádky.
+
+#### Značky opakování a poznámky
+
+| Příkaz | Co dělá | Příklad |
+|---|---|---|
+| `\cue{}` | tučné označení místa, kde se znovu zpívá část napsaná dříve; vysází štítek a tečku | `\cue{R}` → **R.**, `\cue{R2}`, `\cue{B}`, `\cue{S1}`, `\cue{1}` |
+| `\note{}` | poznámka (capo, tempo) patřící k následujícímu bloku | `\note{capo 2}` |
+| `\rep{}` | označení repetice v textu | `\rep{\chord{C}Text}` |
+| `\rec{}` | označení recitativu v textu | `\rec{Text}` |
+
+`\cue` se chová podle místa: po prázdném řádku je to samostatný blok s mezerou nad sebou a se štítkem zarovnaným jako ostatní štítky, za blokem nebo uvnitř něj se připojí na konec řádku (`\vers[1]{...} \cue{R}`).
+
+#### Řádky a oddělovače
+
+| Příkaz | Co dělá | Příklad |
+|---|---|---|
+| `\groupbreak` | mezera mezi skupinami řádků uvnitř sloky | `řádek\\ řádek \groupbreak řádek` |
+| `\blockrule{cm}` | čárkovaná čára mezi těsnými bloky | `\blockrule{10}` |
+| `\partrule` | plná čára mezi částmi písničky | `\partrule` |
+| `\gap{n}` | záměrná pauza mezi akordem a textem | `\chord{G}\gap{4}text` |
+
+
 ### Svislé mezery a velikost písma
 Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
 
-- Mezi bloky (sloka, refrain, intro, ...) je jedna mezera `\blocksep` (20 pt), která se smrští až na nulu, když by se písnička jinak nevešla na stranu. Blok bez štítku je `\vers{}{...}`.
-- Střídání zpěváků (`On:`, `Ona:`) je `\spk{On}{text}`: kurzívní jméno přímo v textu a normální mezera nad blokem. Jméno je širší než štítek, proto se nepíše přes `\vers`.
+- Mezi bloky (sloka, refrain, intro, ...) je jedna mezera `\blocksep` (20 pt), která se smrští až na nulu, když by se písnička jinak nevešla na stranu. Blok bez štítku je `\vers{...}`.
+- Střídání zpěváků (`On:`, `Ona:`) je `\speaker{On}{text}`: kurzívní jméno ve sloupci štítků (zarovnané doprava jako štítky; delší jméno přečnívá doleva) a normální mezera nad blokem. Jméno se nepíše přes `\vers`, protože je kurzívou a s dvojtečkou.
 - Skupiny řádků uvnitř sloky odděluje `\groupbreak`.
 - Čárkovaná čára mezi těsnými slokami je `\blockrule{délka v cm}`, plná čára mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem.
-- `\note{}` (capo apod.) patří k následujícímu bloku: mezeru pod sebou nemá, nad sebou ji má (kromě začátku písničky a místa za `\sub`/`\hyl`). Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
+- `\note{}` (capo apod.) patří k následujícímu bloku: mezeru pod sebou nemá, nad sebou ji má (kromě začátku písničky a místa za `\subtitle`/`\seealso`). Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
 - Celý zpěvník je v `\Large`. Když se písnička nevejde na stranu ani s mezerami smrštěnými na nulu, přidá se za hlavičku `\large` a komentář proč. Velikost písma se do dalších písniček nepřenáší (každá písnička běží ve skupině).
-- Ruční `\vspace` zůstává jen u zarovnání not (záporná hodnota u obrázku s notami) a v pár dalších případech, vždy s komentářem `% KEEP: důvod`. Přehled všech: `docs/vertical-spacing/remaining-vspace.md` v dokumentaci projektu.
+- Ruční `\vspace` zůstává jen u zarovnání not (záporná hodnota u obrázku s notami) a v pár dalších případech, vždy s komentářem `% KEEP: důvod`.
 
 ### Psaní akordů
 V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různých akordových značek. Základním příkazem pro psaní akordů je příkaz `\chord{}`. Tento příkaz vysází akord nad bezprostředně následující text. Do složených závorek uvádím název akordu velkým písmenem. Charakteristiku akordu uvádím za akord příkazem podle následujícího seznamu. Výjimkou je mollový akord, který označím jednoduše písmenem "m".
@@ -100,7 +129,7 @@ V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různ�
 - `\maj` - maj7 akord
 - `\dm` - zmenšený akord (dim)
 - `\hdm` - malý zmenšený akord (m7/5-)
-- `+` - zvětšený akord
+- `\+` - zvětšený akord
 - `\bb` - béčko
 - `\kk` - křížek
 - `\2-9` - 2-9 akord, patřičně podle čísla

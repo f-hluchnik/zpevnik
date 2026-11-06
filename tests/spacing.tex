@@ -1,5 +1,5 @@
-% Vertical spacing (V4): \vers with an empty number, the separators and the
-% \song reset of the "no gap" flag. Run through tests/single-song.sh --build.
+% Vertical spacing: \vers without a number, the separators, the \song reset
+% of the "no gap" flag, notes and cues. Run through tests/single-song.sh --build.
 \documentclass[a4paper, 10pt]{article}
 \usepackage{zpevnik}
 
@@ -8,43 +8,67 @@
 \begin{Large}
 % page 1: numbered and unnumbered verse, every separator, a song ending with a separator
 \song{Spacing test}
-\vers{1}{Alpha}
+\vers[1]{Alpha}
 
-\vers{}{Beta}
+\vers{Beta}
 
-\spk{Ona}{Speaker}
+\speaker{Ona}{Speaker}
 
-\vers{2}{Gamma\groupbreak Delta}
+\vers[2]{Gamma\groupbreak Delta}
 
 \blockrule{5}
 
-\vers{3}{Epsilon}
+\vers[3]{Epsilon}
 
 \partrule
 
-\vers{4}{Zeta}
+\vers[4]{Zeta}
 
 \blockrule{5}
 
 \newpage
 % pages 2 and 3: the same first verse; page 2 follows a song that ended with a separator, page 3 does not
 \song{Reset test}
-\vers{1}{Verse}
+\vers[1]{Verse}
 
 \newpage
 \song{Reset test}
-\vers{1}{Verse}
+\vers[1]{Verse}
 
 \newpage
 % a note belongs to the next block, which gets no gap; also when the note is inside a group (an argument of \solo)
 \song{Note test}
 \note{capo 3}
 
-\vers{1}{Verse}
+\vers[1]{Verse}
 
 \solo{\note{note inside a block}}
 
-\vers{2}{Verse}
+\vers[2]{Verse}
+
+\newpage
+% a cue after a block stays on the line; after an empty line it is a block with the block gap
+\song{Cue test}
+\vers[1]{Verse} \cue{R}
+
+\cue{B}
+
+\vers[2]{Next}
+
+\newpage
+% labels, standalone cues and speaker names are right-aligned (the dots line up) and every text starts at the same place, also after \nv
+\song{Label test}
+\vers[9]{Nine}
+
+\vers[10]{Ten}
+
+\chorus{Chorus}
+
+\cue{R}
+
+\speaker{A}{Speaker}
+
+\nv Unlabelled
 
 \end{Large}
 \end{document}

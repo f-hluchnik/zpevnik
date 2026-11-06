@@ -11,7 +11,7 @@ from songs import Song, find_arguments, read_songs, read_title
 
 class ReadTitle(unittest.TestCase):
     def test_title_with_nested_braces(self):
-        text = "\\hyt{x}\n\\song{Bella ciao\\footnote{\\uv{a}}} \\artist{}\n"
+        text = "\\hypertarget{x}{}\n\\song{Bella ciao\\footnote{\\uv{a}}} \\artist{}\n"
         self.assertEqual(read_title(text, "song", "x.tex"), "Bella ciao\\footnote{\\uv{a}}")
 
     def test_missing_command_is_none(self):

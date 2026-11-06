@@ -10,7 +10,7 @@
 # With --build it also compiles them with pdflatex and checks them: the song
 # takes one page, each page of artist.tex prints the artist links it should,
 # metadata.tex prints none of its metadata, and chords.tex has no overlapping
-# chords, and spacing.tex keeps its separators and unnumbered verses in line.
+# chords, and spacing.tex keeps its separators, unnumbered verses and cues in line.
 # CI runs this script with --build in the pinned TeX Live action; any failed check fails the job.
 set -euo pipefail
 
@@ -80,10 +80,10 @@ ends=$(pdftotext -f 1 -l 1 -bbox chords.pdf - | awk -F'"' '/>Rc</ {print $6}')
   || { echo "chords.tex: \\chords[0.2em] should be narrower than \\chords" >&2; exit 1; }
 echo "chords OK"
 
-# Vertical spacing: \vers{}{...} prints no label but the text starts where a labelled one does;
+# Vertical spacing: \vers{...} prints no label but the text starts where a labelled one does;
 # a separator at the end of a song does not swallow the first gap of the next song (\song resets it).
 pdflatex -interaction=nonstopmode -halt-on-error spacing.tex >/dev/null
-[ "$(pdfinfo spacing.pdf | awk '/^Pages:/ {print $2}')" = 4 ] || { echo "spacing.tex: expected 4 pages" >&2; exit 1; }
+[ "$(pdfinfo spacing.pdf | awk '/^Pages:/ {print $2}')" = 6 ] || { echo "spacing.tex: expected 6 pages" >&2; exit 1; }
 word() { # page, word, bbox attribute (xMin or yMin)
   pdftotext -f "$1" -l "$1" -bbox spacing.pdf - | awk -F'"' -v w="$2" -v a="$3" '$0 ~ ">" w "<" {print (a == "x" ? $2 : $4); exit}'
 }
@@ -93,4 +93,25 @@ text=$(pdftotext -f 1 -l 1 spacing.pdf -)
 ! grep -qx '\.' <<<"$text" || { echo "spacing.tex: unnumbered verse prints a stray label" >&2; exit 1; }
 [ -n "$(word 2 Verse y)" ] && [ "$(word 2 Verse y)" = "$(word 3 Verse y)" ] \
   || { echo "spacing.tex: a separator at the end of a song changed the next song" >&2; exit 1; }
+# A cue after a block stays on its line; after an empty line it is a block of its own with the block gap
+# (a line pitch is about 22 pt, the gap 20 pt).
+awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 R. y)" 'BEGIN {d = cue - verse; exit !(cue != "" && d > -2 && d < 2)}' \
+  || { echo "spacing.tex: a cue after a block is not on the line of the block" >&2; exit 1; }
+awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 B. y)" 'BEGIN {exit !(cue - verse > 35)}' \
+  || { echo "spacing.tex: a cue after an empty line has no block gap" >&2; exit 1; }
+# Labels, standalone cues and speaker names are right-aligned: the dots of "9." and "10." line up, and all texts start at the same place.
+edge() { # page, word, bbox attribute (xMin or xMax)
+  pdftotext -f "$1" -l "$1" -bbox spacing.pdf - | awk -F'"' -v w="$2" -v a="$3" '$0 ~ ">" w "<" {print (a == "min" ? $2 : $6); exit}'
+}
+same() { awk -v a="$1" -v b="$2" -v t="${3:-0.05}" 'BEGIN {d = a - b; exit !(a != "" && b != "" && d > -t && d < t)}'; }
+same "$(edge 6 9. max)" "$(edge 6 10. max)" \
+  || { echo "spacing.tex: the dots of 9. and 10. do not line up" >&2; exit 1; }
+same "$(edge 6 Nine min)" "$(edge 6 Ten min)" && same "$(edge 6 Nine min)" "$(edge 6 Chorus min)" \
+  || { echo "spacing.tex: the texts of labelled blocks do not start at the same place" >&2; exit 1; }
+same "$(edge 6 R. max)" "$(edge 6 9. max)" \
+  || { echo "spacing.tex: a standalone cue is not aligned with the labels" >&2; exit 1; }
+same "$(edge 6 A: max)" "$(edge 6 9. max)" 1 && same "$(edge 6 Speaker min)" "$(edge 6 Nine min)" \
+  || { echo "spacing.tex: a speaker name is not aligned with the labels (the italic colon may be 1 pt off)" >&2; exit 1; }
+same "$(edge 6 Unlabelled min)" "$(edge 6 Nine min)" \
+  || { echo "spacing.tex: text after \\nv does not start where the text of a labelled block does" >&2; exit 1; }
 echo "spacing OK"
