@@ -1,4 +1,4 @@
-# Artists and collections of the songbook (D-002, D-114).
+# Artists and collections of the songbook.
 #
 # One [[entry]] per section of the artist index. Song files refer to an entry
 # by its slug only. Write only what differs from the default.
@@ -13,8 +13,8 @@
 #               Default: "First Surname" for a name of the form "Surname, First",
 #               otherwise the name itself
 #   link_label  shorter text for the link on the artist's songs. Default: label
-#   sort        collation key (D-107). Default: name. Collections come after all
-#               artists, ordered by their own key
+#   sort        collation key (Czech alphabetical order). Default: name.
+#               Collections come after all artists, ordered by their own key
 #   kind        "artist" (default), or "collection" (songs grouped by theme, not by author)
 #   section     true (default) if the book has a section for this entry
 #

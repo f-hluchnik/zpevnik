@@ -1,6 +1,7 @@
-% Automatic chord spacing (C3a, C4, D-123): the spacing of every song, \gap, \chords and the chord trace.
+% Automatic chord spacing: the spacing of every song, \gap, \chords and the chord trace.
 % \chords[sep]{...} narrows one row (the two Ra Rb Rc rows differ in width).
-% Run through tests/single-song.sh --build: one page, no overlapping chords.
+% A pad that splits a word gets a hyphen, also before an accented letter ("zába - čí").
+% Run through tests/single-song.sh --build: one page, no overlapping chords, the hyphens.
 \documentclass[a4paper, 10pt]{article}
 \usepackage{zpevnik}
 
@@ -12,6 +13,7 @@
 \song{Spacing}
 \vers[1]{\overlapping\\
 \chord{C}Pause\gap{4}here, \chord{G}ends\\
+zá\chord{F\kk m\7}ba\chord{Am\7}čí\\
 \chords{Am F\maj{} G\7}\\
 \chords{Ra Rb Rc}\\
 \chords[0.2em]{Ra Rb Rc}}
