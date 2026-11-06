@@ -9,6 +9,7 @@ Errors fail the build:
     `\\gap{n}`, chord-only lines `\\chords{...}`);
   - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (the gap between blocks
     is automatic, see the README);
+  - a song has text, `\\rec` or `\\chords` outside a block (a paragraph must start with a block or a separator);
   - a song has a block without text (`\\bridge{}`, `\\vers[3]{}`); a label alone is `\\cue{...}`;
   - a song still uses a renamed command (`\\refrain`, `\\sub`, `\\refsm`, ... see
     RENAMED_COMMANDS) or the old two-brace `\\vers{n}{...}`;
@@ -55,7 +56,30 @@ RENAMED_COMMAND = re.compile(r"(?<!\\)\\(" + "|".join(RENAMED_COMMANDS) + r")(?!
 EMPTY_BLOCK = re.compile(r"\\(?:vers|chorus|bridge|prechorus|solo|intro|coda)(?:\[[^\]]*\])?\{\s*\}")
 OLD_VERS = re.compile(r"\\vers\{[^{}]*\}\s*\{")  # \vers{n}{text}: the number is now \vers[n]{text}
 COMMENT = re.compile(r"(?<!\\)%.*")
+# What a paragraph outside braces and environments may start with: the header, the blocks, the
+# separators and the layout of scores. Anything else (text, \\rec, \\chords) belongs in a block.
+PARAGRAPH_START = re.compile(r"\\([A-Za-z@]+)|[^\\\s]")
+ALLOWED_PARAGRAPH_STARTS = frozenset(
+    "song artist alttitle subtitle toctitle collection note cue speaker vers chorus prechorus bridge solo "
+    "intro coda blockrule partrule groupbreak seealso large placetextbox hspace vspace begin includegraphics "
+    "hypertarget".split())
+PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n")
+ESCAPED_BRACE = re.compile(r"\\[{}]")
+ENVIRONMENT = re.compile(r"\\(begin|end)\{")
 CHORD_USE = re.compile(r"\\chords?\b")
+
+
+def text_outside_blocks(code: str) -> list[str]:
+    """The first line of each paragraph at the top level that does not start with a block or a separator."""
+    stray, braces, environments = [], 0, 0
+    for paragraph in PARAGRAPH_BREAK.split(code):
+        start = PARAGRAPH_START.match(paragraph.strip())
+        if start and braces == 0 and environments == 0 and start.group(1) not in ALLOWED_PARAGRAPH_STARTS:
+            stray.append(paragraph.strip().splitlines()[0][:40])
+        unescaped = ESCAPED_BRACE.sub("", paragraph)
+        braces += unescaped.count("{") - unescaped.count("}")
+        environments += sum(1 if kind == "begin" else -1 for kind in ENVIRONMENT.findall(paragraph))
+    return stray
 
 
 def text_problems(song_id: str, text: str) -> list[str]:
@@ -86,6 +110,8 @@ def text_problems(song_id: str, text: str) -> list[str]:
     empty_blocks = len(EMPTY_BLOCK.findall(code))
     if empty_blocks:
         problems.append(f"{song_id}: {empty_blocks} blocks without text; a label alone is \\cue{{...}}")
+    for line in text_outside_blocks(code):
+        problems.append(f"{song_id}: text outside a block ({line!r}); put it in \\vers{{...}}")
     return problems
 
 

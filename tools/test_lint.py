@@ -53,6 +53,17 @@ class TextProblems(unittest.TestCase):
     def test_renamed_commands_in_comments_or_after_a_line_break_are_fine(self):
         self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n% \\sub{a}\n\\vers{a}\\\\sub\n"), [])
 
+    def test_text_outside_a_block_is_an_error(self):
+        for stray in ("plain text", "\\rec{a}", "\\chords{A E}", "\\emph{rec.} a", "\\rep{\\chords{A}}"):
+            with self.subTest(stray=stray):
+                problems = text_problems("a", f"\\song{{A}} \\artist{{x}}\n\n\\vers{{a}}\n\n{stray}\n")
+                self.assertTrue(any("outside a block" in problem for problem in problems))
+
+    def test_blocks_separators_and_layout_are_not_outside_a_block(self):
+        text = ("\\song{A} \\artist{x}\n\\note{capo 2}\n\n\\vers{a\n\nstill the verse}\n\n\\cue{R}\n\n"
+                "\\placetextbox{1}{2}{\ntext in a box\n\nmore}\n\n\\begin{multicols}{2}\nlist\n\nitems\n\\end{multicols}\n")
+        self.assertEqual(text_problems("a", text), [])
+
     def test_old_two_brace_verse_is_an_error(self):
         for old in ("\\vers{1}{a}", "\\vers{}{a}", "\\vers{1}\n{a}"):
             with self.subTest(old=old):
