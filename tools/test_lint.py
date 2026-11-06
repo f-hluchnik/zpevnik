@@ -55,8 +55,17 @@ class TextProblems(unittest.TestCase):
     def test_old_two_brace_verse_is_an_error(self):
         for old in ("\\vers{1}{a}", "\\vers{}{a}", "\\vers{1}\n{a}"):
             with self.subTest(old=old):
-                (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n{old}\n")
-                self.assertIn("old \\vers", problem)
+                problems = text_problems("a", f"\\song{{A}} \\artist{{x}}\n{old}\n")
+                self.assertTrue(any("old \\vers" in problem for problem in problems))
+
+    def test_block_without_text_is_an_error(self):
+        for empty in ("\\bridge{}", "\\vers[3]{}", "\\chorus[2]{ }", "\\solo[1]{\n}", "\\chorus{}{text}"):
+            with self.subTest(empty=empty):
+                (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n{empty}\n")
+                self.assertIn("without text", problem)
+
+    def test_cues_and_blocks_with_text_are_fine(self):
+        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\\cue{B}\n\\bridge{\\cue{R}}\n\\vers[3]{=\\gap{2}\\cue{1}}\n"), [])
 
     def test_new_verses_are_fine(self):
         self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\\vers[1]{a {b}}\n\\vers{a}\n"), [])

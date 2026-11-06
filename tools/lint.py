@@ -9,6 +9,7 @@ Errors fail the build:
     `\\gap{n}`, chord-only lines `\\chords{...}`);
   - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (the gap between blocks
     is automatic, see the README);
+  - a song has a block without text (`\\bridge{}`, `\\vers[3]{}`); a label alone is `\\cue{...}`;
   - a song still uses a renamed command (`\\refrain`, `\\sub`, `\\refsm`, ... see
     RENAMED_COMMANDS) or the old two-brace `\\vers{n}{...}`;
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
@@ -48,6 +49,9 @@ RENAMED_COMMANDS = {
     "hyt": "\\hypertarget", "hylo": "\\hyperlink",
 }
 RENAMED_COMMAND = re.compile(r"(?<!\\)\\(" + "|".join(RENAMED_COMMANDS) + r")(?![A-Za-z])")
+# A block without text only prints its label, which is what \cue is for. A second group after the
+# empty one is text that was written next to the block instead of in it.
+EMPTY_BLOCK = re.compile(r"\\(?:vers|chorus|bridge|prechorus|solo|intro|coda)(?:\[[^\]]*\])?\{\s*\}")
 OLD_VERS = re.compile(r"\\vers\{[^{}]*\}\s*\{")  # \vers{n}{text}: the number is now \vers[n]{text}
 COMMENT = re.compile(r"(?<!\\)%.*")
 CHORD_USE = re.compile(r"\\chords?\b")
@@ -78,6 +82,9 @@ def text_problems(song_id: str, text: str) -> list[str]:
     old_vers = len(OLD_VERS.findall(code))
     if old_vers:
         problems.append(f"{song_id}: {old_vers} uses of the old \\vers{{n}}{{text}}; write \\vers[n]{{text}}")
+    empty_blocks = len(EMPTY_BLOCK.findall(code))
+    if empty_blocks:
+        problems.append(f"{song_id}: {empty_blocks} blocks without text; a label alone is \\cue{{...}}")
     return problems
 
 

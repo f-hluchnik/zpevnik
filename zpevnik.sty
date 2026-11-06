@@ -45,6 +45,9 @@
 % In columns (multicols) the gap must not shrink: when balancing the columns,
 % multicol would squeeze the blocks to zero.
 \AddToHook{env/multicols/begin}{\setlength{\blocksep}{\zp@blockgapsize}}
+% A column must not start or end with one line of a block: it would leave the
+% last line of a verse alone at the top of the next column.
+\AddToHook{env/multicols/begin}{\widowpenalty=10000 \clubpenalty=10000 }
 % Shifts built into the macros (negative = up). The values are the ones the
 % macros used to hard-code.
 \newlength{\subtitleshift}\setlength{\subtitleshift}{-10mm}   % \subtitle: moves up to the title
