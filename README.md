@@ -87,7 +87,7 @@ Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Tex
 | `\coda{}` | `C.` | `\coda{\chords{C G C}}` |
 | `\speaker{jméno}{}` | kurzívní jméno přímo v textu | `\speaker{On}{Text}` |
 
-Štítky (`1.`, `R.`, `I.`, `S.`, ...) mají společnou pevnou šířku `\labelw` (25 pt), takže text za štítkem vždy začíná na stejném místě. Příkaz `\nv` odsadí řádek přesně o tuto šířku, tedy pod text za štítkem; používá se pro neoznačené řádky a místo ručního `\hspace`.
+Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnané doprava, takže tečky jsou pod sebou (`9.` nad `10.`) a krátký štítek jako `R.` stojí těsně u textu. Štítek má pevnou šířku `\labelw` (25 pt) a za ním pevnou mezeru, takže text bloku vždy začíná na levém okraji, stejně jako řádky pod ním; na tom, jestli text ve složených závorkách začíná na novém řádku, nezáleží. Příkaz `\nv` odsadí řádek o šířku štítku; používá se pro neoznačené řádky a místo ručního `\hspace`.
 
 #### Značky opakování a poznámky
 

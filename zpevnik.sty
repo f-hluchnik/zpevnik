@@ -138,10 +138,14 @@
 }
 
 %BLOCKS AND LABELS
-\newcommand{\lbl}[1]{\makebox[\labelw][l]{\textbf{#1}}}
+% The label is right-aligned in the box \labelw, so that the dots line up (9.
+% above 10.) and a short label such as "R." stays next to its text. A fixed gap
+% completes the hang, so the text starts at the margin like the lines under it.
+\newcommand{\lbl}[1]{\makebox[\labelw][r]{\textbf{#1}}\hspace{\dimexpr\zp@labelhang-\labelw\relax}}
 \newcommand{\nv}{\hspace*{\labelw}}%no verse: indents the first line of unlabelled text under the text after a label
 % A block is a labelled paragraph with the block gap above it.
-\newcommand{\zp@block}[2]{\zp@blockgap\lbl{#1}{#2}}
+% \ignorespaces: whether the text starts on a new line of the source must not matter.
+\newcommand{\zp@block}[2]{\zp@blockgap\lbl{#1}{\ignorespaces#2}}
 % The optional number of a part (\chorus[2]) follows its letter: "R2.". Every label ends with a dot. Without
 % a number, or with an empty one, only the letter is printed.
 \newcommand*{\zp@number}[1]{\IfNoValueTF{#1}{}{#1}}

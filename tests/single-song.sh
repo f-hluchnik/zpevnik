@@ -83,7 +83,7 @@ echo "chords OK"
 # Vertical spacing: \vers{...} prints no label but the text starts where a labelled one does;
 # a separator at the end of a song does not swallow the first gap of the next song (\song resets it).
 pdflatex -interaction=nonstopmode -halt-on-error spacing.tex >/dev/null
-[ "$(pdfinfo spacing.pdf | awk '/^Pages:/ {print $2}')" = 5 ] || { echo "spacing.tex: expected 5 pages" >&2; exit 1; }
+[ "$(pdfinfo spacing.pdf | awk '/^Pages:/ {print $2}')" = 6 ] || { echo "spacing.tex: expected 6 pages" >&2; exit 1; }
 word() { # page, word, bbox attribute (xMin or yMin)
   pdftotext -f "$1" -l "$1" -bbox spacing.pdf - | awk -F'"' -v w="$2" -v a="$3" '$0 ~ ">" w "<" {print (a == "x" ? $2 : $4); exit}'
 }
@@ -99,4 +99,13 @@ awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 R. y)" 'BEGIN {d = cue - verse
   || { echo "spacing.tex: a cue after a block is not on the line of the block" >&2; exit 1; }
 awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 B. y)" 'BEGIN {exit !(cue - verse > 35)}' \
   || { echo "spacing.tex: a cue after an empty line has no block gap" >&2; exit 1; }
+# Labels are right-aligned: the dots of "9." and "10." line up, and all texts start at the same place.
+edge() { # page, word, bbox attribute (xMin or xMax)
+  pdftotext -f "$1" -l "$1" -bbox spacing.pdf - | awk -F'"' -v w="$2" -v a="$3" '$0 ~ ">" w "<" {print (a == "min" ? $2 : $6); exit}'
+}
+same() { awk -v a="$1" -v b="$2" 'BEGIN {d = a - b; exit !(a != "" && b != "" && d > -0.05 && d < 0.05)}'; }
+same "$(edge 6 9. max)" "$(edge 6 10. max)" \
+  || { echo "spacing.tex: the dots of 9. and 10. do not line up" >&2; exit 1; }
+same "$(edge 6 Nine min)" "$(edge 6 Ten min)" && same "$(edge 6 Nine min)" "$(edge 6 Chorus min)" \
+  || { echo "spacing.tex: the texts of labelled blocks do not start at the same place" >&2; exit 1; }
 echo "spacing OK"
