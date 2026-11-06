@@ -211,6 +211,8 @@
 \newcommand{\cod}[1]{\zp@blockgap\lbl{C:}{#1}}%coda
 %prázdné číslo = neočíslovaná sloka (bez štítku, text zarovnaný jako u ostatních)
 \newcommand{\vers}[2]{\zp@blockgap\lbl{\if\relax\detokenize{#1}\relax\else#1.\fi}{#2}}%sloka
+%střídání zpěváků: kurzívní jméno přímo v textu (je širší než štítek \labelw), s normální mezerou nad blokem
+\newcommand{\spk}[2]{\zp@blockgap\emph{#1:} #2}%mluvčí
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitativ
 
