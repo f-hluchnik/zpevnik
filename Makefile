@@ -1,6 +1,6 @@
 # make          generate the derived .tex files, then compile zpevnik.pdf
-# make generate only run the generator (tools/generate.py, D-104)
-# make song SONG=<id>  build only that song into build/<id>.pdf (tools/build_song.py, R14)
+# make generate only run the generator (tools/generate.py)
+# make song SONG=<id>  build only that song into build/<id>.pdf (tools/build_song.py)
 .PHONY: all generate pdf song
 
 all: pdf
