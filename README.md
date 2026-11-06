@@ -81,6 +81,16 @@ Následuje popis důležitých součástí písničky.
 
 Štítky (`1.`, `R:`, `I:`, `S:`, ...) mají společnou pevnou šířku `\labelw` (25 pt), takže text za štítkem vždy začíná na stejném místě. Příkaz `\nv` odsadí řádek přesně o tuto šířku, tedy pod text za štítkem; používá se pro neoznačené řádky a místo ručního `\hspace`.
     
+### Svislé mezery a velikost písma
+Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
+
+- Mezi bloky (sloka, refrain, intro, ...) je jedna mezera `\blocksep` (20 pt), která se smrští až na nulu, když by se písnička jinak nevešla na stranu. Blok bez štítku je `\vers{}{...}`.
+- Skupiny řádků uvnitř sloky odděluje `\groupbreak`.
+- Čárkovaná čára mezi těsnými slokami je `\blockrule{délka v cm}`, plná čára mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem.
+- `\note{}` (capo apod.) patří k následujícímu bloku, mezeru před ním nemá. Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
+- Celý zpěvník je v `\Large`. Když se písnička nevejde na stranu ani s mezerami smrštěnými na nulu, přidá se za hlavičku `\large` a komentář proč. Velikost písma se do dalších písniček nepřenáší (každá písnička běží ve skupině).
+- Ruční `\vspace` zůstává jen u zarovnání not (záporná hodnota u obrázku s notami) a v pár dalších případech, vždy s komentářem `% KEEP: důvod`. Přehled všech: `docs/vertical-spacing/remaining-vspace.md` v dokumentaci projektu.
+
 ### Psaní akordů
 V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různých akordových značek. Základním příkazem pro psaní akordů je příkaz `\chord{}`. Tento příkaz vysází akord nad bezprostředně následující text. Do složených závorek uvádím název akordu velkým písmenem. Charakteristiku akordu uvádím za akord příkazem podle následujícího seznamu. Výjimkou je mollový akord, který označím jednoduše písmenem "m".
 - `\add{}` - manuální horní index, například pro akord typu C<sup>4/6</sup>.
