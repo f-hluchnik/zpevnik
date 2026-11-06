@@ -190,7 +190,9 @@
 \newif\ifzp@nogap % the next block has no gap (a separator or a note already replaced it). Always set globally (also inside a group, e.g. the argument of \solo); \song lowers it.
 \newcommand{\zp@blockgap}{\global\zp@topfalse\ifzp@nogap\global\zp@nogapfalse\else\vspace{\blocksep}\fi}
 % Separators replace the gap before the next block (via \zp@nogap), they do not remove it.
-\newcommand{\groupbreak}{\\\vspace{\groupshift}\\}% space inside a verse between groups of lines
+% \groupbreak: space inside a verse between groups of lines. It is an empty line
+% (the second \\) shortened by \groupshift, so it scales with the font size of the song.
+\newcommand{\groupbreak}{\\\vspace{\groupshift}\\}
 \newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\zp@labelindent\hdashrule{#1cm}{\zp@dashthickness}{\zp@dashpattern}\vspace{\ruleshiftafter}\global\zp@nogaptrue}% dashed rule between tight verses
 % Solid rule between parts of a song. \par: the next block starts a new
 % paragraph (like an empty line after center).
@@ -226,8 +228,13 @@
   \pdfsavepos
   \edef\zp@tmp{\write\zp@trace{\noexpand\the\noexpand\pdflastxpos\space\noexpand\the\noexpand\pdflastypos\space\noexpand\thepage\space\number\wd\zp@chordbox}}%
   \zp@tmp}
-\edef\zp@utftwo{\expandafter\string\csname UTFviii@two@octets\endcsname}
 % Is the next token \zp@next a letter (ASCII, or a two-byte UTF-8 one like č, ž, é)?
+% With inputenc a UTF-8 letter is an active character whose meaning starts with the
+% kernel's internal \UTFviii@two@octets, so the test looks for that name. It relies
+% on a LaTeX internal: should it change, accented letters only stop counting as
+% letters (no hyphen in a word split before them), nothing breaks. tests/chords.tex
+% checks the hyphen before "č". Three-byte letters do not occur in Czech or in the songs.
+\edef\zp@utftwo{\expandafter\string\csname UTFviii@two@octets\endcsname}
 \def\zp@testnextletter{%
   \zp@nextletterfalse
   \ifcat\noexpand\zp@next a\zp@nextlettertrue\fi
@@ -245,13 +252,19 @@
   \zp@afterletterfalse
   \ifnum\lastnodetype=\z@ \zp@afterlettertrue\fi % a character before the chord
   \ifnum\lastnodetype=7 \zp@afterlettertrue\fi   % or a ligature
+  % The chord stands on the first row of a two-row tabular aligned at its bottom: the
+  % empty second row sits on the baseline of the text, so the chord is one line above it.
   \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#1}\\
-				\mbox{}\end{tabular}}}%
+    \mbox{}\end{tabular}}}%
   \zp@pad\zp@pend \global\zp@pend\z@
   \zp@segtoks{}%
   \futurelet\zp@next\zp@chordfirst}
 \def\zp@chordfirst{\zp@testnextletter\zp@scan@}
 % Collects tokens up to the next \chord, \chords, \\, }, \par, \end or \begin.
+% A group is taken whole, and the scan stops at the end of the group the chord is
+% in: a chord cannot see the next chord past a closing brace (e.g. a chord at the
+% end of \rep{...} and the next one after it). tools/chord_gaps.py fails the build
+% if two chords overlap there, so such a case is found, not printed wrong.
 \def\zp@scan{\futurelet\zp@next\zp@scan@}
 \def\zp@scan@{%
   \let\zp@do\zp@grabtok
@@ -297,6 +310,7 @@
   \leavevmode\zp@chords@#2 \zp@chordsend{} \endgroup}
 \def\zp@chords@#1 {\ifx\zp@chordsend#1\else
   \textbf{\textcolor{chordred}{#1}}\zp@chordsnext\fi}
+% Jumps out of the \ifx above before reading on, so the conditionals do not nest per chord.
 \def\zp@chordsnext#1\fi{\fi\zp@chordsmore}
 \def\zp@chordsmore{\futurelet\zp@next\zp@chordsmore@}
 \def\zp@chordsmore@{\ifx\zp@next\zp@chordsend\expandafter\zp@chordsstop\else\hskip\zp@rowsep\relax\expandafter\zp@chords@\fi}
@@ -336,17 +350,14 @@
 % The lookups print nothing for an unknown slug, and a missing file is fine,
 % so a single song still compiles without the generator (Overleaf).
 % \zpregisterartist is public: the generated file calls it.
-\newcommand{\zpregisterartist}[5]{%
-  \expandafter\gdef\csname zp@name@#1\endcsname{#2}%
-  \expandafter\gdef\csname zp@label@#1\endcsname{#3}%
-  \expandafter\gdef\csname zp@link@#1\endcsname{#4}%
-  \ifnum#5=1
+% \zpregisterartist{slug}{link label}{1 if the artist has a section, else 0}
+\newcommand{\zpregisterartist}[3]{%
+  \expandafter\gdef\csname zp@link@#1\endcsname{#2}%
+  \ifnum#3=1
     \expandafter\gdef\csname zp@section@#1\endcsname{\@firstoftwo}%
   \else
     \expandafter\gdef\csname zp@section@#1\endcsname{\@secondoftwo}%
   \fi}
-\newcommand{\artistname}[1]{\ifcsname zp@name@#1\endcsname\csname zp@name@#1\endcsname\fi}%
-\newcommand{\artistlabel}[1]{\ifcsname zp@label@#1\endcsname\csname zp@label@#1\endcsname\fi}%
 \newcommand{\artistlinklabel}[1]{\ifcsname zp@link@#1\endcsname\csname zp@link@#1\endcsname\fi}%
 \newcommand{\ifartistsection}[3]{%
   \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}

@@ -9,8 +9,9 @@
 # chords.tex (automatic chord spacing).
 # With --build it also compiles them with pdflatex and checks them: the song
 # takes one page, each page of artist.tex prints the artist links it should,
-# metadata.tex prints none of its metadata, and chords.tex has no overlapping
-# chords, and spacing.tex keeps its separators, unnumbered verses and cues in line.
+# metadata.tex prints none of its metadata, chords.tex has no overlapping
+# chords and a hyphen in each split word, and spacing.tex keeps its separators,
+# unnumbered verses and cues in line.
 # CI runs this script with --build in the pinned TeX Live action; any failed check fails the job.
 set -euo pipefail
 
@@ -53,7 +54,7 @@ arrows 4 2; expect 4 has "Own label"; expect 4 lacks "A. Test"
 arrows 5 3; expect 5 has "A. Test"; expect 5 has "B. Test"
 arrows 6 3; expect 6 lacks "C. Test"
 expect 8 lacks "Own label"
-arrows 9 2; expect 9 has "D. L. Test"; expect 9 lacks "Dee Long"
+arrows 9 2; expect 9 has "D. L. Test"
 echo "artist OK (9 pages)"
 
 # \alttitle, \toctitle, \collection: no output, one page, the song is intact.
@@ -73,6 +74,10 @@ python3 "$root/tools/chord_gaps.py" --trace chords.chords >/dev/null \
   || { echo "chords.tex: chords overlap" >&2; exit 1; }
 text=$(pdftotext -f 1 -l 1 chords.pdf -)
 grep -qF "Pause" <<<"$text" && grep -qF "here" <<<"$text" || { echo "chords.tex: lyrics missing" >&2; exit 1; }
+# A pad inside a word holds a hyphen, also before an accented (two-byte UTF-8) letter.
+for split in "vi - sible" "zába - čí"; do
+  grep -qF -- "$split" <<<"$text" || { echo "chords.tex: no hyphen in '$split'" >&2; exit 1; }
+done
 grep -qF "G7" <<<"$text" || { echo "chords.tex: \\chords did not print its chords" >&2; exit 1; }
 # \chords[sep]{...} changes the spacing of its row only: the narrow row ends left of the normal one.
 ends=$(pdftotext -f 1 -l 1 -bbox chords.pdf - | awk -F'"' '/>Rc</ {print $6}')

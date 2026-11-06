@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Generate the TeX files derived from the registry and the songs.
 
-Writes into generated/: artists.tex (one \\zpregisterartist{slug}{name}{label}
-{link label}{1 or 0} line per registry entry, which zpevnik.sty turns into lookups
-by slug), include.tex (the \\songinclude list of all songs in the Czech collation
-order), obsah-letters.tex (the letter part of the contents), obsah-artists.tex (the
-artist index and the artist sections) and version.tex (the songbook version).
+Writes into generated/: artists.tex (one \\zpregisterartist{slug}{link label}{1 or 0}
+line per registry entry, which zpevnik.sty turns into lookups by slug), include.tex
+(the \\songinclude list of all songs in the Czech collation order), obsah-letters.tex
+(the letter part of the contents), obsah-artists.tex (the artist index and the artist
+sections) and version.tex (the songbook version).
 Generated files are build outputs (gitignored); `make` runs this before compiling.
 
 Usage: python3 tools/generate.py [repo-root]
@@ -16,7 +16,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from artist_toc import HEADING_BREAK, artist_part_tex
+from artist_toc import artist_part_tex
 from collation import section, sort_key
 from letter_toc import letters_tex
 from paths import (ARTIST_PART_TEX, ARTISTS_TEX, INCLUDE_TEX, LETTERS_TEX, REGISTRY_FILE, SONGS_DIR,
@@ -36,12 +36,9 @@ def header(source: str) -> str:
 def artists_tex(entries: list[dict]) -> str:
     lines = [header(str(REGISTRY_FILE))]
     for artist in map(normalise, entries):
-        name = escape_tex(artist["name"].replace(HEADING_BREAK, " "))
-        label = escape_tex(artist["label"])
         link_label = escape_tex(artist["link_label"])
         has_section = int(artist["section"])
-        lines.append(f"\\zpregisterartist{{{artist['slug']}}}{{{name}}}{{{label}}}"
-                     f"{{{link_label}}}{{{has_section}}}\n")
+        lines.append(f"\\zpregisterartist{{{artist['slug']}}}{{{link_label}}}{{{has_section}}}\n")
     return "".join(lines)
 
 
