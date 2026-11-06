@@ -78,8 +78,8 @@ Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Tex
 |---|---|---|
 | `\vers{}` | bez štítku (sloka bez čísla, poznámka) | `\vers{\emph{Mluvené.}}` |
 | `\vers[n]{}` | `n.` | `\vers[2]{\chord{C}Text}` |
-| `\chorus{}` | `R:` | `\chorus{\chord{G}Text}` |
-| `\chorus[n]{}` | `Rn:` | `\chorus[2]{\chord{G}Text}` |
+| `\chorus{}` | `R.` | `\chorus{\chord{G}Text}` |
+| `\chorus[n]{}` | `Rn.` | `\chorus[2]{\chord{G}Text}` |
 | `\prechorus{}`, `\prechorus[n]{}` | `P:`, `Pn:` | `\prechorus{\chord{F}Text}` |
 | `\bridge{}`, `\bridge[n]{}` | `B:`, `Bn:` | `\bridge{\chord{Am}Text}` |
 | `\solo{}`, `\solo[n]{}` | `S:`, `Sn:` | `\solo[1]{\chords{C G Am F}}` |
@@ -87,7 +87,7 @@ Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Tex
 | `\coda{}` | `C:` | `\coda{\chords{C G C}}` |
 | `\speaker{jméno}{}` | kurzívní jméno přímo v textu | `\speaker{On}{Text}` |
 
-Štítky (`1.`, `R:`, `I:`, `S:`, ...) mají společnou pevnou šířku `\labelw` (25 pt), takže text za štítkem vždy začíná na stejném místě. Příkaz `\nv` odsadí řádek přesně o tuto šířku, tedy pod text za štítkem; používá se pro neoznačené řádky a místo ručního `\hspace`.
+Štítky (`1.`, `R.`, `I:`, `S:`, ...) mají společnou pevnou šířku `\labelw` (25 pt), takže text za štítkem vždy začíná na stejném místě. Příkaz `\nv` odsadí řádek přesně o tuto šířku, tedy pod text za štítkem; používá se pro neoznačené řádky a místo ručního `\hspace`.
 
 #### Značky opakování a poznámky
 

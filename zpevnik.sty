@@ -29,13 +29,13 @@
 \pdfminorversion=7
 
 %PAGE LAYOUT AND NAMED LENGTHS
-% The label (R:, 1., I:, ...) hangs in the left margin by this much: the first
+% The label (R., 1., I:, ...) hangs in the left margin by this much: the first
 % line of a paragraph starts left of the text block. With indentfirst this also
 % holds for the first paragraph after a heading.
 \newcommand*{\zp@labelhang}{10mm}
 \setlength{\parindent}{-\zp@labelhang}
 % Width of a label: the text after it always starts at the same place. It must
-% hold the widest label (R1:, 24 pt).
+% hold the widest label (R1., 24 pt).
 \newcommand*{\labelw}{25pt}
 % Gap between blocks (verse, chorus, ...). It can shrink to zero so that a song
 % still fits on its page.
@@ -139,11 +139,11 @@
 \newcommand{\nv}{\hspace*{\labelw}}%no verse: indents the first line of unlabelled text under the text after a label
 % A block is a labelled paragraph with the block gap above it.
 \newcommand{\zp@block}[2]{\zp@blockgap\lbl{#1}{#2}}
-% The optional number of a part (\chorus[2]) follows its letter: "R2:". Without
+% The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
 % a number, or with an empty one, only the letter is printed.
 \newcommand*{\zp@number}[1]{\IfNoValueTF{#1}{}{#1}}
 % The text may contain empty lines (+m), as it did with \newcommand.
-\NewDocumentCommand{\chorus}{o +m}{\zp@block{R\zp@number{#1}:}{#2}}
+\NewDocumentCommand{\chorus}{o +m}{\zp@block{R\zp@number{#1}.}{#2}}
 \NewDocumentCommand{\bridge}{o +m}{\zp@block{B\zp@number{#1}:}{#2}}
 \NewDocumentCommand{\prechorus}{o +m}{\zp@block{P\zp@number{#1}:}{#2}}
 \NewDocumentCommand{\solo}{o +m}{\zp@block{S\zp@number{#1}:}{#2}}
