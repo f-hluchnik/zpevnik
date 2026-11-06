@@ -99,13 +99,17 @@ awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 R. y)" 'BEGIN {d = cue - verse
   || { echo "spacing.tex: a cue after a block is not on the line of the block" >&2; exit 1; }
 awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 B. y)" 'BEGIN {exit !(cue - verse > 35)}' \
   || { echo "spacing.tex: a cue after an empty line has no block gap" >&2; exit 1; }
-# Labels are right-aligned: the dots of "9." and "10." line up, and all texts start at the same place.
+# Labels, standalone cues and speaker names are right-aligned: the dots of "9." and "10." line up, and all texts start at the same place.
 edge() { # page, word, bbox attribute (xMin or xMax)
   pdftotext -f "$1" -l "$1" -bbox spacing.pdf - | awk -F'"' -v w="$2" -v a="$3" '$0 ~ ">" w "<" {print (a == "min" ? $2 : $6); exit}'
 }
-same() { awk -v a="$1" -v b="$2" 'BEGIN {d = a - b; exit !(a != "" && b != "" && d > -0.05 && d < 0.05)}'; }
+same() { awk -v a="$1" -v b="$2" -v t="${3:-0.05}" 'BEGIN {d = a - b; exit !(a != "" && b != "" && d > -t && d < t)}'; }
 same "$(edge 6 9. max)" "$(edge 6 10. max)" \
   || { echo "spacing.tex: the dots of 9. and 10. do not line up" >&2; exit 1; }
 same "$(edge 6 Nine min)" "$(edge 6 Ten min)" && same "$(edge 6 Nine min)" "$(edge 6 Chorus min)" \
   || { echo "spacing.tex: the texts of labelled blocks do not start at the same place" >&2; exit 1; }
+same "$(edge 6 R. max)" "$(edge 6 9. max)" \
+  || { echo "spacing.tex: a standalone cue is not aligned with the labels" >&2; exit 1; }
+same "$(edge 6 A: max)" "$(edge 6 9. max)" 1 && same "$(edge 6 Speaker min)" "$(edge 6 Nine min)" \
+  || { echo "spacing.tex: a speaker name is not aligned with the labels (the italic colon may be 1 pt off)" >&2; exit 1; }
 echo "spacing OK"

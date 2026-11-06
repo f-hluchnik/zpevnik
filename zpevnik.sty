@@ -141,7 +141,8 @@
 % The label is right-aligned in the box \labelw, so that the dots line up (9.
 % above 10.) and a short label such as "R." stays next to its text. A fixed gap
 % completes the hang, so the text starts at the margin like the lines under it.
-\newcommand{\lbl}[1]{\makebox[\labelw][r]{\textbf{#1}}\hspace{\dimexpr\zp@labelhang-\labelw\relax}}
+\newcommand{\zp@labelbox}[1]{\makebox[\labelw][r]{#1}\hspace{\dimexpr\zp@labelhang-\labelw\relax}}
+\newcommand{\lbl}[1]{\zp@labelbox{\textbf{#1}}}
 \newcommand{\nv}{\hspace*{\labelw}}%no verse: indents the first line of unlabelled text under the text after a label
 % A block is a labelled paragraph with the block gap above it.
 % \ignorespaces: whether the text starts on a new line of the source must not matter.
@@ -163,10 +164,10 @@
 % A cue marks where a part that is written out elsewhere starts again ("R.",
 % "B.", "1."). After an empty line it is a block of its own with the block gap;
 % after a block or inside one it is appended to the line.
-\newcommand{\cue}[1]{\ifvmode\zp@blockgap\fi\textbf{#1.}}
-% Change of singer: the name in italics right in the text (it is wider than
-% \labelw), with the normal gap above the block.
-\newcommand{\speaker}[2]{\zp@blockgap\emph{#1:} #2}
+\newcommand{\cue}[1]{\ifvmode\zp@blockgap\lbl{#1.}\ignorespaces\else\textbf{#1.}\fi}
+% Change of singer: the name in italics in the label column (a name wider than
+% the box sticks out to the left), with the normal gap above the block.
+\newcommand{\speaker}[2]{\zp@blockgap\zp@labelbox{\emph{#1:}}{\ignorespaces#2}}
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repeat
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitative
 % A note belongs to the block that follows: that block gets no gap (as after a

@@ -85,7 +85,7 @@ Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Tex
 | `\solo{}`, `\solo[n]{}` | `S.`, `Sn.` | `\solo[1]{\chords{C G Am F}}` |
 | `\intro{}` | `I.` | `\intro{\chords{Am F G}}` |
 | `\coda{}` | `C.` | `\coda{\chords{C G C}}` |
-| `\speaker{jméno}{}` | kurzívní jméno přímo v textu | `\speaker{On}{Text}` |
+| `\speaker{jméno}{}` | kurzívní jméno s dvojtečkou ve sloupci štítků, zarovnané doprava | `\speaker{On}{Text}` |
 
 Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnané doprava, takže tečky jsou pod sebou (`9.` nad `10.`) a krátký štítek jako `R.` stojí těsně u textu. Štítek má pevnou šířku `\labelw` (25 pt) a za ním pevnou mezeru, takže text bloku vždy začíná na levém okraji, stejně jako řádky pod ním; na tom, jestli text ve složených závorkách začíná na novém řádku, nezáleží. Příkaz `\nv` odsadí řádek o šířku štítku; používá se pro neoznačené řádky a místo ručního `\hspace`.
 
@@ -98,7 +98,7 @@ Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnan�
 | `\rep{}` | označení repetice v textu | `\rep{\chord{C}Text}` |
 | `\rec{}` | označení recitativu v textu | `\rec{Text}` |
 
-`\cue` se chová podle místa: po prázdném řádku je to samostatný blok s mezerou nad sebou, za blokem nebo uvnitř něj se připojí na konec řádku (`\vers[1]{...} \cue{R}`).
+`\cue` se chová podle místa: po prázdném řádku je to samostatný blok s mezerou nad sebou a se štítkem zarovnaným jako ostatní štítky, za blokem nebo uvnitř něj se připojí na konec řádku (`\vers[1]{...} \cue{R}`).
 
 #### Řádky a oddělovače
 
@@ -114,7 +114,7 @@ Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnan�
 Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
 
 - Mezi bloky (sloka, refrain, intro, ...) je jedna mezera `\blocksep` (20 pt), která se smrští až na nulu, když by se písnička jinak nevešla na stranu. Blok bez štítku je `\vers{...}`.
-- Střídání zpěváků (`On:`, `Ona:`) je `\speaker{On}{text}`: kurzívní jméno přímo v textu a normální mezera nad blokem. Jméno je širší než štítek, proto se nepíše přes `\vers`.
+- Střídání zpěváků (`On:`, `Ona:`) je `\speaker{On}{text}`: kurzívní jméno ve sloupci štítků (zarovnané doprava jako štítky; delší jméno přečnívá doleva) a normální mezera nad blokem. Jméno se nepíše přes `\vers`, protože je kurzívou a s dvojtečkou.
 - Skupiny řádků uvnitř sloky odděluje `\groupbreak`.
 - Čárkovaná čára mezi těsnými slokami je `\blockrule{délka v cm}`, plná čára mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem.
 - `\note{}` (capo apod.) patří k následujícímu bloku: mezeru pod sebou nemá, nad sebou ji má (kromě začátku písničky a místa za `\subtitle`/`\seealso`). Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
