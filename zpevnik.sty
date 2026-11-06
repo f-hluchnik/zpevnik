@@ -1,10 +1,15 @@
 % zpevnik.sty -- packages and macros of the songbook.
 % Everything a song needs lives here, so one song compiles with just
-% \documentclass + \usepackage{zpevnik} (the Overleaf workflow, D-005).
+% \documentclass + \usepackage{zpevnik} (the Overleaf workflow).
 % The document class, metadata and the list of songs stay in zpevnik.tex.
+%
+% Public interface used by the generated files and by zpevnik.tex:
+% \songinclude, \zpregisterartist, \zpversion and \zprule. Internal macros
+% carry the \zp@ prefix and may be renamed freely.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{zpevnik}[2026/11/03 Songbook packages and macros]
+\ProvidesPackage{zpevnik}[2026/11/06 Songbook packages and macros]
 
+%PACKAGES AND PDF SETTINGS
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[czech, british]{babel}
 \RequirePackage[autostyle]{csquotes}
@@ -18,49 +23,184 @@
 \RequirePackage{amssymb}
 \RequirePackage{xcolor}
 \RequirePackage{indentfirst}
-%poslední balík
+% hyperref goes last: it redefines commands of the packages above
 \RequirePackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true, linkcolor=gray}
+\pdfminorversion=7
 
-%příkazy pro hypertextové odkazy
+%PAGE LAYOUT AND NAMED LENGTHS
+% The label (R:, 1., I:, ...) hangs in the left margin by this much: the first
+% line of a paragraph starts left of the text block. With indentfirst this also
+% holds for the first paragraph after a heading.
+\newcommand*{\zp@labelhang}{10mm}
+\setlength{\parindent}{-\zp@labelhang}
+% Width of a label: the text after it always starts at the same place. It must
+% hold the widest label (R1:, 24 pt).
+\newcommand*{\labelw}{25pt}
+% Gap between blocks (verse, chorus, ...). It can shrink to zero so that a song
+% still fits on its page.
+\newcommand*{\zp@blockgapsize}{20pt}
+\newlength{\blocksep}
+\setlength{\blocksep}{\zp@blockgapsize minus \zp@blockgapsize}
+% In columns (multicols) the gap must not shrink: when balancing the columns,
+% multicol would squeeze the blocks to zero.
+\AddToHook{env/multicols/begin}{\setlength{\blocksep}{\zp@blockgapsize}}
+% Shifts built into the macros (negative = up). The values are the ones the
+% macros used to hard-code.
+\newlength{\subshift}\setlength{\subshift}{-10mm}   % \sub: subtitle moves up to the title
+\newlength{\hylshift}\setlength{\hylshift}{-15pt}   % \hyl: link line moves up to the previous block
+\newlength{\groupshift}\setlength{\groupshift}{-2mm} % \groupbreak: space between line groups in a verse
+\newlength{\songlinkgap}\setlength{\songlinkgap}{2mm} % \song: title to the "obsah" link
+% The shifts of the dashed rule are fractions of the line height, not fixed
+% points, so the rule also fits in a song set in a smaller size (\large). Before
+% the rule: -13/18 of a line (13 pt at \Large); after it: +4/18, so the chords
+% of the next block do not touch it.
+\newcommand{\ruleshiftbefore}{\dimexpr-\baselineskip*13/18\relax} % rule moves up to the last line of the previous block
+\newcommand{\ruleshiftafter}{\dimexpr\baselineskip*4/18\relax}    % \zp@nogap replaces the gap before the next block
+% Dashed rule between tight verses (dashrule: thickness, dash pattern).
+\newcommand*{\zp@dashthickness}{1pt}
+\newcommand*{\zp@dashpattern}{3pt}
+% Solid rule between parts of a song and in the contents. One macro, so the
+% book and the generated contents draw the same line.
+\newlength{\zprulethickness}\setlength{\zprulethickness}{0.03cm}
+\newcommand*{\zprule}[1]{\rule{#1}{\zprulethickness}}
+% Artist links in the top-right corner of a page: vertical position as a
+% fraction of the page height, distance of the right edge from the page edge,
+% gap between two links, and how many links a song may have.
+\newcommand*{\zp@artistheight}{0.98}
+\newlength{\zp@artistedge}\setlength{\zp@artistedge}{1cm}
+\newcommand*{\zp@artistgap}{1.5em}
+\newcommand*{\zp@maxartists}{2}
+
+% \placetextbox{x}{y}{text}: typewriter text at (x\paperwidth, y\paperheight) of the page
+\newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\noindent\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{#3}\end{large}}\end{minipage}}}}}
+
+%SONG HEADER
+% Links: \hylo links to a target, \hyt creates one.
 \newcommand{\hylo}[2]{\hyperlink{#1}{#2}}
-\newcommand{\hyl}[2]{\global\zp@topfalse\vspace{\hylshift}\nv\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
 \newcommand{\hyt}[1]{\hypertarget{#1}{}}
+% Id of the song for \song, set by \songinclude (generated/include.tex). Without
+% it no link target is created. The group keeps a font change inside a song
+% (e.g. \large in a song that does not fit otherwise) from leaking into the next one.
+\newcommand{\zp@songid}{}
+\newcommand{\songinclude}[1]{\begingroup\gdef\zp@songid{#1}\include{pisnicky/#1}\endgroup}
+\newcommand{\zp@songtarget}{\ifx\zp@songid\empty\else\hyt{\zp@songid}\gdef\zp@songid{}\fi}
+% Small capitals as the old \sc did: \normalfont also drops the bold that the
+% headings set, so only the title (\textbf in \song) stays bold.
+\newcommand*{\zp@smallcaps}{\normalfont\scshape}
+\newcommand{\song}[1]{%
+  \global\zp@toptrue\global\zp@nogapfalse\zp@songtarget\zp@artistreset
+  \section*{\Huge\zp@smallcaps\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{\songlinkgap} $\rightarrow$~obsah}}
+}
+% \@nobreakfalse: right after a heading (\song) LaTeX would drop the space above
+% \subsection*; the subtitle needs it.
+\newcommand{\sub}[1]{\vspace{\subshift}\@nobreakfalse\subsection*{\large\zp@smallcaps{#1}}}
 
-%id písničky pro \song: nastavuje ho \songinclude (generated/include.tex), bez něj se cíl odkazu nevytvoří
-\newcommand{\zpsongid}{}
-%skupina: písmo (např. \large v písni, která se jinak nevejde) neprosakuje do dalších písní
-\newcommand{\songinclude}[1]{\begingroup\gdef\zpsongid{#1}\include{pisnicky/#1}\endgroup}
-\newcommand{\zpsongtarget}{\ifx\zpsongid\empty\else\hyt{\zpsongid}\gdef\zpsongid{}\fi}
+% \artist[label]{slug}: link to the artist's section in the top-right corner
+% of the song's page. Put it on the line of \song, once per song; for two
+% artists write \artist{a}\artist{b} (the first is rightmost, a third is
+% ignored). The text comes from the registry (link_label, else label) unless
+% given. An empty or unknown slug, or an artist without a section, prints
+% nothing. The links are right-aligned to the right margin. The list is built
+% here and typeset at shipout; \song starts a new list.
+\newcount\zp@artistcount
+\newbox\zp@artistbox
+% minipage and parbox are nested to keep the vertical placement and the font in
+% effect at shipout (\Large in the book); \noindent cancels the negative
+% \parindent of this style. The kern puts the right edge of the links
+% \zp@artistedge from the page edge.
+\newcommand{\zp@artistpicture}{%
+  \setbox\zp@artistbox\hbox{\zp@artistlist}%
+  \put(0,\LenToUnit{\zp@artistheight\paperheight}){\vtop{{\null}\hbox to \paperwidth{\hss
+    \begin{minipage}{\wd\zp@artistbox}\noindent{\parbox{\wd\zp@artistbox}{\noindent\unhcopy\zp@artistbox}}\end{minipage}\kern\zp@artistedge}}}}
+\newcommand{\zp@artistreset}{\global\zp@artistcount=0 \global\let\zp@artistlist\@empty}
+\zp@artistreset
+\newcommand{\zp@artistlink}[2]{\hyperlink{#1}{$\rightarrow$~#2}}
+% Adds a link (slug #1, text #2): the first one is registered for the page and
+% stays rightmost, the second goes to its left.
+\newcommand{\zp@addartist}[2]{%
+  \ifnum\zp@artistcount=0
+    \AddToShipoutPictureFG*{\zp@artistpicture}%
+    \gdef\zp@artistfirst{\zp@artistlink{#1}{#2}}%
+    \global\let\zp@artistlist\zp@artistfirst
+  \else
+    \gdef\zp@artistlist{\zp@artistlink{#1}{#2}\hspace{\zp@artistgap}\zp@artistfirst}%
+  \fi
+  \global\advance\zp@artistcount by 1 }
+\NewDocumentCommand{\artist}{o m}{%
+  \ifartistsection{#2}{%
+    \ifnum\zp@artistcount<\zp@maxartists
+      \IfNoValueTF{#1}%
+        {\zp@addartist{#2}{\artistlinklabel{#2}}}%
+        {\zp@addartist{#2}{#1}}%
+    \fi
+  }{}%
+}
 
+%BLOCKS AND LABELS
+\newcommand{\lbl}[1]{\makebox[\labelw][l]{\textbf{#1}}}
+\newcommand{\nv}{\hspace*{\labelw}}%no verse: indents the first line of unlabelled text under the text after a label
+\newcommand{\refrain}[1]{\zp@blockgap\lbl{R:}{#1}}%refrain
+\newcommand{\refrainn}[2]{\zp@blockgap\lbl{R{#1}:}{#2}}%numbered refrain
+\newcommand{\refsm}[1]{\textbf{R{#1}.}}%small refrain
+\newcommand{\refsme}[1]{\zp@blockgap\textbf{R{#1}.}}%small refrain, separated from the verse
+\newcommand{\intro}[1]{\zp@blockgap\lbl{I:}{#1}}%intro
+\newcommand{\bridge}[1]{\zp@blockgap\lbl{B:}{#1}}%bridge
+\newcommand{\bridgesm}[1]{\textbf{B.}}%small bridge
+\newcommand{\prechorus}[1]{\zp@blockgap\lbl{P:}{#1}}%pre-chorus
+\newcommand{\solo}[1]{\zp@blockgap\lbl{S:}{#1}}%solo
+\newcommand{\solon}[2]{\zp@blockgap\lbl{S{#1}:}{#2}}%numbered solo
+\newcommand{\solosm}[1]{\zp@blockgap\lbl{S{#1}.}}%small solo
+\newcommand{\cod}[1]{\zp@blockgap\lbl{C:}{#1}}%coda
+% An empty number makes an unnumbered verse (no label, text aligned like the others).
+\newcommand{\vers}[2]{\zp@blockgap\lbl{\if\relax\detokenize{#1}\relax\else#1.\fi}{#2}}%verse
+% Change of singer: the name in italics right in the text (it is wider than
+% \labelw), with the normal gap above the block.
+\newcommand{\spk}[2]{\zp@blockgap\emph{#1:} #2}%speaker
+\newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repeat
+\newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitative
+% A note belongs to the block that follows: that block gets no gap (as after a
+% separator). The note itself has the normal gap above it, except at the start
+% of a song.
+\newcommand{\note}[1]{\ifvmode\ifzp@top\else\zp@blockgap\fi\fi\emph{#1}\global\zp@nogaptrue\global\zp@topfalse}
+% Link line to another song, pulled up to the previous block.
+\newcommand{\hyl}[2]{\global\zp@topfalse\vspace{\hylshift}\nv\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
 
-% předsazení prvního řádku odstavce: štítek (\lbl) visí v levém okraji; díky indentfirst
-% i v prvním odstavci za nadpisem (H6)
-\setlength{\parindent}{-10mm}
+%SEPARATORS AND VERTICAL SPACING
+\newif\ifzp@top % nothing after the song title (and subtitle) yet: a note above has no gap. \song raises the flag; a block, a note and \hyl lower it.
+\newif\ifzp@nogap % the next block has no gap (a separator or a note already replaced it). Always set globally (also inside a group, e.g. the argument of \solo); \song lowers it.
+\newcommand{\zp@blockgap}{\global\zp@topfalse\ifzp@nogap\global\zp@nogapfalse\else\vspace{\blocksep}\fi}
+% Separators replace the gap before the next block (via \zp@nogap), they do not remove it.
+\newcommand{\groupbreak}{\\\vspace{\groupshift}\\}% space inside a verse between groups of lines
+\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\nv\hdashrule{#1cm}{\zp@dashthickness}{\zp@dashpattern}\vspace{\ruleshiftafter}\global\zp@nogaptrue}% dashed rule between tight verses
+% Solid rule between parts of a song. \par: the next block starts a new
+% paragraph (like an empty line after center).
+\newcommand{\partrule}{\begin{center}\zprule{\textwidth}\end{center}\par\global\zp@nogaptrue}
+
+%CHORDS: \chord{X}text
+% A chord has zero width but does not overlap the next chord on the same line.
+% Rule: a chord and its text take max(text width, chord width + \chordsep);
+% between two chords without text the width is chord width + \chordrunsep.
+% The place where chords would overlap is widened; the text does not move
+% otherwise. \chord reads the text up to the next chord, measures it and
+% returns it unchanged (one pass, nothing is stored in the .aux). This holds in
+% all songs: spaces in the text are not typed by hand, a pause is \gap{n}, a
+% line of chords only is \chords{...}.
 \definecolor{chordred}{RGB}{184, 39, 39}
-\definecolor{chordblack}{RGB}{0, 0, 0}
-%AKORDY: \chord{X}text (D-123)
-% Akord má nulovou šířku, ale nepřekryje další akord na stejném řádku.
-% Pravidlo: akord a jeho text zabírají max(šířka textu, šířka akordu + \chordsep);
-% mezi dvěma akordy bez textu je šířka akordu + \chordrunsep.
-% Místo, kde by se akordy překrývaly, se rozšíří; text se jinak nehýbe.
-% \chord přečte text až k dalšímu akordu, změří ho a vrátí beze změny (jeden
-% průchod, nic se neukládá do .aux). Platí ve všech písních; mezery v textu
-% se nepíšou ručně, pauza je \gap{n}, řádek samých akordů je \chords{...}.
 \newcommand*{\chordsep}{0.5em}
 \newcommand*{\chordrunsep}{1em}
 \newcommand*{\gapunit}{0.5em}
-\newcommand*{\zp@hyphenroom}{.3em} % o kolik je mezera se spojovníkem širší než spojovník
-\newcommand*{\zp@notext}{.5pt}     % užší text mezi akordy se nepočítá (akordy hned za sebou)
+\newcommand*{\zp@hyphenroom}{.3em} % how much wider the gap with a hyphen is than the hyphen
+\newcommand*{\zp@notext}{.5pt}     % narrower text between chords does not count (chords right after each other)
 \newsavebox\zp@chordbox
 \newsavebox\zp@segbox
 \newtoks\zp@segtoks
-\newdimen\zp@pend % mezera, kterou si před sebe vloží další akord (nastavuje ji předchozí)
+\newdimen\zp@pend % gap that the next chord inserts before itself (set by the previous one)
 \newdimen\zp@pad
 \newif\ifzp@afterletter
 \newif\ifzp@nextletter
-\newif\ifzp@split % mezera rozdělí slovo
-% Poloha každého akordu se zapisuje do \jobname.chords pro tools/chord_gaps.py.
+\newif\ifzp@split % the gap splits a word
+% The position of every chord is written to \jobname.chords for tools/chord_gaps.py.
 \newwrite\zp@trace
 \AtBeginDocument{\immediate\openout\zp@trace=\jobname.chords\relax}
 \def\zp@tracechord{%
@@ -68,13 +208,13 @@
   \edef\zp@tmp{\write\zp@trace{\noexpand\the\noexpand\pdflastxpos\space\noexpand\the\noexpand\pdflastypos\space\noexpand\thepage\space\number\wd\zp@chordbox}}%
   \zp@tmp}
 \edef\zp@utftwo{\expandafter\string\csname UTFviii@two@octets\endcsname}
-% je následující token \zp@next písmeno (ASCII, nebo dvoubajtové UTF-8 jako č, ž, é)?
+% Is the next token \zp@next a letter (ASCII, or a two-byte UTF-8 one like č, ž, é)?
 \def\zp@testnextletter{%
   \zp@nextletterfalse
   \ifcat\noexpand\zp@next a\zp@nextlettertrue\fi
   \edef\zp@tmp{\noexpand\in@{\zp@utftwo}{\meaning\zp@next}}\zp@tmp
   \ifin@\zp@nextlettertrue\fi}
-% mezera \zp@pad; uvnitř slova s vystředěným spojovníkem (mezera se rozšíří, aby se vešel)
+% The gap \zp@pad; inside a word it holds a centred hyphen (the gap widens to fit it).
 \def\zp@space{%
   \ifzp@split
     \settowidth\dimen@{-}\advance\dimen@\zp@hyphenroom\relax
@@ -84,15 +224,15 @@
 \newcommand{\chord}[1]{%
   \leavevmode
   \zp@afterletterfalse
-  \ifnum\lastnodetype=\z@ \zp@afterlettertrue\fi % před akordem je znak
-  \ifnum\lastnodetype=7 \zp@afterlettertrue\fi   % nebo ligatura
+  \ifnum\lastnodetype=\z@ \zp@afterlettertrue\fi % a character before the chord
+  \ifnum\lastnodetype=7 \zp@afterlettertrue\fi   % or a ligature
   \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#1}\\
 				\mbox{}\end{tabular}}}%
   \zp@pad\zp@pend \global\zp@pend\z@
   \zp@segtoks{}%
   \futurelet\zp@next\zp@chordfirst}
 \def\zp@chordfirst{\zp@testnextletter\zp@scan@}
-% sbírá tokeny až k dalšímu \chord, \chords, \\, }, \par, \end nebo \begin
+% Collects tokens up to the next \chord, \chords, \\, }, \par, \end or \begin.
 \def\zp@scan{\futurelet\zp@next\zp@scan@}
 \def\zp@scan@{%
   \let\zp@do\zp@grabtok
@@ -109,10 +249,10 @@
 \def\zp@grabtok#1{\zp@segtoks\expandafter{\the\zp@segtoks#1}\zp@scan}
 \def\zp@grabgroup#1{\zp@segtoks\expandafter{\the\zp@segtoks{#1}}\zp@scan}
 \expandafter\def\expandafter\zp@grabspace\space{\zp@segtoks\expandafter{\the\zp@segtoks\space}\zp@scan}
-% #1 = 1, když text končí dalším akordem na stejném řádku
+% #1 = 1 when the text ends with another chord on the same line
 \def\zp@finish#1{%
   \ifnum#1=\@ne
-    \sbox\zp@segbox{\let\footnote\@gobble\the\zp@segtoks}% změřit bez vedlejších účinků
+    \sbox\zp@segbox{\let\footnote\@gobble\the\zp@segtoks}% measure without side effects
     \ifdim\wd\zp@segbox<\zp@notext\relax
       \global\zp@pend\dimexpr\wd\zp@chordbox+\chordrunsep-\wd\zp@segbox\relax
     \else
@@ -128,10 +268,11 @@
   \zp@tracechord
   \makebox[0pt][l]{\usebox\zp@chordbox}%
   \the\zp@segtoks}
-% záměrná mezera (pauza), #1 znaků po \gapunit
+% An intentional gap (pause), #1 characters of \gapunit.
 \newcommand{\gap}[1]{\hspace{\dimexpr\gapunit*#1\relax}}
-% akordy v řádku textu bez slov (intro, konec řádku), červeně, od sebe \chordrunsep;
-% \chords[0.55em]{...} zúží mezery jen v tomto řádku (dlouhý řádek, který se jinak zalomí)
+% Chords in a line of text without words (intro, end of a line), in red,
+% \chordrunsep apart; \chords[0.55em]{...} narrows the gaps in this line only
+% (a long line that would otherwise wrap).
 \newcommand{\chords}[2][\chordrunsep]{\begingroup
   \edef\zp@rowsep{\the\dimexpr#1\relax}%
   \leavevmode\zp@chords@#2 \zp@chordsend{} \endgroup}
@@ -142,84 +283,27 @@
 \def\zp@chordsmore@{\ifx\zp@next\zp@chordsend\expandafter\zp@chordsstop\else\hskip\zp@rowsep\relax\expandafter\zp@chords@\fi}
 \def\zp@chordsstop\zp@chordsend#1 {}
 \def\zp@chordsend{}
-%\newcommand{\chord}[2][l]{} % alternativní příkaz pro akordy pro zpěvních bez akordů
-\pdfminorversion=7
 
-%%KONVENCE
-	% charakteristiky akordů kromě moll se píšou do horního indexu
-	% pochody v basu se píšou do dolního indexu (\bas)
-%AKORDY
-\newcommand{\bas}[1]{/\textsubscript{#1}}%dolní index pro přechody v basu
-\newcommand{\add}[1]{\textsuperscript{#1}}%manuální horní index
-\newcommand{\maj}{\textsuperscript{$\triangle$}}%maj7 akordy
-\newcommand{\sus}[1]{\textsuperscript{sus#1}}%sus[] akordy
-\newcommand{\dm}{\textsuperscript{\Large{$\circ$}}}%dim akordy (zmenšený septakord c-es-ges-a, diminished)
-\newcommand{\hdm}{\textsuperscript{\large{$\varnothing$}}}%m7/5- akordy (malý zmenšený septakord c-es-ges-b, half diminished)
-\newcommand{\+}{\textsuperscript{+}}%aug akordy (C-E-G#)
-\newcommand{\bb}{\textsuperscript{\Large$\flat$}}%béčko
-\newcommand{\kk}{\textsuperscript{\#}}%křížek
+%CHORD SYMBOLS
+% Convention: chord qualities other than minor are superscripts; bass
+% movements are subscripts (\bas).
+\newcommand{\bas}[1]{/\textsubscript{#1}}%subscript for bass movements
+\newcommand{\add}[1]{\textsuperscript{#1}}%manual superscript
+\newcommand{\maj}{\textsuperscript{$\triangle$}}%maj7 chords
+\newcommand{\sus}[1]{\textsuperscript{sus#1}}%sus[] chords
+\newcommand{\dm}{\textsuperscript{\Large$\circ$}}%dim chords (diminished seventh c-es-ges-a)
+\newcommand{\hdm}{\textsuperscript{\large$\varnothing$}}%m7/5- chords (half diminished seventh c-es-ges-b)
+\newcommand{\+}{\textsuperscript{+}}%aug chords (C-E-G#)
+\newcommand{\bb}{\textsuperscript{\Large$\flat$}}%flat
+\newcommand{\kk}{\textsuperscript{\#}}%sharp
 \newcommand{\2}{\textsuperscript{2}}%2
 \newcommand{\4}{\textsuperscript{4}}%4
 \newcommand{\5}{\textsuperscript{5}}%5
 \newcommand{\6}{\textsuperscript{6}}%6
 \newcommand{\7}{\textsuperscript{7}}%7
 \newcommand{\9}{\textsuperscript{9}}%9
-\newcommand{\note}[1]{\ifvmode\ifzp@top\else\zp@blockgap\fi\fi\emph{#1}\global\zp@nogaptrue\global\zp@topfalse}%poznámka patří k následujícímu bloku: ten nemá mezeru (jako za oddělovačem); sama má normální mezeru nad sebou, kromě začátku písničky
 
-%MEZERY
-%horizontální
-%šířka štítku (R:, 1., I:, ...): text za štítkem vždy začíná na stejném místě (C5); musí se do ní vejít nejširší štítek (R1:, 24 pt)
-\newcommand*{\labelw}{25pt}
-\newcommand{\lbl}[1]{\makebox[\labelw][l]{\textbf{#1}}}
-\newcommand{\nv}{\hspace*{\labelw}}%no verse - odsazení prvního řádku pro neoznačené texty, pod text za štítkem
-%vertikální
-%mezera mezi bloky (sloka, refrén, ...): 20 pt, smrštitelná až na nulu, aby se píseň vešla na stránku (D-124)
-\newlength{\blocksep}
-\setlength{\blocksep}{20pt minus 20pt}
-%ve sloupcích (multicols) se mezera nesmršťuje: multicol by při vyvažování sloupců stlačil bloky na nulu
-\AddToHook{env/multicols/begin}{\setlength{\blocksep}{20pt}}
-%posuny zabudované v makrech (záporné = nahoru); hodnoty jsou ty, které makra měla dosud napevno (V6)
-\newlength{\subshift}\setlength{\subshift}{-10mm}%\sub: podnázev se posune nahoru k názvu písně
-\newlength{\hylshift}\setlength{\hylshift}{-15pt}%\hyl: řádek s odkazem se posune nahoru k předchozímu bloku
-%posuny čáry jsou zlomky řádkování (\baselineskip), ne pevné body, aby čára seděla i v písni s menším písmem (\large); před čárou -13/18 řádku (při \Large 13 pt), za ní +4/18 (akordy dalšího bloku se čáry nedotýkají)
-\newcommand{\ruleshiftbefore}{\dimexpr-\baselineskip*13/18\relax}%\blockrule: čára se posune nahoru, blíž k poslednímu řádku předchozího bloku
-\newcommand{\ruleshiftafter}{\dimexpr\baselineskip*4/18\relax}%\blockrule: za čárou; mezeru před dalším blokem nahrazuje \zp@nogap
-\newif\ifzp@top % nic za názvem písničky (a podnázvem) ještě nebylo: poznámka nad sebou nemá mezeru; \song vlajku zvedne, blok, poznámka a odkaz (\hyl) ji shodí
-\newif\ifzp@nogap % následující blok nemá mezeru (oddělovač nebo poznámka ji už nahradily); vždy se nastavuje globálně (i uvnitř skupiny, např. argumentu \solo); \song vlajku shodí
-\newcommand{\zp@blockgap}{\global\zp@topfalse\ifzp@nogap\global\zp@nogapfalse\else\vspace{\blocksep}\fi}
-%oddělovače: nahrazují mezeru před dalším blokem (\zp@nogap), ne ji rušují
-\newcommand{\groupbreak}{\\\vspace{-2mm}\\}%mezera uvnitř sloky mezi skupinami řádků
-\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\nv\hdashrule{#1cm}{1pt}{3pt}\vspace{\ruleshiftafter}\global\zp@nogaptrue}%čárkovaná čára mezi těsnými slokami
-\newcommand{\partrule}{\begin{center}\rule{\textwidth}{0.03cm}\end{center}\par\global\zp@nogaptrue}%plná čára mezi částmi písně; \par: další blok začíná nový odstavec (jako prázdný řádek za center, H6)
-
-%MAIN
-\newcommand{\song}[1]{\global\zp@toptrue\global\zp@nogapfalse\zpsongtarget\zpartistreset\section*{\Huge\sc\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{2mm} $\rightarrow$~obsah}}
-}%název
-% \@nobreakfalse: hned za nadpisem (\song) by LaTeX vynechal mezeru nad \subsection*; podnázev ji má (H6)
-\newcommand{\sub}[1]{\vspace{\subshift}\@nobreakfalse\subsection*{\large\expandafter\sc{#1}}}%podnázev
-\newcommand{\refrain}[1]{\zp@blockgap\lbl{R:}{#1}}%refrain
-\newcommand{\refrainn}[2]{\zp@blockgap\lbl{R{#1}:}{#2}}%číslovaný refrain
-\newcommand{\refsm}[1]{\textbf{R{#1}.}}%malý refrain
-\newcommand{\refsme}[1]{\zp@blockgap\textbf{R{#1}.}}%malý refrain oddělený od sloky
-\newcommand{\intro}[1]{\zp@blockgap\lbl{I:}{#1}}%intro
-\newcommand{\bridge}[1]{\zp@blockgap\lbl{B:}{#1}}%bridge
-\newcommand{\bridgesm}[1]{\textbf{B.}}%malý bridge
-\newcommand{\prechorus}[1]{\zp@blockgap\lbl{P:}{#1}}%pre-chorus
-\newcommand{\solo}[1]{\zp@blockgap\lbl{S:}{#1}}%solo
-\newcommand{\solon}[2]{\zp@blockgap\lbl{S{#1}:}{#2}}%solo
-\newcommand{\solosm}[1]{\zp@blockgap\lbl{S{#1}.}}%solo
-\newcommand{\cod}[1]{\zp@blockgap\lbl{C:}{#1}}%coda
-%prázdné číslo = neočíslovaná sloka (bez štítku, text zarovnaný jako u ostatních)
-\newcommand{\vers}[2]{\zp@blockgap\lbl{\if\relax\detokenize{#1}\relax\else#1.\fi}{#2}}%sloka
-%střídání zpěváků: kurzívní jméno přímo v textu (je širší než štítek \labelw), s normální mezerou nad blokem
-\newcommand{\spk}[2]{\zp@blockgap\emph{#1:} #2}%mluvčí
-\newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repetice
-\newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitativ
-
-% \placetextbox{x}{y}{text}: text psaným strojem na pozici (x\paperwidth, y\paperheight) stránky
-\newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\noindent\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{#3}\end{large}}\end{minipage}}}}}
-
-%SONG METADATA (print nothing; read by the generator and the converter, D-001, D-107)
+%SONG METADATA (print nothing; read by the generator and the converter)
 % \alttitle{Other title}   other name the song is known by; repeatable.
 % \toctitle{TOC title}     title in the contents and the sort key when it must
 %                          differ from \song, e.g. "Marie (Klus)".
@@ -228,11 +312,11 @@
 \newcommand{\toctitle}[1]{}
 \newcommand{\collection}[1]{}
 
-%ARTISTS REGISTRY
+%REGISTRY LOOKUPS
 % generated/artists.tex (tools/generate.py) registers every artist by slug.
 % The lookups print nothing for an unknown slug, and a missing file is fine,
-% so a single song still compiles without the generator (Overleaf, D-005).
-\makeatletter
+% so a single song still compiles without the generator (Overleaf).
+% \zpregisterartist is public: the generated file calls it.
 \newcommand{\zpregisterartist}[5]{%
   \expandafter\gdef\csname zp@name@#1\endcsname{#2}%
   \expandafter\gdef\csname zp@label@#1\endcsname{#3}%
@@ -247,57 +331,11 @@
 \newcommand{\artistlinklabel}[1]{\ifcsname zp@link@#1\endcsname\csname zp@link@#1\endcsname\fi}%
 \newcommand{\ifartistsection}[3]{%
   \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}
-
-% \artist[label]{slug}: link to the artist's section in the top-right corner
-% of the song's page (D-003). Put it on the line of \song, once per song; for
-% two artists write \artist{a}\artist{b} (the first is rightmost, a third is
-% ignored). The text comes from the registry (link_label, else label) unless given. An empty or
-% unknown slug, or an artist without a section, prints nothing.
-% The links are right-aligned to the right margin (D-113). The list is built
-% here and typeset at shipout; \song starts a new list.
-\newcount\zp@artistcount
-\newbox\zp@artistbox
-% minipage and parbox are nested like in the old \interpret, which keeps its
-% vertical placement and the font in effect at shipout (\Large in the book);
-% \noindent cancels the negative \parindent of this style.
-% The box around it puts the right edge of the links 1cm from the page edge.
-\newcommand{\zp@artistpicture}{%
-  \setbox\zp@artistbox\hbox{\zp@artistlist}%
-  \put(0,\LenToUnit{0.98\paperheight}){\vtop{{\null}\hbox to \paperwidth{\hss
-    \begin{minipage}{\wd\zp@artistbox}\noindent{\parbox{\wd\zp@artistbox}{\noindent\unhcopy\zp@artistbox}}\end{minipage}\kern1cm}}}}
-\newcommand{\zpartistreset}{\global\zp@artistcount=0 \global\let\zp@artistlist\@empty}
-\zpartistreset
-\newcommand{\zp@nolabel}{}
-\def\zp@nolabeldefault{\zp@nolabel}% what #1 expands to when no label is given
-\newcommand{\artist}[2][\zp@nolabel]{%
-  \def\zp@given{#1}%
-  \ifartistsection{#2}{%
-    \ifnum\zp@artistcount<2
-      \ifnum\zp@artistcount=0
-        \AddToShipoutPictureFG*{\zp@artistpicture}%
-        \ifx\zp@given\zp@nolabeldefault
-          \gdef\zp@itema{\hyperlink{#2}{$\rightarrow$~\artistlinklabel{#2}}}%
-        \else
-          \gdef\zp@itema{\hyperlink{#2}{$\rightarrow$~#1}}%
-        \fi
-        \global\let\zp@artistlist\zp@itema
-      \else
-        \ifx\zp@given\zp@nolabeldefault
-          \gdef\zp@itemb{\hyperlink{#2}{$\rightarrow$~\artistlinklabel{#2}}}%
-        \else
-          \gdef\zp@itemb{\hyperlink{#2}{$\rightarrow$~#1}}%
-        \fi
-        \gdef\zp@artistlist{\zp@itemb\hspace{1.5em}\zp@itema}%
-      \fi
-      \global\advance\zp@artistcount by 1
-    \fi
-  }{}%
-}
-\makeatother
 \InputIfFileExists{generated/artists}{}{}
 
 %VERSION
 % generated/version.tex (tools/generate.py) sets the real version: song count + 100.
-% Without it the colophon shows a visibly wrong placeholder.
+% Without it the colophon shows a visibly wrong placeholder. \zpversion is
+% public: zpevnik.tex prints it.
 \newcommand{\zpversion}{?.??}
 \InputIfFileExists{generated/version}{}{}

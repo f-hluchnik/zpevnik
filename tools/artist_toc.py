@@ -18,7 +18,7 @@ from tex_text import tex
 COLLECTION = "collection"
 COLUMNS = 2  # the index and the sections are both set in two columns
 HEADING_BREAK = "\n"  # in a registry name: a forced line break in the section heading
-INDEX_TO_SECTIONS_RULE = "\\begin{center}\\rule{10cm}{0.03cm}\\end{center}\n"
+INDEX_TO_SECTIONS_RULE = "\\begin{center}\\zprule{10cm}\\end{center}\n"
 
 
 def page_title(song: Song) -> str:

@@ -72,7 +72,7 @@ def letters_tex(songs: list[Song]) -> str:
         row + "\n",
         "\\vspace{5pt}\n\n",
         link(ARTIST_INDEX_ANCHOR, ARTIST_INDEX_LINK) + "\n",
-        "\\end{Large}\n\n\\rule{10cm}{0.03cm}\n\\end{center}\n\n\n",
+        "\\end{Large}\n\n\\zprule{10cm}\n\\end{center}\n\n\n",
         "\\begin{multicols}{2}\n",
     ]
     for letter, group in sections:
