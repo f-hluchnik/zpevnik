@@ -47,6 +47,7 @@ RENAMED_COMMANDS = {
     "sub": "\\subtitle", "spk": "\\speaker", "hyl": "\\seealso",
     "refsm": "\\cue{R}", "refsme": "\\cue{R}", "bridgesm": "\\cue{B}", "solosm": "\\cue{S}",
     "hyt": "\\hypertarget", "hylo": "\\hyperlink",
+    "nv": "\\vers{...} (a block without a label)", "lbl": "\\speaker{A}{...} or \\cue{...}",
 }
 RENAMED_COMMAND = re.compile(r"(?<!\\)\\(" + "|".join(RENAMED_COMMANDS) + r")(?![A-Za-z])")
 # A block without text only prints its label, which is what \cue is for. A second group after the
