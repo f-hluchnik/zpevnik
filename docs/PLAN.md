@@ -1,0 +1,90 @@
+# Zpěvník modernisation plan
+
+**Goal:** the songbook as a downloadable PDF *and* an online HTML songbook on the website, both built from the same LaTeX song files, with the technical debt paid off first ([DECISIONS.md](DECISIONS.md) D-100). Editions (song subsets) and a print edition are in scope too (D-121, D-122); the koledy songbook is not.
+
+Companion files: [TICKETS.md](TICKETS.md) (ordered, self-contained tickets and their status), [SESSIONS.md](SESSIONS.md) (tickets grouped into working sessions), [DECISIONS.md](DECISIONS.md) (agreed decisions and rationale), [HISTORY.md](HISTORY.md) (what was done, and notes for the article on the website). Helper files of finished phases and the original inventory are in [archive/](archive/); this plan as it was before the 6 Nov 2026 cleanup is in archive/snapshot-2026-11-06/.
+
+Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or visual review.
+
+## Principles
+
+1. **One source of truth:** the song files plus one artists registry. The table of contents, the include list, the artist index, the web pages and `songs.json` are all generated from them.
+2. **Song files say *what*, never *how far*:** a chord, a verse, an artist; never millimetres of space.
+3. **One song per page in the PDF is enforced by CI**, not by eye.
+4. **Generated files are produced at build time** (`make`), never committed (D-104). One song still compiles with just the style file (Overleaf, D-005).
+5. **Every change is checked against a baseline PDF**, built in the same CI job from the base commit with the same pinned TeX Live, and compared song by song (D-105, D-106).
+6. **Songs are ordered by Czech collation of their title**, never by file name (D-107).
+
+## Order of work (D-108, D-132)
+
+| WP | What | Status | Tickets |
+|---|---|---|---|
+| 0 | Safety net (pinned TeX Live, PDF diff, one-page check) | done | S1–S3 |
+| 1 | Artists registry, generated TOC and include list | done | R1–R14 |
+| 4 | Source hygiene | done | H1–H6 |
+| 2 | Chord spacing | done | C1–C5 |
+| 3 | Vertical spacing | done | V1–V9 |
+| Q | Code quality and final command names | done | Q1–Q6 |
+| 8 | Editions (song subsets), build version | **next** | E0–E5 |
+| 9 | Print | then | P1–P4 |
+| 5 | Converter and `songs.json` | later | J1–J5 |
+| 7 | Legal hygiene | later, before WP6 goes online | L1–L2 |
+| 6 | Website | later | W1–W7 |
+
+WP0–WP4 are described in HISTORY.md (results) and in the archived plan (the original problem statements). The cleanup came before the converter so that the converter is written once, against semantic macros only, and `songs.json` carries no layout (D-108). Editions and print were pulled ahead of the converter in D-132.
+
+---
+
+## WP-Q – Code quality (D-131)
+
+The refactoring is closed by a review of the code as a senior engineer would leave it:
+- `zpevnik.sty` ordered by topic, English comments with the reason, internals under `\zp@`, named constants, idiomatic optional arguments (`\NewDocumentCommand`), no dead code (Q1);
+- the Python tools: one registry module, one place for paths, one command-line style (Q2);
+- CI runs the assertions of the test documents, not just their compilation (Q3);
+- the song commands get their final names before the converter makes them its grammar: `\chorus`, `\coda`, `\subtitle`, `\speaker`, `\seealso`, optional numbers, one `\cue` for repeat marks (Q4), plus the last song-source leftovers and the decision on song footnotes (Q5).
+
+## WP8 – Editions (D-121)
+
+A song subset (first use: `zpevnik-lite`, a manual selection) built from the same files: a filter on the song list in `tools/generate.py`, an edition file per edition, edition title and version parameters, no dangling links, CI and release asset. The full book must not change. The same filter later serves the hide switch (L2). First, E0 makes the version name one build (`8.33.N`, D-133), which the edition releases and the print proof rely on.
+
+## WP9 – Print (D-122)
+
+A print build with its own page geometry from the same files, a check that every song still fits on a page, a preflighted proof and the owner's licensing check before selling. It needs WP8 only if the printed book is a subset.
+
+---
+
+## WP5 – Converter and `songs.json`
+
+**State.** Not started. The `tex2json.py` prototype mentioned in an early session is in neither repository, so the converter is written from scratch, against the command set after Q4 (D-108, D-131).
+
+**Design.** `songs.json` is a derived export: the LaTeX song files stay the only source (D-001), the converter parses them, the website renders the JSON. Conditions:
+1. Generated, never hand-edited.
+2. Carries a `schemaVersion`; a JSON Schema is validated in the CI of both repos (this is the contract between them).
+3. Semantic only, no layout.
+4. Published as a **release asset** of `zpevnik`; the web build downloads the version pinned in its `version.txt` instead of committing generated data into the web repo (D-110).
+5. One file for now (≈370 kB gzipped); split only if it passes a few MB.
+
+**Contents.** `version`, `songs[]` (`id`, `title`, `altTitles`, `artists`, `subtitle`, `see`, `order`, `page`, `footnotes`, `images`, `columns`, `blocks[]` → lines → chord/text segments), `artists[]` (from the registry).
+
+**Steps.** First the owner decides the remaining song quirks (score images get a `\score` command, echo lines, layout-only places; J0). Then the converter in `tools/`, strict (an unknown macro is an error), with snapshot tests and a whole-book parse (J1); `songs.json` with registry, metadata and `page` (J2); JSON Schema (J3); CI and release asset (J4); score images exported from the `.mscz` files with a pinned MuseScore, for the PDF and the web (J5, D-125).
+
+## WP7 – Legal hygiene (reasonable effort, not legal advice)
+
+Lyrics and arrangements are copyrighted unless public domain; a free PDF and a website are the same kind of "making available".
+1. `noindex` meta tag and `robots.txt` on the website; no sitemap (D-006, W6).
+2. [you] A short notice page on the site and in the PDF: non-commercial, contact address for removal requests (L1).
+3. A per-song hide switch, so any song can be removed from web and PDF within minutes (L2, using the edition filter).
+4. A **sold** printed edition is a different situation from a free PDF; check licensing (e.g. with OSA) before selling (P2).
+
+## WP6 – Website (`zpevnik-web`)
+
+The online songbook lives in the web repo but is clearly separate from the download page (D-103): the download page stays at `/`; the songbook lives under `/zpevnik/` with its own templates and navigation, and the download page links to it. The web build gets `songs.json` and the PDF from the release assets pinned in `version.txt` instead of committed files (D-110).
+1. `build.py` renders one page per song, an alphabetical index, artist pages and prev/next in book order (Jinja, no framework).
+2. Chord CSS (inline-block, the rule of D-123), font-size control, existing dark mode.
+3. Build-time search index over title, alternative titles, artist and lyrics (diacritics-insensitive), lazy-loaded.
+4. Screen wake-lock toggle.
+5. Later: transposition (with the Czech B/H convention), setlists, offline.
+
+## Open owner decisions
+
+Listed with what they block in [SESSIONS.md](SESSIONS.md) (*Owner decisions that gate sessions*).

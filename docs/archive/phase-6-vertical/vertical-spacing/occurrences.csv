@@ -1,0 +1,619 @@
+song,line,macro,argument,class,song without all of this macro,source line
+acrosstheuniverse,1,\vspace,-7pt,R1,spills without,\song{Across the Universe\footnote{Na albu Let It Be byla tato píseň dodatečně zpomalena a tím transponována do tóniny C\kk dur.}} \artist{beatles}\vspace{-7pt}
+acrosstheuniverse,5,\vspace,-45pt,R2,spills without,\vspace{-45pt}
+acrosstheuniverse,9,\ns,,N1,spills without,\ns
+acrosstheuniverse,10,\vspace,-10pt,R1,spills without,\vspace{-10pt}
+acrosstheuniverse,18,\ns,,N1,spills without,\ns
+acrosstheuniverse,24,\ns,,N1,spills without,\ns
+acrosstheuniverse,32,\ns,,N1,spills without,\ns
+alisongross,7,\ns,,N1,spills without,\ns
+alisongross,33,\ns,,N1,spills without,\ns
+alisongross,49,\ns,,N1,spills without,\ns
+alisongross,60,\ns,,N1,spills without,\ns
+allyouneedislove,4,\vspace,5mm,R3,,\vspace{5mm}
+allyouneedislove,29,\vspace,5mm,R3,,\vspace{5mm}
+allyouneedislove,31,\vspace,5mm,R3,,\vspace{5mm}
+andelska,2,\ns,,N1,spills without,\ns
+andelska,9,\ns,,N1,spills without,\ns
+andelska,23,\ns,,N1,spills without,\ns
+andelska,31,\ns,,N1,spills without,\ns
+andelska,45,\ns,,N1,spills without,\ns
+aztosemnusekne,2,\ns,,N1,spills without,\ns
+aztosemnusekne,4,\vspace,-3mm,R1,fits without,\vspace{-3mm}
+azvzletnouptaci,27,\vspace,3mm,R3,,\vspace{3mm}
+babickamary,3,\vspace,-9mm,R1,spills without,\vspace{-9mm}
+babickamary,15,\ns,,N1,spills without,\ns
+babickamary,40,\ns,,N1,spills without,\ns
+babickamary,49,\ns,,N1,spills without,\ns
+babickamary,69,\ns,,N1,spills without,\ns
+barbarskepobrezi,2,\ns,,N1,fits without,\ns
+barbarskepobrezi,3,\vspace,-10pt,R1,fits without,\vspace{-10pt}
+barborapiseztabora,2,\ns,,N1,spills without,\ns
+barborapiseztabora,40,\vspace,10pt,R7,,\vspace{10pt}
+barborapiseztabora,43,\vspace,-10pt,R1,fits without,\vspace{-10pt}
+batalion,7,\vinv,,I1,,\vinv
+batalion,15,\vinv,,I1,,\vinv
+bellaciao,36,\vspace,100pt,R4,,\vspace{100pt}
+bigbangtheorytheme,41,\vinv,,I1,,\vinv
+botyprotilasce,30,\vnv,,U1,,\vnv
+bratrickuzavirejvratka,5,\vinv,,I1,,\vinv
+bratrickuzavirejvratka,21,\vinv,,I1,,\vinv
+buchetjespousta,5,\ns,,N1,spills without,\ns
+carodejnicezamesbury,2,\ns,,N1,spills without,\ns
+carodejnicezamesbury,8,\ns,,N1,spills without,\ns
+carodejnicezamesbury,9,\vspace,-10pt,R1,spills without,\vspace{-10pt}
+cernaostrava,2,\ns,,N1,spills without,\ns
+cernaostrava,7,\ns,,N1,spills without,\ns
+cernaostrava,12,\ns,,N1,spills without,\ns
+cernaostrava,17,\ns,,N1,spills without,\ns
+cernaostrava,22,\ns,,N1,spills without,\ns
+cernaostrava,27,\ns,,N1,spills without,\ns
+cernaostrava,32,\ns,,N1,spills without,\ns
+cernaostrava,33,\ns,,N1,spills without,\ns
+cernaostrava,38,\ns,,N1,spills without,\ns
+cernaostrava,43,\ns,,N1,spills without,\ns
+cernaostrava,48,\ns,,N1,spills without,\ns
+cernaostrava,53,\ns,,N1,spills without,\ns
+cernaostrava,58,\ns,,N1,spills without,\ns
+cernaostrava,63,\ns,,N1,spills without,\ns
+cernaostrava,68,\ns,,N1,spills without,\ns
+cernaostrava,73,\ns,,N1,spills without,\ns
+cernaostrava,78,\ns,,N1,spills without,\ns
+cernaostrava,83,\ns,,N1,spills without,\ns
+cernaostrava,88,\ns,,N1,spills without,\ns
+cernaostrava,93,\ns,,N1,spills without,\ns
+cernaostrava,98,\ns,,N1,spills without,\ns
+cernaostrava,103,\ns,,N1,spills without,\ns
+cernaostrava,108,\ns,,N1,spills without,\ns
+cernaostrava,113,\ns,,N1,spills without,\ns
+cernaostrava,118,\ns,,N1,spills without,\ns
+cernaostrava,123,\ns,,N1,spills without,\ns
+cernymuz,3,\ns,,N1,fits without,\ns
+cernymuz,5,\ns,,N1,fits without,\ns
+cernymuz,50,\vspace,5mm,R7,,\vspace{5mm}
+cervenarekatucny,4,\ns,,N1,fits without,\ns
+cestadom,18,\ns,,N1,spills without,\ns
+cestadom,45,\ns,,N1,spills without,\ns
+coztebebude,9,\vinv,,I1,,\vinv
+coztebebude,28,\vinv,,I1,,\vinv
+dablovynamluvy,2,\ns,,N1,spills without,\ns
+dance,2,\ns,,N1,spills without,\ns
+dance,8,\ns,,N1,spills without,\ns
+dance,16,\ns,,N1,spills without,\ns
+dance,22,\vspace,-18pt,R1,spills without,"we just couldn't help it, nobody's to blame,\vspace{-18pt}\\"
+dance,25,\ns,,N1,spills without,\ns
+dance,31,\ns,,N1,spills without,\ns
+dance,37,\vspace,-18pt,R1,spills without,"you tell me it's over, what more can I say?\vspace{-18pt}\\"
+dance,40,\ns,,N1,spills without,\ns
+dance,49,\ns,,N1,spills without,\ns
+dance,54,\ns,,N1,spills without,\ns
+darmodej,2,\ns,,N1,spills without,\ns
+darmodej,18,\vspace,-6mm,R1,spills without,\vspace{-6mm}
+darmodej,51,\vspace,-4mm,R1,spills without,\vspace{-4mm}
+deepriverblues,6,\vspace,-55pt,R2,spills without,\vspace{-55pt}
+deepriverblues,10,\vspace,-35pt,R1,spills without,\vspace{-35pt}
+digadigadoplihal,5,\vspace,15pt,R4,,\vspace{15pt}
+digadigadospiritual,14,\ns,,N1,spills without,\ns
+dobreminenarada,15,\vnv,,U1,,\vnv
+dobreminenarada,23,\vnv,,U1,,\vnv
+dobrodruzstvisbohempanem,5,\vspace,15pt,R4,,\vspace{15pt}
+donebes,2,\ns,,N1,spills without,\ns
+donebes,30,\ns,,N1,spills without,\ns
+dontstopmenow,2,\ns,,N1,spills without,\ns
+dontstopmenow,10,\ns,,N1,spills without,\ns
+dontstopmenow,18,\ns,,N1,spills without,\ns
+dontstopmenow,32,\ns,,N1,spills without,\ns
+dontstopmenow,40,\ns,,N1,spills without,\ns
+dontstopmenow,48,\ns,,N1,spills without,\ns
+duhovavila,9,\vinv,,I1,,\vinv
+duhovavila,19,\vinv,,I1,,\vinv
+duhovavila,29,\vinv,,I1,,\vinv
+dvakrat,5,\vspace,-25pt,R2,spills without,\vspace{-25pt}
+dvakrat,9,\ns,,N1,spills without,\ns
+dvakrat,17,\ns,,N1,spills without,\ns
+dvakrat,25,\ns,,N1,spills without,\ns
+dvakrat,45,\ns,,N1,spills without,\ns
+dvakrat,53,\vspace,-4mm,R1,spills without,\vspace{-4mm}
+dvakrat,59,\vspace,-4mm,R1,spills without,\vspace{-4mm}
+ejhorahora,6,\ns,,N1,spills without,\ns
+ejhorahora,11,\ns,,N1,spills without,\ns
+ejhorahora,16,\ns,,N1,spills without,\ns
+ejhorahora,21,\ns,,N1,spills without,\ns
+ejhorahora,26,\ns,,N1,spills without,\ns
+ejhorahora,35,\ns,,N1,spills without,\ns
+ejhorahora,40,\ns,,N1,spills without,\ns
+ejhorahora,44,\ns,,N1,spills without,\ns
+ejhorahora,49,\ns,,N1,spills without,\ns
+ejhorahora,55,\ns,,N1,spills without,\ns
+ejhorahora,60,\ns,,N1,spills without,\ns
+ejhorahora,65,\ns,,N1,spills without,\ns
+ejhorahora,71,\ns,,N1,spills without,\ns
+ejhorahora,76,\ns,,N1,spills without,\ns
+ejhorahora,81,\ns,,N1,spills without,\ns
+ejhorahora,89,\ns,,N1,spills without,\ns
+ejhorahora,94,\ns,,N1,spills without,\ns
+ejhorahora,99,\ns,,N1,spills without,\ns
+ejhorahora,104,\ns,,N1,spills without,\ns
+ejhorahora,109,\ns,,N1,spills without,\ns
+eldorado,23,\vspace,10pt,R4,,\vspace{10pt}
+elektrickyvalcik,16,\vspace,15pt,R4,,\vspace{15pt}
+elektrickyvalcik,32,\vspace,15pt,R4,,\vspace{15pt}
+farao,2,\ns,,N1,spills without,\ns
+farao,10,\ns,,N1,spills without,\ns
+farao,16,\ns,,N1,spills without,\ns
+farao,22,\ns,,N1,spills without,\ns
+farao,33,\ns,,N1,spills without,\ns
+farao,39,\ns,,N1,spills without,\ns
+farao,55,\ns,,N1,spills without,\ns
+feleenazelpasa,10,\ns,,N1,spills without,\ns
+feleenazelpasa,21,\ns,,N1,spills without,\ns
+feleenazelpasa,28,\ns,,N1,spills without,\ns
+feleenazelpasa,35,\ns,,N1,spills without,\ns
+feleenazelpasa,42,\ns,,N1,spills without,\ns
+feleenazelpasa,49,\ns,,N1,spills without,\ns
+feleenazelpasa,56,\ns,,N1,spills without,\ns
+greensleeves,6,\vspace,3mm,R4,,\vspace{3mm}
+hajnyjelesapan,15,\vinv,,I1,,\vinv
+hajnyjelesapan,28,\vinv,,I1,,\vinv
+haubilouplani,30,\vspace,5mm,R3,,\vspace{5mm}
+herecomesthesun,2,\ns,,N1,spills without,\ns
+herecomesthesun,6,\vspace,10mm,R3,,\vspace{10mm}
+herecomesthesun,7,\ns,,N1,spills without,\ns
+herecomesthesun,12,\vspace,-10mm,R2,spills without,\vspace{-10mm}
+herecomesthesun,16,\vspace,7mm,R3,,\vspace{7mm}
+herecomesthesun,17,\ns,,N1,spills without,\ns
+herecomesthesun,22,\vspace,-5mm,R1,spills without,\vspace{-5mm}
+herecomesthesun,24,\vspace,5mm,R3,,\vspace{5mm}
+herecomesthesun,31,\vspace,-5mm,R1,spills without,\vspace{-5mm}
+herecomesthesun,33,\vspace,5mm,R3,,\vspace{5mm}
+herecomesthesun,38,\vspace,5mm,R3,,\vspace{5mm}
+herecomesthesun,40,\vspace,5mm,R3,,\vspace{5mm}
+herecomesthesun,47,\vspace,5mm,R3,,\vspace{5mm}
+herecomesthesun,52,\vspace,-5mm,R1,spills without,\vspace{-5mm}
+herecomesthesun,54,\vspace,5mm,R3,,\vspace{5mm}
+herecomesthesun,60,\vspace,5mm,R3,,\vspace{5mm}
+heyhey,5,\vspace,-58pt,R2,fits without,\vspace{-58pt}
+hittheroadjack,17,\vinv,,I1,,\vinv
+hladiny,2,\ns,,N1,spills without,\ns
+hladiny,10,\ns,,N1,spills without,\ns
+hladiny,30,\ns,,N1,spills without,\ns
+hladiny,38,\ns,,N1,spills without,\ns
+hladiny,44,\ns,,N1,spills without,\ns
+hodiljsemflintudozita,8,\vinv,,I1,,\vinv
+hodiljsemflintudozita,20,\vinv,,I1,,\vinv
+hodiljsemflintudozita,27,\vspace,10pt,R4,,\vspace{10pt}
+holkyznasiskolky,3,\ns,,N1,spills without,\ns
+holkyznasiskolky,11,\ns,,N1,spills without,\ns
+holkyznasiskolky,24,\ns,,N1,spills without,\ns
+holkyznasiskolky,37,\ns,,N1,spills without,\ns
+holkyznasiskolky,51,\ns,,N1,spills without,\ns
+holubidum,6,\vinv,,I1,,\vinv
+holubidum,19,\vinv,,I1,,\vinv
+hvezdyjsoujaksedmikraskynadbrnem,6,\vspace,15pt,R3,,\vspace{15pt}
+hvezdyjsoujaksedmikraskynadbrnem,10,\vspace,15pt,R3,,\vspace{15pt}
+hvezdyjsoujaksedmikraskynadbrnem,14,\vspace,15pt,R3,,\vspace{15pt}
+idzepostaridze,5,\vnv,,U1,,\vnv
+idzepostaridze,11,\vspace,5mm,R3,,\vspace{5mm}
+idzepostaridze,16,\ns,,N2,fits without,\ns
+idzepostaridze,18,\ns,,N2,fits without,\ns
+idzepostaridze,31,\ns,,N2,fits without,\ns
+idzepostaridze,33,\ns,,N2,fits without,\ns
+illbethereforyou,6,\ns,,N1,spills without,\ns
+illbethereforyou,9,\vspace,-25pt,R2,spills without,\vspace{-25pt}
+illbethereforyou,13,\vspace,-35pt,R1,spills without,\vspace{-35pt}
+illbethereforyou,34,\ns,,N1,spills without,\ns
+illbethereforyou,45,\ns,,N1,spills without,\ns
+jaktosnamalaskobude,5,\vspace,5mm,R5,,\vspace{5mm}
+jaro,8,\vinv,,I1,,\vinv
+jaro,18,\vinv,,I1,,\vinv
+jaro,29,\vinv,,I1,,\vinv
+jdoupomnejdou,2,\ns,,N1,spills without,\ns
+jdoupomnejdou,45,\vspace,-4mm,R1,spills without,\vspace{-4mm}
+jednoubudemdal,21,\vnv,,U1,,\vnv
+jednourano,4,\vspace,20pt,R5,,\vspace{20pt}
+jenamteplo,3,\ns,,N1,spills without,\ns
+jenamteplo,8,\ns,,N1,spills without,\ns
+jenamteplo,17,\lsp,,L1,,\lsp{10}
+jenamteplo,26,\lsp,,L1,,\lsp{10}
+jenamteplo,32,\ns,,N1,spills without,\ns
+jenamteplo,37,\lsp,,L1,,\lsp{10}
+jenamteplo,46,\lsp,,L1,,\lsp{10}
+jenamteplo,55,\lsp,,L1,,\lsp{10}
+jenamteplo,64,\lsp,,L1,,\lsp{10}
+jenamteplo,71,\lsp,,L1,,\lsp{10}
+jestemichvilkuzpivej,16,\vspace,5mm,R3,,\vspace{5mm}
+jez,9,\vinv,,I1,,\vinv
+jez,21,\vinv,,I1,,\vinv
+jinetonebude,6,\vinv,,I1,,\vinv
+jinetonebude,19,\vinv,,I1,,\vinv
+jinetonebude,27,\vinv,,I1,,\vinv
+jinetonebude,37,\vnv,,U1,,\vnv
+jozinzbazin,2,\ns,,N1,spills without,\ns
+katce,2,\ns,,N1,spills without,\ns
+katce,9,\vinv,,I1,,\vinv
+katce,29,\vinv,,I1,,\vinv
+kloboukvekrovi,5,\vnv,,U1,,\vnv
+kloboukvekrovi,9,\vnv,,U1,,\vnv
+kloboukvekrovi,13,\vnv,,U1,,\vnv
+koberecek,2,\ns,,N1,fits without,\ns
+koberecek,30,\vinv,,I1,,\vinv
+kockanaokne,4,\vnv,,U1,,\vnv
+kolobezka,10,\vinv,,I1,,\vinv
+kolobezka,19,\vinv,,I1,,\vinv
+kolobezka,27,\vinv,,I1,,\vinv
+kometa,2,\ns,,N1,spills without,\ns
+kometa,11,\lsp,,L1,,\lsp{10}
+kometa,20,\lsp,,L1,,\lsp{10}
+kometa,29,\lsp,,L1,,\lsp{10}
+kometa,38,\lsp,,L1,,\lsp{10}
+kometa,47,\lsp,,L1,,\lsp{10}
+kometa,56,\lsp,,L1,,\lsp{10}
+kometa,65,\lsp,,L1,,\lsp{10}
+ladovskazima,3,\vspace,15pt,R2,,\vspace{15pt}
+ladovskazima,17,\vspace,5mm,R3,,\vspace{5mm}
+ladovskazima,21,\vspace,2mm,R3,,\vspace{2mm}
+ladovskazima,25,\vspace,2mm,R3,,\vspace{2mm}
+ladovskazima,29,\vspace,2mm,R3,,\vspace{2mm}
+ladovskazima,33,\vspace,5mm,R3,,\vspace{5mm}
+ladovskazima,38,\vspace,2mm,R3,,\vspace{2mm}
+ladovskazima,42,\vspace,2mm,R3,,\vspace{2mm}
+ladovskazima,48,\vspace,2mm,R3,,\vspace{2mm}
+lasko,32,\vspace,15pt,R4,,\vspace{15pt}
+laughingontheoutside,5,\ns,,N1,spills without,\ns
+letosmonikou,4,\ns,,N1,spills without,\ns
+letosmonikou,54,\ns,,N1,spills without,\ns
+livingnextdoortoalice,4,\ns,,N1,spills without,\ns
+lizatko,5,\vspace,20pt,R7,,"\chord{Em}a já se \chord{A\7}na něj  nezlo\chord{D}bím, ne\chord{E\bb\dm}jsem žád\chord{Em}ná faj\chord{A\7}novka.\vspace{20pt}"
+lizatko,9,\vspace,20pt,R7,,"\chord{E\7}uhynuly zakrát\chord{A\7}ko, do\chord{B\7}bře jim \chord{A\7}tak!\vspace{20pt}"
+lizatko,13,\vspace,20pt,R7,,"\chord{G}kdy byl ještě \chord{H\7}malé holát\chord{Em}ko, mám dneska \chord{A\7}z pekla štěstí!\vspace{20pt}"
+maleceskeblues,45,\vinv,,I1,,\vinv
+malekote,8,\vinv,,I1,,\vinv
+malekote,13,\vinv,,I1,,\vinv
+malekote,16,\vinv,,I1,,\vinv
+malekote,21,\vinv,,I1,,\vinv
+malekote,24,\vspace,5mm,R3,,\vspace{5mm}
+malujzaseobrazky,3,\ns,,N1,spills without,\ns
+malujzaseobrazky,4,\vspace,-5pt,R1,spills without,\vspace{-5pt}
+malujzaseobrazky,9,\ns,,N1,spills without,\ns
+malujzaseobrazky,17,\ns,,N1,spills without,\ns
+malujzaseobrazky,24,\ns,,N1,spills without,\ns
+malujzaseobrazky,25,\ns,,N1,spills without,\ns
+malujzaseobrazky,30,\ns,,N1,spills without,\ns
+malujzaseobrazky,38,\ns,,N1,spills without,\ns
+malujzaseobrazky,55,\ns,,N1,spills without,\ns
+malujzaseobrazky,63,\ns,,N1,spills without,\ns
+malujzaseobrazky,64,\ns,,N1,spills without,\ns
+malujzaseobrazky,72,\ns,,N1,spills without,\ns
+mamdomakocku,2,\ns,,N1,spills without,\ns
+mamdomakocku,11,\lsp,,L1,,\lsp{12}
+mamdomakocku,20,\lsp,,L1,,\lsp{12}
+mamdomakocku,21,\vspace,5pt,R7,,\vspace{5pt}
+mamdomakocku,30,\lsp,,L1,,\lsp{12}
+mamdomakocku,39,\lsp,,L1,,\lsp{12}
+mamdomakocku,48,\lsp,,L1,,\lsp{12}
+mamdomakocku,57,\lsp,,L1,,\lsp{12}
+mamdomakocku,66,\lsp,,L1,,\lsp{12}
+mamdomakocku,67,\vspace,5pt,R7,,\vspace{5pt}
+mamjizvunartu,2,\ns,,N1,spills without,\ns
+mamjizvunartu,5,\ns,,N1,spills without,\ns
+mamjizvunartu,14,\ns,,N1,spills without,\ns
+mamjizvunartu,26,\ns,,N1,spills without,} \refsm{}\ns
+mammalystan,7,\vinv,,I1,,\vinv
+marieklus,4,\vspace,10mm,R5,,\vspace{10mm}
+melanaocichbryle,2,\ns,,N1,spills without,\ns
+melanaocichbryle,40,\ns,,N1,spills without,\ns
+mikymauz,4,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,10,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,16,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,23,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,29,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,35,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,42,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,48,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,54,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,61,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,67,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,73,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+mikymauz,80,\vspace,-8pt,R1,spills without,\vspace{-8pt}
+milionar,2,\ns,,N1,spills without,\ns
+milionar,18,\ns,,N1,spills without,\ns
+milionar,27,\ns,,N1,spills without,\ns
+milionar,36,\ns,,N1,spills without,\ns
+milionar,46,\ns,,N1,spills without,\ns
+milionar,55,\ns,,N1,spills without,\ns
+milionar,64,\ns,,N1,spills without,\ns
+milionar,73,\ns,,N1,spills without,\ns
+milionar,82,\ns,,N1,spills without,\ns
+milionar,90,\ns,,N1,spills without,\ns
+milionar,98,\ns,,N1,spills without,\ns
+milionar,106,\ns,,N1,spills without,\ns
+milionar,115,\vspace,-10mm,R1,spills without,\vspace{-10mm}
+mladickabasnirka,4,\ns,,N1,spills without,\ns
+mladickabasnirka,46,\ns,,N1,spills without,\ns
+morseovka,12,\vspace,-30pt,R2,spills without,\vspace{-30pt}
+morseovka,16,\vspace,-30pt,R1,spills without,\vspace{-30pt}
+morseovka,25,\vspace,-30pt,R2,spills without,\vspace{-30pt}
+morseovka,28,\vspace,-20pt,R2,spills without,\vspace{-20pt}
+morseovka,42,\ns,,N1,spills without,\ns
+morseovka,45,\ns,,N1,spills without,\ns
+morseovka,51,\ns,,N1,spills without,\ns
+morseovka,56,\ns,,N1,spills without,\ns
+motyl,8,\vspace,5mm,R7,,\vspace{5mm}
+motyl,14,\vspace,5mm,R7,,\vspace{5mm}
+nadejeatouhy,26,\ns,,N1,fits without,\ns
+nancymulligan,3,\ns,,N1,spills without,\ns
+natusvatukaterinu,11,\vinv,,I1,,\vinv
+nebenazemi,4,\vspace,10pt,R3,,\vspace{10pt}
+nebenazemi,10,\vnv,,U1,,\vnv
+nebenazemi,16,\vnv,,U1,,\vnv
+necoolasce,2,\ns,,N1,spills without,\ns
+necoolasce,16,\ns,,N1,spills without,\ns
+necoolasce,23,\ns,,N1,spills without,\ns
+necoolasce,31,\ns,,N1,spills without,\ns
+necoolasce,39,\ns,,N1,spills without,\ns
+necoolasce,47,\ns,,N1,spills without,\ns
+necoolasce,55,\ns,,N1,spills without,\ns
+nemusibejt,2,\ns,,N1,fits without,\ns
+nemusibejt,11,\vinv,,I1,,\vinv
+nemusibejt,30,\vinv,,I1,,\vinv
+nepijjanonepijvodu,2,\cns,,N1,spills without,\cns
+nepijjanonepijvodu,9,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,16,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,23,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,30,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,37,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,44,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,51,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,58,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,65,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,72,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,79,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,86,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,93,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,100,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,107,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,114,\lsp,,L1,,\lsp{12}
+nepijjanonepijvodu,121,\lsp,,L1,,\lsp{12}
+noe,3,\ns,,N1,spills without,\ns
+noe,11,\ns,,N1,spills without,\ns
+noe,19,\ns,,N1,spills without,\ns
+noe,27,\ns,,N1,spills without,\ns
+noe,35,\ns,,N1,spills without,\ns
+noe,43,\ns,,N1,spills without,\ns
+noe,51,\ns,,N1,spills without,\ns
+noe,59,\ns,,N1,spills without,\ns
+noe,66,\ns,,N1,spills without,\ns
+noe,74,\vspace,5mm,R7,,\vspace{5mm}
+nowhereman,2,\ns,,N1,spills without,\ns
+nowhereman,15,\vinv,,I1,,\vinv
+nowhereman,25,\vinv,,I1,,\vinv
+nowhereman,35,\vinv,,I1,,\vinv
+obladioblada,2,\ns,,N1,spills without,\ns
+orlice,41,\ns,,N1,spills without,\ns
+osmichu,2,\ns,,N1,spills without,\ns
+ourlastsummer,2,\ns,,N1,spills without,\ns
+ourlastsummer,19,\ns,,N1,spills without,\ns
+ourlastsummer,27,\ns,,N1,spills without,\ns
+ourlastsummer,39,\ns,,N1,spills without,\ns
+outsiderwaltz,2,\ns,,N1,spills without,\ns
+outsiderwaltz,10,\ns,,N1,spills without,\ns
+outsiderwaltz,16,\ns,,N1,spills without,\ns
+outsiderwaltz,24,\ns,,N1,spills without,\ns
+outsiderwaltz,30,\ns,,N1,spills without,\ns
+outsiderwaltz,38,\ns,,N1,spills without,\ns
+paneprezidente,37,\vspace,5mm,R3,,\vspace{5mm}
+pata,3,\ns,,N1,spills without,\ns
+pennylane,2,\ns,,N1,spills without,\ns
+pianoman,3,\ns,,N1,fits without,\ns
+pianoman,4,\vspace,-30pt,R1,spills without,"\intro{\chords{Dm\7 D\dm}, akordy jako ve sloce} \solon{1}{\chords{C F G F} $\times$ 2}\vspace{-30pt}"
+pisenokoni,17,\vspace,20pt,R4,,\vspace{20pt}
+pochodamerickychnamorniku,7,\vinv,,I1,,\vinv
+pochodamerickychnamorniku,15,\vinv,,I1,,\vinv
+pochodamerickychnamorniku,23,\vinv,,I1,,\vinv
+podzimniplihal,34,\vspace,20pt,R4,,\vspace{20pt}
+pohadka,4,\vspace,10pt,R5,,\vspace{10pt}
+pohadka,8,\vspace,-25pt,R2,spills without,\vspace{-25pt}
+pohadka,13,\vspace,10pt,R4,,\vspace{10pt}
+pohadka,17,\vinv,,I1,,\vinv
+pohadka,20,\vinv,,I1,,\vinv
+pohadka,23,\vinv,,I1,,\vinv
+pohadka,26,\vinv,,I1,,\vinv
+pohadka,29,\vinv,,I1,,\vinv
+pohadka,32,\vinv,,I1,,\vinv
+pohadka,36,\vspace,-15pt,R1,spills without,\vspace{-15pt}
+pohadka,42,\vspace,0pt,R2,,\vspace{0pt}
+pohadka,50,\vinv,,I1,,\vinv
+pohoda,6,\vinv,,I1,,\vinv
+pohoda,18,\vinv,,I1,,\vinv
+pohoda,30,\vinv,,I1,,\vinv
+porekadla,2,\ns,,N1,spills without,\ns
+porekadla,39,\ns,,N1,spills without,\ns
+potopa,2,\ns,,N1,spills without,\ns
+potopa,12,\ns,,N1,spills without,\ns
+potopa,48,\ns,,N1,spills without,\ns
+povestehovejs,2,\ns,,N1,fits without,\ns
+povestehovejs,8,\ns,,N1,fits without,\ns
+povestehovejs,36,\ns,,N1,fits without,\ns
+prazce,7,\ns,,N1,spills without,\ns
+prazce,27,\ns,,N1,spills without,\ns
+prazce,65,\ns,,N1,spills without,\ns
+prejelijsmeslepici,6,\vnv,,U1,,\vnv
+prejelijsmeslepici,11,\vnv,,U1,,\vnv
+prejelijsmeslepici,16,\vspace,5mm,R3,,\vspace{5mm}
+prejelijsmeslepici,19,\vspace,5mm,R3,,\vspace{5mm}
+prejelijsmeslepici,23,\vnv,,U1,,\vnv
+prejelijsmeslepici,27,\vnv,,U1,,\vnv
+prodavac,2,\ns,,N1,spills without,\ns
+prodavac,10,\ns,,N1,spills without,\ns
+promeny,40,\vspace,2cm,R6,,\vspace{2cm}
+pterodaktylus,11,\vspace,15pt,R4,,\vspace{15pt}
+pterodaktylus,20,\vspace,15pt,R4,,\vspace{15pt}
+pterodaktylus,29,\vspace,15pt,R4,,\vspace{15pt}
+pterodaktylus,38,\vspace,15pt,R4,,\vspace{15pt}
+reddwarftheme,8,\vspace,-25pt,R2,fits without,\vspace{-25pt}
+reddwarftheme,17,\vspace,20pt,R3,,\vspace{20pt}
+reddwarftheme,27,\vspace,-25pt,R2,fits without,\vspace{-25pt}
+ridictentvrdejchlebama,3,\ns,,N1,spills without,\ns
+ridictentvrdejchlebama,24,\ns,,N1,spills without,\ns
+ringoffire,19,\vspace,-15pt,R1,fits without,\vspace{-15pt}
+romance16leta,5,\vspace,5mm,R4,,\vspace{5mm}
+salome,13,\vinv,,I1,,\vinv
+salome,27,\vinv,,I1,,\vinv
+satydelajcloveka,4,\vnv,,U1,,\vnv\\
+satydelajcloveka,9,\vnv,,U1,,\vnv\\
+scarboroughfaircarthy,8,\ns,,N1,fits without,\ns
+skrhola,7,\vinv,,I1,,\vinv
+skrhola,12,\vinv,,I1,,\vinv
+skrhola,14,\vinv,,I1,,\vinv
+skupinovefoto,2,\ns,,N1,spills without,\ns
+skupinovefoto,9,\ns,,N1,spills without,\ns
+skupinovefoto,17,\ns,,N1,spills without,\ns
+skupinovefoto,26,\ns,,N1,spills without,\ns
+skupinovefoto,35,\ns,,N1,spills without,\ns
+skupinovefoto,44,\ns,,N1,spills without,\ns
+skupinovefoto,54,\ns,,N1,spills without,\ns
+slunecnyhrob,6,\vspace,-30pt,R2,spills without,\vspace{-30pt}
+slunecnyhrob,22,\vspace,-30pt,R2,spills without,\vspace{-30pt}
+slunecnyhrob,26,\ns,,N1,spills without,\ns
+slunecnyhrob,45,\ns,,N1,spills without,\ns
+slunecnyhrob,50,\ns,,N1,spills without,\ns
+slunecnyhrob,55,\vspace,2mm,R7,,\vspace{2mm}
+slunicko,5,\vnv,,U1,,\vnv
+slunicko,11,\vnv,,U1,,\vnv
+slunicko,16,\vnv,,U1,,\vnv
+snebyvalouochotou,4,\vspace,20pt,R3,,\vspace{20pt}
+soudnyden,2,\ns,,N1,spills without,\ns
+spimvobili,18,\vnv,,U1,,\vnv
+sprostyadmindusan,2,\ns,,N1,spills without,\ns
+summernights,3,\cns,,N1,spills without,\cns
+summernights,6,\ns,,N1,spills without,\ns
+summernights,12,\ns,,N1,spills without,\ns
+summernights,17,\ns,,N1,spills without,\ns
+summernights,24,\ns,,N1,spills without,\ns
+summernights,30,\ns,,N1,spills without,\ns
+summernights,35,\cns,,N1,spills without,\cns
+summernights,41,\cns,,N1,spills without,\cns
+summernights,46,\ns,,N1,spills without,\ns
+summernights,52,\ns,,N1,spills without,\ns
+summernights,57,\ns,,N1,spills without,\ns
+summernights,64,\ns,,N1,spills without,\ns
+summernights,70,\ns,,N1,spills without,\ns
+summernights,75,\ns,,N1,spills without,\ns
+summernights,88,\ns,,N1,spills without,\ns
+svatekmazofie,3,\ns,,N1,spills without,\ns
+svatekmazofie,18,\ns,,N1,spills without,\ns
+svatekmazofie,30,\ns,,N1,spills without,\ns
+svazceskychbohemu,5,\vspace,8mm,R5,,\vspace{8mm}
+swingmodrezdi,6,\vinv,,I1,,\vinv
+swingmodrezdi,19,\vinv,,I1,,\vinv
+swingmodrezdi,27,\vinv,,I1,,\vinv
+swingmodrezdi,30,\vinv,,I1,,\vinv
+tasidele,8,\ns,,N1,spills without,}\ns
+tasidele,24,\ns,,N1,spills without,}\ns
+tasidele,45,\ns,,N1,spills without,}\ns
+tearsinheaven,5,\vspace,-45pt,R2,spills without,\vspace{-45pt}
+tearsinheaven,9,\ns,,N1,spills without,\ns
+tearsinheaven,17,\ns,,N1,spills without,\ns
+tearsinheaven,20,\ns,,N1,spills without,\ns
+tesar,2,\ns,,N1,fits without,\ns
+tesar,9,\lsp,,L1,,\lsp{17}
+tesar,16,\lsp,,L1,,\lsp{17}
+tesar,23,\lsp,,L1,,\lsp{17}
+tesar,30,\lsp,,L1,,\lsp{17}
+tesar,37,\lsp,,L1,,\lsp{17}
+tesar,44,\lsp,,L1,,\lsp{17}
+tesar,51,\lsp,,L1,,\lsp{17}
+tesar,58,\lsp,,L1,,\lsp{17}
+tesar,65,\lsp,,L1,,\lsp{17}
+tesar,71,\lsp,,L1,,\lsp{17}
+tesar,77,\lsp,,L1,,\lsp{17}
+tesar,83,\lsp,,L1,,\lsp{17}
+tesar,89,\lsp,,L1,,\lsp{17}
+tesar,95,\lsp,,L1,,\lsp{17}
+tesar,101,\lsp,,L1,,\lsp{17}
+tesar,107,\lsp,,L1,,\lsp{17}
+thetimestheyareachangin,3,\ns,,N1,fits without,\ns
+tiamo,3,\ns,,N1,spills without,\ns
+tickettoride,5,\vspace,-30pt,R2,fits without,\vspace{-30pt}
+tickettoride,9,\vspace,-10pt,R1,fits without,\vspace{-10pt}
+tophatbarandgrill,2,\ns,,N1,spills without,\ns
+tophatbarandgrill,5,\ns,,N1,spills without,\ns
+tophatbarandgrill,15,\ns,,N1,spills without,\ns
+tophatbarandgrill,44,\ns,,N1,spills without,\ns
+totenkratvctyricatompatom,9,\vinv,,I1,,\vinv
+totenkratvctyricatompatom,28,\vinv,,I1,,\vinv
+totenkratvsedesatomosmom,9,\vinv,,I1,,\vinv
+touha,15,\vspace,10pt,R3,,\vspace{10pt}
+touha,18,\vspace,-10 pt,R1,fits without,\vspace{-10 pt}
+tramvajacka,11,\vinv,,I1,,\vinv
+tramvajacka,20,\vinv,,I1,,\vinv
+tramvajacka,29,\vinv,,I1,,\vinv
+tresnicky,2,\ns,,N1,fits without,\ns
+trhvescarborough,3,\ns,,N1,spills without,\ns
+triandele,5,\vspace,-53pt,R2,fits without,\vspace{-53pt}
+trikrize,3,\ns,,N1,spills without,\ns
+trpaslicisvatba,5,\vinv,,I1,,\vinv
+trpaslicisvatba,20,\vinv,,I1,,\vinv
+vadinevadi,6,\vnv,,U1,,\vnv
+vadinevadi,9,\vnv,,U1,,\vnv
+variacenarenesancnitema,12,\vspace,25pt,R7,,\vspace{25pt}
+variacenarenesancnitema,15,\vspace,-52pt,R2,fits without,\vspace{-52pt}
+vcelkamaja,5,\vspace,10mm,R5,,\vspace{10mm}
+vcelkamaja,11,\vnv,,U1,,\vnv
+velrybarskavyprava,6,\vinv,,I1,,\vinv
+velrybarskavyprava,19,\vinv,,I1,,\vinv
+velrybarskavyprava,27,\vinv,,I1,,\vinv
+velrybarskavyprava,35,\vinv,,I1,,\vinv
+velrybarskavyprava,43,\vinv,,I1,,\vinv
+vienna,4,\ns,,N1,spills without,\ns
+vienna,12,\ns,,N1,spills without,\ns
+vienna,20,\ns,,N1,spills without,\ns
+vienna,35,\ns,,N1,spills without,\ns
+vienna,47,\ns,,N1,spills without,\ns
+vjednymdumku,7,\vinv,,I1,,\vinv
+vjednymdumku,18,\vinv,,I1,,\vinv
+vjednymdumku,29,\vinv,,I1,,\vinv
+vjednymdumku,40,\vinv,,I1,,\vinv
+vlese,18,\vinv,,I2,,\vinv
+vlese,41,\vinv,,I2,,\vinv
+vlese,52,\vinv,,I1,,\vinv
+vodauzjesvarena,12,\vinv,,I1,,\vinv
+vodauzjesvarena,20,\vinv,,I1,,\vinv
+vodauzjesvarena,28,\vinv,,I1,,\vinv
+vodavodenka,37,\vspace,175pt,R6,,\vspace{175pt}
+vosa,33,\vspace,20pt,R4,,\vspace{20pt}
+vranabuty,31,\vinv,,I1,,\vinv
+vreledikyzpupku,25,\ns,,N1,spills without,\ns
+walkingbacktohappiness,35,\ns,,N1,fits without,\ns
+www.idnes,2,\ns,,N1,spills without,\ns
+www.idnes,14,\ns,,N1,spills without,\ns
+zapomenutytrumf,9,\ns,,N1,spills without,\ns
+zapomenutytrumf,20,\ns,,N1,spills without,\ns
+zapomenutytrumf,31,\ns,,N1,spills without,\ns
+zapomenutytrumf,42,\ns,,N1,spills without,\ns
+zivotjejennahoda,7,\vnv,,U1,,\vnv\\
+zivotjejennahoda,10,\vnv,,U1,,\vnv\\
+zivotjejennahoda,15,\vnv,,U1,,\vnv\\
+zivotjejennahoda,18,\vnv,,U1,,\vnv\\
+zizniva,27,\vnv,,U1,,\vnv
+zlatestrevicky,5,\vinv,,I1,,\vinv
+zlatestrevicky,23,\vinv,,I1,,\vinv
+zlatestrevicky,36,\vinv,,I1,,\vinv
+zpatkydotrenek,2,\ns,,N1,spills without,\ns
+zpatkydotrenek,7,\ns,,N1,spills without,\ns
+zpatkydotrenek,16,\lsp,,L1,,\lsp{12}
+zpatkydotrenek,25,\lsp,,L1,,\lsp{12}
+zpatkydotrenek,34,\lsp,,L1,,\lsp{12}
+zpatkydotrenek,43,\lsp,,L1,,\lsp{12}
+zpatkydotrenek,52,\lsp,,L1,,\lsp{12}
+zumzumII,2,\ns,,N1,spills without,\ns
+zumzumII,9,\ns,,N1,spills without,\ns
+zumzumII,15,\ns,,N1,spills without,\ns
+zumzumII,22,\ns,,N1,spills without,\ns
+zumzumII,29,\ns,,N1,spills without,\ns
+zumzumII,35,\ns,,N1,spills without,\ns
+zumzumII,42,\ns,,N1,spills without,\ns
+zumzumII,49,\ns,,N1,spills without,\ns
+zumzumII,56,\ns,,N1,spills without,\ns
+zumzumII,62,\ns,,N1,spills without,\ns
+zumzumII,69,\ns,,N1,spills without,\ns
