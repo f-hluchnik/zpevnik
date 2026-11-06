@@ -143,12 +143,12 @@
 % completes the hang, so the text starts at the margin like the lines under it.
 \newcommand*{\zp@labelgap}{\dimexpr\zp@labelhang-\labelw\relax}
 \newcommand{\zp@labelbox}[1]{\makebox[\labelw][r]{#1}\hspace{\zp@labelgap}}
-\newcommand{\lbl}[1]{\zp@labelbox{\textbf{#1}}}
+\newcommand{\zp@boldlabel}[1]{\zp@labelbox{\textbf{#1}}}
 % No label: indents the line by the hang, so that its text starts where the text after a label does.
-\newcommand{\nv}{\hspace*{\zp@labelhang}}
+\newcommand{\zp@labelindent}{\hspace*{\zp@labelhang}}
 % A block is a labelled paragraph with the block gap above it.
 % \ignorespaces: whether the text starts on a new line of the source must not matter.
-\newcommand{\zp@block}[2]{\zp@blockgap\lbl{#1}{\ignorespaces#2}}
+\newcommand{\zp@block}[2]{\zp@blockgap\zp@boldlabel{#1}{\ignorespaces#2}}
 % The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
 % a number, only the letter is printed. Every label ends with a dot.
 \newcommand*{\zp@number}[1]{\IfNoValueTF{#1}{}{#1}}
@@ -166,7 +166,7 @@
 % A cue marks where a part that is written out elsewhere starts again ("R.",
 % "B.", "1."). After an empty line it is a block of its own with the block gap;
 % after a block or inside one it is appended to the line.
-\newcommand{\cue}[1]{\ifvmode\zp@blockgap\lbl{#1.}\ignorespaces\else\textbf{#1.}\fi}
+\newcommand{\cue}[1]{\ifvmode\zp@blockgap\zp@boldlabel{#1.}\ignorespaces\else\textbf{#1.}\fi}
 % Change of singer: the name in italics in the label column (a name wider than
 % the box sticks out to the left), with the normal gap above the block. Inside
 % a block (a verse with numbered label, for instance) there is no label column
@@ -183,7 +183,7 @@
 % of a song.
 \newcommand{\note}[1]{\ifvmode\ifzp@top\else\zp@blockgap\fi\fi\emph{#1}\global\zp@nogaptrue\global\zp@topfalse}
 % Link line to another song, pulled up to the previous block.
-\newcommand{\seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\nv\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
+\newcommand{\seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\zp@labelindent\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
 
 %SEPARATORS AND VERTICAL SPACING
 \newif\ifzp@top % nothing after the song title (and subtitle) yet: a note above has no gap. \song raises the flag; a block, a note and \seealso lower it.
@@ -191,7 +191,7 @@
 \newcommand{\zp@blockgap}{\global\zp@topfalse\ifzp@nogap\global\zp@nogapfalse\else\vspace{\blocksep}\fi}
 % Separators replace the gap before the next block (via \zp@nogap), they do not remove it.
 \newcommand{\groupbreak}{\\\vspace{\groupshift}\\}% space inside a verse between groups of lines
-\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\nv\hdashrule{#1cm}{\zp@dashthickness}{\zp@dashpattern}\vspace{\ruleshiftafter}\global\zp@nogaptrue}% dashed rule between tight verses
+\newcommand{\blockrule}[1]{\vspace{\ruleshiftbefore}\zp@labelindent\hdashrule{#1cm}{\zp@dashthickness}{\zp@dashpattern}\vspace{\ruleshiftafter}\global\zp@nogaptrue}% dashed rule between tight verses
 % Solid rule between parts of a song. \par: the next block starts a new
 % paragraph (like an empty line after center).
 \newcommand{\partrule}{\begin{center}\zprule{\textwidth}\end{center}\par\global\zp@nogaptrue}
