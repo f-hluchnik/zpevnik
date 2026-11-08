@@ -293,3 +293,8 @@ The converter is strict (an unknown macro is an error), so every special case in
 - **Text inside an environment must be in a block too:** the glossary of `zkratky` is one unnumbered `\vers{…}` inside `small` and `multicols` (it still fits one page; at normal size it does not). Its `\setstretch{1.0}` was the only use of `setspace`, which is no longer loaded (the whole book renders identically without it). The lint no longer exempts environments; `\columnbreak` and `\end` may start a paragraph.
 - **Kept, and how the converter treats it:** `multicols` is a song-level fact (`columns` in `songs.json`); `\columnbreak`, `small` and `\large` are PDF-only layout. `\textbf` stays as bold, like `\emph` (only in the footnote of `polesbavlnou`: **Tex**as, **Ark**ansas, L**ana**). `\uv`, `\enquote` and `\enquote*` stay, each with its own quote marks. Line breaks inside a word in `noe` are the lyric. `zapomnetliva` stays as decided in Q5.
 - **Scores** (item 1 of J0) are decided separately, together with J5: see the next entry.
+
+### D-137 · `\kk` prints a sharp sign ♯ — Agreed (owner, 9 Nov 2026, session 23)
+- The chord sharp was the number sign `#`, while the flat `\bb` already printed the music sign ♭. Noticed next to the scores, whose chord names (MuseScore) use ♯. `\kk` now prints `$\sharp$` raised like `\bb` (`\textsuperscript{\Large …}`), so both accidentals look alike; the sign is slightly narrower than `#`, so no chord spacing gets tighter.
+- 176 songs change (every song with a sharp), nothing else; every song still fits one page and no chords overlap.
+- The converter and the web print `\kk` as ♯ (U+266F), `\bb` as ♭ (U+266D).
