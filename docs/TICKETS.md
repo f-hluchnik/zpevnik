@@ -45,7 +45,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P2 | todo | owner: licensing check before selling |
 | P3 | todo | |
 | P4 | todo | owner signs off the proof |
-| J0 | todo | owner decides the song quirks; `\score` command |
+| J0 | in review | song quirks: D-135, PR `feature/j0-song-quirks`; scores (with J5): next PR |
 | J1 | todo | strong model (parser design) |
 | J2 | todo | strong model (data model = contract between repos) |
 | J3 | todo | strong model (schema = contract between repos) |
@@ -156,6 +156,7 @@ The converter is strict (an unknown macro is an error), so every remaining speci
 3. Layout in a few songs: `multicols` and `\columnbreak` (cernymuz, lojzaaliza, milionar, promeny, zkratky), `\placetextbox` (vosa), the negative `\hspace` inside `\rep` (velicenstvokat), `center` (jedesohajzvidna, kolenasejchalupecky), `\note{\small …}` (jednourano): PDF-only layout the converter skips, or a semantic form (e.g. `columns` in `songs.json`).
 4. `zapomnetliva`: the repeat mark stands before the speaker name (nitpick left from Q5).
 5. Anything else the strict parser of J1 would reject; footnotes in `\song{}` stay (Q5).
+**Decided (owner, 8 Nov 2026):** items 2–5 and the rest of the list in D-135; item 1 together with J5 (a standard MuseScore export that places itself, no per-song offsets).
 
 ### J1 · Converter package — [agent] · **[strong model]** · L · needs Q4, Q5, J0
 1. Write the converter in `tools/songbook/` as a package: parser, model, command line. It starts from scratch (the earlier `tex2json.py` prototype is in neither repository). Strict: an unknown macro is an error; it understands only the command set after Q4 (D-108, D-131).
