@@ -50,35 +50,47 @@ RENAMED_COMMANDS = {
     "hyt": "\\hypertarget", "hylo": "\\hyperlink",
     "nv": "\\vers{...} (a block without a label)", "lbl": "\\speaker{A}{...} or \\cue{...}",
 }
-RENAMED_COMMAND = re.compile(r"(?<!\\)\\(" + "|".join(RENAMED_COMMANDS) + r")(?![A-Za-z])")
+# LaTeX commands that build by hand what a song command does; the value is that command.
+HAND_WRITTEN_FORMS = {
+    "textsuperscript": "\\echo{...} for an echo or backing vocals",
+    "backslash": "\\rep{...}", "textbackslash": "\\rep{...}",
+}
+
+
+def command_pattern(names: dict[str, str]) -> re.Pattern[str]:
+    """Matches \\name for any of the names, not after a line break (\\\\name) and not as a prefix."""
+    return re.compile(r"(?<!\\)\\(" + "|".join(names) + r")(?![A-Za-z])")
+
+
+RENAMED_COMMAND = command_pattern(RENAMED_COMMANDS)
+HAND_WRITTEN_FORM = command_pattern(HAND_WRITTEN_FORMS)
 # A block without text only prints its label, which is what \cue is for. A second group after the
 # empty one is text that was written next to the block instead of in it.
 EMPTY_BLOCK = re.compile(r"\\(?:vers|chorus|bridge|prechorus|solo|intro|coda)(?:\[[^\]]*\])?\{\s*\}")
 OLD_VERS = re.compile(r"\\vers\{[^{}]*\}\s*\{")  # \vers{n}{text}: the number is now \vers[n]{text}
 COMMENT = re.compile(r"(?<!\\)%.*")
-# What a paragraph outside braces and environments may start with: the header, the blocks, the
-# separators and the layout of scores. Anything else (text, \\rec, \\chords) belongs in a block.
+# What a paragraph outside braces may start with: the header, the blocks, the separators, column
+# layout and the layout of scores. Anything else (text, \\rec, \\chords) belongs in a block, also
+# inside an environment such as multicols.
 PARAGRAPH_START = re.compile(r"\\([A-Za-z@]+)|[^\\\s]")
 ALLOWED_PARAGRAPH_STARTS = frozenset(
     "song artist alttitle subtitle toctitle collection note cue speaker vers chorus prechorus bridge solo "
-    "intro coda blockrule partrule groupbreak seealso large placetextbox hspace vspace begin includegraphics "
-    "hypertarget".split())
+    "intro coda blockrule partrule groupbreak seealso large hspace vspace begin end columnbreak "
+    "includegraphics hypertarget".split())
 PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n")
 ESCAPED_BRACE = re.compile(r"\\[{}]")
-ENVIRONMENT = re.compile(r"\\(begin|end)\{")
 CHORD_USE = re.compile(r"\\chords?\b")
 
 
 def text_outside_blocks(code: str) -> list[str]:
-    """The first line of each paragraph at the top level that does not start with a block or a separator."""
-    stray, braces, environments = [], 0, 0
+    """The first line of each paragraph outside braces that does not start with a block or a separator."""
+    stray, braces = [], 0
     for paragraph in PARAGRAPH_BREAK.split(code):
         start = PARAGRAPH_START.match(paragraph.strip())
-        if start and braces == 0 and environments == 0 and start.group(1) not in ALLOWED_PARAGRAPH_STARTS:
+        if start and braces == 0 and start.group(1) not in ALLOWED_PARAGRAPH_STARTS:
             stray.append(paragraph.strip().splitlines()[0][:40])
         unescaped = ESCAPED_BRACE.sub("", paragraph)
         braces += unescaped.count("{") - unescaped.count("}")
-        environments += sum(1 if kind == "begin" else -1 for kind in ENVIRONMENT.findall(paragraph))
     return stray
 
 
@@ -104,6 +116,8 @@ def text_problems(song_id: str, text: str) -> list[str]:
     code = COMMENT.sub("", text)
     for name, count in Counter(RENAMED_COMMAND.findall(code)).items():
         problems.append(f"{song_id}: {count} uses of the removed \\{name}; write {RENAMED_COMMANDS[name]}")
+    for name, count in Counter(HAND_WRITTEN_FORM.findall(code)).items():
+        problems.append(f"{song_id}: {count} uses of \\{name}; write {HAND_WRITTEN_FORMS[name]}")
     old_vers = len(OLD_VERS.findall(code))
     if old_vers:
         problems.append(f"{song_id}: {old_vers} uses of the old \\vers{{n}}{{text}}; write \\vers[n]{{text}}")

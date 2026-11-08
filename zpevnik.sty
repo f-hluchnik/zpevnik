@@ -18,7 +18,6 @@
 \RequirePackage{tikz}
 \RequirePackage{eso-pic}
 \RequirePackage[T1]{fontenc}
-\RequirePackage{setspace}
 \RequirePackage{dashrule}
 \RequirePackage{amssymb}
 \RequirePackage{xcolor}
@@ -74,9 +73,6 @@
 \newlength{\zp@artistedge}\setlength{\zp@artistedge}{1cm}
 \newcommand*{\zp@artistgap}{1.5em}
 \newcommand*{\zp@maxartists}{2}
-
-% \placetextbox{x}{y}{text}: typewriter text at (x\paperwidth, y\paperheight) of the page
-\newcommand{\placetextbox}[3]{\AddToShipoutPictureFG*{\put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\noindent\begin{minipage}{\linewidth}{\fontfamily{cmtt}\selectfont\begin{large}\parbox{\linewidth}{#3}\end{large}}\end{minipage}}}}}
 
 %SONG HEADER
 % Id of the song for \song, set by \songinclude (generated/include.tex). Without
@@ -177,6 +173,13 @@
   \emph{#1:}\nobreakspace#2%
 \fi}
 \newcommand{\rep}[1]{$\backslash$: {#1} :$\backslash$}%repeat
+% How many times to play or sing it: \ntimes{2} prints ×2.
+\newcommand{\ntimes}[1]{$\times #1$}
+% Echo or backing vocals: raised like a superscript, but in italics at the size
+% of the text around it (a superscript alone would be smaller).
+\newcommand{\echo}[1]{%
+  \edef\zp@echosize{\f@size}\edef\zp@echoskip{\f@baselineskip}%
+  \textsuperscript{\fontsize{\zp@echosize}{\zp@echoskip}\selectfont\emph{#1}}}
 \newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitative
 % A note belongs to the block that follows: that block gets no gap (as after a
 % separator). The note itself has the normal gap above it, except at the start

@@ -61,8 +61,22 @@ class TextProblems(unittest.TestCase):
 
     def test_blocks_separators_and_layout_are_not_outside_a_block(self):
         text = ("\\song{A} \\artist{x}\n\\note{capo 2}\n\n\\vers{a\n\nstill the verse}\n\n\\cue{R}\n\n"
-                "\\placetextbox{1}{2}{\ntext in a box\n\nmore}\n\n\\begin{multicols}{2}\nlist\n\nitems\n\\end{multicols}\n")
+                "\\begin{multicols}{2}\n\\vers{a}\n\n\\columnbreak\n\n\\vers{b}\n\n\\end{multicols}\n")
         self.assertEqual(text_problems("a", text), [])
+
+    def test_text_inside_an_environment_is_still_outside_a_block(self):
+        text = "\\song{A} \\artist{x}\n\n\\begin{multicols}{2}\n\\vers{a}\n\nloose text\n\\end{multicols}\n"
+        (problem,) = text_problems("a", text)
+        self.assertIn("outside a block ('loose text')", problem)
+
+    def test_hand_written_echo_and_repeat_signs_are_errors(self):
+        for written, command in (("a\\textsuperscript{\\emph{(echo)}}", "\\echo{...}"),
+                                 ("$\\backslash$: a :$\\backslash$", "\\rep{...}"),
+                                 ("\\textbackslash: a :\\textbackslash", "\\rep{...}")):
+            with self.subTest(written=written):
+                (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n\\vers{{{written}}}\n")
+                self.assertIn("2 uses" if "backslash" in written else "1 uses", problem)
+                self.assertIn(f"write {command}", problem)
 
     def test_old_two_brace_verse_is_an_error(self):
         for old in ("\\vers{1}{a}", "\\vers{}{a}", "\\vers{1}\n{a}"):
