@@ -53,6 +53,26 @@ class StaffPositionTest(unittest.TestCase):
         with self.assertRaises(ScoreError):
             staff_position(svg((0, 10)))
 
+    def test_lines_that_are_not_evenly_spaced_are_no_staff(self):
+        with self.assertRaisesRegex(ScoreError, "first staff has 2"):
+            staff_position(svg((0, 10), (0, 12), (0, 30), (0, 33), (0, 36)))
+
+    def test_segments_of_one_line_count_once_from_the_leftmost(self):
+        lines = tab_staff(top=20, x=10) + [(2, 20)]
+        self.assertAlmostEqual(staff_position(svg(*lines)).left, 2 * PT_PER_UNIT)
+
+    def test_positions_count_from_the_view_box_origin(self):
+        image = svg(*tab_staff(top=20, x=5))
+        image.set("viewBox", "5 10 100 100")
+        position = staff_position(image)
+        self.assertAlmostEqual((position.left, position.middle), (0, 17.5 * PT_PER_UNIT))
+
+    def test_malformed_points_fail(self):
+        image = svg(*tab_staff(top=20))
+        image[0].set("points", "0;20 100;20")
+        with self.assertRaisesRegex(ScoreError, "malformed"):
+            staff_position(image)
+
     def test_without_size_in_mm_it_fails(self):
         image = svg(*tab_staff(top=20))
         image.set("width", "100")
@@ -68,9 +88,15 @@ class ImageTest(unittest.TestCase):
         self.assertEqual((fills["Harmony"], fills["Note"]), ("#B82727", None))
 
     def test_page_background_is_removed(self):
-        image = svg(*tab_staff(top=20), extra='<path class="" fill="#FFFFFF" d="M0,0 L100,0"/>')
+        image = svg(*tab_staff(top=20), extra='<title>a</title><path class="" fill="#FFFFFF" d="M0,0 L100,0"/>')
         remove_page_background(image)
-        self.assertEqual([element.get("class") for element in image], ["StaffLines"] * 6)
+        self.assertEqual([element.get("class") for element in image], [None] + ["StaffLines"] * 6)
+
+    def test_only_the_page_painted_first_is_removed(self):
+        image = svg(*tab_staff(top=20))
+        image.append(ElementTree.fromstring('<path class="" fill="#ffffff" d="M0,0"/>'))
+        remove_page_background(image)
+        self.assertEqual(len(image), 7)
 
 
 class SettingsTest(unittest.TestCase):

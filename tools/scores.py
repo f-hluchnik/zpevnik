@@ -40,18 +40,24 @@ SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 XLINK_NAMESPACE = "http://www.w3.org/1999/xlink"
 STAFF_LINE_CLASS = "StaffLines"
 CHORD_NAME_CLASS = "Harmony"
-# MuseScore paints the page white with an element of empty class; the image must be
-# transparent so that it works on a dark web page too.
+# MuseScore paints the page white before anything else, with an element of empty class
+# (there is no export option for a transparent page). The image must be transparent so
+# that it works on a dark web page too.
 PAGE_BACKGROUND_CLASS = ""
 PAGE_BACKGROUND_FILL = "#ffffff"
 POINTS_PER_INCH = 72.0
 MILLIMETRES_PER_INCH = 25.4
 # Lines of one staff are evenly spaced; the next staff starts after a different gap.
 STAFF_SPACING_TOLERANCE = 0.01
+# The book's staves have 5 lines (notation) or 4 to 6 (tab). Fewer evenly spaced lines at
+# the top mean the first staff was not found, which must fail rather than misplace a score.
+MIN_STAFF_LINES = 4
 
 CHORD_COLOUR = re.compile(r"\\definecolor\{chordred\}\{RGB\}\{\s*(\d+),\s*(\d+),\s*(\d+)\s*\}")
 PRINTABLE_WIDTH = re.compile(r"<pagePrintableWidth>([\d.]+)</pagePrintableWidth>")
 SVG_LENGTH_MM = re.compile(r"([\d.]+)mm")
+# What MuseScore writes before the drawing.
+SVG_METADATA_TAGS = frozenset(f"{{{SVG_NAMESPACE}}}{name}" for name in ("title", "desc"))
 
 MSCORE_ENVIRONMENT_VARIABLE = "MSCORE"
 MSCORE_COMMANDS = ("mscore4portable", "mscore", "mscore4", "musescore")
@@ -70,6 +76,27 @@ ElementTree.register_namespace("xlink", XLINK_NAMESPACE)
 
 class ScoreError(Exception):
     """A score cannot be exported or placed; the message says which and why."""
+
+
+@dataclass(frozen=True)
+class StaffLine:
+    """One line of a staff in SVG units: where it starts and how far down it is."""
+    left: float
+    y: float
+
+
+@dataclass(frozen=True)
+class SvgFrame:
+    """MuseScore gives the size of the image in mm and draws in its own units (the viewBox)."""
+    origin_x: float
+    origin_y: float
+    points_per_unit: float
+
+    def x_points(self, x: float) -> float:
+        return (x - self.origin_x) * self.points_per_unit
+
+    def y_points(self, y: float) -> float:
+        return (y - self.origin_y) * self.points_per_unit
 
 
 @dataclass(frozen=True)
@@ -95,53 +122,74 @@ def system_width_pt(mss_text: str) -> float:
     return float(match.group(1)) * POINTS_PER_INCH
 
 
-def points_per_svg_unit(svg: ElementTree.Element) -> float:
-    """MuseScore writes the size in mm and draws in its own units (the viewBox)."""
+def svg_frame(svg: ElementTree.Element) -> SvgFrame:
     width = SVG_LENGTH_MM.fullmatch(svg.get("width", ""))
     view_box = svg.get("viewBox", "").split()
     if not width or len(view_box) != 4:
         raise ScoreError("the SVG has no width in mm or no viewBox")
-    return float(width.group(1)) / MILLIMETRES_PER_INCH * POINTS_PER_INCH / float(view_box[2])
+    origin_x, origin_y, view_width, _ = map(float, view_box)
+    width_points = float(width.group(1)) / MILLIMETRES_PER_INCH * POINTS_PER_INCH
+    return SvgFrame(origin_x, origin_y, width_points / view_width)
 
 
-def staff_line_ends(svg: ElementTree.Element) -> list[tuple[float, float]]:
-    """(x of the left end, y) of every staff line, in SVG units, top to bottom."""
-    ends: dict[float, float] = {}
+def polyline_points(element: ElementTree.Element) -> list[tuple[float, float]]:
+    """The points of a polyline: "x1,y1 x2,y2 ..." in SVG units."""
+    pairs = (pair.split(",") for pair in element.get("points", "").split())
+    try:
+        return [(float(x), float(y)) for x, y in pairs]
+    except ValueError as error:
+        raise ScoreError(f"a staff line has malformed points: {element.get('points')!r}") from error
+
+
+def staff_lines(svg: ElementTree.Element) -> list[StaffLine]:
+    """Every staff line, top to bottom. MuseScore draws each line of a system as a horizontal
+    polyline of class StaffLines; segments at the same height count as one line."""
+    left_by_height: dict[float, float] = {}
     for element in svg.iter():
         if element.get("class") != STAFF_LINE_CLASS:
             continue
-        x_text, y_text = element.get("points", "").split()[0].split(",")
-        y = float(y_text)
-        ends[y] = min(float(x_text), ends.get(y, float(x_text)))
-    return sorted(((x, y) for y, x in ends.items()), key=lambda end: end[1])
+        points = polyline_points(element)
+        if not points:
+            raise ScoreError("a staff line has no points")
+        y = points[0][1]
+        left = min(x for x, _ in points)
+        left_by_height[y] = min(left, left_by_height.get(y, left))
+    return [StaffLine(left, y) for y, left in sorted(left_by_height.items())]
 
 
-def first_staff(lines: list[tuple[float, float]]) -> list[tuple[float, float]]:
+def first_staff(lines: list[StaffLine]) -> list[StaffLine]:
     """The top run of evenly spaced lines: the first staff of the first system."""
-    if len(lines) < 2:
-        raise ScoreError("the SVG has fewer than two staff lines")
-    spacing = lines[1][1] - lines[0][1]
+    if len(lines) < MIN_STAFF_LINES:
+        raise ScoreError(f"the SVG has {len(lines)} staff lines, a staff has at least {MIN_STAFF_LINES}")
+    spacing = lines[1].y - lines[0].y
     staff = lines[:2]
     for line in lines[2:]:
-        if abs(line[1] - staff[-1][1] - spacing) > STAFF_SPACING_TOLERANCE * spacing:
+        if abs(line.y - staff[-1].y - spacing) > STAFF_SPACING_TOLERANCE * spacing:
             break
         staff.append(line)
+    if len(staff) < MIN_STAFF_LINES:
+        raise ScoreError(f"the first staff has {len(staff)} evenly spaced lines, "
+                         f"expected at least {MIN_STAFF_LINES}")
     return staff
 
 
 def staff_position(svg: ElementTree.Element) -> StaffPosition:
-    scale = points_per_svg_unit(svg)
-    staff = first_staff(staff_line_ends(svg))
-    left = min(x for x, _ in staff)
-    middle = (staff[0][1] + staff[-1][1]) / 2
-    return StaffPosition(left=left * scale, middle=middle * scale)
+    frame = svg_frame(svg)
+    staff = first_staff(staff_lines(svg))
+    return StaffPosition(left=frame.x_points(min(line.left for line in staff)),
+                         middle=frame.y_points((staff[0].y + staff[-1].y) / 2))
+
+
+def is_page_background(element: ElementTree.Element) -> bool:
+    return (element.get("class") == PAGE_BACKGROUND_CLASS
+            and element.get("fill", "").lower() == PAGE_BACKGROUND_FILL)
 
 
 def remove_page_background(svg: ElementTree.Element) -> None:
-    for element in list(svg):
-        if (element.get("class") == PAGE_BACKGROUND_CLASS
-                and element.get("fill", "").lower() == PAGE_BACKGROUND_FILL):
-            svg.remove(element)
+    """Remove the white page MuseScore paints first, so that the image is transparent."""
+    drawn = [element for element in svg if element.tag not in SVG_METADATA_TAGS]
+    if drawn and is_page_background(drawn[0]):
+        svg.remove(drawn[0])
 
 
 def paint_chord_names(svg: ElementTree.Element, colour: str) -> None:
@@ -157,9 +205,10 @@ def placement_tex(position: StaffPosition, system_width: float) -> str:
 
 
 def find_mscore() -> str:
-    candidates = [os.environ.get(MSCORE_ENVIRONMENT_VARIABLE)]
-    candidates += [shutil.which(command) for command in MSCORE_COMMANDS]
-    candidates += [str(app) for app in MSCORE_MACOS_APPS if app.exists()]
+    """The MSCORE environment variable, a MuseScore command on the PATH, or the macOS app."""
+    candidates = [os.environ.get(MSCORE_ENVIRONMENT_VARIABLE),
+                  *(shutil.which(command) for command in MSCORE_COMMANDS),
+                  *(str(app) for app in MSCORE_MACOS_APPS if app.exists())]
     for candidate in candidates:
         if candidate:
             return candidate
@@ -220,6 +269,16 @@ def is_up_to_date(score: Path, root: Path, dependencies: list[Path]) -> bool:
     return min(file.stat().st_mtime for file in files) >= newest_input
 
 
+def export_scores(scores: list[Path], root: Path) -> None:
+    """Export the scores with the settings every export shares; ScoreError on the first failure."""
+    mscore = find_mscore()
+    colour = chord_colour((root / STYLE_FILE).read_text(encoding="utf-8"))
+    width = system_width_pt((root / SCORE_STYLE).read_text(encoding="utf-8"))
+    (root / SCORE_OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
+    for score in scores:
+        export_score(score, root, mscore, colour, width)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_root_argument(parser)
@@ -229,17 +288,12 @@ def main() -> int:
     dependencies = [root / SCORE_STYLE, root / STYLE_FILE, Path(__file__)]
     scores = sorted((root / SCORES_DIR).glob("*.mscz"))
     pending = [score for score in scores if args.force or not is_up_to_date(score, root, dependencies)]
-    try:
-        if pending:
-            mscore = find_mscore()
-            colour = chord_colour((root / STYLE_FILE).read_text(encoding="utf-8"))
-            width = system_width_pt((root / SCORE_STYLE).read_text(encoding="utf-8"))
-            (root / SCORE_OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
-        for score in pending:
-            export_score(score, root, mscore, colour, width)
-    except ScoreError as error:
-        print(f"error: {error}", file=sys.stderr)
-        return 1
+    if pending:
+        try:
+            export_scores(pending, root)
+        except ScoreError as error:
+            print(f"error: {error}", file=sys.stderr)
+            return 1
     print(f"scores: {len(pending)} exported, {len(scores) - len(pending)} up to date")
     return 0
 
