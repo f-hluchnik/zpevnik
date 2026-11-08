@@ -9,6 +9,8 @@ Errors fail the build:
     `\\gap{n}`, chord-only lines `\\chords{...}`);
   - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (the gap between blocks
     is automatic, see the README);
+  - a song places or spaces something by hand (`\\includegraphics`, `\\vspace`, `\\hspace`) or
+    writes an echo or repeat signs by hand (see HAND_WRITTEN_FORMS);
   - a song has text, `\\rec` or `\\chords` outside a block (a paragraph must start with a block or a separator);
   - a song has a block without text (`\\bridge{}`, `\\vers[3]{}`); a label alone is `\\cue{...}`;
   - a song still uses a renamed command (`\\refrain`, `\\sub`, `\\refsm`, ... see
@@ -52,35 +54,50 @@ RENAMED_COMMANDS = {
     "hyt": "\\hypertarget", "hylo": "\\hyperlink",
     "nv": "\\vers{...} (a block without a label)", "lbl": "\\speaker{A}{...} or \\cue{...}",
 }
-RENAMED_COMMAND = re.compile(r"(?<!\\)\\(" + "|".join(RENAMED_COMMANDS) + r")(?![A-Za-z])")
+# LaTeX commands that do by hand what a song command or the style does; the value is the advice.
+HAND_WRITTEN_FORMS = {
+    "textsuperscript": "write \\echo{...} for an echo or backing vocals",
+    "backslash": "write \\rep{...}", "textbackslash": "write \\rep{...}",
+    "includegraphics": "write \\score{name} for scores/<name>.mscz",
+    "vspace": "the gaps between blocks are automatic and scores place themselves",
+    "hspace": "chord spacing is automatic (a pause is \\gap{n}) and scores place themselves",
+}
+
+
+def command_pattern(names: dict[str, str]) -> re.Pattern[str]:
+    """Matches \\name for any of the names, not after a line break (\\\\name) and not as a prefix."""
+    return re.compile(r"(?<!\\)\\(" + "|".join(names) + r")(?![A-Za-z])")
+
+
+RENAMED_COMMAND = command_pattern(RENAMED_COMMANDS)
+HAND_WRITTEN_FORM = command_pattern(HAND_WRITTEN_FORMS)
 # A block without text only prints its label, which is what \cue is for. A second group after the
 # empty one is text that was written next to the block instead of in it.
 EMPTY_BLOCK = re.compile(r"\\(?:vers|chorus|bridge|prechorus|solo|intro|coda)(?:\[[^\]]*\])?\{\s*\}")
 OLD_VERS = re.compile(r"\\vers\{[^{}]*\}\s*\{")  # \vers{n}{text}: the number is now \vers[n]{text}
 COMMENT = re.compile(r"(?<!\\)%.*")
-# What a paragraph outside braces and environments may start with: the header, the blocks, the
-# separators and scores. Anything else (text, \\rec, \\chords) belongs in a block.
+# What a paragraph outside braces may start with: the header, the blocks, the separators, column
+# layout and scores. Anything else (text, \\rec, \\chords) belongs in a block, also inside an
+# environment such as multicols.
 PARAGRAPH_START = re.compile(r"\\([A-Za-z@]+)|[^\\\s]")
 ALLOWED_PARAGRAPH_STARTS = frozenset(
     "song artist alttitle subtitle toctitle collection note cue speaker vers chorus prechorus bridge solo "
-    "intro coda blockrule partrule groupbreak seealso large placetextbox hspace begin score "
+    "intro coda blockrule partrule groupbreak seealso large begin end columnbreak score "
     "hypertarget".split())
 PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n")
 ESCAPED_BRACE = re.compile(r"\\[{}]")
-ENVIRONMENT = re.compile(r"\\(begin|end)\{")
 CHORD_USE = re.compile(r"\\chords?\b")
 
 
 def text_outside_blocks(code: str) -> list[str]:
-    """The first line of each paragraph at the top level that does not start with a block or a separator."""
-    stray, braces, environments = [], 0, 0
+    """The first line of each paragraph outside braces that does not start with a block or a separator."""
+    stray, braces = [], 0
     for paragraph in PARAGRAPH_BREAK.split(code):
         start = PARAGRAPH_START.match(paragraph.strip())
-        if start and braces == 0 and environments == 0 and start.group(1) not in ALLOWED_PARAGRAPH_STARTS:
+        if start and braces == 0 and start.group(1) not in ALLOWED_PARAGRAPH_STARTS:
             stray.append(paragraph.strip().splitlines()[0][:40])
         unescaped = ESCAPED_BRACE.sub("", paragraph)
         braces += unescaped.count("{") - unescaped.count("}")
-        environments += sum(1 if kind == "begin" else -1 for kind in ENVIRONMENT.findall(paragraph))
     return stray
 
 
@@ -106,6 +123,8 @@ def text_problems(song_id: str, text: str) -> list[str]:
     code = COMMENT.sub("", text)
     for name, count in Counter(RENAMED_COMMAND.findall(code)).items():
         problems.append(f"{song_id}: {count} uses of the removed \\{name}; write {RENAMED_COMMANDS[name]}")
+    for name, count in Counter(HAND_WRITTEN_FORM.findall(code)).items():
+        problems.append(f"{song_id}: {count} uses of \\{name}; {HAND_WRITTEN_FORMS[name]}")
     old_vers = len(OLD_VERS.findall(code))
     if old_vers:
         problems.append(f"{song_id}: {old_vers} uses of the old \\vers{{n}}{{text}}; write \\vers[n]{{text}}")
