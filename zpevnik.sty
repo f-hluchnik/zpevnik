@@ -330,8 +330,18 @@
 \newcommand{\dm}{\textsuperscript{\Large$\circ$}}%dim chords (diminished seventh c-es-ges-a)
 \newcommand{\hdm}{\textsuperscript{\large$\varnothing$}}%m7/5- chords (half diminished seventh c-es-ges-b)
 \newcommand{\+}{\textsuperscript{+}}%aug chords (C-E-G#)
-\newcommand{\bb}{\textsuperscript{\Large$\flat$}}%flat
-\newcommand{\kk}{\textsuperscript{\Large$\sharp$}}%sharp
+% Flat and sharp are the engraved signs of the MusiXTeX music font, as in the
+% scores. That font is sized for a staff, so it is scaled to twice the size of
+% the superscript; each sign is lifted by its own depth, so that it stands on the
+% baseline like the digits of the other chord superscripts.
+\DeclareFontFamily{U}{zpmusix}{}
+\DeclareFontShape{U}{zpmusix}{m}{n}{<-> s*[2.0] musix20}{}
+\newcommand*{\zp@musixflat}{90}
+\newcommand*{\zp@musixsharp}{92}
+\newcommand{\zp@accidental}[1]{\textsuperscript{\usefont{U}{zpmusix}{m}{n}%
+  \raisebox{\fontchardp\font#1\relax}{\symbol{#1}}}}
+\newcommand{\bb}{\zp@accidental{\zp@musixflat}}%flat
+\newcommand{\kk}{\zp@accidental{\zp@musixsharp}}%sharp
 \newcommand{\2}{\textsuperscript{2}}%2
 \newcommand{\4}{\textsuperscript{4}}%4
 \newcommand{\5}{\textsuperscript{5}}%5
