@@ -4,8 +4,8 @@
 % The document class, metadata and the list of songs stay in zpevnik.tex.
 %
 % Public interface used by the generated files and by zpevnik.tex:
-% \songinclude, \zpregisterartist, \zpversion and \zprule. Internal macros
-% carry the \zp@ prefix and may be renamed freely.
+% \songinclude, \zpregisterartist, \zpscoregeometry, \zpversion and \zprule.
+% Internal macros carry the \zp@ prefix and may be renamed freely.
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zpevnik}[2026/11/06 Songbook packages and macros]
 
@@ -16,6 +16,7 @@
 \RequirePackage{multicol}
 \RequirePackage[top=1.5cm, left=2cm, right=1cm, bottom=2cm]{geometry}
 \RequirePackage{tikz}
+\RequirePackage{graphicx}
 \RequirePackage{eso-pic}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{dashrule}
@@ -187,6 +188,32 @@
 \newcommand{\note}[1]{\ifvmode\ifzp@top\else\zp@blockgap\fi\fi\emph{#1}\global\zp@nogaptrue\global\zp@topfalse}
 % Link line to another song, pulled up to the previous block.
 \newcommand{\seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\zp@labelindent\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
+
+%SCORES
+% \score{name} sets the image of scores/<name>.mscz, exported by tools/scores.py
+% into generated/scores/ with the geometry of its first staff. All scores share
+% one scale: a full system (the printable width of the shared MuseScore style)
+% fills the line from the text column to the right margin. The staff starts at
+% the text column and the middle of its first staff is level with the middle of
+% a label, so a block label stands beside the staff. A score needs no offsets
+% in the song. Without the generated files (one song in Overleaf) a framed name
+% stands in for the image.
+\newcommand*{\zp@scoredir}{generated/scores/}
+\newcommand*{\zp@labelmiddle}{.5\fontcharht\font`I}
+% Written by tools/scores.py: left end of the staff, middle of the first staff
+% (both from the top-left corner of the image) and the width of a full system.
+% \ignorespaces drops the end of the line of the generated file.
+\newcommand{\zpscoregeometry}[3]{%
+  \def\zp@scoreleft{#1}\def\zp@scoremiddle{#2}\def\zp@scoresystem{#3}\ignorespaces}
+\newcommand{\score}[1]{%
+  \ifvmode\leavevmode\zp@labelindent\fi
+  \IfFileExists{\zp@scoredir#1.tex}{\zp@placescore{#1}}{\fbox{\ttfamily score \detokenize{#1}}}}
+\newcommand{\zp@placescore}[1]{%
+  \input{\zp@scoredir#1.tex}%
+  \edef\zp@scorescale{\fpeval{(\linewidth-\zp@labelhang)/(\zp@scoresystem)}}%
+  \hspace*{-\fpeval{\zp@scorescale*(\zp@scoreleft)}pt}%
+  \raisebox{\dimexpr\fpeval{\zp@scorescale*(\zp@scoremiddle)}pt-\height+\zp@labelmiddle\relax}%
+    {\includegraphics[scale=\zp@scorescale]{\zp@scoredir#1.pdf}}}
 
 %SEPARATORS AND VERTICAL SPACING
 \newif\ifzp@top % nothing after the song title (and subtitle) yet: a note above has no gap. \song raises the flag; a block, a note and \seealso lower it.

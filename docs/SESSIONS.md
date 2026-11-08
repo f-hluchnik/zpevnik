@@ -49,10 +49,10 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 - **Read:** DECISIONS D-001, D-110 · PLAN WP5 (Design, Contents).
 - **Notes:** Propose the JSON shape for two representative songs (one with chord-only rows and `\cue`, one with footnotes and scores) and get the owner's OK before writing the schema.
 
-### Session 25 · J4, J5, L1, L2 · Sonnet · `zpevnik`
-- **Needs:** J3, E2; for J5 the missing `.mscz` files from the owner. L1 is the owner's text: draft it in Czech and English for approval.
-- **Read:** DECISIONS D-006, D-008, D-110, D-125 · PLAN WP5 (Steps), WP7.
-- **Notes:** J4 attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J5: prototype the MuseScore export first and report before building on it. L2 reuses E2's song filter.
+### Session 25 · J4, L1, L2 · Sonnet · `zpevnik`
+- **Needs:** J3, E2. L1 is the owner's text: draft it in Czech and English for approval.
+- **Read:** DECISIONS D-006, D-008, D-110, D-125, D-136 · PLAN WP5 (Steps), WP7.
+- **Notes:** J4 attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J4 also attaches the score SVGs (`generated/scores/*.svg`, one zip; J5 was done with J0, D-136). L2 reuses E2's song filter.
 
 ### Session 26 · W1, W2 · Sonnet · `zpevnik-web` (W1 also touches `zpevnik` CI)
 - **Needs:** J4 released at least once.
@@ -81,6 +81,5 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 | E4 songs for `zpevnik-lite` | TICKETS E4 | session 21 |
 | P1 print requirements and deadline | TICKETS P1 | session 22 |
 | P2 licensing check before selling | TICKETS P2 | selling the print (not the build) |
-| Missing `.mscz` files | TICKETS J5 | session 25 (J5) |
 | L1 notice text | TICKETS L1 | sessions 25, 27 |
 | K1 chords for the 8 songs without them | TICKETS K1 | nothing (content) |

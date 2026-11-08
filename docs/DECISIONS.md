@@ -37,7 +37,7 @@ Since H3 (D-120) the song's hypertarget comes from the generated include list, s
 
 ### D-007 · The converter lives in `zpevnik` — Agreed
 
-### D-008 · Score PDFs are converted to SVG in CI, never by hand — Agreed
+### D-008 · Score PDFs are converted to SVG in CI, never by hand — Agreed; amended by D-136 (MuseScore exports SVG, CI converts it to PDF)
 
 ---
 
@@ -203,7 +203,7 @@ Rationale: the target rule of WP2 with no manual spacing left. Pauses stay expli
 - Analysis and evidence: docs/archive/phase-6-vertical/vertical-spacing.md and docs/archive/phase-6-vertical/vertical-spacing/analysis.md.
 - Ticket plan (owner, 5 Nov 2026): the gap is shrinkable from V3 on; V4 introduces the named macros with zero diff; V5 is one batched pass per song (deletions, unnumbered verses, the decision on each `\groupbreak` and remaining `\vspace`), reviewed like C3b; V7 is merged into V5; V8 deletes the old macros. Before all of it, H6 replaces the `\everypar` hack (owner: as soon as possible). The body font size (`\Large`) waits until after V8 and may stay as it is (backlog).
 
-### D-125 · Score images are exported from MuseScore in CI — Direction agreed (owner, 5 Nov 2026), confirmed by J5's prototype
+### D-125 · Score images are exported from MuseScore in CI — Direction agreed (owner, 5 Nov 2026), confirmed by J5's prototype; implemented in D-136
 - The `.mscz` files are the source of the score images. CI exports them with a pinned MuseScore, so the PDF and the web use the same export, and the exported images are build output (D-104), not committed.
 - A score is a single page by principle; that is what makes MuseScore's trimmed SVG export (`-T`) usable. pdfLaTeX cannot include SVG, so the PDF needs a converted SVG or a cropped PDF export; J5's prototype decides.
 - One `.mscz` per image; the owner provides the missing ones (list in TICKETS J5). Replaces J5's earlier plan (`pdftocairo` from the committed PDFs).
@@ -293,3 +293,14 @@ The converter is strict (an unknown macro is an error), so every special case in
 - **Text inside an environment must be in a block too:** the glossary of `zkratky` is one unnumbered `\vers{…}` inside `small` and `multicols` (it still fits one page; at normal size it does not). Its `\setstretch{1.0}` was the only use of `setspace`, which is no longer loaded (the whole book renders identically without it). The lint no longer exempts environments; `\columnbreak` and `\end` may start a paragraph.
 - **Kept, and how the converter treats it:** `multicols` is a song-level fact (`columns` in `songs.json`); `\columnbreak`, `small` and `\large` are PDF-only layout. `\textbf` stays as bold, like `\emph` (only in the footnote of `polesbavlnou`: **Tex**as, **Ark**ansas, L**ana**). `\uv`, `\enquote` and `\enquote*` stay, each with its own quote marks. Line breaks inside a word in `noe` are the lyric. `zapomnetliva` stays as decided in Q5.
 - **Scores** (item 1 of J0) are decided separately, together with J5: see the next entry.
+
+### D-136 · Scores place themselves: shared MuseScore style, trimmed SVG, `\score{name}` — Agreed (owner, 8 Nov 2026, session 23), J0 item 1 together with J5
+- **Problem:** 22 score images in 18 songs were placed by hand (`\vspace{-25…-58pt}`, `\hspace{20pt}`, `21pt` or `9mm`, widths from `0.7\linewidth` to `515pt`), cropped by hand in macOS Preview, at different scales, two of them 10 mm into the left margin. An indent "as one constant" with zero diff was impossible: the indents differed.
+- **Source:** one `scores/<name>.mscz` per image (owner split `morseovka`, `pohadka`, `reddwarftheme`, `slunecnyhrob` and added `tickettoride`); the committed PDFs and PNGs are gone (build output, D-104). A score is a single page.
+- **Shared style `scores/zpevnik.mss`**, applied on every export with MuseScore's `-S` (it overrides the style saved in the file; verified): the owner's house style (staff space 1.764 mm, printable width 190 mm, no indent of the first system) with CMU Serif (Computer Modern, the book's font) for all text, bold chord names in German spelling (H/B, as in the songbook), no measure numbers, systems 0–7 sp apart. With it 21 of 22 scores keep their own line breaks; `variacenarenesancnitema` wrapped its last measure (bold chord names are wider) and got a layout stretch of 0.95 on its measures, which keeps it on one system. Editing a score means loading this style in MuseScore first, so what the owner sees is what the build makes.
+- **Export (`tools/scores.py`, `make scores`):** MuseScore 4.6.5 (pinned in CI, AppImage) writes a trimmed SVG (`-T 0`): its left edge is the left end of the staff. The tool reads the first staff from the lines MuseScore marks `class="StaffLines"`, removes the white page background (for a dark web page), paints the chord names (`class="Harmony"`) in `chordred` read from `zpevnik.sty`, converts the SVG to a PDF of the same size with `rsvg-convert` (pdfLaTeX cannot include SVG), and writes `<name>.tex` with the left end and the middle of the first staff. Text in the SVG is outlines, so the result does not depend on fonts at build time beyond the export.
+- **Placement (`\score{name}` in `zpevnik.sty`):** one scale for all scores, a full system (the style's printable width) fills the line from the text column to the right margin (0.894 on A4; a print page size scales the same way). The staff starts at the text column; the middle of its first staff is level with the middle of a label, so at the start of a block the label stands beside the staff. No offsets in songs: the aligning `\vspace` lines (`% KEEP`) of `pohadka` and `variacenarenesancnitema` are gone, and no song has a manual `\vspace` left. A song compiled alone (Overleaf, D-005) shows a framed name instead of the image.
+- **Lint:** `\score{name}` without `scores/<name>.mscz` is an error, an unused `.mscz` a warning.
+- **Reproducible:** the PDF conversion runs with `SOURCE_DATE_EPOCH=0`, so an export gives the same bytes every time; MuseScore may write the lyric dashes of `scarboroughfaircarthy` in another order between runs, but the image is identical (checked on five exports).
+- **Web:** the same SVGs, transparent, chord names in the songbook's red; J2/J4 put them into `songs.json` and the release.
+- Amends D-008 (the conversion goes SVG → PDF, not PDF → SVG) and confirms D-125 (J5's prototype is this). Not adopted: per-song offset arguments (they encoded the hand-cropping), cropping PDF exports with `pdfcrop` (MuseScore trims only PNG and SVG; the SVG also gives the staff position).
