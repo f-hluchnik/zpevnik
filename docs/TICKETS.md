@@ -45,7 +45,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P2 | todo | owner: licensing check before selling |
 | P3 | todo | |
 | P4 | todo | owner signs off the proof |
-| J0 | in review | song quirks: D-135, PR `feature/j0-song-quirks`; scores (with J5): next PR |
+| J0 | in review | song quirks: D-135, PR #88; scores (with J5): next PR |
 | J1 | todo | strong model (parser design) |
 | J2 | todo | strong model (data model = contract between repos) |
 | J3 | todo | strong model (schema = contract between repos) |
