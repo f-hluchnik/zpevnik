@@ -45,12 +45,12 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P2 | todo | owner: licensing check before selling |
 | P3 | todo | |
 | P4 | todo | owner signs off the proof |
-| J0 | todo | owner decides the song quirks; `\score` command |
+| J0 | in review | song quirks: PR #88 (D-135); scores: PR `feature/j0-scores` (D-136) |
 | J1 | todo | strong model (parser design) |
 | J2 | todo | strong model (data model = contract between repos) |
 | J3 | todo | strong model (schema = contract between repos) |
 | J4 | todo | |
-| J5 | todo | owner: missing `.mscz` files |
+| J5 | in review | done with J0's scores (D-136): PR `feature/j0-scores` |
 | L1 | todo | owner: notice text |
 | L2 | todo | |
 | W1 | todo | |
@@ -172,6 +172,7 @@ Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated in
 After the compile, run the converter and the schema validation. On pushes to master, add `songs.json` to the `files:` of the release step. PRs only validate.
 
 ### J5 · Scores from MuseScore — [agent] + [you] · M · needs J4
+**Done together with J0 item 1 (D-136), 8 Nov 2026:** the export is `tools/scores.py` with a shared style, the PDF uses the converted SVG, and every score places itself with `\score{name}`. Left for J4: put the SVGs (`generated/scores/*.svg`) into the release and reference them from `songs.json`. The text below is the original plan.
 The `.mscz` files are the source; CI exports the images, so the PDF and the web use the same export (D-125). A score is a single page by principle.
 1. **Prototype first and report before building on it:** a pinned MuseScore 4 in CI with `-o file.svg -T 0` (trimmed SVG, documented for single-page scores only). pdfLaTeX cannot include SVG, so for the PDF either convert the SVG (e.g. `rsvg-convert`) or export a PDF and crop it with `pdfcrop`. Compare a few results with today's images.
 2. One `.mscz` per image. Missing (5 Nov 2026): `tickettoride` uses `ticket_to_ride_intro.png`, which has no source. These `.mscz` produce more than one image today: `morseovka.mscz` (`morseovka_1.png`, `morseovka_2.png`), `pohadka.mscz` (`pohadka.pdf` and `pohadkaref.pdf`), `reddwarftheme.mscz` (intro and outro), `slunecnyhrob.mscz` (intro and solo). Unused: `morseovkasolo1–3.pdf`. The owner provides the missing files.

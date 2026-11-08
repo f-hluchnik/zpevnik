@@ -8,7 +8,7 @@ from pathlib import Path
 
 from registry import Artist
 from lint import (artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
-                  chord_warnings, lint, text_problems, unknown_slugs)
+                  chord_warnings, lint, text_problems, unknown_scores, unknown_slugs, unused_scores)
 from songs import Song
 
 
@@ -18,8 +18,9 @@ def artist(slug: str, section: bool = True) -> Artist:
 
 
 def song(song_id: str, title: str = "T", toctitle: str | None = None,
-         artists: tuple[str, ...] = (), collections: tuple[str, ...] = ()) -> Song:
-    return Song(song_id, title, toctitle, (), artists, collections)
+         artists: tuple[str, ...] = (), collections: tuple[str, ...] = (),
+         scores: tuple[str, ...] = ()) -> Song:
+    return Song(song_id, title, toctitle, (), artists, collections, scores)
 
 
 class TextProblems(unittest.TestCase):
@@ -156,6 +157,19 @@ class EmptyArtistInfo(unittest.TestCase):
     def test_counts_songs_without_artist_and_those_in_a_collection(self):
         songs = [song("a"), song("b", collections=("filmy",)), song("c", artists=("abba",))]
         self.assertEqual(empty_artist_info(songs), "2 songs have an empty \\artist{} (1 of them are in a collection)")
+
+
+class Scores(unittest.TestCase):
+    def test_score_without_source_is_reported(self):
+        self.assertEqual(unknown_scores([song("a", scores=("a_intro", "missing"))], {"a_intro"}),
+                         ["a: \\score{missing} has no scores/missing.mscz"])
+
+    def test_source_without_song_is_reported(self):
+        self.assertEqual(unused_scores([song("a", scores=("a_intro",))], {"a_intro", "old"}),
+                         ["scores/old.mscz is used by no song"])
+
+    def test_score_is_not_outside_a_block(self):
+        self.assertEqual(text_problems("a", "\\song{A} \\artist{x}\n\n\\score{a_riff}\n\n\\vers{a}\n"), [])
 
 
 class LintTree(unittest.TestCase):

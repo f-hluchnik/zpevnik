@@ -14,12 +14,14 @@ Errors fail the build:
   - a song still uses a renamed command (`\\refrain`, `\\sub`, `\\refsm`, ... see
     RENAMED_COMMANDS) or the old two-brace `\\vers{n}{...}`;
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
-  - an entry with `section = true` has no songs.
+  - an entry with `section = true` has no songs;
+  - a song sets `\\score{name}` and there is no `scores/<name>.mscz`.
 Warnings are listed and do not fail:
   - a song has no `\\chord` or `\\chords`;
   - an artist without a section has MIN_SONGS_FOR_SECTION songs or more;
   - several songs have the same title in the contents and none tells them apart
-    with a `\\toctitle`.
+    with a `\\toctitle`;
+  - a `scores/<name>.mscz` is used by no song.
 Info: how many songs have an empty `\\artist{}`.
 
 Usage: python3 tools/lint.py [repo-root]
@@ -32,7 +34,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from paths import add_root_argument
+from paths import SCORES_DIR, add_root_argument
 from registry import Artist, check_entries, normalise, read_entries
 from songs import ARTIST, Song, parse_song, song_paths
 
@@ -57,11 +59,11 @@ EMPTY_BLOCK = re.compile(r"\\(?:vers|chorus|bridge|prechorus|solo|intro|coda)(?:
 OLD_VERS = re.compile(r"\\vers\{[^{}]*\}\s*\{")  # \vers{n}{text}: the number is now \vers[n]{text}
 COMMENT = re.compile(r"(?<!\\)%.*")
 # What a paragraph outside braces and environments may start with: the header, the blocks, the
-# separators and the layout of scores. Anything else (text, \\rec, \\chords) belongs in a block.
+# separators and scores. Anything else (text, \\rec, \\chords) belongs in a block.
 PARAGRAPH_START = re.compile(r"\\([A-Za-z@]+)|[^\\\s]")
 ALLOWED_PARAGRAPH_STARTS = frozenset(
     "song artist alttitle subtitle toctitle collection note cue speaker vers chorus prechorus bridge solo "
-    "intro coda blockrule partrule groupbreak seealso large placetextbox hspace vspace begin includegraphics "
+    "intro coda blockrule partrule groupbreak seealso large placetextbox hspace begin score "
     "hypertarget".split())
 PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n")
 ESCAPED_BRACE = re.compile(r"\\[{}]")
@@ -157,6 +159,20 @@ def duplicate_titles(songs: list[Song]) -> list[str]:
             for same in by_title.values() if len(same) > 1]
 
 
+def score_names(root: Path) -> set[str]:
+    return {path.stem for path in (root / SCORES_DIR).glob("*.mscz")}
+
+
+def unknown_scores(songs: list[Song], available: set[str]) -> list[str]:
+    return [f"{song.id}: \\score{{{name}}} has no {SCORES_DIR}/{name}.mscz"
+            for song in songs for name in song.scores if name not in available]
+
+
+def unused_scores(songs: list[Song], available: set[str]) -> list[str]:
+    used = {name for song in songs for name in song.scores}
+    return [f"{SCORES_DIR}/{name}.mscz is used by no song" for name in sorted(available - used)]
+
+
 def empty_artist_info(songs: list[Song]) -> str:
     without = [song for song in songs if not song.artists]
     in_collection = sum(1 for song in without if song.collections)
@@ -193,6 +209,9 @@ def lint(root: Path) -> Findings:
         registry = [normalise(entry) for entry in entries]
         errors += unknown_slugs(songs, registry) + empty_sections(songs, registry)
         warnings += artists_ready_for_section(songs, registry) + duplicate_titles(songs)
+    available_scores = score_names(root)
+    errors += unknown_scores(songs, available_scores)
+    warnings += unused_scores(songs, available_scores)
     return Findings(errors, warnings, empty_artist_info(songs))
 
 

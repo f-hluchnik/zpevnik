@@ -32,6 +32,8 @@ Na kompilaci potřebuji Python 3.11 a novější a TeX Live s češtinou, `latex
 - **Linux (Debian, Ubuntu):** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra latexmk`. Na kontrolu stran a porovnání PDF (`tools/check_pages.py`, `tools/pdfdiff.py`) navíc `poppler-utils`.
 - **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic setspace pgf geometry xcolor hyperref cm-super latexmk`. Python 3.11 a novější je například z Homebrew (`brew install python`).
 
+Noty (viz [Noty](#noty)) se exportují z MuseScoru, takže `make` potřebuje ještě MuseScore 4.6.5, `rsvg-convert` a písmo CMU Serif: na Linuxu `sudo apt-get install librsvg2-bin fonts-cmu` a MuseScore jako AppImage (cestu k němu dej do proměnné `MSCORE`), na macOS MuseScore 4 z musescore.org, `brew install librsvg` a písmo CMU Serif.
+
 `make` zkompiluje celý zpěvník, `make song SONG=<id>` jen jednu písničku. `<id>` je název souboru bez `.tex`, například `make song SONG=lonelystranger`. Hotové PDF je v `build/<id>.pdf` (složka `build` se necommituje) a trvá to pár sekund. Je to stejné nastavení jako na Overleafu: bez obsahu a bez odkazů na interprety. Lokální sestavení s novější verzí TeX Live se může od GitHub Actions mírně lišit; rozhodující je vždy GitHub Actions.
 
 ### Název písničky v obsahu
@@ -119,7 +121,16 @@ Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
 - Čárkovaná čára mezi těsnými slokami je `\blockrule{délka v cm}`, plná čára mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem.
 - `\note{}` (capo apod.) patří k následujícímu bloku: mezeru pod sebou nemá, nad sebou ji má (kromě začátku písničky a místa za `\subtitle`/`\seealso`). Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
 - Celý zpěvník je v `\Large`. Když se písnička nevejde na stranu ani s mezerami smrštěnými na nulu, přidá se za hlavičku `\large` a komentář proč. Velikost písma se do dalších písniček nepřenáší (každá písnička běží ve skupině).
-- Ruční `\vspace` zůstává jen u zarovnání not (záporná hodnota u obrázku s notami) a v pár dalších případech, vždy s komentářem `% KEEP: důvod`.
+- Ruční `\vspace` do písniček nepiš: mezery mezi bloky jsou automatické a noty se zarovnají samy (viz [Noty](#noty)).
+
+### Noty
+Každý obrázek s notami je jeden soubor `scores/<název>.mscz` z MuseScoru 4 a v písničce ho vysází `\score{<název>}`. Na začátku bloku stojí vedle štítku (`\intro{` + `\score{pohadka}` + `}`), jinde na vlastním řádku. Do písničky se nepíše žádné odsazení, posun ani šířka: obrázek začíná tam, kde text bloku, štítek stojí uprostřed první osnovy a všechny noty mají stejné měřítko (celý systém přesně vyplní řádek).
+
+- Před úpravou noty načti v MuseScoru sdílený styl `scores/zpevnik.mss` (Formát → Styl → Načíst styl). Sestavení ho stejně použije na každý soubor, takže jen tak uvidíš rozdělení do systémů, jaké bude ve zpěvníku.
+- Nota je vždy na jedné stránce. Víc obrázků v jedné písničce znamená víc souborů (`morseovka_1.mscz`, `morseovka_2.mscz`).
+- Noty z MuseScoru ručně neexportuj: `make` (nebo `make scores`) je vyexportuje do `generated/scores/` sám a přeskočí ty, které se nezměnily. Akordy dostanou stejnou červenou jako ve zpěvníku.
+- Písnička otevřená samostatně (Overleaf) místo not ukáže rámeček s názvem.
+- `tools/lint.py` hlásí `\score` bez souboru `.mscz` a soubor, který žádná písnička nepoužívá.
 
 ### Psaní akordů
 V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různých akordových značek. Základním příkazem pro psaní akordů je příkaz `\chord{}`. Tento příkaz vysází akord nad bezprostředně následující text. Do složených závorek uvádím název akordu velkým písmenem. Charakteristiku akordu uvádím za akord příkazem podle následujícího seznamu. Výjimkou je mollový akord, který označím jednoduše písmenem "m".

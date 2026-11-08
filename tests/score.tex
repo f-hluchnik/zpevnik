@@ -1,0 +1,20 @@
+% A score in a song compiled alone (Overleaf): without generated/scores/ the
+% image is replaced by a framed name, and the name may contain an underscore.
+% Run through tests/single-song.sh --build, which checks the page text.
+\documentclass[a4paper, 10pt]{article}
+\usepackage{zpevnik}
+
+\begin{document}
+\pagestyle{plain}
+\begin{Large}
+\song{Score test}
+
+\intro{
+\score{test_riff}
+}
+
+\vers[1]{
+\chord{C}Lyrics after the score.
+}
+\end{Large}
+\end{document}

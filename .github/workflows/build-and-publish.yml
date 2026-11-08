@@ -4,6 +4,12 @@ on:
     branches: [main, master]
   pull_request:
 
+env:
+  # The score images are exported with this MuseScore (tools/scores.py). Moving to
+  # another version can change the layout of the scores; review them in the PDF diff.
+  MUSESCORE_URL: https://github.com/musescore/MuseScore/releases/download/v4.6.5/MuseScore-Studio-4.6.5.253511702-x86_64.AppImage
+  MUSESCORE_DIR: /home/runner/musescore
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,6 +29,38 @@ jobs:
       # Songs against the artists registry: errors fail, warnings are listed.
       - name: Lint songs and registry
         run: python3 tools/lint.py
+
+      # MuseScore runs headless under a virtual display (xvfb); it needs some X and
+      # OpenGL libraries the runner may lack. rsvg-convert turns the SVGs into PDFs
+      # for pdfLaTeX. CMU Serif is the font of the shared score style.
+      - name: Install the score export tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb librsvg2-bin fonts-cmu libopengl0 libegl1 \
+            libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-render-util0 libxcb-xinerama0 libxcb-shape0
+
+      - name: Cache MuseScore
+        id: musescore-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.MUSESCORE_DIR }}
+          key: musescore-${{ env.MUSESCORE_URL }}
+
+      # The AppImage is unpacked rather than mounted: the runner has no FUSE.
+      - name: Download MuseScore
+        if: steps.musescore-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$MUSESCORE_DIR" && cd "$MUSESCORE_DIR"
+          curl -fsSL -o musescore.AppImage "$MUSESCORE_URL"
+          chmod +x musescore.AppImage
+          ./musescore.AppImage --appimage-extract > /dev/null
+          rm musescore.AppImage
+
+      - name: Export scores
+        run: |
+          echo "MSCORE=$MUSESCORE_DIR/squashfs-root/AppRun" >> "$GITHUB_ENV"
+          MSCORE="$MUSESCORE_DIR/squashfs-root/AppRun" xvfb-run -a python3 tools/scores.py
 
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
@@ -69,6 +107,12 @@ jobs:
       - name: Generate derived files for base
         if: github.event_name == 'pull_request'
         run: if [ -f base/tools/generate.py ]; then python3 base/tools/generate.py base; fi
+
+      # A base with tools/scores.py exports its scores like the head; an older base
+      # has the images committed.
+      - name: Export scores for base
+        if: github.event_name == 'pull_request'
+        run: if [ -f base/tools/scores.py ]; then xvfb-run -a python3 base/tools/scores.py base; fi
 
       - name: Compile base
         if: github.event_name == 'pull_request'

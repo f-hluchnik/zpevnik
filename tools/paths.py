@@ -18,6 +18,9 @@ CHORD_TRACE = Path("zpevnik.chords")  # written by every build, see \chord in zp
 MULTIPAGE_ALLOWLIST = Path("tools/multipage-allowlist.txt")
 SINGLE_SONG_TEMPLATE = Path("tests/single-song.tex")
 BUILD_DIR = Path("build")
+STYLE_FILE = Path("zpevnik.sty")
+SCORES_DIR = Path("scores")              # MuseScore sources, one .mscz per image
+SCORE_STYLE = SCORES_DIR / "zpevnik.mss"  # shared MuseScore style, applied on every export
 
 GENERATED_DIR = Path("generated")
 ARTISTS_TEX = GENERATED_DIR / "artists.tex"
@@ -25,6 +28,7 @@ INCLUDE_TEX = GENERATED_DIR / "include.tex"
 LETTERS_TEX = GENERATED_DIR / "obsah-letters.tex"
 ARTIST_PART_TEX = GENERATED_DIR / "obsah-artists.tex"
 VERSION_TEX = GENERATED_DIR / "version.tex"
+SCORE_OUTPUT_DIR = GENERATED_DIR / "scores"  # <name>.svg (web), .pdf (pdfLaTeX), .tex (placement)
 
 
 def resolved_path(text: str) -> Path:
