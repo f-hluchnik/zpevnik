@@ -53,7 +53,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | J3 | todo | strong model (schema = contract between repos) |
 | J4 | todo | |
 | J5 | done | done with J0's scores (D-136): PR #89 |
-| L1 | todo | owner: notice text |
+| L1 | done | D-141 (notice in the PDF colophon and the web footer, licence scope) |
 | L2 | todo | |
 | W1 | todo | |
 | W2 | todo | |
@@ -104,7 +104,7 @@ Decided by the owner on 9 Nov 2026: **D-138**, superseded by the review **D-139*
 D-139. Everything below keeps the full book byte-identical (zero diff) and `generated/` byte-identical except new files.
 1. `editions/<name>/edition.toml` (`title`, optional `subtitle`, `file`, `songs` = song ids and/or `artists` = registry slugs); read and validated by a small module (unknown key, unknown song id or slug, empty selection, an unexpected `.tex` file in the folder are errors). Unit tests.
 2. One `Edition` type for every book: the full book is the edition without a filter (one code path, only its output paths differ). `tools/generate.py --edition <name>` filters the song list once (after an exclusion list, empty until L2) and generates from it: include list, letter contents, artist index and sections (the full book's rules, restricted to the artists with a song in the edition). The edition's generated files go to `generated/editions/<name>/`, the full book's stay where they are.
-3. Generated macros: title, subtitle, version (the build, D-133; E0's function), song count, build date, source link. The base files in `preamble/` use them instead of hard-coded text, so an edition without its own front matter is correct (full book: zero diff). The colophon becomes a generated core plus additions: today's credits stay in `preamble/vydavatelskyzaznam.tex` as the full book's additions, and an edition's own `vydavatelskyzaznam.tex` replaces only those.
+3. Generated macros: title, subtitle, version (the build, D-133; E0's function), song count, build date, source link. The legal notice (`preamble/upozorneni.tex`, D-141) is part of the colophon core: an edition cannot replace it. The base files in `preamble/` use them instead of hard-coded text, so an edition without its own front matter is correct (full book: zero diff). The colophon becomes a generated core plus additions: today's credits stay in `preamble/vydavatelskyzaznam.tex` as the full book's additions, and an edition's own `vydavatelskyzaznam.tex` replaces only those.
 4. Front matter per edition: the generator resolves which files make the front matter (a file in `editions/<name>/` with the name of a `preamble/` file replaces it; `pred-pisnickami.tex` and `po-obsahu.tex` are extra pages before the songs and after the contents) and writes their list. One main document parametrised by the edition (no copy of `zpevnik.tex`); choose how the edition is passed to it (a definition on the latexmk command line or a two-line generated driver) by testing with the pinned TeX Live. The edition compiles into its own output directory (`build/editions/<name>/`), so both builds can run in one checkout and the full book's per-song `.aux` files are untouched; the build creates the subfolders LaTeX writes those `.aux` files into (it does not create them itself). Leave room in the parameters and the output path for the format (screen now, print in P3): the format is never part of an edition.
 5. Page numbering (D-139): no hand-set counter. Remove `\setcounter{page}{8}` from `zpevnik.tex` if the full book stays byte-identical, otherwise derive the number; an edition with a different front matter must be numbered correctly.
 6. `make edition EDITION=<name>`; `check_pages.py` works on an edition's output. The chord-gap check (`tools/chord_gaps.py`, reading `<jobname>.chords`) stays on the full book: chord spacing depends on the format, not on the song selection.
@@ -136,13 +136,16 @@ All songs of the `zpevnik-lidovky` repository are already in the full book (owne
 The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff).
 
 ### P1 · Print requirements — [you] · S
-Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …); margins including the gutter for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (a subset needs E1–E4 first).
+Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (a subset needs E1–E4 first).
 
 ### P2 · Licensing check — [you] · S — **cancelled**
 Was: check the licensing before selling printed copies. The book is never sold (D-140).
 
 ### P3 · Print build — [agent] · M · needs P1 (and E4 for a subset)
-A print format with the page geometry from P1, built from the same song files and generated files; no copy of song content. The format is separate from the edition (D-139): it combines with the full book or any edition, using E2's parameters and an output directory of its own. The print format also owns the page-numbering rules of a printed book (D-139): the cover outside the numbered book block if P1 says so, the songs starting on a right-hand page. Every song must fit on one page, and a page smaller than A4 makes some spill: run the one-page check with the print geometry, report every song that takes more pages and propose a fix per song (a `\large` as D-129 allows, a two-page allow-list entry); do not change song content or fix silently. Also: even page count, blank pages where a spread needs them, the contents and the artist index still resolve, links printed without colour (or as P1 says). **Expected differences:** none for the screen PDF.
+D-142. The print format is a step after the build, separate from the edition (D-139): it combines with the full book or any edition and writes into an output directory of its own; no copy of song content.
+1. **Scaled print (the default):** scale the edition's screen PDF to the print page size from P1 (A4 to A5 is exactly 1/√2), with the offset of odd and even pages for the binding if P1 asks for it, blank pages where a spread needs them (songs starting on a right-hand page, an even page count), and the cover outside the numbered book block if P1 says so. Use what the pinned TeX Live has (`pdfpages` in a small wrapper document, or `pdfjam`); no new dependency. Check page size and page count; the contents links still work.
+2. **Geometry trial:** for the specific printed edition, build it once with a LaTeX page geometry for the print size (E2's parameters, no copy of `zpevnik.tex`), run the one-page check, report every song that spills, and attach a few pages of both versions for comparison; propose a fix per song (a `\large` as D-129 allows, a two-page allow-list entry), never fix silently. The owner chooses; the trial is not merged unless he picks it.
+**Expected differences:** none for the screen PDF.
 
 ### P4 · Print proof check — [agent] + [you] · S · needs P3
 Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, colour space against the printer's requirement (report, convert only if asked), crops of the first page, a middle page, a two-column song and the contents at 100%. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
@@ -187,11 +190,11 @@ The `.mscz` files are the source; CI exports the images, so the PDF and the web 
 
 # Phase 8 – Legal
 
-### L1 · Notice text — [you] · S
-A short text in Czech and English: non-commercial, contact address for removal requests. It goes into the website footer and the PDF colophon.
+### L1 · Notice text — [you] · S — **done**
+A short text in Czech and English: non-commercial, contact address for removal requests. It goes into the website footer and the PDF colophon. Done on 9 Nov 2026 (D-141): `preamble/upozorneni.tex` in the colophon, the footer in `zpevnik-web/templates/base.html`, and the scope of the Apache licence in `LICENSE` and the README.
 
 ### L2 · Hide switch — [agent] · S · needs E2, J2, L1
-`data/hidden.txt` with one song id per line. The generator leaves those songs out of every book, using E2's song filter (TOC, index and include list follow); the converter leaves them out of `songs.json`; a lint checks that each id exists. Put the L1 text into the colophon. (This hides songs from the outputs; only deleting the file removes it from the repository.)
+`data/hidden.txt` with one song id per line. The generator leaves those songs out of every book, using E2's song filter (TOC, index and include list follow); the converter leaves them out of `songs.json`; a lint checks that each id exists. (This hides songs from the outputs; only deleting the file removes it from the repository.)
 
 ---
 
@@ -215,7 +218,7 @@ Build-time index over title, alternative titles, artist and lyrics (about 270 kB
 A toggle on the song page using the Screen Wake Lock API; hidden where unsupported.
 
 ### W6 · Robots and notice — [agent] · S · needs W2, L1
-`robots.txt` disallowing everything, no sitemap, notice page and footer link. Hidden songs are absent because they are absent from the JSON.
+`robots.txt` disallowing everything, no sitemap. The notice is already in the footer of every page (L1, D-141); no separate notice page. Hidden songs are absent because they are absent from the JSON.
 
 ### W7 · Release check — [agent] · S · needs W3–W6
 Build under 1 minute; every song page present (minus hidden); every internal link resolves; screenshots of 3 songs on a phone-sized viewport; update the web README.

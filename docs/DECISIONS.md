@@ -151,7 +151,7 @@ Because the index would now show full labels, the owner proposes turning the one
 ### D-121 · Editions are in scope — Agreed (owner, 4 Nov 2026), tickets E1–E7; design decided in D-138, revised in D-139
 Two use cases: `zpevnik-lite` (a manual selection of favourites, exported now and then, not on a schedule) and possibly the printed book (D-122). The constraint of D-102 stays: the generator works from one ordered song list, so an edition is a filter over it and the full book stays byte-identical. Design questions (definition by file or tag, links to songs outside the edition, artist sections, naming, publishing) are the owner's decision E1; the agent's proposed defaults are in TICKETS. Checked in session 8: the include list, the letter contents and the artist sections already follow the song list; the artist index and sections still loop over the whole registry; the title and the version (song files + 100) are not parametrised; 84 `\hyl` links in 76 songs would dangle.
 
-### D-122 · The print edition is in scope with a deadline — Agreed (owner, 4 Nov 2026), tickets P1–P4; amended by D-140
+### D-122 · The print edition is in scope with a deadline — Agreed (owner, 4 Nov 2026), tickets P1–P4; amended by D-140, D-142
 Supersedes D-109 (which had put the print layout out of scope). The print is important and has a deadline (the date is asked in P1). The plan is to finish the refactoring first, but the owner may pivot, so the print build needs only phases 1–2 (done) and works on the current layout; it is repeated after phases 5–6. If the book is a subset it needs E1–E4 first (P1 asks). Licensing for a sold book is the separate owner task P2.
 
 
@@ -352,3 +352,16 @@ Changes from D-138 and why:
 
 ### D-140 · The songbook is never sold — Agreed (owner, 9 Nov 2026)
 The songbook is and stays free: a free PDF and later a free website. Printed copies are not sold. P2 (licensing check before selling) is cancelled, and D-122's note on a sold book and PLAN WP7 item 4 no longer apply. A free PDF and a website are still a kind of "making available", so L1 (notice) and L2 (hide switch) stay, before WP6 goes online.
+
+### D-141 · Legal notice and the scope of the licence — Agreed (owner, 9 Nov 2026), ticket L1
+Reasonable effort, not legal advice (WP7).
+- **Notice**, in Czech and English, in the colophon of every book (`preamble/upozorneni.tex`, part of the colophon core of D-139) and in the footer of every page of the website: the songbook is non-commercial and free; the copyright in the lyrics and music belongs to the authors; rights holders who do not want their song in it write to frantahluchnik@gmail.com and the song is removed. The two copies (PDF and web) are kept in step by hand: a short text in two repositories does not justify a shared data file; each copy says where the other is.
+- **Licence scope:** the Apache License 2.0 in `LICENSE` had covered the whole repository, songs included, which the owner cannot license. A scope statement now precedes the unchanged licence text: it covers only the owner's own work (tools, tests, CI, Makefile, `zpevnik.sty`, the document structure, the artists registry, the docs). The songs (`pisnicky/`), the scores (`scores/`), the PDFs built from them, the front matter (`preamble/`, whose foreword quotes lyrics by Vlasta Redl) and the cover (`obrazky/`, by Ivana Vlčková) are not licensed. The README says the same in Czech. GitHub may stop showing "Apache-2.0" for the repository, which is correct for a repository with mixed content.
+- Links to the web in the PDF are grey like the internal ones (`urlcolor`; the mail address is the first web link in the book).
+- Still open in WP7: the hide switch (L2) and `noindex`/`robots.txt` for the online songbook (W6).
+
+### D-142 · Print: the screen PDF scaled down; an own page geometry only as a trial — Agreed (owner, 9 Nov 2026), amends P1/P3
+A5 is A4 scaled by 1/√2 (ISO 216), so the A4 PDF scales to A5 without any change of layout: no song spills, the one-page rule holds, and the screen PDF stays the only typeset source. The cost: the body text becomes ≈ 10 pt (from 14.4 pt) and the margins shrink to 70.7 % (2 cm left, 1 cm right become 14 mm and 7 mm), the same on every page, so a two-sided bound book needs an offset of odd and even pages towards the outer edge (or ring binding). The owner checks legibility on paper by printing A4 pages "2 per sheet".
+- **The print format is a step after the build**: it takes the PDF of any edition (D-139) and scales it to the print page size, with the binding offset and the blank pages a printed book needs (songs starting on a right-hand page if P1 asks). No new LaTeX geometry, no fixes per song.
+- **Trial in P3:** a LaTeX page geometry for the specific printed edition (P1), which may not contain the longest songs: report which songs spill and compare a few pages with the scaled version. The owner chooses; the scaled version is the default.
+- Amends D-122 and the print notes of D-139 (the format is a scaling step, not a geometry, unless the trial wins).

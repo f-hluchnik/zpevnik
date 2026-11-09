@@ -49,7 +49,7 @@ A song subset built from the same files, as a songbook of its own (D-139): `zpev
 
 ## WP9 – Print (D-122)
 
-A print build with its own page geometry from the same files, a check that every song still fits on a page, and a preflighted proof. The print format combines with any edition (D-139); it needs WP8 only if the printed book is a subset. The book is never sold (D-140).
+A print version of any edition: by default the screen PDF scaled to the print page size (A4 to A5 is exactly 1/√2), with the binding offset and the blank pages a printed book needs; a LaTeX page geometry only as a trial for a specific printed edition (D-142); and a preflighted proof. The print format combines with any edition (D-139); it needs WP8 only if the printed book is a subset. The book is never sold (D-140).
 
 ---
 
@@ -72,7 +72,7 @@ A print build with its own page geometry from the same files, a check that every
 
 Lyrics and arrangements are copyrighted unless public domain; a free PDF and a website are the same kind of "making available".
 1. `noindex` meta tag and `robots.txt` on the website; no sitemap (D-006, W6).
-2. [you] A short notice page on the site and in the PDF: non-commercial, contact address for removal requests (L1).
+2. A short notice in the PDF colophon and the web footer, in Czech and English: non-commercial, contact address for removal requests (L1, done: D-141); the Apache licence covers only the owner's own work, not the songs (D-141).
 3. A per-song hide switch, so any song can be removed from web and PDF within minutes (L2, using the edition filter).
 
 The book is never sold, printed or not (D-140), so there is no licensing check for selling.
