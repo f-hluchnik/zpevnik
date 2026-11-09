@@ -25,7 +25,7 @@ Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or
 | 2 | Chord spacing | done | C1–C5 |
 | 3 | Vertical spacing | done | V1–V9 |
 | Q | Code quality and final command names | done | Q1–Q6 |
-| 8 | Editions (song subsets), build version | **next** | E0–E5 |
+| 8 | Editions (song subsets), build version | **next** | E0–E7 |
 | 9 | Print | then | P1–P4 |
 | 5 | Converter and `songs.json` | later | J1–J5 |
 | 7 | Legal hygiene | later, before WP6 goes online | L1–L2 |
@@ -45,7 +45,7 @@ The refactoring is closed by a review of the code as a senior engineer would lea
 
 ## WP8 – Editions (D-121)
 
-A song subset (first use: `zpevnik-lite`, a manual selection) built from the same files: a filter on the song list in `tools/generate.py`, an edition file per edition, edition title and version parameters, no dangling links, CI and release asset. The full book must not change. The same filter later serves the hide switch (L2). First, E0 makes the version name one build (`8.33.N`, D-133), which the edition releases and the print proof rely on.
+A song subset built from the same files, as a songbook of its own (D-138): `zpevnik-lite` (a manual selection, the main download on the website) and `lidovky` (until now a separate repository). A folder per edition with its song list and, optionally, its own front matter; a filter on the song list in `tools/generate.py`; the edition's own version; no dangling links; a checked colophon; CI, release asset and the download page. The full book must not change. The same filter later serves the hide switch (L2). First, E0 makes the version name one build (`8.33.N`, D-133), which the edition releases and the print proof rely on.
 
 ## WP9 – Print (D-122)
 

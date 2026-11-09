@@ -36,11 +36,13 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 |---|---|---|
 | K1 | todo | owner: chords for the 8 songs without them |
 | E0 | todo | build version `8.33.N` (D-133); needs nothing, before E5 and P4 |
-| E1 | todo | owner decisions |
+| E1 | done | D-138 |
 | E2 | todo | |
 | E3 | todo | |
 | E4 | todo | owner picks the songs |
 | E5 | todo | |
+| E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
+| E7 | todo | owner confirms the `lidovky` song list |
 | P1 | todo | owner: print requirements and the deadline |
 | P2 | todo | owner: licensing check before selling |
 | P3 | todo | |
@@ -66,7 +68,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | Phase | Tickets | After it you have |
 |---|---|---|
 | 1, 2, 4, 5, 6, 11 | done | Safety net, generated lists, clean sources, automatic chord and vertical spacing, code quality and the final command names (HISTORY.md) |
-| 10 Editions | E0–E5 | Song subsets such as `zpevnik-lite` built from the same files (D-121) |
+| 10 Editions | E0–E7 | Song subsets such as `zpevnik-lite` and `lidovky` built from the same files, with their own front matter (D-121, D-138) |
 | 3 Print | P1–P4 | A print build and a checked proof (D-122) |
 | 7 Converter | J0–J5 | `songs.json` and score SVGs on every release |
 | 8 Legal | L1–L2 | Notice, hide switch |
@@ -85,7 +87,7 @@ The converter is written once, against the final command names of phase 11 (D-10
 
 # Phase 10 – Editions (song subsets, D-121)
 
-Use cases: **`zpevnik-lite`**, a book of selected favourites (manual selection), exported now and then; possibly the printed book (P1). The generator already works from one song list, so an edition is a filter over it. Everything below keeps the full book byte-identical (zero diff).
+Use cases: **`zpevnik-lite`**, a book of selected favourites (manual selection), the main download on the website; **`lidovky`**; possibly the printed book (P1). The generator already works from one song list, so an edition is a filter over it, with its own front matter (D-138). Everything below keeps the full book byte-identical (zero diff).
 
 ### E0 · Build version `8.33.N` — [agent] · S · needs nothing
 D-133. Today every push to master replaces the PDF of release `v8.33`, whose tag still points at the source of 21 Aug 2026, and commits another PDF to `zpevnik-web`; the version names a song count, not a build.
@@ -95,37 +97,37 @@ D-133. Today every push to master replaces the PDF of release `v8.33`, whose tag
 4. README (Czech): what the three numbers mean.
 **Expected differences:** the colophon page only (version line).
 
-### E1 · Decide the editions design — [you] · S
-Answer the six questions; the agent's proposed defaults are marked with *.
-1. How an edition is defined: `editions/<name>.toml` (title, optional subtitle, file name, list of song ids)*, or a tag in the song files. The order is always the D-107 collation, never the list order*.
-   - I think that the edition should be defined as list of song ids plus it's optional own title page, dedication, colophon... basically everything in preamble. Example usecase: "Skautský zpěvník" - this is the printed edition we should prepare. It gets its own preable (titulní stránka, název, obálka, patitul, titulní list, úvod, dedikace, vydavatelský záznam). We can think of it as a new songbook derived from the current one, and it only gets the songs and table of contents from it. It can add as many pages it wants either before the songs or after the TOC. Therefore, an edition should be stored in it's own directory within our repo (I'm thinking `/editions/<concrete-edition>`) and should be compiled only on demand. An exception would be zpevnik-lite - this one should be regularly published to the website.
-   - About the zpevnik-lite: I see the future like this:
-      - on the website, the main button is to download zpevnik-lite
-      - there is a secondary button for the full version, which is also downloaded under the static link `zpevnik_latest.pdf`, because I already have QR codes for that.
-      - on the website, there is the online version of the zpevnik under `zpevnik.hluchnikovi.cz/zpevnik` (or something better if we can think of something that would make more sense)
-      - on the website, there are ternary buttons (or maybe a section) for the carols songbook (this is, however, not derived from the base zpevnik) and for the "lidovky" zpevnik. AFAIK the zpevnik-lidovky now has it's own repo, but we should turn it into an edition as it's a perfect example of an edition
-2. What happens to a `\seealso` link (and any other reference) to a song that is not in the edition: leave the link out*, or print the title without a link.
-   - If the song that the `\seealso` points to is missing in the edition, don't include the link at all (that means, no link, nothing printed). Basically act as if the `\seealso` song never existed.
-3. Artist sections and index: only artists with at least one song in the edition*; the threshold of 3 (D-119) does not apply*.
-   - Yes, the threshold should not apply in an edition.
-4. Name and version of an edition book, for example `zpevnik-lite` plus the book version*.
-   - The filename doesn't matter much. The real name we should be able to choose (similarly as the title page and colophon, see bellow). The edition book should have it's own version and note saying which base zpevnik version it was derived from.
-5. Where it is published: a release asset only*, or also the download page of `zpevnik-web`.
-   - It depends on the edition. For example, zpevnik-lite should go to the zpevnik-web. But there can be some editions that are only meant for printing. These could be only published as a release asset. But wouldn't them be buried in the release assets then?
-6. Title page and colophon text of each edition.
-   - When creating an edition, we should be able to submit a custom title page and at least edit the colophon. I know it's tricky since we have that generated, but I still see the preamble directory in the repo. I'm thinking that we could allow a custom colophon when present and only check if it contains the mandatory parts (we should decide what is mandatory first).
+### E1 · Decide the editions design — [you] · S — **done**
+Decided by the owner on 9 Nov 2026: **D-138** (a folder per edition with its own front matter and version, publishing per edition, the rules for links and artist sections). The owner's original answers are in the snapshot of this file in the Git history (before the PR of D-138).
 
-### E2 · Generator: edition filter — [agent] · M · needs E1
-`tools/generate.py --edition <name>` (default: the full book) reads `editions/<name>.toml`, filters the song list once and generates everything from it: include list, letter contents, artist index and sections. Edition title, subtitle and version go to a generated `edition.tex` that `patitul`, `titulnilist`, `uvod` and `vydavatelskyzaznam` use instead of the hard-coded title. An edition's generated files go to their own folder, so both builds can run in one checkout (the simplest way that leaves `make` unchanged). An unknown song id is an error. Unit tests. Design the filter so that L2's hidden songs are the same mechanism (an exclusion list applied before the edition filter). **Expected differences:** none for the full book; `generated/` byte-identical except the new `edition.tex`.
+### E2 · Generator and build: editions — [agent] · M · needs E0, E1
+D-138. Everything below keeps the full book byte-identical (zero diff) and `generated/` byte-identical except new files.
+1. `editions/<name>/edition.toml` (`title`, optional `subtitle`, `file`, `publish` = `web` or `release`, `songs` = ids); read and validated by a small module (unknown key, unknown song id, empty list, bad `publish` are errors). Unit tests.
+2. `tools/generate.py --edition <name>` filters the song list once (after an exclusion list, empty until L2) and generates from it: include list, letter contents, artist index and sections (only artists with a song in the edition, no threshold). The edition's generated files go to `generated/editions/<name>/`, the full book's stay where they are.
+3. Generated macros for the front matter: book title, subtitle, version, the full book's version (for an edition), build date, source link. The base files in `preamble/` use them instead of hard-coded text, so an edition without its own front matter is correct (full book: zero diff).
+4. Front matter per edition: a file in `editions/<name>/` with the name of a `preamble/` file replaces it; `pred-pisnickami.tex` and `po-obsahu.tex` are extra pages before the songs and after the contents. One main document parametrised by the edition (no copy of `zpevnik.tex`); the edition compiles into its own output directory (`build/editions/<name>/`), so both builds can run in one checkout and the full book's per-song `.aux` files are untouched.
+5. Edition version as in D-138 (E0's function with the edition's song count). `make edition EDITION=<name>`; `check_pages.py` works on an edition's output.
+Test with a throwaway edition that is not committed (some songs, one front-matter file of its own).
+**Expected differences:** none for the full book.
 
-### E3 · Links to songs outside the edition — [agent] · S · needs E2
-Implement the E1 rule for `\seealso` (84 uses in 76 songs on 6 Nov 2026); a generated list of the songs present (like the artist registry) lets `zpevnik.sty` decide without a second pass. Add a check that every contents link, `\seealso` and artist-section link of an edition points to an existing target, and fails otherwise; run the one-page check and the lints on the edition. **Expected differences:** none for the full book.
+### E3 · Edition integrity — [agent] · S · needs E2
+1. `\seealso` to a song outside the edition prints nothing (D-138); a generated list of the songs present lets `zpevnik.sty` decide without a second pass (84 uses in 76 songs on 6 Nov 2026).
+2. A check that every contents link, `\seealso` and artist-section link of an edition points to an existing target.
+3. The colophon check of D-138: an edition's own `vydavatelskyzaznam.tex` must use the generated macros of the mandatory parts.
+4. Run the one-page check and the lints on the edition.
+**Expected differences:** none for the full book.
 
 ### E4 · Choose the songs for `zpevnik-lite` — [you] + [agent] · S · needs E2
-The agent adds a small helper that lists song ids with title and artist (filter by artist) to pick from. The owner picks the songs; the agent writes `editions/lite.toml`; the lint checks that every id exists. **Expected differences:** none for the full book.
+The agent adds a small helper that lists song ids with title and artist (filter by artist) to pick from. The owner picks the songs; the agent writes `editions/lite/edition.toml` (`publish = "web"`). **Expected differences:** none for the full book.
 
 ### E5 · CI and release — [agent] · M · needs E3, E4
-CI builds every edition in `editions/` on pull requests (the build, the one-page check and the link check must pass) and, on pushes to master, attaches `zpevnik-<name>-<version>.pdf` to the same release as the full book. No change in `zpevnik-web` unless E1 says so. The PDF diff keeps comparing the full book only. Czech README section on editions: how to add a song to one.
+CI builds every edition in `editions/` on pull requests (the build, the one-page check, the link and colophon checks must pass) and, on pushes to master, attaches `<file>-<version>.pdf` of each edition to the release of the full book; the release notes list the editions. The PDF diff keeps comparing the full book only. Czech README section on editions: how to make one and how to add a song to one.
+
+### E6 · Download page with editions — [agent] · M · needs E5 · `zpevnik-web` (and a small PR in `zpevnik`)
+D-138, D-110. The website gets the PDFs from the release (this takes over the PDF half of W1): `build.py` downloads the PDFs of the release tagged `v<version.txt>`; the songbook CI stops committing the PDF into `zpevnik-web` and only writes `version.txt`. The download page offers `zpevnik-lite` as the main button and the full book as the second one at its current URL (`zpevnik_last.pdf`, printed QR codes point to it); further editions with `publish = "web"` (`lidovky`, at its current URL `zpevnik_lidovky.pdf`) and the separate koledy songbook in their own section. The owner had an uncommitted change in `templates/base.html` (6 Nov 2026): ask before touching it.
+
+### E7 · `lidovky` as an edition — [you] + [agent] · S · needs E4
+All songs of the `zpevnik-lidovky` repository are already in the full book (owner, 9 Nov 2026). The agent maps them to song ids (by title, with E4's helper) and writes `editions/lidovky/edition.toml` (`publish = "web"`) and, if the old book has its own title page or foreword, its front matter; the owner confirms the list and the front matter, and archives the old repository himself.
 
 ---
 
@@ -197,7 +199,7 @@ A short text in Czech and English: non-commercial, contact address for removal r
 
 ### W1 · Load the data — [agent] · M · needs J4
 `build.py` downloads `songs.json` from the release tagged `v<version.txt>` (the songbook CI already writes `version.txt` after creating the release) into an uncommitted folder, validates `schemaVersion`, and fails loudly if missing. Add a local option to point at a file.
-The PDF comes the same way (D-110): the songbook CI stops committing `static/files/zpevnik_last.pdf` and only writes `version.txt` (a separate PR in `zpevnik`); the download page keeps its URL and `download` file name.
+The PDFs already come from the release since E6 (D-110, D-138); W1 adds `songs.json` the same way.
 
 ### W2 · Song pages — [agent] · L · needs W1
 The online songbook is separate from the download page (D-103): it lives under `/zpevnik/`, with its own templates and navigation; the download page at `/` stays as it is, plus one link to the songbook.

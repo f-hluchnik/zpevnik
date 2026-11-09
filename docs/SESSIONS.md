@@ -25,24 +25,29 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 ## Sessions
 
 ### Session 20 · E0, E2, E3 · Sonnet · `zpevnik`
-- **Needs:** nothing for E0; E1 (owner decisions recorded in DECISIONS) for E2, E3.
-- **Read:** DECISIONS D-102, D-107, D-119, D-121, D-132, D-133 · PLAN WP8 · `tools/generate.py`, `tools/artist_toc.py` · for E0 the CI workflow.
-- **Notes:** Zero diff for the full book (S3 diff) and a byte-identical `generated/` except the new `edition.tex`. Test with a throwaway edition file that is not committed. E3: the rule for `\seealso` is the one chosen in E1. E0 first (its own PR); its only visible difference is the colophon; read the first release run on master before claiming it works (the owner merges, then checks the tag).
+- **Needs:** nothing for E0; E1 (done, D-138) for E2, E3.
+- **Read:** DECISIONS D-102, D-107, D-119, D-121, D-133, D-138 · PLAN WP8 · `zpevnik.tex`, `preamble/`, `tools/generate.py`, `tools/artist_toc.py`, `tools/paths.py` · for E0 the CI workflow.
+- **Notes:** E0 first (its own PR); its only visible difference is the colophon; read the first release run on master before claiming it works (the owner merges, then checks the tag). E2 needs E0 (the edition version reuses its function). E2 and E3: zero diff for the full book (PDF diff) and a byte-identical `generated/` except new files; test with a throwaway edition (a few songs, one front-matter file of its own) that is not committed. Before coding E2, give the owner a short plan of how one main document is parametrised by the edition and where its outputs go (D-138: no copy of `zpevnik.tex`, the full book's `.aux` files untouched).
 
-### Session 21 · E4, E5 · Sonnet · `zpevnik`
-- **Needs:** E3 and the owner's song list for `zpevnik-lite` (E4).
-- **Read:** DECISIONS D-110, D-121 · TICKETS E4, E5 · the CI workflow.
-- **Notes:** Release assets only on pushes to master; do not touch `zpevnik-web` unless E1 says so. Read the first real CI run before claiming anything about it.
+### Session 21 · E4, E5, E7 · Sonnet · `zpevnik`
+- **Needs:** E3; the owner's song list for `zpevnik-lite` (E4); for E7 the owner's confirmation of the `lidovky` list.
+- **Read:** DECISIONS D-110, D-121, D-138 · TICKETS E4, E5, E7 · the CI workflow · the `f-hluchnik/zpevnik-lidovky` repository (read-only, for E7).
+- **Notes:** Release assets only on pushes to master. Do not touch `zpevnik-web` (that is E6). Read the first real CI run before claiming anything about it.
+
+### Session 21b · E6 · Sonnet · `zpevnik-web` (and a small PR in `zpevnik`)
+- **Needs:** E5 released at least once with `zpevnik-lite` and `lidovky`.
+- **Read:** DECISIONS D-103, D-110, D-138 · TICKETS E6 · zpevnik-web README.
+- **Notes:** The current URLs stay: the full book `zpevnik_last.pdf` (printed QR codes), `zpevnik_lidovky.pdf`. The songbook CI stops committing the PDF into `zpevnik-web` (a PR in `zpevnik`); merge order between the two PRs matters, say it in both. The owner had an uncommitted change in `templates/base.html` (6 Nov 2026): ask before touching it.
 
 ### Session 22 · P3, P4 · Sonnet · `zpevnik`
 - **Needs:** P1 answered by the owner (page size, binding, deadline, full book or subset); E4 if a subset.
 - **Read:** DECISIONS D-122, D-129 and the P1 entry · PLAN WP9 · README (one page per song).
 - **Notes:** The screen PDF must not change (zero diff). Report every song that spills over a page with the print geometry and propose a fix per song; do not fix silently. P4 ends with the owner's sign-off, not with the agent's.
 
-### Session 23 · J0, J1 · **strong model** · `zpevnik`
-- **Needs:** Q4, Q5; for J0 the owner's answers per quirk (ask at the start).
-- **Read:** DECISIONS D-001, D-007, D-108, D-131 · PLAN WP5.
-- **Notes:** J0 first, its own PR (the `\score` command must give zero diff). J1: there is no prototype; this starts from scratch. Before coding, propose the parser structure and the in-memory model and wait for the owner's OK: J2/J3 turn that model into the contract with the website.
+### Session 23 · J1 · **strong model** · `zpevnik`
+- **Needs:** Q4, Q5, J0 (done, D-135, D-136).
+- **Read:** DECISIONS D-001, D-007, D-108, D-131, D-135, D-136 · PLAN WP5.
+- **Notes:** J1: there is no prototype; this starts from scratch. Before coding, propose the parser structure and the in-memory model and wait for the owner's OK: J2/J3 turn that model into the contract with the website. D-135 lists how the converter treats every special case (math symbols, `multicols`, `\echo`, `\ntimes`, ...); D-136 the scores (`\score{name}`, SVGs in `generated/scores/`).
 
 ### Session 24 · J2, J3 · **strong model** · `zpevnik`
 - **Needs:** J1.
@@ -54,10 +59,10 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 - **Read:** DECISIONS D-006, D-008, D-110, D-125, D-136 · PLAN WP5 (Steps), WP7.
 - **Notes:** J4 attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J4 also attaches the score SVGs (`generated/scores/*.svg`, one zip; J5 was done with J0, D-136). L2 reuses E2's song filter.
 
-### Session 26 · W1, W2 · Sonnet · `zpevnik-web` (W1 also touches `zpevnik` CI)
+### Session 26 · W1, W2 · Sonnet · `zpevnik-web`
 - **Needs:** J4 released at least once.
 - **Read:** DECISIONS D-103, D-110, D-123 · PLAN WP6 · zpevnik-web README.
-- **Notes:** W1 also changes the songbook CI so it stops committing the PDF into `zpevnik-web` (D-110): a separate PR in `zpevnik`. The download page at `/` must look and work as before. The songbook lives under `/zpevnik/`. W2 implements the chord rule in CSS and must read well without JavaScript. The owner had an uncommitted change in `zpevnik-web/templates/base.html` (6 Nov 2026): ask before touching that file.
+- **Notes:** The PDFs already come from the release (E6); W1 adds `songs.json`. The download page at `/` must look and work as before. The songbook lives under `/zpevnik/`. W2 implements the chord rule in CSS and must read well without JavaScript. The owner had an uncommitted change in `zpevnik-web/templates/base.html` (6 Nov 2026): ask before touching that file.
 
 ### Session 27 · W3, W4, W5, W6 · Sonnet · `zpevnik-web`
 - **Needs:** W2, L1.
@@ -76,9 +81,8 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 | Decision | Where | Blocks |
 |---|---|---|
 | Q5 items 2–4 (zapomnetliva dialogue, ahorsewithnoname note, song footnotes) | TICKETS Q5 | session 19 |
-| E1 editions design | TICKETS E1 | session 20 (E2, E3) |
-| J0 song quirks | TICKETS J0 | session 23 |
 | E4 songs for `zpevnik-lite` | TICKETS E4 | session 21 |
+| E7 `lidovky` song list and front matter confirmed | TICKETS E7 | session 21 (E7) |
 | P1 print requirements and deadline | TICKETS P1 | session 22 |
 | P2 licensing check before selling | TICKETS P2 | selling the print (not the build) |
 | L1 notice text | TICKETS L1 | sessions 25, 27 |
