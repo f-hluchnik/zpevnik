@@ -27,10 +27,10 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 Na kompilaci potřebuji Python 3.11 a novější, `latexmk` a TeX Live 2023 s češtinou (ve stejné verzi kompiluje zpěvník i GitHub Actions).
 
 ### Lokální sestavení
-Na kompilaci potřebuji Python 3.11 a novější a TeX Live s češtinou, `latexmk` a několik balíků (`csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `cm-super`).
+Na kompilaci potřebuji Python 3.11 a novější a TeX Live s češtinou, `latexmk` a několik balíků (`csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `cm-super`, `musixtex-fonts` pro křížky a béčka v akordech).
 
-- **Linux (Debian, Ubuntu):** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra latexmk`. Na kontrolu stran a porovnání PDF (`tools/check_pages.py`, `tools/pdfdiff.py`) navíc `poppler-utils`.
-- **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref cm-super latexmk`. Python 3.11 a novější je například z Homebrew (`brew install python`).
+- **Linux (Debian, Ubuntu):** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music latexmk`. Na kontrolu stran a porovnání PDF (`tools/check_pages.py`, `tools/pdfdiff.py`) navíc `poppler-utils`.
+- **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref cm-super musixtex-fonts latexmk`. Python 3.11 a novější je například z Homebrew (`brew install python`).
 
 Noty (viz [Noty](#noty)) se exportují z MuseScoru, takže `make` potřebuje ještě MuseScore 4.6.5, `rsvg-convert` a písmo CMU Serif: na Linuxu `sudo apt-get install librsvg2-bin fonts-cmu` a MuseScore jako AppImage (cestu k němu dej do proměnné `MSCORE`), na macOS MuseScore 4 z musescore.org, `brew install librsvg` a písmo CMU Serif.
 
