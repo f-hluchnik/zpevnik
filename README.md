@@ -179,3 +179,8 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - unit testy nástrojů `python3 -m unittest discover -s tools`
 - kontrola, že každá písnička je na jedné stránce `python3 tools/check_pages.py` (po `make`)
 - kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; překryv akordů kdekoli v knize je chyba)
+
+## Licence a autorská práva
+Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`pisnicky/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`preamble/`, úvod cituje text Vlasty Redla) a obálku (`obrazky/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Držitelé práv, kteří si nepřejí, aby zde jejich píseň byla, mi mohou napsat na frantahluchnik@gmail.com a píseň odstraním.
+
+Stejné upozornění je v tiráži zpěvníku (`preamble/upozorneni.tex`) a v patičce webu; když se mění, mění se na obou místech.

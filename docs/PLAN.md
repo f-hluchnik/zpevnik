@@ -45,11 +45,11 @@ The refactoring is closed by a review of the code as a senior engineer would lea
 
 ## WP8 – Editions (D-121)
 
-A song subset built from the same files, as a songbook of its own (D-138): `zpevnik-lite` (a manual selection, the main download on the website) and `lidovky` (until now a separate repository). A folder per edition with its song list and, optionally, its own front matter; a filter on the song list in `tools/generate.py`; the edition's own version; no dangling links; a checked colophon; CI, release asset and the download page. The full book must not change. The same filter later serves the hide switch (L2). First, E0 makes the version name one build (`8.33.N`, D-133), which the edition releases and the print proof rely on.
+A song subset built from the same files, as a songbook of its own (D-139): `zpevnik-lite` (a manual selection, the main download on the website) and `lidovky` (until now a separate repository, now the songs of one registry entry). A folder per edition with its selection (song ids and/or artists) and, optionally, its own front matter; a filter on the song list in `tools/generate.py`, with the full book as the edition without a filter; the edition named by the build it comes from; no dangling links; one colophon core in every book; CI, release asset and the download page (configured in `zpevnik-web`). Editions are independent of the print format. The full book must not change. The same filter later serves the hide switch (L2). First, E0 makes the version name one build (`8.33.N`, D-133), which the edition releases and the print proof rely on.
 
 ## WP9 – Print (D-122)
 
-A print build with its own page geometry from the same files, a check that every song still fits on a page, a preflighted proof and the owner's licensing check before selling. It needs WP8 only if the printed book is a subset.
+A print version of any edition: by default the screen PDF scaled to the print page size (A4 to A5 is exactly 1/√2), with the binding offset and the blank pages a printed book needs; a LaTeX page geometry only as a trial for a specific printed edition (D-142); and a preflighted proof. The print format combines with any edition (D-139); it needs WP8 only if the printed book is a subset. The book is never sold (D-140).
 
 ---
 
@@ -72,9 +72,10 @@ A print build with its own page geometry from the same files, a check that every
 
 Lyrics and arrangements are copyrighted unless public domain; a free PDF and a website are the same kind of "making available".
 1. `noindex` meta tag and `robots.txt` on the website; no sitemap (D-006, W6).
-2. [you] A short notice page on the site and in the PDF: non-commercial, contact address for removal requests (L1).
+2. A short notice in the PDF colophon and the web footer, in Czech and English: non-commercial, contact address for removal requests (L1, done: D-141); the Apache licence covers only the owner's own work, not the songs (D-141).
 3. A per-song hide switch, so any song can be removed from web and PDF within minutes (L2, using the edition filter).
-4. A **sold** printed edition is a different situation from a free PDF; check licensing (e.g. with OSA) before selling (P2).
+
+The book is never sold, printed or not (D-140), so there is no licensing check for selling.
 
 ## WP6 – Website (`zpevnik-web`)
 
