@@ -3,7 +3,7 @@
 A song file has one `\\song{Title}`, optionally one `\\toctitle{TOC title}` and
 any number of `\\alttitle{Other title}`, each at the start of a line. The song
 line carries its `\\artist{slug}` tags (up to two); `\\collection{slug}` is on
-a line of its own.
+a line of its own. `\\score{name}` sets the image of `scores/<name>.mscz`.
 
 Python >= 3.11, standard library only.
 """
@@ -17,6 +17,7 @@ from tex_text import brace_group, plain_text
 
 
 ARTIST = re.compile(r"\\artist(?:\[[^\]]*\])?\{([^}]*)\}")  # \artist[label]{slug}
+SCORE = re.compile(r"\\score\{([^}]*)\}")  # \score{name}: the image of scores/<name>.mscz
 
 
 @dataclass(frozen=True)
@@ -27,6 +28,7 @@ class Song:
     alttitles: tuple[str, ...] = ()  # \alttitle, other names the song is known by
     artists: tuple[str, ...] = ()    # \artist slugs, empty ones left out
     collections: tuple[str, ...] = ()  # \collection slugs
+    scores: tuple[str, ...] = ()       # \score names, in the order of the song
 
     @property
     def groups(self) -> tuple[str, ...]:
@@ -72,7 +74,8 @@ def parse_song(song_id: str, text: str) -> Song:
     return Song(song_id, title, read_title(text, "toctitle", where),
                 tuple(find_arguments(text, "alttitle")),
                 tuple(slug for slug in ARTIST.findall(text) if slug),
-                tuple(find_arguments(text, "collection")))
+                tuple(find_arguments(text, "collection")),
+                tuple(SCORE.findall(text)))
 
 
 def read_songs(root: Path) -> list[Song]:

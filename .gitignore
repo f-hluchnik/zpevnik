@@ -318,3 +318,6 @@ __pycache__/
 
 # Output of make song (R14)
 /build/
+
+# MuseScore backup copies, next to any saved score
+.mscbackup/

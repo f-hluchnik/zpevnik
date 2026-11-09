@@ -6,12 +6,12 @@
 # Fills DIR with exactly what an Overleaf project has: zpevnik.sty,
 # single-song.tex and the one song it includes, plus artist.tex (the edge
 # cases of \artist), metadata.tex (\alttitle, \toctitle, \collection) and
-# chords.tex (automatic chord spacing).
+# chords.tex (automatic chord spacing) and score.tex (a score without its image).
 # With --build it also compiles them with pdflatex and checks them: the song
 # takes one page, each page of artist.tex prints the artist links it should,
 # metadata.tex prints none of its metadata, chords.tex has no overlapping
 # chords and a hyphen in each split word, and spacing.tex keeps its separators,
-# unnumbered verses and cues in line.
+# unnumbered verses and cues in line, and score.tex shows the score's name.
 # CI runs this script with --build in the pinned TeX Live action; any failed check fails the job.
 set -euo pipefail
 
@@ -21,7 +21,7 @@ song=$(grep -oP '(?<=\\include\{pisnicky/)[^}]+' "$root/tests/single-song.tex")
 
 rm -rf "$dir"
 mkdir -p "$dir/pisnicky"
-cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$root/tests/chords.tex" "$root/tests/spacing.tex" "$dir/"
+cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$root/tests/chords.tex" "$root/tests/spacing.tex" "$root/tests/score.tex" "$dir/"
 cp "$root/pisnicky/$song.tex" "$dir/pisnicky/"
 
 [ "${2:-}" = "--build" ] || exit 0
@@ -120,3 +120,11 @@ same "$(edge 6 A: max)" "$(edge 6 9. max)" 1 && same "$(edge 6 Speaker min)" "$(
 same "$(edge 6 Unlabelled min)" "$(edge 6 Nine min)" \
   || { echo "spacing.tex: text of an unnumbered verse does not start where the text of a labelled block does" >&2; exit 1; }
 echo "spacing OK"
+
+# A score without its exported image: a framed name instead, and the song goes on.
+pdflatex -interaction=nonstopmode -halt-on-error score.tex >/dev/null
+text=$(pdftotext score.pdf -)
+for t in "score test_riff" "Lyrics after the score."; do
+  grep -qF -- "$t" <<<"$text" || { echo "score.tex: '$t' missing" >&2; exit 1; }
+done
+echo "score OK"

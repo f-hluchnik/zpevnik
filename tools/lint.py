@@ -9,17 +9,21 @@ Errors fail the build:
     `\\gap{n}`, chord-only lines `\\chords{...}`);
   - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (the gap between blocks
     is automatic, see the README);
+  - a song places or spaces something by hand (`\\includegraphics`, `\\vspace`, `\\hspace`) or
+    writes an echo or repeat signs by hand (see HAND_WRITTEN_FORMS);
   - a song has text, `\\rec` or `\\chords` outside a block (a paragraph must start with a block or a separator);
   - a song has a block without text (`\\bridge{}`, `\\vers[3]{}`); a label alone is `\\cue{...}`;
   - a song still uses a renamed command (`\\refrain`, `\\sub`, `\\refsm`, ... see
     RENAMED_COMMANDS) or the old two-brace `\\vers{n}{...}`;
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
-  - an entry with `section = true` has no songs.
+  - an entry with `section = true` has no songs;
+  - a song sets `\\score{name}` and there is no `scores/<name>.mscz`.
 Warnings are listed and do not fail:
   - a song has no `\\chord` or `\\chords`;
   - an artist without a section has MIN_SONGS_FOR_SECTION songs or more;
   - several songs have the same title in the contents and none tells them apart
-    with a `\\toctitle`.
+    with a `\\toctitle`;
+  - a `scores/<name>.mscz` is used by no song.
 Info: how many songs have an empty `\\artist{}`.
 
 Usage: python3 tools/lint.py [repo-root]
@@ -32,7 +36,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from paths import add_root_argument
+from paths import SCORES_DIR, add_root_argument
 from registry import Artist, check_entries, normalise, read_entries
 from songs import ARTIST, Song, parse_song, song_paths
 
@@ -50,10 +54,13 @@ RENAMED_COMMANDS = {
     "hyt": "\\hypertarget", "hylo": "\\hyperlink",
     "nv": "\\vers{...} (a block without a label)", "lbl": "\\speaker{A}{...} or \\cue{...}",
 }
-# LaTeX commands that build by hand what a song command does; the value is that command.
+# LaTeX commands that do by hand what a song command or the style does; the value is the advice.
 HAND_WRITTEN_FORMS = {
-    "textsuperscript": "\\echo{...} for an echo or backing vocals",
-    "backslash": "\\rep{...}", "textbackslash": "\\rep{...}",
+    "textsuperscript": "write \\echo{...} for an echo or backing vocals",
+    "backslash": "write \\rep{...}", "textbackslash": "write \\rep{...}",
+    "includegraphics": "write \\score{name} for scores/<name>.mscz",
+    "vspace": "the gaps between blocks are automatic and scores place themselves",
+    "hspace": "chord spacing is automatic (a pause is \\gap{n}) and scores place themselves",
 }
 
 
@@ -70,13 +77,13 @@ EMPTY_BLOCK = re.compile(r"\\(?:vers|chorus|bridge|prechorus|solo|intro|coda)(?:
 OLD_VERS = re.compile(r"\\vers\{[^{}]*\}\s*\{")  # \vers{n}{text}: the number is now \vers[n]{text}
 COMMENT = re.compile(r"(?<!\\)%.*")
 # What a paragraph outside braces may start with: the header, the blocks, the separators, column
-# layout and the layout of scores. Anything else (text, \\rec, \\chords) belongs in a block, also
-# inside an environment such as multicols.
+# layout and scores. Anything else (text, \\rec, \\chords) belongs in a block, also inside an
+# environment such as multicols.
 PARAGRAPH_START = re.compile(r"\\([A-Za-z@]+)|[^\\\s]")
 ALLOWED_PARAGRAPH_STARTS = frozenset(
     "song artist alttitle subtitle toctitle collection note cue speaker vers chorus prechorus bridge solo "
-    "intro coda blockrule partrule groupbreak seealso large hspace vspace begin end columnbreak "
-    "includegraphics hypertarget".split())
+    "intro coda blockrule partrule groupbreak seealso large begin end columnbreak score "
+    "hypertarget".split())
 PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n")
 ESCAPED_BRACE = re.compile(r"\\[{}]")
 CHORD_USE = re.compile(r"\\chords?\b")
@@ -117,7 +124,7 @@ def text_problems(song_id: str, text: str) -> list[str]:
     for name, count in Counter(RENAMED_COMMAND.findall(code)).items():
         problems.append(f"{song_id}: {count} uses of the removed \\{name}; write {RENAMED_COMMANDS[name]}")
     for name, count in Counter(HAND_WRITTEN_FORM.findall(code)).items():
-        problems.append(f"{song_id}: {count} uses of \\{name}; write {HAND_WRITTEN_FORMS[name]}")
+        problems.append(f"{song_id}: {count} uses of \\{name}; {HAND_WRITTEN_FORMS[name]}")
     old_vers = len(OLD_VERS.findall(code))
     if old_vers:
         problems.append(f"{song_id}: {old_vers} uses of the old \\vers{{n}}{{text}}; write \\vers[n]{{text}}")
@@ -171,6 +178,20 @@ def duplicate_titles(songs: list[Song]) -> list[str]:
             for same in by_title.values() if len(same) > 1]
 
 
+def score_names(root: Path) -> set[str]:
+    return {path.stem for path in (root / SCORES_DIR).glob("*.mscz")}
+
+
+def unknown_scores(songs: list[Song], available: set[str]) -> list[str]:
+    return [f"{song.id}: \\score{{{name}}} has no {SCORES_DIR}/{name}.mscz"
+            for song in songs for name in song.scores if name not in available]
+
+
+def unused_scores(songs: list[Song], available: set[str]) -> list[str]:
+    used = {name for song in songs for name in song.scores}
+    return [f"{SCORES_DIR}/{name}.mscz is used by no song" for name in sorted(available - used)]
+
+
 def empty_artist_info(songs: list[Song]) -> str:
     without = [song for song in songs if not song.artists]
     in_collection = sum(1 for song in without if song.collections)
@@ -207,6 +228,9 @@ def lint(root: Path) -> Findings:
         registry = [normalise(entry) for entry in entries]
         errors += unknown_slugs(songs, registry) + empty_sections(songs, registry)
         warnings += artists_ready_for_section(songs, registry) + duplicate_titles(songs)
+    available_scores = score_names(root)
+    errors += unknown_scores(songs, available_scores)
+    warnings += unused_scores(songs, available_scores)
     return Findings(errors, warnings, empty_artist_info(songs))
 
 

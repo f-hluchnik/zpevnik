@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from songs import Song, find_arguments, read_songs, read_title
+from songs import Song, find_arguments, parse_song, read_songs, read_title
 
 
 class ReadTitle(unittest.TestCase):
@@ -68,6 +68,10 @@ class ReadSongs(unittest.TestCase):
             a, b = read_songs(Path(tmp))
             self.assertEqual((a.artists, a.collections), (("x", "y"), ("filmy",)))
             self.assertEqual((b.artists, b.collections), ((), ()))
+
+    def test_reads_the_scores_in_song_order(self):
+        song = parse_song("a", "\\song{A}\n\\intro{\n\\score{a_intro}\n}\n\\vers{x}\n\n\\score{a_riff}\n")
+        self.assertEqual(song.scores, ("a_intro", "a_riff"))
 
     def test_song_without_title_is_an_error(self):
         with tempfile.TemporaryDirectory() as tmp:
