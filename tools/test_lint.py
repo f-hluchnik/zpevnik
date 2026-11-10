@@ -195,10 +195,10 @@ class LintTree(unittest.TestCase):
         tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(tmp))
         (tmp / "data").mkdir()
-        (tmp / "pisnicky").mkdir()
+        (tmp / "songs").mkdir()
         (tmp / "data" / "artists.toml").write_text(registry, encoding="utf-8")
         for name, text in songs.items():
-            (tmp / "pisnicky" / f"{name}.tex").write_text(text, encoding="utf-8")
+            (tmp / "songs" / f"{name}.tex").write_text(text, encoding="utf-8")
         return tmp
 
     def test_clean_tree(self):

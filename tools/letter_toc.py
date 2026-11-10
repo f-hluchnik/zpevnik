@@ -1,6 +1,6 @@
 """The letter part of the table of contents.
 
-`letters_tex` returns the letter row and the letter sections of obsah.tex:
+`letters_tex` returns the letter row and the letter sections of shared-pages/contents.tex:
 one `\\hyperlink` per song, in songbook order, and an italic entry for each
 alternative title, ordered by that title under its own letter.
 

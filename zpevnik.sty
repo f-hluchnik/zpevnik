@@ -80,7 +80,7 @@
 % it no link target is created. The group keeps a font change inside a song
 % (e.g. \large in a song that does not fit otherwise) from leaking into the next one.
 \newcommand{\zp@songid}{}
-\newcommand{\songinclude}[1]{\begingroup\gdef\zp@songid{#1}\include{pisnicky/#1}\endgroup}
+\newcommand{\songinclude}[1]{\begingroup\gdef\zp@songid{#1}\include{songs/#1}\endgroup}
 \newcommand{\zp@songtarget}{\ifx\zp@songid\empty\else\hypertarget{\zp@songid}{}\gdef\zp@songid{}\fi}
 % Small capitals as the old \sc did: \normalfont also drops the bold that the
 % headings set, so only the title (\textbf in \song) stays bold.

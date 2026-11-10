@@ -3,17 +3,17 @@
 
 \author{František Hluchník}
 
-% \includeonly{pisnicky/zelviblues, obsah}
+% \includeonly{songs/zelviblues, shared-pages/contents}
 
 \begin{document}
 \pagestyle{empty}
-\include{preamble/obalka}
+\include{shared-pages/cover}
 \clearpage\mbox{}\clearpage
-\include{preamble/patitul}
-\include{preamble/vydavatelskyzaznam}
-\include{preamble/titulnilist}
-\include{preamble/dedikace}
-\include{preamble/uvod}
+\include{shared-pages/halftitle}
+\include{shared-pages/imprint}
+\include{shared-pages/titlepage}
+\include{shared-pages/dedication}
+\include{shared-pages/introduction}
 
 \clearpage
 \setcounter{page}{8}
@@ -22,5 +22,5 @@
 \begin{Large}
 \input{generated/include}
 \end{Large}
-\include{obsah}
+\include{shared-pages/contents}
 \end{document}

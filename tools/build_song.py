@@ -25,7 +25,7 @@ def main_file_text(template: str, song: str) -> str:
     """The template with its one \\include line pointing at `song`."""
     text, replaced = INCLUDE_LINE.subn(lambda _: f"\\include{{{SONGS_DIR}/{song}}}", template)
     if replaced != 1:
-        raise ValueError(f"{SINGLE_SONG_TEMPLATE} must contain exactly one \\include{{pisnicky/...}} line")
+        raise ValueError(f"{SINGLE_SONG_TEMPLATE} must contain exactly one \\include{{songs/...}} line")
     return text
 
 

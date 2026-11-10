@@ -10,7 +10,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-SONGS_DIR = Path("pisnicky")
+SONGS_DIR = Path("songs")
+LEGACY_SONGS_DIR = Path("pisnicky")  # the folder before the rename (R15); dropped by R16
 REGISTRY_FILE = Path("data/artists.toml")
 BOOK_TEX = Path("zpevnik.tex")
 BOOK_PDF = Path("zpevnik.pdf")
@@ -29,6 +30,11 @@ LETTERS_TEX = GENERATED_DIR / "obsah-letters.tex"
 ARTIST_PART_TEX = GENERATED_DIR / "obsah-artists.tex"
 VERSION_TEX = GENERATED_DIR / "version.tex"
 SCORE_OUTPUT_DIR = GENERATED_DIR / "scores"  # <name>.svg (web), .pdf (pdfLaTeX), .tex (placement)
+
+
+def songs_dir(root: Path) -> Path:
+    """The song folder of a checkout, which may predate the rename (the PDF diff builds a base)."""
+    return SONGS_DIR if (root / SONGS_DIR).is_dir() else LEGACY_SONGS_DIR
 
 
 def resolved_path(text: str) -> Path:

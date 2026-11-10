@@ -36,7 +36,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 |---|---|---|
 | K1 | todo | owner: chords for the 8 songs without them |
 | E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
-| R15 | todo | English names (D-143); before E2 |
+| R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | todo | |
 | E3 | todo | |
@@ -140,7 +140,7 @@ D-143. The skeleton gets the Czech book order: cover, blank, halftitle, blank, t
 **Expected differences:** the front-matter pages (order, one new blank page, the first credit line); every page number one higher, and the contents numbers with them. The song-by-song diff reports every song: check that each differs only in its page number.
 
 ### R16 · Drop the old song folder from the version — [agent] · S · needs the first song-count change after R15
-D-143. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename test goes. **Expected differences:** none.
+D-143. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename tests go. R15 left four more traces of the old folder, all removed here: `LEGACY_SONGS_DIR` and `songs_dir()` in `tools/paths.py` (with the fallback in `tools/check_pages.py` that lets the PDF diff read a base built before the rename, and its test), and the `pisnicky/` pathspec of the *List newly added songs* step in the CI workflow. **Expected differences:** none.
 
 ---
 
@@ -204,7 +204,7 @@ The `.mscz` files are the source; CI exports the images, so the PDF and the web 
 # Phase 8 – Legal
 
 ### L1 · Notice text — [you] · S — **done**
-A short text in Czech and English: non-commercial, contact address for removal requests. It goes into the website footer and the PDF colophon. Done on 9 Nov 2026 (D-141): `preamble/upozorneni.tex` in the colophon, the footer in `zpevnik-web/templates/base.html`, and the scope of the Apache licence in `LICENSE` and the README.
+A short text in Czech and English: non-commercial, contact address for removal requests. It goes into the website footer and the PDF colophon. Done on 9 Nov 2026 (D-141): `shared-pages/notice.tex` (then `preamble/upozorneni.tex`) in the colophon, the footer in `zpevnik-web/templates/base.html`, and the scope of the Apache licence in `LICENSE` and the README.
 
 ### L2 · Hide switch — [agent] · S · needs E2, J2, L1
 `data/hidden.txt` with one song id per line. The generator leaves those songs out of every book, using E2's song filter (TOC, index and include list follow); the converter leaves them out of `songs.json`; a lint checks that each id exists. (This hides songs from the outputs; only deleting the file removes it from the repository.)

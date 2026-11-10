@@ -1,4 +1,4 @@
-# Song ids (file names in pisnicky/ without .tex), one per line, that may take
+# Song ids (file names in songs/ without .tex), one per line, that may take
 # two pages. Everything else must fit on one page (tools/check_pages.py).
 # "#" starts a comment. Currently empty: every song fits under the pinned
 # TeX Live 2023 (756 pages).

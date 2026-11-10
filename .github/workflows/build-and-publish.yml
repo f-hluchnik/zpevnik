@@ -165,7 +165,9 @@ jobs:
              || ! git cat-file -e "$base" 2>/dev/null; then
             added=""
           else
-            added=$(git diff --name-status "$base" "${{ github.sha }}" -- pisnicky/ \
+            # Both folders, with rename detection: the commit that renamed pisnicky/
+            # to songs/ must not list every song as new.
+            added=$(git diff -M --name-status "$base" "${{ github.sha }}" -- songs/ pisnicky/ \
                     | awk '$1=="A" {print $2}')
           fi
 
