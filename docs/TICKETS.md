@@ -35,7 +35,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | Ticket | Status | Notes / PR |
 |---|---|---|
 | K1 | todo | owner: chords for the 8 songs without them |
-| E0 | done | build version `8.33.N` (D-133) |
+| E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
+| R15 | todo | English names (D-143); before E2 |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | todo | |
 | E3 | todo | |
@@ -43,6 +44,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E5 | todo | |
 | E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
 | E7 | todo | owner confirms the `lidovky` song list |
+| E8 | todo | front matter in book order (D-143); every page number +1 |
+| R16 | todo | needs the first song-count change after R15 (8.34.0) |
 | P1 | todo | owner: print requirements and the deadline |
 | P2 | cancelled | the book is never sold (D-140) |
 | P3 | todo | |
@@ -68,7 +71,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | Phase | Tickets | After it you have |
 |---|---|---|
 | 1, 2, 4, 5, 6, 11 | done | Safety net, generated lists, clean sources, automatic chord and vertical spacing, code quality and the final command names (HISTORY.md) |
-| 10 Editions | E0–E7 | Song subsets such as `zpevnik-lite` and `lidovky` built from the same files, with their own front matter (D-121, D-138) |
+| 10 Editions | E0–E8, R15, R16 | Song subsets such as `zpevnik-lite` and `lidovky` built from the same files, with their own pages; the full book is one of them (D-121, D-139, D-143) |
 | 3 Print | P1–P4 | A print build and a checked proof (D-122) |
 | 7 Converter | J0–J5 | `songs.json` and score SVGs on every release |
 | 8 Legal | L1–L2 | Notice, hide switch |
@@ -100,15 +103,18 @@ D-133. Today every push to master replaces the PDF of release `v8.33`, whose tag
 ### E1 · Decide the editions design — [you] · S — **done**
 Decided by the owner on 9 Nov 2026: **D-138**, superseded by the review **D-139** the same day (selection by song id or artist, front matter per edition, one colophon core, no edition version, the download page configured in `zpevnik-web`, the rules for links and artist sections). The owner's original answers are in the snapshot of this file in the Git history (before the PR of D-138).
 
-### E2 · Generator and build: editions — [agent] · M · needs E0, E1
-D-139. Everything below keeps the full book byte-identical (zero diff) and `generated/` byte-identical except new files.
-1. `editions/<name>/edition.toml` (`title`, optional `subtitle`, `file`, `songs` = song ids and/or `artists` = registry slugs); read and validated by a small module (unknown key, unknown song id or slug, empty selection, an unexpected `.tex` file in the folder are errors). Unit tests.
-2. One `Edition` type for every book: the full book is the edition without a filter (one code path, only its output paths differ). `tools/generate.py --edition <name>` filters the song list once (after an exclusion list, empty until L2) and generates from it: include list, letter contents, artist index and sections (the full book's rules, restricted to the artists with a song in the edition). The edition's generated files go to `generated/editions/<name>/`, the full book's stay where they are.
-3. Generated macros: title, subtitle, version (the build, D-133; E0's function), song count, build date, source link. The legal notice (`preamble/upozorneni.tex`, D-141) is part of the colophon core: an edition cannot replace it. The base files in `preamble/` use them instead of hard-coded text, so an edition without its own front matter is correct (full book: zero diff). The colophon becomes a generated core plus additions: today's credits stay in `preamble/vydavatelskyzaznam.tex` as the full book's additions, and an edition's own `vydavatelskyzaznam.tex` replaces only those.
-4. Front matter per edition: the generator resolves which files make the front matter (a file in `editions/<name>/` with the name of a `preamble/` file replaces it; `pred-pisnickami.tex` and `po-obsahu.tex` are extra pages before the songs and after the contents) and writes their list. One main document parametrised by the edition (no copy of `zpevnik.tex`); choose how the edition is passed to it (a definition on the latexmk command line or a two-line generated driver) by testing with the pinned TeX Live. The edition compiles into its own output directory (`build/editions/<name>/`), so both builds can run in one checkout and the full book's per-song `.aux` files are untouched; the build creates the subfolders LaTeX writes those `.aux` files into (it does not create them itself). Leave room in the parameters and the output path for the format (screen now, print in P3): the format is never part of an edition.
-5. Page numbering (D-139): no hand-set counter. Remove `\setcounter{page}{8}` from `zpevnik.tex` if the full book stays byte-identical, otherwise derive the number; an edition with a different front matter must be numbered correctly.
-6. `make edition EDITION=<name>`; `check_pages.py` works on an edition's output. The chord-gap check (`tools/chord_gaps.py`, reading `<jobname>.chords`) stays on the full book: chord spacing depends on the format, not on the song selection.
-Test with a throwaway edition that is not committed (some songs selected by id, one artist, one front-matter file of its own).
+### R15 · English names — [agent] · S · ⚠ · needs E0
+D-143. A mechanical rename with `git mv`, nothing else: `pisnicky/`→`songs/`, `obrazky/`→`images/`, `sablona.tex`→`song-template.tex`, `preamble/`→`shared-pages/` (`obalka`→`cover`, `patitul`→`halftitle`, `titulnilist`→`titlepage`, `vydavatelskyzaznam`→`imprint`, `upozorneni`→`notice`, `dedikace`→`dedication`, `uvod`→`introduction`), `obsah.tex`→`shared-pages/contents.tex`. Update every reference (`tools/paths.py`, `zpevnik.tex`, `zpevnik.sty`, the tests, CI, the Makefile, the README, `.gitignore`, the current text of the docs; not the archive and not past DECISIONS entries). `tools/build_version.py` counts both the old and the new song folder, with a test that a renamed folder keeps the patch counting. Output paths do not change yet (E2). The owner's branch `new_songs` stays; he re-adds its songs by hand after the merge.
+**Expected differences:** none; `generate.py --version` on the rename gives the previous patch + 1, not 0.
+
+### E2 · Generator and build: editions — [agent] · M · needs R15, E1
+D-139 and D-143. Zero diff for the full book (the song-by-song diff and identical rendered front-matter pages, D-143 on `/ID`); its generated `.tex` files identical to today's at their new path, except new files.
+1. `data/book.toml` and `editions/<name>/edition.toml` (keys and errors as in D-143), read and validated by a small module; a unit test for each error.
+2. One `Edition` type for every book; the full book is `editions/full/`. `tools/generate.py --edition <name>` (default `full`) filters the song list once (after an exclusion list, empty until L2) and writes into `build/editions/<name>/generated/`: the include list, the letter contents, the artist index and sections (the full book's rules, restricted to the artists with a song in the edition), the registry, the version, the macros and the resolved page list. The version is the build's (the full song count, D-133), never the edition's song count.
+3. Generated macros: the book's title, author, start year and source; the edition's title, subtitle, editors and song count; the version; the derivation sentence (empty for the base edition). The shared pages use them instead of hard-coded text.
+4. The skeleton in `zpevnik.tex`, in today's order (E8 changes it): the pages resolved by the generator from `[pages]`, `before_songs` and `after_contents`; the imprint with its core and its slot. Move the full book's dedication, introduction and credits into `editions/full/`. Remove `\setcounter{page}{8}`.
+5. Build: `make [pdf] [EDITION=<name>]` creates the output directory and the subfolders LaTeX writes the per-song `.aux` files into, runs latexmk with `-outdir` and the edition (`-usepretex`), and prints the PDF's path; `zpevnik.tex` stops with an error without an edition. `make song` writes `build/songs/<id>.pdf`, the score images go to `build/scores/`, `make clean` deletes `build/`. `check_pages.py` works on any edition's output; `chord_gaps.py` stays on the full book (chord spacing depends on the format, not on the selection). CI, the release and the website copy take the full book's PDF from its new path (the release asset keeps its name until E5); the CI PDF diff also handles a base with the old layout (needed in this PR only).
+Test with a throwaway edition that is not committed: songs by id, one artist, an own title page, a `before_songs` page and an imprint fragment.
 **Expected differences:** none for the full book.
 
 ### E3 · Edition integrity — [agent] · S · needs E2
@@ -121,13 +127,20 @@ Test with a throwaway edition that is not committed (some songs selected by id, 
 The agent adds a small helper that lists song ids with title and artist (filter by artist) to pick from. The owner picks the songs; the agent writes `editions/lite/edition.toml`. **Expected differences:** none for the full book.
 
 ### E5 · CI and release — [agent] · M · needs E3, E4
-CI builds every edition in `editions/` on pull requests (the build, the one-page check and the link check must pass) and, on pushes to master, attaches `<file>-<version>.pdf` of each edition (the build version, D-139) to the release of the full book; the release notes list the editions. The PDF diff keeps comparing the full book only. Czech README section on editions: how to make one (by song ids or by artist), how to add a song to one, and that an uncommitted edition folder is a private edition built only locally.
+CI builds every edition in `editions/` on pull requests (the build, the one-page check and the link check must pass) and, on pushes to master, attaches `zpevnik-<edition>-<version>.pdf` of each edition (the build version, D-143) to the release of the full book; the release notes list the editions. The PDF diff keeps comparing the full book only. Czech README section on editions: how to make one (by song ids or by artist), how to add a song to one, and that an uncommitted edition folder is a private edition built only locally.
 
 ### E6 · Download page with editions — [agent] · M · needs E5 · `zpevnik-web` (and a small PR in `zpevnik`)
 D-139, D-110. The website gets the PDFs from the release (this takes over the PDF half of W1): `build.py` downloads the PDFs of the release tagged `v<version.txt>`; the songbook CI stops committing the PDF into `zpevnik-web` and only writes `version.txt`. Which editions the download page shows, and how, is configured in `zpevnik-web` (the songbook has no `publish` flag): `zpevnik-lite` as the main button, the full book as the second one, also served at its fixed URL `zpevnik_last.pdf` (printed QR codes point to it); further editions such as `lidovky` and the separate koledy songbook in their own section. Only `zpevnik_last.pdf` needs a fixed URL; the others may link to the release assets. The owner had an uncommitted change in `templates/base.html` (6 Nov 2026): ask before touching it.
 
 ### E7 · `lidovky` as an edition — [you] + [agent] · S · needs E4
 All songs of the `zpevnik-lidovky` repository are already in the full book (owner, 9 Nov 2026), and the 76 songs tagged `\artist{lidove}` match the 2020 book (D-139). The agent writes `editions/lidovky/edition.toml` with `artists = ["lidove"]`, compares the result with the song list of the old repository (by title, with E4's helper) and reports any difference, and, if the old book has its own title page or foreword, adds its front matter; the owner confirms the list and the front matter, and archives the old repository himself.
+
+### E8 · Front matter in book order — [agent] · S · needs E3
+D-143. The skeleton gets the Czech book order: cover, blank, halftitle, blank, title page (a right-hand page), the imprint on its back, then `before_songs`. The songs start on page 9 instead of 8. The stray `\hspace{10mm}` before the first credit goes.
+**Expected differences:** the front-matter pages (order, one new blank page, the first credit line); every page number one higher, and the contents numbers with them. The song-by-song diff reports every song: check that each differs only in its page number.
+
+### R16 · Drop the old song folder from the version — [agent] · S · needs the first song-count change after R15
+D-143. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename test goes. **Expected differences:** none.
 
 ---
 
@@ -178,7 +191,7 @@ Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated in
 After the compile, run the converter and the schema validation. On pushes to master, add `songs.json` to the `files:` of the release step. PRs only validate.
 
 ### J5 · Scores from MuseScore — [agent] + [you] · M · needs J4
-**Done together with J0 item 1 (D-136), 8 Nov 2026:** the export is `tools/scores.py` with a shared style, the PDF uses the converted SVG, and every score places itself with `\score{name}`. Left for J4: put the SVGs (`generated/scores/*.svg`) into the release and reference them from `songs.json`. The text below is the original plan.
+**Done together with J0 item 1 (D-136), 8 Nov 2026:** the export is `tools/scores.py` with a shared style, the PDF uses the converted SVG, and every score places itself with `\score{name}`. Left for J4: put the SVGs (`build/scores/*.svg` since E2, D-143) into the release and reference them from `songs.json`. The text below is the original plan.
 The `.mscz` files are the source; CI exports the images, so the PDF and the web use the same export (D-125). A score is a single page by principle.
 1. **Prototype first and report before building on it:** a pinned MuseScore 4 in CI with `-o file.svg -T 0` (trimmed SVG, documented for single-page scores only). pdfLaTeX cannot include SVG, so for the PDF either convert the SVG (e.g. `rsvg-convert`) or export a PDF and crop it with `pdfcrop`. Compare a few results with today's images.
 2. One `.mscz` per image. Missing (5 Nov 2026): `tickettoride` uses `ticket_to_ride_intro.png`, which has no source. These `.mscz` produce more than one image today: `morseovka.mscz` (`morseovka_1.png`, `morseovka_2.png`), `pohadka.mscz` (`pohadka.pdf` and `pohadkaref.pdf`), `reddwarftheme.mscz` (intro and outro), `slunecnyhrob.mscz` (intro and solo). Unused: `morseovkasolo1–3.pdf`. The owner provides the missing files.
