@@ -11,10 +11,12 @@ Python >= 3.11, standard library only.
 import subprocess
 from pathlib import Path
 
-from paths import SONGS_DIR
+from paths import LEGACY_SONGS_DIR, SONGS_DIR
 
 UNKNOWN_PATCH = "?"
-SONG_FILES = f"{SONGS_DIR}/*.tex"
+# Both folders: the commit that renamed pisnicky/ to songs/ then shows as renames, which do
+# not change the song count, instead of as all songs added.
+SONG_FILES = [f"{folder}/*.tex" for folder in (SONGS_DIR, LEGACY_SONGS_DIR)]
 COMMIT_START = "\0"  # starts every commit in the log output (git writes it for %x00)
 ADDED, DELETED = "A", "D"
 
@@ -40,7 +42,7 @@ def song_count_change(statuses: list[str]) -> int:
 def last_count_change(root: Path) -> str:
     """The newest first-parent commit that changed the song count."""
     log = git(root, "log", "--first-parent", "--diff-filter=AD", "--name-status",
-              "--format=%x00%H", "--", SONG_FILES)
+              "--format=%x00%H", "--", *SONG_FILES)
     for commit in log.split(COMMIT_START)[1:]:
         sha, _, changes = commit.partition("\n")
         statuses = [line.split("\t")[0] for line in changes.splitlines() if line]

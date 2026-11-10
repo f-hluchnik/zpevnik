@@ -31,14 +31,14 @@ class Book(unittest.TestCase):
     """A two-song book (`one` on page 2, `two` on page 3); the trace has an overlap on `page`."""
 
     def build(self, root: Path, overlap_page: int | None) -> None:
-        (root / "pisnicky").mkdir()
+        (root / "songs").mkdir()
         (root / "generated").mkdir()
         (root / "zpevnik.tex").write_text("\\setcounter{page}{2}\n\\input{generated/include}\n")
         (root / "generated" / "include.tex").write_text("\\songinclude{one}\n\\songinclude{two}\n")
         for song, after in (("one", 3), ("two", 4)):
-            (root / "pisnicky" / f"{song}.aux").write_text(
-                f"\\@setckpt{{pisnicky/{song}}}{{\n\\setcounter{{page}}{{{after}}}\n}}\n")
-            (root / "pisnicky" / f"{song}.tex").write_text("\\song{X}\n")
+            (root / "songs" / f"{song}.aux").write_text(
+                f"\\@setckpt{{songs/{song}}}{{\n\\setcounter{{page}}{{{after}}}\n}}\n")
+            (root / "songs" / f"{song}.tex").write_text("\\song{X}\n")
         rows = [Chord(0, 5, 2, pt(8)), Chord(pt(20), 5, 2, pt(8))]  # no overlap
         if overlap_page is not None:
             rows += [Chord(0, 5, overlap_page, pt(8)), Chord(pt(4), 5, overlap_page, pt(8))]

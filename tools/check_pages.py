@@ -2,8 +2,8 @@
 """Fail if a song takes more than one page.
 
 Every song is pulled in with ``\\songinclude{<id>}``, which ends in
-``\\include{pisnicky/<id>}``, and LaTeX writes
-``pisnicky/<id>.aux`` with a checkpoint that records the page counter *after*
+``\\include{songs/<id>}``, and LaTeX writes
+``songs/<id>.aux`` with a checkpoint that records the page counter *after*
 the song. The pages of a song are therefore the difference between its
 checkpoint and the previous one. Songs listed in
 ``tools/multipage-allowlist.txt`` may take two pages.
@@ -16,7 +16,7 @@ import re
 import sys
 from pathlib import Path
 
-from paths import BOOK_TEX, INCLUDE_TEX, MULTIPAGE_ALLOWLIST, SONGS_DIR, add_root_argument
+from paths import BOOK_TEX, INCLUDE_TEX, MULTIPAGE_ALLOWLIST, add_root_argument, songs_dir
 
 MAX_PAGES = 1
 MAX_PAGES_ALLOWLISTED = 2
@@ -35,11 +35,11 @@ def read_allowlist(path: Path) -> set[str]:
     return ids
 
 
-def checkpoint_page(aux: Path, song: str) -> int | None:
-    """Page counter recorded by the song's own \\@setckpt block."""
+def checkpoint_page(aux: Path) -> int | None:
+    """Page counter recorded by the song's own \\@setckpt block (named like the \\include)."""
     text = aux.read_text(encoding="utf-8", errors="replace")
     block = re.search(
-        r"\\@setckpt\{" + re.escape(f"{SONGS_DIR}/{song}") + r"\}\{(.*?)\n\}", text, re.S
+        r"\\@setckpt\{" + re.escape(f"{aux.parent.name}/{aux.stem}") + r"\}\{(.*?)\n\}", text, re.S
     )
     if not block:
         return None
@@ -67,6 +67,7 @@ def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
     songs: list[tuple[str, int, int]] = []
     errors: list[str] = []
     prev: int | None = None
+    directory = songs_dir(root)
     for raw in book_lines(root):
         line = raw.split("%", 1)[0]  # commented-out includes do not count
         counter = PAGE_COUNTER.search(line)
@@ -79,9 +80,9 @@ def song_pages(root: Path) -> tuple[list[tuple[str, int, int]], list[str]]:
         if prev is None:
             errors.append(f"{song}: no \\setcounter{{page}} before the first song")
             continue
-        cur = checkpoint_page(root / SONGS_DIR / f"{song}.aux", song)
+        cur = checkpoint_page(root / directory / f"{song}.aux")
         if cur is None:
-            errors.append(f"{song}: no page checkpoint in {SONGS_DIR}/{song}.aux (not compiled?)")
+            errors.append(f"{song}: no page checkpoint in {directory}/{song}.aux (not compiled?)")
             continue
         songs.append((song, prev, cur - prev))
         prev = cur

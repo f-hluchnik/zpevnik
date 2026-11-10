@@ -5,15 +5,15 @@ Copyright 2019-2026 František Hluchník
 
 The Apache License 2.0 below covers only the author's own work in this
 repository: the build and check tools (tools/, tests/, .github/, Makefile),
-the LaTeX style and document structure (zpevnik.sty, zpevnik.tex, obsah.tex,
-sablona.tex), the artists registry (data/) and the documentation (docs/,
+the LaTeX style and document structure (zpevnik.sty, zpevnik.tex, shared-pages/contents.tex,
+song-template.tex), the artists registry (data/) and the documentation (docs/,
 README.md, CLAUDE.md).
 
-It does not cover the songs. Their lyrics, music and chords (pisnicky/), the
+It does not cover the songs. Their lyrics, music and chords (songs/), the
 scores (scores/) and the PDFs built from them belong to the songs' authors and
 rights holders and are not licensed here. Neither are the front matter
-(preamble/: its foreword quotes lyrics by Vlasta Redl) and the cover image
-(obrazky/, drawn by Ivana Vlčková); their rights stay with their authors.
+(shared-pages/ except contents.tex: its foreword quotes lyrics by Vlasta Redl) and the cover image
+(images/, drawn by Ivana Vlčková); their rights stay with their authors.
 
 The songbook is non-commercial and free of charge. Rights holders who do not
 want their song in it, please write to frantahluchnik@gmail.com and the song

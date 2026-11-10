@@ -1,4 +1,4 @@
-"""Read the songs in pisnicky/*.tex (shared by the generators).
+"""Read the songs in songs/*.tex (shared by the generators).
 
 A song file has one `\\song{Title}`, optionally one `\\toctitle{TOC title}` and
 any number of `\\alttitle{Other title}`, each at the start of a line. The song
@@ -61,7 +61,7 @@ def read_title(text: str, command: str, where: str) -> str | None:
 
 
 def song_paths(root: Path) -> list[Path]:
-    """The song files of pisnicky/, in file-name order (not the songbook order)."""
+    """The song files of songs/, in file-name order (not the songbook order)."""
     return sorted((root / SONGS_DIR).glob("*.tex"))
 
 
@@ -79,5 +79,5 @@ def parse_song(song_id: str, text: str) -> Song:
 
 
 def read_songs(root: Path) -> list[Song]:
-    """All songs in pisnicky/, in file-name order (not the songbook order)."""
+    """All songs in songs/, in file-name order (not the songbook order)."""
     return [parse_song(path.stem, path.read_text(encoding="utf-8")) for path in song_paths(root)]

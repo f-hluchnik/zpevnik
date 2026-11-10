@@ -1,4 +1,4 @@
-"""Unit tests for reading the songs in pisnicky/.
+"""Unit tests for reading the songs in songs/.
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
@@ -50,7 +50,7 @@ class SortTitle(unittest.TestCase):
 class ReadSongs(unittest.TestCase):
     def test_reads_all_songs_in_file_name_order(self):
         with tempfile.TemporaryDirectory() as tmp:
-            songs_dir = Path(tmp) / "pisnicky"
+            songs_dir = Path(tmp) / "songs"
             songs_dir.mkdir()
             (songs_dir / "b.tex").write_text(
                 "\\song{B}\n\\toctitle{B (x)}\n\\alttitle{b1}\n\\alttitle{b2}\n", encoding="utf-8")
@@ -60,7 +60,7 @@ class ReadSongs(unittest.TestCase):
 
     def test_reads_the_artist_and_collection_tags(self):
         with tempfile.TemporaryDirectory() as tmp:
-            songs_dir = Path(tmp) / "pisnicky"
+            songs_dir = Path(tmp) / "songs"
             songs_dir.mkdir()
             (songs_dir / "a.tex").write_text(
                 "\\song{A} \\artist[Label]{x}\\artist{y}\n\\collection{filmy}\n", encoding="utf-8")
@@ -75,7 +75,7 @@ class ReadSongs(unittest.TestCase):
 
     def test_song_without_title_is_an_error(self):
         with tempfile.TemporaryDirectory() as tmp:
-            songs_dir = Path(tmp) / "pisnicky"
+            songs_dir = Path(tmp) / "songs"
             songs_dir.mkdir()
             (songs_dir / "a.tex").write_text("no title here\n", encoding="utf-8")
             with self.assertRaises(ValueError):

@@ -17,12 +17,12 @@ set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 dir=${1:?usage: single-song.sh DIR [--build]}
-song=$(grep -oP '(?<=\\include\{pisnicky/)[^}]+' "$root/tests/single-song.tex")
+song=$(grep -oP '(?<=\\include\{songs/)[^}]+' "$root/tests/single-song.tex")
 
 rm -rf "$dir"
-mkdir -p "$dir/pisnicky"
+mkdir -p "$dir/songs"
 cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$root/tests/chords.tex" "$root/tests/spacing.tex" "$root/tests/score.tex" "$dir/"
-cp "$root/pisnicky/$song.tex" "$dir/pisnicky/"
+cp "$root/songs/$song.tex" "$dir/songs/"
 
 [ "${2:-}" = "--build" ] || exit 0
 

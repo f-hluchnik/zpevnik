@@ -4,7 +4,7 @@
 Usage: python3 tools/pdfdiff.py --base BASE_DIR --head HEAD_DIR [--dpi 72]
 
 Both directories hold a compiled checkout (zpevnik.pdf and the per-song
-pisnicky/*.aux files). Pages are mapped to song ids with the page checkpoints
+songs/*.aux files). Pages are mapped to song ids with the page checkpoints
 that check_pages.py reads, so a song is compared with itself wherever it sits
 in the book. The page-number footer is left out of every comparison. Front
 matter and the pages after the last song (the table of contents) are compared

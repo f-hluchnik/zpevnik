@@ -15,9 +15,9 @@ Filosofie tohoto zpěvníku je taková, že by se z něj mělo dobře zpívat a 
     - Písnička musí být zapsaná tak, aby se hlavně dobře hrála. Na druhém místě se musí dobře zpívat, na třetím místě je vzhled. Tyto tři charakteristiky spolu samozřejmě úzce souvisí. V tomto bodě mám ale na mysli hlavně případy, kdy je například potřeba zvolit nestandardní odsazení či zalomení, a to z důvodu, aby hraní písničky bylo přirozené a hladké. Toto je samozřejmě velmi subjektivní.
     
 ## Postup přidávání nové písničky
-V této části popíšu postup přidání nové písničky do Zpěvníku, jak jsem si to navykl dělat. Písnička je jediný soubor; seznam písniček, obsah (podle písmen i podle interpretů) i verzi zpěvníku generuje skript `tools/generate.py`, takže `zpevnik.tex` ani `obsah.tex` ručně neupravuji.
+V této části popíšu postup přidání nové písničky do Zpěvníku, jak jsem si to navykl dělat. Písnička je jediný soubor; seznam písniček, obsah (podle písmen i podle interpretů) i verzi zpěvníku generuje skript `tools/generate.py`, takže `zpevnik.tex` ani `shared-pages/contents.tex` ručně neupravuji.
 
-1. Ve složce `pisnicky` vytvořím soubor s názvem podle názvu písničky. Název souboru se tvoří odebráním diakritiky a mezer z názvu písničky a zapsáním tohoto názvu malými písmeny. Je-li potřeba odlišit dvě písničky se stejným názvem od různých interpretů, učiní se tak přidáním jména interpreta (pokud možno jednoslovně, tedy příjmení nebo název skupiny) za jméno písničky, opět bez mezer a diakritiky, malými písmeny. Je možné použít šablonu `sablona.tex`, která je umístěna v kořenovém adresáři zpěvníku.
+1. Ve složce `songs` vytvořím soubor s názvem podle názvu písničky. Název souboru se tvoří odebráním diakritiky a mezer z názvu písničky a zapsáním tohoto názvu malými písmeny. Je-li potřeba odlišit dvě písničky se stejným názvem od různých interpretů, učiní se tak přidáním jména interpreta (pokud možno jednoslovně, tedy příjmení nebo název skupiny) za jméno písničky, opět bez mezer a diakritiky, malými písmeny. Je možné použít šablonu `song-template.tex`, která je umístěna v kořenovém adresáři zpěvníku.
 2. Na řádek s příkazem `\song{}` doplním `\artist{<kotva>}` (více v části o interpretech níže). Pokud interpret ještě v registru není, přidám do souboru `data/artists.toml` nový záznam `[[entry]]` s kotvou (`slug`) a jménem (`name`, ve tvaru "Příjmení, Jméno").
 3. Otevřu si soubor s písničkou a začnu přepisovat. Více o přepisování písniček dále.
 4. Spustím `make`. Skript nejdřív vygeneruje seznam písniček seřazený podle abecedy, obsah a verzi (do složky `generated`, která se necommituje) a pak zkompiluje `zpevnik.pdf`. Písnička se sama zařadí podle názvu v `\song{}`, do obsahu podle písmen i do sekce svého interpreta.
@@ -48,7 +48,7 @@ Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová
 
 1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje `zpevnik.tex` do PDF. U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
 2. Spočítá aktuální verzi zpěvníku, která má tři čísla `major.minor.patch` (např. `8.33.67`; počítá to `tools/generate.py`, stejně jako verzi v tiráži, a `python3 tools/generate.py --version` ji vypíše):
-   - `major.minor` je počet písniček ve složce `pisnicky` + 100 (733 písniček dává 8.33),
+   - `major.minor` je počet písniček ve složce `songs` + 100 (733 písniček dává 8.33),
    - `patch` je počet commitů v hlavní větvi (first-parent) od posledního commitu, který změnil počet písniček. Přidání písničky tedy začíná znovu od 0 a každá další změna (oprava textu, nástrojů, vzhledu) číslo zvýší o 1. Verze tak určuje jedno konkrétní sestavení PDF. Počítá se z historie Gitu, takže stejný výsledek dá CI i lokální sestavení s celou historií; bez ní (např. `git clone --depth 1`) vyjde `8.33.?`.
 3. Vytvoří GitHub Release s tagem `v<verze>` (např. `v8.33.67`) a názvem `Zpěvník v8.33.67` a přiloží k němu zkompilované PDF ke stažení. Existující tag se nikdy nepřepisuje ani nepřesouvá: pokud tag už existuje (stává se to jen tehdy, když se po smazání písniček vrátí počet na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Starý tag `v8.33` zůstává.
 4. Zapíše aktuální verzi a zkompilované PDF do repozitáře webu ([zpevnik-web](https://github.com/f-hluchnik/zpevnik-web)) a tuto změnu tam commitne a pushne.
@@ -166,15 +166,15 @@ Každý záznam se sekcí (výchozí) musí mít aspoň jednu písničku. U inte
 ### Doporučení pro psaní písniček
 Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu souborů příliš dlouho. Navykl jsem si proto používat k psaní písničky pouze zjednodušený projekt na Overleafu. Stačí do něj nahrát soubor `zpevnik.sty` a jednoduchý hlavní soubor, který importuje jedinou přepisovanou písničku (vzor je v `tests/single-song.tex`). Obsah ani registr interpretů tam nejsou, proto se jméno interpreta nevysází; písnička se ale zkompiluje bez chyby. Jakmile mám písničku přepsanou, provedu následující kroky. Používám editor vim, je však možné použít kterýkoli jiný textový editor.
 
-1. Vytvořím nový soubor písničky `vim pisnicky/<nazevpisnicky>.tex`.
+1. Vytvořím nový soubor písničky `vim songs/<nazevpisnicky>.tex`.
 2. Překopíruju zdrojový text z Overleafu do tohoto souboru a uložím.
 3. Doplním `\artist{}` a případně přidám interpreta do `data/artists.toml`.
 4. Spustím `make` a zkontroluji písničku v celém zpěvníku. Import do `zpevnik.tex` ani odkazy do obsahu nepřidávám, vše se vygeneruje.
 
 ### Šikovné příkazy
-- vyhledání souboru písničky `ls pisnicky | grep <nazevpisnicky>`
+- vyhledání souboru písničky `ls songs | grep <nazevpisnicky>`
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`
-- kontrola počtu písniček `ls pisnicky/*.tex | wc -l`
+- kontrola počtu písniček `ls songs/*.tex | wc -l`
 - vygenerování obsahu a kompilace zpěvníku `make` (jen generování: `make generate`)
 - kompilace jedné písničky `make song SONG=<id>` (výsledek `build/<id>.pdf`)
 - kontrola písniček a registru interpretů `python3 tools/lint.py`
@@ -183,6 +183,6 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; překryv akordů kdekoli v knize je chyba)
 
 ## Licence a autorská práva
-Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`pisnicky/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`preamble/`, úvod cituje text Vlasty Redla) a obálku (`obrazky/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Držitelé práv, kteří si nepřejí, aby zde jejich píseň byla, mi mohou napsat na frantahluchnik@gmail.com a píseň odstraním.
+Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`songs/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`shared-pages/` kromě `contents.tex`, úvod cituje text Vlasty Redla) a obálku (`images/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Držitelé práv, kteří si nepřejí, aby zde jejich píseň byla, mi mohou napsat na frantahluchnik@gmail.com a píseň odstraním.
 
-Stejné upozornění je v tiráži zpěvníku (`preamble/upozorneni.tex`) a v patičce webu; když se mění, mění se na obou místech.
+Stejné upozornění je v tiráži zpěvníku (`shared-pages/notice.tex`) a v patičce webu; když se mění, mění se na obou místech.
