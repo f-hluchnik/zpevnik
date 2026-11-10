@@ -62,21 +62,24 @@ jobs:
           echo "MSCORE=$MUSESCORE_DIR/squashfs-root/AppRun" >> "$GITHUB_ENV"
           MSCORE="$MUSESCORE_DIR/squashfs-root/AppRun" xvfb-run -a python3 tools/scores.py
 
+      # The same build as `make`: tools/build_edition.py runs latexmk for the full
+      # book into build/editions/full/. Pinned to TeX Live 2023 (pdfTeX 1.40.25): a
+      # frozen release, and the one the dev workspace uses, so local builds match CI.
+      # Moving to another year changes the layout; use the song-by-song diff to
+      # review it. The image is Alpine-based and has no Python, hence the apk line.
       - name: Compile LaTeX
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/texlive-action@v2
         with:
-          root_file: zpevnik.tex
-          # Pinned to TeX Live 2023 (pdfTeX 1.40.25): a frozen release, and the
-          # one the dev workspace uses, so local builds match CI.
-          # Moving to another year changes the layout; use the song-by-song
-          # diff to review it.
           texlive_version: 2023
+          run: |
+            apk add --no-cache python3
+            python3 tools/build_edition.py
 
       - name: Check one song per page
         run: python3 tools/check_pages.py
 
-      # Chord positions are written by every build (zpevnik.chords). Any overlap
-      # in the book fails.
+      # Chord positions are written by every build (zpevnik.chords next to the PDF).
+      # Any overlap in the book fails.
       - name: Check chord overlaps
         run: python3 tools/chord_gaps.py
 
@@ -114,13 +117,21 @@ jobs:
         if: github.event_name == 'pull_request'
         run: if [ -f base/tools/scores.py ]; then xvfb-run -a python3 base/tools/scores.py base; fi
 
+      # In the same TeX Live as the head, so the image never shows in the diff. A base
+      # from before editions has no build tool and compiles zpevnik.tex in its root.
       - name: Compile base
         if: github.event_name == 'pull_request'
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/texlive-action@v2
         with:
-          root_file: zpevnik.tex
-          working_directory: base
           texlive_version: 2023
+          run: |
+            apk add --no-cache python3
+            cd base
+            if [ -f tools/build_edition.py ]; then
+              python3 tools/build_edition.py
+            else
+              latexmk -pdf -interaction=nonstopmode -halt-on-error zpevnik.tex
+            fi
 
       - name: Install poppler
         if: github.event_name == 'pull_request'
@@ -198,7 +209,7 @@ jobs:
 
       - name: Update PDF
         if: github.event_name == 'push'
-        run: cp zpevnik.pdf website/static/files/zpevnik_last.pdf
+        run: cp build/editions/full/zpevnik.pdf website/static/files/zpevnik_last.pdf
 
       - name: Create GitHub Release
         if: github.event_name == 'push'
@@ -209,7 +220,7 @@ jobs:
             body: |
                 ${{ steps.new_songs.outputs.block }}
                 
-            files: zpevnik.pdf
+            files: build/editions/full/zpevnik.pdf
             make_latest: true
 
       - name: Commit and push

@@ -6,8 +6,9 @@ zpevnik.sty): one line "x y page width" in sp per chord, in document order. Two
 consecutive chords with the same y on the same page stand on one line; they overlap when
 the second starts before the first one ends.
 
-Book mode (default, run after compiling zpevnik.tex): any overlap in the book is an
-error (exit 1).
+Book mode (default, run after compiling the full book): any overlap in the book is an
+error (exit 1). Only the full book is checked: the spacing depends on the page format,
+not on which songs an edition selects.
 
     python3 tools/chord_gaps.py [repo-root]
 
@@ -23,7 +24,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from check_pages import song_pages
-from paths import CHORD_TRACE, add_root_argument
+from paths import CHORD_TRACE_NAME, DEFAULT_EDITION, add_root_argument, edition_output_dir
 
 SP_PER_PT = 65536
 
@@ -57,16 +58,17 @@ def overlapping(pairs: list[Pair]) -> list[Pair]:
     return sorted(pair for pair in pairs if pair.gap < 0)
 
 
-def song_of_page(root: Path) -> dict[int, str]:
-    songs, _errors = song_pages(root)
+def song_of_page(output_dir: Path) -> dict[int, str]:
+    songs, _errors = song_pages(output_dir)
     return {page: song for song, first, count in songs for page in range(first, first + count)}
 
 
 def check_book(root: Path) -> int:
-    chords = read_trace(root / CHORD_TRACE)
+    output_dir = root / edition_output_dir(DEFAULT_EDITION)
+    chords = read_trace(output_dir / CHORD_TRACE_NAME)
     pairs = same_line_pairs(chords)
     overlaps = overlapping(pairs)
-    song_at = song_of_page(root)
+    song_at = song_of_page(output_dir)
     print(f"{len(chords)} chords, {len(pairs)} pairs on the same line, {len(overlaps)} overlapping")
     for pair in overlaps:
         song = song_at.get(pair.page) or "outside the songs"

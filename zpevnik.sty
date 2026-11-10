@@ -2,6 +2,8 @@
 % Everything a song needs lives here, so one song compiles with just
 % \documentclass + \usepackage{zpevnik} (the Overleaf workflow).
 % The document class, metadata and the list of songs stay in zpevnik.tex.
+% A book build defines \zpgenerated, the directory of the edition's generated files
+% (tools/build_edition.py); a song compiled alone has none and keeps the defaults.
 %
 % Public interface used by the generated files and by zpevnik.tex:
 % \songinclude, \zpregisterartist, \zpscoregeometry, \zpversion and \zprule.
@@ -76,7 +78,7 @@
 \newcommand*{\zp@maxartists}{2}
 
 %SONG HEADER
-% Id of the song for \song, set by \songinclude (generated/include.tex). Without
+% Id of the song for \song, set by \songinclude (the generated include.tex). Without
 % it no link target is created. The group keeps a font change inside a song
 % (e.g. \large in a song that does not fit otherwise) from leaking into the next one.
 \newcommand{\zp@songid}{}
@@ -191,14 +193,14 @@
 
 %SCORES
 % \score{name} sets the image of scores/<name>.mscz, exported by tools/scores.py
-% into generated/scores/ with the geometry of its first staff. All scores share
+% into build/scores/ with the geometry of its first staff. All scores share
 % one scale: a full system (the printable width of the shared MuseScore style)
 % fills the line from the text column to the right margin. The staff starts at
 % the text column and the middle of its first staff is level with the middle of
 % a label, so a block label stands beside the staff. A score needs no offsets
 % in the song. Without the generated files (one song in Overleaf) a framed name
 % stands in for the image.
-\newcommand*{\zp@scoredir}{generated/scores/}
+\newcommand*{\zp@scoredir}{build/scores/}
 \newcommand*{\zp@labelmiddle}{.5\fontcharht\font`I}
 % Written by tools/scores.py: left end of the staff, middle of the first staff
 % (both from the top-left corner of the image) and the width of a full system.
@@ -386,9 +388,9 @@
 \newcommand{\collection}[1]{}
 
 %REGISTRY LOOKUPS
-% generated/artists.tex (tools/generate.py) registers every artist by slug.
-% The lookups print nothing for an unknown slug, and a missing file is fine,
-% so a single song still compiles without the generator (Overleaf).
+% The generated artists.tex (tools/generate.py) registers every artist by slug.
+% The lookups print nothing for an unknown slug, and a song compiled alone
+% (Overleaf) has no generated files and registers nothing.
 % \zpregisterartist is public: the generated file calls it.
 % \zpregisterartist{slug}{link label}{1 if the artist has a section, else 0}
 \newcommand{\zpregisterartist}[3]{%
@@ -401,11 +403,12 @@
 \newcommand{\artistlinklabel}[1]{\ifcsname zp@link@#1\endcsname\csname zp@link@#1\endcsname\fi}%
 \newcommand{\ifartistsection}[3]{%
   \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}
-\InputIfFileExists{generated/artists}{}{}
+\ifdefined\zpgenerated\input{\zpgenerated/artists}\fi
 
 %VERSION
-% generated/version.tex (tools/generate.py) sets the real version: song count + 100, then the build number.
-% Without it the colophon shows a visibly wrong placeholder. \zpversion is
-% public: zpevnik.tex prints it.
+% The generated version.tex (tools/generate.py) sets the real version: song count + 100,
+% then the build number. Without it (a song compiled alone) the colophon would show
+% a visibly wrong placeholder. \zpversion is
+% public: the imprint (shared-pages/imprint.tex) prints it.
 \newcommand{\zpversion}{?.??.?}
-\InputIfFileExists{generated/version}{}{}
+\ifdefined\zpgenerated\input{\zpgenerated/version}\fi

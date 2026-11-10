@@ -20,7 +20,7 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 1. Ve složce `songs` vytvořím soubor s názvem podle názvu písničky. Název souboru se tvoří odebráním diakritiky a mezer z názvu písničky a zapsáním tohoto názvu malými písmeny. Je-li potřeba odlišit dvě písničky se stejným názvem od různých interpretů, učiní se tak přidáním jména interpreta (pokud možno jednoslovně, tedy příjmení nebo název skupiny) za jméno písničky, opět bez mezer a diakritiky, malými písmeny. Je možné použít šablonu `song-template.tex`, která je umístěna v kořenovém adresáři zpěvníku.
 2. Na řádek s příkazem `\song{}` doplním `\artist{<kotva>}` (více v části o interpretech níže). Pokud interpret ještě v registru není, přidám do souboru `data/artists.toml` nový záznam `[[entry]]` s kotvou (`slug`) a jménem (`name`, ve tvaru "Příjmení, Jméno").
 3. Otevřu si soubor s písničkou a začnu přepisovat. Více o přepisování písniček dále.
-4. Spustím `make`. Skript nejdřív vygeneruje seznam písniček seřazený podle abecedy, obsah a verzi (do složky `generated`, která se necommituje) a pak zkompiluje `zpevnik.pdf`. Písnička se sama zařadí podle názvu v `\song{}`, do obsahu podle písmen i do sekce svého interpreta.
+4. Spustím `make`. Skript nejdřív vygeneruje seznam písniček seřazený podle abecedy, obsah a verzi (do `build/editions/full/generated/`; složka `build` se necommituje) a pak zkompiluje zpěvník do `build/editions/full/zpevnik.pdf`. Písnička se sama zařadí podle názvu v `\song{}`, do obsahu podle písmen i do sekce svého interpreta.
 5. Spustím `python3 tools/lint.py`. Zkontroluje, že každá písnička má `\song` a právě jeden řádek s `\artist`, že všechny kotvy jsou v registru a že každá sekce interpreta má písničky. Stejnou kontrolu spouští i GitHub Actions. Nezávažné nálezy (varování) jen vypíše.
 6. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 
@@ -34,7 +34,7 @@ Na kompilaci potřebuji Python 3.11 a novější a TeX Live s češtinou, `latex
 
 Noty (viz [Noty](#noty)) se exportují z MuseScoru, takže `make` potřebuje ještě MuseScore 4.6.5, `rsvg-convert` a písmo CMU Serif: na Linuxu `sudo apt-get install librsvg2-bin fonts-cmu` a MuseScore jako AppImage (cestu k němu dej do proměnné `MSCORE`), na macOS MuseScore 4 z musescore.org, `brew install librsvg` a písmo CMU Serif.
 
-`make` zkompiluje celý zpěvník, `make song SONG=<id>` jen jednu písničku. `<id>` je název souboru bez `.tex`, například `make song SONG=lonelystranger`. Hotové PDF je v `build/<id>.pdf` (složka `build` se necommituje) a trvá to pár sekund. Je to stejné nastavení jako na Overleafu: bez obsahu a bez odkazů na interprety. Lokální sestavení s novější verzí TeX Live se může od GitHub Actions mírně lišit; rozhodující je vždy GitHub Actions.
+`make` zkompiluje celý zpěvník, `make song SONG=<id>` jen jednu písničku. `<id>` je název souboru bez `.tex`, například `make song SONG=lonelystranger`. Hotové PDF je v `build/songs/<id>.pdf` a trvá to pár sekund. Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clean` ji smaže). Je to stejné nastavení jako na Overleafu: bez obsahu a bez odkazů na interprety. Lokální sestavení s novější verzí TeX Live se může od GitHub Actions mírně lišit; rozhodující je vždy GitHub Actions.
 
 ### Název písničky v obsahu
 Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky na začátku řádku za `\song{}` na stránce nic nevysází, jen řídí obsah:
@@ -46,7 +46,7 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky 
 
 Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
 
-1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje `zpevnik.tex` do PDF. U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
+1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje celý zpěvník do PDF (`build/editions/full/zpevnik.pdf`). U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
 2. Spočítá aktuální verzi zpěvníku, která má tři čísla `major.minor.patch` (např. `8.33.67`; počítá to `tools/generate.py`, stejně jako verzi v tiráži, a `python3 tools/generate.py --version` ji vypíše):
    - `major.minor` je počet písniček ve složce `songs` + 100 (733 písniček dává 8.33),
    - `patch` je počet commitů v hlavní větvi (first-parent) od posledního commitu, který změnil počet písniček. Přidání písničky tedy začíná znovu od 0 a každá další změna (oprava textu, nástrojů, vzhledu) číslo zvýší o 1. Verze tak určuje jedno konkrétní sestavení PDF. Počítá se z historie Gitu, takže stejný výsledek dá CI i lokální sestavení s celou historií; bez ní (např. `git clone --depth 1`) vyjde `8.33.?`.
@@ -62,7 +62,7 @@ V této sekci popíšu postup a konvence přepisování písniček. Nejprve uved
 
 1. název a interpret
     - Na začátku písničky je příkaz `\song`, který vytváří název písničky. Tento příkaz udělá z názvu automaticky odkaz na obsah. Na stejný řádek patří `\artist{}` s interpretem (viz níže).
-Na konec písničky žádný příkaz pro novou stranu nepatří: každá písnička se vkládá příkazem `\songinclude{id}` (generuje se do `generated/include.tex`, `id` je název souboru bez `.tex`), který sám začíná novou stranu. Stejné `id` použije `\song` jako cíl odkazu z obsahu, takže cíl odkazu se do písničky nepíše.
+Na konec písničky žádný příkaz pro novou stranu nepatří: každá písnička se vkládá příkazem `\songinclude{id}` (generuje se do `build/editions/<vydání>/generated/include.tex`, `id` je název souboru bez `.tex`), který sám začíná novou stranu. Stejné `id` použije `\song` jako cíl odkazu z obsahu, takže cíl odkazu se do písničky nepíše.
 
 Následuje přehled příkazů, které se v písničce používají. Příkazy pro akordy jsou v sekci „Psaní akordů“ níže, metadata (`\alttitle`, `\toctitle`, `\collection`) a `\artist` výše.
 
@@ -132,7 +132,7 @@ Každý obrázek s notami je jeden soubor `scores/<název>.mscz` z MuseScoru 4 a
 
 - Před úpravou noty načti v MuseScoru sdílený styl `scores/zpevnik.mss` (Formát → Styl → Načíst styl). Sestavení ho stejně použije na každý soubor, takže jen tak uvidíš rozdělení do systémů, jaké bude ve zpěvníku.
 - Nota je vždy na jedné stránce. Víc obrázků v jedné písničce znamená víc souborů (`morseovka_1.mscz`, `morseovka_2.mscz`).
-- Noty z MuseScoru ručně neexportuj: `make` (nebo `make scores`) je vyexportuje do `generated/scores/` sám a přeskočí ty, které se nezměnily. Akordy dostanou stejnou červenou jako ve zpěvníku.
+- Noty z MuseScoru ručně neexportuj: `make` (nebo `make scores`) je vyexportuje do `build/scores/` sám a přeskočí ty, které se nezměnily. Akordy dostanou stejnou červenou jako ve zpěvníku.
 - Písnička otevřená samostatně (Overleaf) místo not ukáže rámeček s názvem.
 - `tools/lint.py` hlásí `\score` bez souboru `.mscz` a soubor, který žádná písnička nepoužívá.
 
@@ -176,13 +176,14 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`
 - kontrola počtu písniček `ls songs/*.tex | wc -l`
 - vygenerování obsahu a kompilace zpěvníku `make` (jen generování: `make generate`)
-- kompilace jedné písničky `make song SONG=<id>` (výsledek `build/<id>.pdf`)
+- kompilace jiného vydání `make EDITION=<název>` (vydání je složka `editions/<název>/`, výsledek `build/editions/<název>/zpevnik.pdf`)
+- kompilace jedné písničky `make song SONG=<id>` (výsledek `build/songs/<id>.pdf`)
 - kontrola písniček a registru interpretů `python3 tools/lint.py`
 - unit testy nástrojů `python3 -m unittest discover -s tools`
 - kontrola, že každá písnička je na jedné stránce `python3 tools/check_pages.py` (po `make`)
 - kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; překryv akordů kdekoli v knize je chyba)
 
 ## Licence a autorská práva
-Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`songs/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`shared-pages/` kromě `contents.tex`, úvod cituje text Vlasty Redla) a obálku (`images/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Držitelé práv, kteří si nepřejí, aby zde jejich píseň byla, mi mohou napsat na frantahluchnik@gmail.com a píseň odstraním.
+Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`songs/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`shared-pages/` kromě `contents.tex` a strany vydání v `editions/`, úvod celého zpěvníku cituje text Vlasty Redla) a obálku (`images/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Držitelé práv, kteří si nepřejí, aby zde jejich píseň byla, mi mohou napsat na frantahluchnik@gmail.com a píseň odstraním.
 
 Stejné upozornění je v tiráži zpěvníku (`shared-pages/notice.tex`) a v patičce webu; když se mění, mění se na obou místech.

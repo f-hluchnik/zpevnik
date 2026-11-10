@@ -12,7 +12,8 @@ README.md, CLAUDE.md).
 It does not cover the songs. Their lyrics, music and chords (songs/), the
 scores (scores/) and the PDFs built from them belong to the songs' authors and
 rights holders and are not licensed here. Neither are the front matter
-(shared-pages/ except contents.tex: its foreword quotes lyrics by Vlasta Redl) and the cover image
+(shared-pages/ except contents.tex, and the pages of the editions in editions/: the full
+book's foreword quotes lyrics by Vlasta Redl) and the cover image
 (images/, drawn by Ivana Vlčková); their rights stay with their authors.
 
 The songbook is non-commercial and free of charge. Rights holders who do not

@@ -27,17 +27,30 @@ CASH = artist("johnnycash", "Cash, Johnny", "Johnny Cash")
 CHOMOR = artist("cechomor", "Čechomor")
 
 
+def songs_of(*artists: Artist) -> list[Song]:
+    """One song for each artist (in a collection, if it is one)."""
+    return [song(a["slug"], "Song", **{"collections" if a["kind"] == "collection" else "artists": (a["slug"],)})
+            for a in artists]
+
+
 class OrderedArtists(unittest.TestCase):
     def test_sorted_by_czech_collation_of_the_sort_key(self):
-        self.assertEqual([a["slug"] for a in ordered_artists([CHOMOR, KRYL, CASH, ABBA])],
+        registry = [CHOMOR, KRYL, CASH, ABBA]
+        self.assertEqual([a["slug"] for a in ordered_artists(registry, songs_of(*registry))],
                          ["abba", "johnnycash", "cechomor", "karelkryl"])
 
     def test_collections_come_last(self):
         zz = artist("zz", "Zz")
-        self.assertEqual([a["slug"] for a in ordered_artists([FILMY, zz, ABBA])], ["abba", "zz", "filmy"])
+        registry = [FILMY, zz, ABBA]
+        self.assertEqual([a["slug"] for a in ordered_artists(registry, songs_of(*registry))],
+                         ["abba", "zz", "filmy"])
 
     def test_entry_without_section_is_left_out(self):
-        self.assertEqual(ordered_artists([artist("x", "X", section=False), ABBA]), [ABBA])
+        no_section = artist("x", "X", section=False)
+        self.assertEqual(ordered_artists([no_section, ABBA], songs_of(no_section, ABBA)), [ABBA])
+
+    def test_artist_without_a_song_among_the_songs_is_left_out(self):
+        self.assertEqual(ordered_artists([KRYL, ABBA], songs_of(ABBA)), [ABBA])
 
 
 class IndexText(unittest.TestCase):
@@ -101,7 +114,8 @@ class SectionsTex(unittest.TestCase):
 
 class ArtistPartTex(unittest.TestCase):
     def test_index_rule_sections_in_this_order(self):
-        tex = artist_part_tex([KRYL, ABBA], [song("a", "Alfa", artists=("abba",))])
+        tex = artist_part_tex([KRYL, ABBA], [song("a", "Alfa", artists=("abba",)),
+                                             song("k", "Kryl", artists=("karelkryl",))])
         self.assertLess(tex.index("\\hyperlink{abba}{ABBA}\\par"), tex.index("\\zprule{10cm}"))
         self.assertLess(tex.index("\\zprule{10cm}"), tex.index("\\subsection*{ABBA}"))
         self.assertLess(tex.index("\\subsection*{ABBA}"), tex.index("\\subsection*{Kryl, Karel}"))

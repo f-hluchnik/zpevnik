@@ -1,0 +1,12 @@
+# The full songbook: every song, the shared front-matter pages and its own
+# dedication, introduction and credits (tools/edition.py).
+all = true
+cover_image = "../../images/cover_image.jpg"
+imprint = "credits.tex"
+before_songs = ["dedication.tex", "introduction.tex"]
+after_contents = []
+
+[pages]
+cover = "shared"
+halftitle = "shared"
+titlepage = "shared"

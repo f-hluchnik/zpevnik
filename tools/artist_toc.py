@@ -1,7 +1,7 @@
 """The artist part of the table of contents.
 
 `artist_part_tex` returns the artist index, a column list of every artist that has a
-section, and the sections themselves: the songs of each artist in the order of
+section and a song in the edition, and the sections themselves: the songs of each artist in the order of
 songbook order under the title of their page (the `\\toctitle` only tells songs of the same name
 apart in the letter sections), with the alternative titles.
 Which songs belong to an artist comes from the `\\artist` and `\\collection` tags
@@ -30,10 +30,15 @@ def heading_tex(artist: Artist) -> str:
     return "\\\\".join(escape_tex(line) for line in artist["name"].split(HEADING_BREAK))
 
 
-def ordered_artists(registry: list[Artist]) -> list[Artist]:
-    """Artists with a section in the order of the book: by sort key, collections last."""
-    with_section = (artist for artist in registry if artist["section"])
-    return sorted(with_section, key=lambda a: (a["kind"] == COLLECTION, sort_key(a["sort"])))
+def members(artist: Artist, songs: list[Song]) -> list[Song]:
+    return [song for song in songs if artist["slug"] in song.groups]
+
+
+def ordered_artists(registry: list[Artist], songs: list[Song]) -> list[Artist]:
+    """Artists with a section and a song among `songs`, in the order of the book: by sort
+    key, collections last. The full book's rules, so an edition never differs from it."""
+    listed = (artist for artist in registry if artist["section"] and members(artist, songs))
+    return sorted(listed, key=lambda a: (a["kind"] == COLLECTION, sort_key(a["sort"])))
 
 
 def index_text(artist: Artist) -> str:
@@ -56,14 +61,13 @@ def sections_tex(artists: list[Artist], songs: list[Song]) -> str:
     """One section per artist: heading, link target and a link for each entry."""
     lines = [f"\\begin{{multicols}}{{{COLUMNS}}}\n"]
     for artist in artists:
-        members = [song for song in songs if artist["slug"] in song.groups]
         lines.append(f"\\subsection*{{{heading_tex(artist)}}}\n{link_target(artist['slug'])}\n")
-        lines += [link(e.song_id, e.text) + "\n\n" for e in sorted_entries(members, page_title)]
+        lines += [link(e.song_id, e.text) + "\n\n" for e in sorted_entries(members(artist, songs), page_title)]
     lines.append("\\end{multicols}\n")
     return "".join(lines)
 
 
 def artist_part_tex(registry: list[Artist], songs: list[Song]) -> str:
     """The index, a rule and the sections."""
-    artists = ordered_artists(registry)
+    artists = ordered_artists(registry, songs)
     return index_tex(artists) + INDEX_TO_SECTIONS_RULE + sections_tex(artists, songs)

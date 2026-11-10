@@ -1,17 +1,21 @@
+% The shared title page. {} after a macro at the end of a line keeps the line-end
+% space that the centred title and author lines have always ended with.
 \vspace*{5cm}
 \begin{center}
 \begin{Huge}
 	\fontfamily{frc}
 	\selectfont
-	Ještě mi chvilku zpívej
+	\zpeditiontitle{}
 \end{Huge}
+\ifx\zpeditionsubtitle\empty\else\par\vspace{5mm}{\LARGE\zpeditionsubtitle\par}\fi
 \vspace{1cm}
 
 \begin{Large}
-František Hluchník
+\zpbookauthor{}
 \vspace{4mm}
 
-2019--\the\year
+\ifx\zpeditioneditors\empty\else\zpeditioneditors\par\vspace{4mm}\fi
+\zpbookstartyear--\the\year
 \end{Large}
 \end{center}
 \newpage

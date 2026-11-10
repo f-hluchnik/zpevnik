@@ -307,16 +307,13 @@ TSWLatexianTemp*
 # Scratch output of tests/single-song.sh
 tests/build/
 
-# Build outputs of tools/generate.py (D-104)
-generated/
-
 # Python bytecode of tools/
 __pycache__/
 
 # Chord positions written by every build (tools/chord_gaps.py, C3a)
 *.chords
 
-# Output of make song (R14)
+# Everything make builds: editions, single songs, score images (D-143)
 /build/
 
 # MuseScore backup copies, next to any saved score

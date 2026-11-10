@@ -38,7 +38,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
 | R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
-| E2 | todo | |
+| E2 | done | editions in the generator and the build (D-144): PR #? |
 | E3 | todo | |
 | E4 | todo | owner picks the songs |
 | E5 | todo | |
@@ -121,6 +121,7 @@ Test with a throwaway edition that is not committed: songs by id, one artist, an
 1. `\seealso` to a song outside the edition prints nothing and takes no space (D-139); a generated list of the songs present lets `zpevnik.sty` decide without a second pass (84 uses in 76 songs on 6 Nov 2026).
 2. A link to a missing target fails the edition build: pdfTeX's warning in the log (`… has been referenced but does not exist`). Verify with the throwaway edition that it catches the contents links, `\seealso` and the artist links.
 3. Run the one-page check and the lints on the edition.
+4. `make check [EDITION=<name>]` (D-143, D-144): the unit tests, the lints, the one-page check and the link check of the edition; the chord check on the full book.
 **Expected differences:** none for the full book.
 
 ### E4 · Choose the songs for `zpevnik-lite` — [you] + [agent] · S · needs E2
@@ -136,11 +137,11 @@ D-139, D-110. The website gets the PDFs from the release (this takes over the PD
 All songs of the `zpevnik-lidovky` repository are already in the full book (owner, 9 Nov 2026), and the 76 songs tagged `\artist{lidove}` match the 2020 book (D-139). The agent writes `editions/lidovky/edition.toml` with `artists = ["lidove"]`, compares the result with the song list of the old repository (by title, with E4's helper) and reports any difference, and, if the old book has its own title page or foreword, adds its front matter; the owner confirms the list and the front matter, and archives the old repository himself.
 
 ### E8 · Front matter in book order — [agent] · S · needs E3
-D-143. The skeleton gets the Czech book order: cover, blank, halftitle, blank, title page (a right-hand page), the imprint on its back, then `before_songs`. The songs start on page 9 instead of 8. The stray `\hspace{10mm}` before the first credit goes.
-**Expected differences:** the front-matter pages (order, one new blank page, the first credit line); every page number one higher, and the contents numbers with them. The song-by-song diff reports every song: check that each differs only in its page number.
+D-143. The skeleton gets the Czech book order: cover, blank, halftitle, blank, title page (a right-hand page), the imprint on its back, then `before_songs`. The songs start on page 9 instead of 8. (The `\hspace{10mm}` before the first credit went in E2, D-144.)
+**Expected differences:** the front-matter pages (order, one new blank page); every page number one higher, and the contents numbers with them. The song-by-song diff reports every song: check that each differs only in its page number.
 
 ### R16 · Drop the old song folder from the version — [agent] · S · needs the first song-count change after R15
-D-143. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename tests go. R15 left four more traces of the old folder, all removed here: `LEGACY_SONGS_DIR` and `songs_dir()` in `tools/paths.py` (with the fallback in `tools/check_pages.py` that lets the PDF diff read a base built before the rename, and its test), and the `pisnicky/` pathspec of the *List newly added songs* step in the CI workflow. **Expected differences:** none.
+D-143, D-144. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename tests go. The other traces of the old folder and of the layout before editions, all removed here: `LEGACY_SONGS_DIR` in `tools/paths.py`, the `pisnicky/` pathspec of the *List newly added songs* step in the CI workflow, `book_output_dir`'s fallback to the root in `tools/pdfdiff.py` (a base built before E2) and the `else latexmk` branch of the *Compile base* step. (E2 already removed `songs_dir()` and the fallback of `tools/check_pages.py`.) **Expected differences:** none.
 
 ---
 

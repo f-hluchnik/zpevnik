@@ -1,0 +1,9 @@
+# The songbook itself: facts every edition shares (tools/edition.py).
+# The generator turns them into macros for the shared pages; no edition changes them.
+title = "Ještě mi chvilku zpívej"
+author = "František Hluchník"
+start_year = 2019
+source = "https://github.com/f-hluchnik/zpevnik"
+# The edition that is the book itself: its imprint prints the plain version line,
+# every other edition the sentence that it is a selection from this book.
+base_edition = "full"

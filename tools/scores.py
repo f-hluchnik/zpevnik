@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Export the score images from MuseScore, so that every score places itself in the book.
 
-For each scores/<name>.mscz this writes into generated/scores/:
+For each scores/<name>.mscz this writes into build/scores/:
   <name>.svg  the image for the web: transparent, chord names in the songbook's
               chord colour;
   <name>.pdf  the same image for pdfLaTeX, which cannot include SVG;
@@ -294,7 +294,7 @@ def main() -> int:
         except ScoreError as error:
             print(f"error: {error}", file=sys.stderr)
             return 1
-    print(f"scores: {len(pending)} exported, {len(scores) - len(pending)} up to date")
+    print(f"{SCORE_OUTPUT_DIR}: {len(pending)} exported, {len(scores) - len(pending)} up to date")
     return 0
 
 

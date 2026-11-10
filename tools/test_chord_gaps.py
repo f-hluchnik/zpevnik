@@ -7,6 +7,8 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from chord_gaps import SP_PER_PT, Chord, Pair, check_book, overlapping, read_trace, same_line_pairs
+from paths import CHORD_TRACE_NAME, DEFAULT_EDITION, edition_output_dir
+from test_check_pages import write_compiled_book
 
 
 def pt(points: float) -> int:
@@ -28,21 +30,16 @@ class Pairs(unittest.TestCase):
 
 
 class Book(unittest.TestCase):
-    """A two-song book (`one` on page 2, `two` on page 3); the trace has an overlap on `page`."""
+    """A two-song full book (`one` on page 2, `two` on page 3); the trace has an overlap on `page`."""
 
     def build(self, root: Path, overlap_page: int | None) -> None:
-        (root / "songs").mkdir()
-        (root / "generated").mkdir()
-        (root / "zpevnik.tex").write_text("\\setcounter{page}{2}\n\\input{generated/include}\n")
-        (root / "generated" / "include.tex").write_text("\\songinclude{one}\n\\songinclude{two}\n")
-        for song, after in (("one", 3), ("two", 4)):
-            (root / "songs" / f"{song}.aux").write_text(
-                f"\\@setckpt{{songs/{song}}}{{\n\\setcounter{{page}}{{{after}}}\n}}\n")
-            (root / "songs" / f"{song}.tex").write_text("\\song{X}\n")
+        output_dir = root / edition_output_dir(DEFAULT_EDITION)
+        output_dir.mkdir(parents=True)
+        write_compiled_book(output_dir, [("shared-pages/cover", 2), ("songs/one", 3), ("songs/two", 4)])
         rows = [Chord(0, 5, 2, pt(8)), Chord(pt(20), 5, 2, pt(8))]  # no overlap
         if overlap_page is not None:
             rows += [Chord(0, 5, overlap_page, pt(8)), Chord(pt(4), 5, overlap_page, pt(8))]
-        (root / "zpevnik.chords").write_text("".join(f"{c.x} {c.y} {c.page} {c.width}\n" for c in rows))
+        (output_dir / CHORD_TRACE_NAME).write_text("".join(f"{c.x} {c.y} {c.page} {c.width}\n" for c in rows))
 
     def test_an_overlap_in_any_song_fails(self):
         for page in (2, 3):
@@ -63,7 +60,8 @@ class Book(unittest.TestCase):
     def test_the_trace_is_read_in_order(self):
         with TemporaryDirectory() as tmp:
             self.build(Path(tmp), overlap_page=2)
-            self.assertEqual(len(read_trace(Path(tmp) / "zpevnik.chords")), 4)
+            trace = Path(tmp) / edition_output_dir(DEFAULT_EDITION) / CHORD_TRACE_NAME
+            self.assertEqual(len(read_trace(trace)), 4)
 
 
 if __name__ == "__main__":

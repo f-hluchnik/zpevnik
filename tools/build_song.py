@@ -3,10 +3,10 @@
 
 Usage: python3 tools/build_song.py SONG_ID [repo-root]      (or: make song SONG=<id>)
 
-Writes build/<id>.tex, a main file made from
+Writes build/songs/<id>.tex, a main file made from
 tests/single-song.tex with the song swapped in (the Overleaf setup: zpevnik.sty
 and one song, so no table of contents and no artist links), compiles it with latexmk and
-prints the path of build/<id>.pdf. A local build with a newer TeX Live than CI's can
+prints the path of build/songs/<id>.pdf. A local build with a newer TeX Live than CI's can
 differ slightly; CI stays the reference. Python >= 3.11, standard library only.
 """
 import argparse
@@ -15,10 +15,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-from paths import BUILD_DIR, SINGLE_SONG_TEMPLATE, SONGS_DIR, add_root_argument
+from build_edition import LATEXMK
+from paths import SINGLE_SONG_TEMPLATE, SONG_BUILD_DIR, SONGS_DIR, add_root_argument
 
 INCLUDE_LINE = re.compile(r"\\include\{" + re.escape(str(SONGS_DIR)) + r"/[^}]+\}")
-LATEXMK = ["latexmk", "-pdf", "-interaction=nonstopmode", "-halt-on-error"]
 
 
 def main_file_text(template: str, song: str) -> str:
@@ -34,11 +34,11 @@ def build(root: Path, song: str) -> Path:
     song_file = SONGS_DIR / f"{song}.tex"
     if not (root / song_file).is_file():
         raise FileNotFoundError(f"no song {song_file} (the id is the file name without .tex)")
-    (root / BUILD_DIR / SONGS_DIR).mkdir(parents=True, exist_ok=True)  # \include writes its .aux there
-    main = BUILD_DIR / f"{song}.tex"
+    (root / SONG_BUILD_DIR / SONGS_DIR).mkdir(parents=True, exist_ok=True)  # \include writes its .aux there
+    main = SONG_BUILD_DIR / f"{song}.tex"
     template = (root / SINGLE_SONG_TEMPLATE).read_text(encoding="utf-8")
     (root / main).write_text(main_file_text(template, song), encoding="utf-8")
-    subprocess.run([*LATEXMK, f"-outdir={BUILD_DIR}", str(main)], cwd=root, check=True)
+    subprocess.run([*LATEXMK, f"-outdir={SONG_BUILD_DIR}", str(main)], cwd=root, check=True)
     return main.with_suffix(".pdf")
 
 

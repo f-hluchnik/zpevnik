@@ -11,30 +11,53 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SONGS_DIR = Path("songs")
-LEGACY_SONGS_DIR = Path("pisnicky")  # the folder before the rename (R15); dropped by R16
+LEGACY_SONGS_DIR = Path("pisnicky")  # the folder before the rename (R15), for the version; dropped by R16
 REGISTRY_FILE = Path("data/artists.toml")
+BOOK_FILE = Path("data/book.toml")      # facts of the songbook every edition shares
+EDITIONS_DIR = Path("editions")         # editions/<name>/edition.toml and its own pages
+EDITION_FILE_NAME = "edition.toml"
+SHARED_PAGES_DIR = Path("shared-pages")  # pages an edition can share, and the imprint core
 BOOK_TEX = Path("zpevnik.tex")
-BOOK_PDF = Path("zpevnik.pdf")
-CHORD_TRACE = Path("zpevnik.chords")  # written by every build, see \chord in zpevnik.sty
+BOOK_PDF_NAME = "zpevnik.pdf"           # the PDF of every edition, in its output directory
+BOOK_AUX_NAME = "zpevnik.aux"           # its main auxiliary file, which lists every \include
+CHORD_TRACE_NAME = "zpevnik.chords"     # written by every build, see \chord in zpevnik.sty
 MULTIPAGE_ALLOWLIST = Path("tools/multipage-allowlist.txt")
 SINGLE_SONG_TEMPLATE = Path("tests/single-song.tex")
-BUILD_DIR = Path("build")
 STYLE_FILE = Path("zpevnik.sty")
 SCORES_DIR = Path("scores")              # MuseScore sources, one .mscz per image
 SCORE_STYLE = SCORES_DIR / "zpevnik.mss"  # shared MuseScore style, applied on every export
 
-GENERATED_DIR = Path("generated")
-ARTISTS_TEX = GENERATED_DIR / "artists.tex"
-INCLUDE_TEX = GENERATED_DIR / "include.tex"
-LETTERS_TEX = GENERATED_DIR / "obsah-letters.tex"
-ARTIST_PART_TEX = GENERATED_DIR / "obsah-artists.tex"
-VERSION_TEX = GENERATED_DIR / "version.tex"
-SCORE_OUTPUT_DIR = GENERATED_DIR / "scores"  # <name>.svg (web), .pdf (pdfLaTeX), .tex (placement)
+# Everything derived lives under one root (gitignored), deleted by `make clean`.
+BUILD_DIR = Path("build")
+SCORE_OUTPUT_DIR = BUILD_DIR / "scores"  # <name>.svg (web), .pdf (pdfLaTeX), .tex (placement)
+SONG_BUILD_DIR = BUILD_DIR / "songs"     # make song: <id>.pdf
+EDITION_BUILD_DIR = BUILD_DIR / "editions"
+DEFAULT_EDITION = "full"
+
+# The files tools/generate.py writes into an edition's generated/ directory.
+ARTISTS_TEX = Path("artists.tex")
+INCLUDE_TEX = Path("include.tex")
+LETTERS_TEX = Path("obsah-letters.tex")
+ARTIST_PART_TEX = Path("obsah-artists.tex")
+VERSION_TEX = Path("version.tex")
+MACROS_TEX = Path("macros.tex")
+PAGES_TEX = Path("pages.tex")
 
 
-def songs_dir(root: Path) -> Path:
-    """The song folder of a checkout, which may predate the rename (the PDF diff builds a base)."""
-    return SONGS_DIR if (root / SONGS_DIR).is_dir() else LEGACY_SONGS_DIR
+def edition_output_dir(edition: str) -> Path:
+    """Where an edition is built: its PDF, LaTeX's auxiliary files and generated/."""
+    return EDITION_BUILD_DIR / edition
+
+
+def generated_dir(edition: str) -> Path:
+    """The generated .tex files of an edition."""
+    return edition_output_dir(edition) / "generated"
+
+
+def add_edition_argument(parser: argparse.ArgumentParser) -> None:
+    """The --edition option of the tools that work on one edition."""
+    parser.add_argument("--edition", default=DEFAULT_EDITION,
+                        help=f"the edition, a folder of {EDITIONS_DIR}/ (default: {DEFAULT_EDITION})")
 
 
 def resolved_path(text: str) -> Path:
