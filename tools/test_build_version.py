@@ -12,10 +12,10 @@ from build_version import UNKNOWN_PATCH, build_patch, song_count_change
 
 class SongCountChange(unittest.TestCase):
     def test_added_minus_deleted(self):
-        self.assertEqual(song_count_change(["A\ta.tex", "A\tb.tex", "D\tc.tex"]), 1)
+        self.assertEqual(song_count_change(["A", "A", "D"]), 1)
 
     def test_replacing_a_song_does_not_change_the_count(self):
-        self.assertEqual(song_count_change(["A\ta.tex", "D\tb.tex"]), 0)
+        self.assertEqual(song_count_change(["A", "D"]), 0)
 
 
 class BuildPatch(unittest.TestCase):
