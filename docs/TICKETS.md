@@ -38,7 +38,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
 | R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
-| E2 | done | editions in the generator and the build (D-144): PR #? |
+| E2 | done | editions in the generator and the build (D-144): PR #96 |
 | E3 | todo | |
 | E4 | todo | owner picks the songs |
 | E5 | todo | |
