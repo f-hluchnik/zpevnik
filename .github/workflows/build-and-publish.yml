@@ -136,12 +136,24 @@ jobs:
           set -euo pipefail
           version=$(python3 tools/generate.py --version)
 
-          if ! [[ "$version" =~ ^[0-9]+\.[0-9]{2}$ ]]; then
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]{2}\.[0-9]+$ ]]; then
             echo "::error::Computed version '$version' looks invalid, aborting."
             exit 1
           fi
 
           echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      # A tag is never overwritten or moved. It exists already only if songs were
+      # removed and the song count returned to an earlier value. Checked before
+      # anything is published.
+      - name: Fail if the release tag exists
+        if: github.event_name == 'push'
+        run: |
+          tag="v${{ steps.version.outputs.version }}"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "::error::Tag $tag already exists; the release is not overwritten."
+            exit 1
+          fi
 
       - name: List newly added songs
         id: new_songs

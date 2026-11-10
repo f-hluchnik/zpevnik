@@ -35,7 +35,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | Ticket | Status | Notes / PR |
 |---|---|---|
 | K1 | todo | owner: chords for the 8 songs without them |
-| E0 | todo | build version `8.33.N` (D-133); needs nothing, before E5 and P4 |
+| E0 | done | build version `8.33.N` (D-133) |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | todo | |
 | E3 | todo | |

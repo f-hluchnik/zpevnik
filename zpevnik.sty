@@ -404,8 +404,8 @@
 \InputIfFileExists{generated/artists}{}{}
 
 %VERSION
-% generated/version.tex (tools/generate.py) sets the real version: song count + 100.
+% generated/version.tex (tools/generate.py) sets the real version: song count + 100, then the build number.
 % Without it the colophon shows a visibly wrong placeholder. \zpversion is
 % public: zpevnik.tex prints it.
-\newcommand{\zpversion}{?.??}
+\newcommand{\zpversion}{?.??.?}
 \InputIfFileExists{generated/version}{}{}
