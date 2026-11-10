@@ -3,8 +3,9 @@
 
 Usage: python3 tools/pdfdiff.py --base BASE_DIR --head HEAD_DIR [--dpi 72]
 
-Both directories hold a compiled checkout (zpevnik.pdf and the per-song
-songs/*.aux files). Pages are mapped to song ids with the page checkpoints
+Both directories hold a compiled checkout; the full book is compared (its PDF and
+auxiliary files in build/editions/full/, or in the root for a base built before
+editions existed). Pages are mapped to song ids with the page checkpoints
 that check_pages.py reads, so a song is compared with itself wherever it sits
 in the book. The page-number footer is left out of every comparison. Front
 matter and the pages after the last song (the table of contents) are compared
@@ -23,7 +24,7 @@ import tempfile
 from pathlib import Path
 
 from check_pages import song_pages
-from paths import BOOK_PDF
+from paths import BOOK_PDF_NAME, DEFAULT_EDITION, edition_output_dir
 
 FOOTER_TOP_PT = 805.0  # the page number sits at y = 808-817 pt on an A4 page
 MONTHS = {
@@ -33,14 +34,22 @@ MONTHS = {
 MAX_LISTED = 60
 
 
+def book_output_dir(root: Path) -> Path:
+    """Where a checkout has its full book: the edition's output directory, or the root
+    of a checkout from before editions (the base of the PR that introduced them)."""
+    output_dir = root / edition_output_dir(DEFAULT_EDITION)
+    return output_dir if (output_dir / BOOK_PDF_NAME).exists() else root
+
+
 class Build:
     def __init__(self, root: Path, dpi: int, tmp: Path, label: str):
         self.root = root
         self.dpi = dpi
-        self.pdf = root / BOOK_PDF
+        output_dir = book_output_dir(root)
+        self.pdf = output_dir / BOOK_PDF_NAME
         if not self.pdf.exists():
             raise SystemExit(f"ERROR: {self.pdf} not found")
-        ranges, errors = song_pages(root)
+        ranges, errors = song_pages(output_dir)
         if errors:
             raise SystemExit(f"ERROR ({label}): " + "; ".join(errors[:5]))
         self.songs = {sid: (start, n) for sid, start, n in ranges}

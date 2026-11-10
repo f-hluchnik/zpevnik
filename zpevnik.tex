@@ -1,26 +1,35 @@
 \documentclass[a4paper, 10pt]{article}
+% Every book is an edition, built with `make [EDITION=<name>]` (tools/build_edition.py).
+% The build defines \zpgenerated, the directory of the edition's generated files,
+% before this file is read.
+\ifdefined\zpgenerated\else
+  \errmessage{zpevnik.tex is built per edition: run make [EDITION=<name>]}
+  \expandafter\stop
+\fi
 \usepackage{zpevnik}
+% The facts the shared pages print, and the pages of the edition.
+\input{\zpgenerated/macros}
+\input{\zpgenerated/pages}
 
-\author{František Hluchník}
+\author{\zpbookauthor}
 
 % \includeonly{songs/zelviblues, shared-pages/contents}
 
 \begin{document}
 \pagestyle{empty}
-\include{shared-pages/cover}
+\zpcoverpage
 \clearpage\mbox{}\clearpage
-\include{shared-pages/halftitle}
+\zphalftitlepage
 \include{shared-pages/imprint}
-\include{shared-pages/titlepage}
-\include{shared-pages/dedication}
-\include{shared-pages/introduction}
+\zptitlepage
+\zpbeforesongs
 
 \clearpage
-\setcounter{page}{8}
 \pagestyle{plain}
 
 \begin{Large}
-\input{generated/include}
+\input{\zpgenerated/include}
 \end{Large}
 \include{shared-pages/contents}
+\zpaftercontents
 \end{document}

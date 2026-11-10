@@ -1,13 +1,17 @@
+% The imprint of every book: the edition's fragment (its credits) above a core that no
+% edition replaces. An edition derived from the book also says what it is selected from
+% and where its source is. \noindent: this style's \parindent is negative (hanging
+% block labels), so the fragment and the core start at the margin.
 \vspace*{\fill}
-%\hspace{10mm}sepsal František Hluchník\\
-\hspace{10mm}obálku nakreslila Ivana Vlčková\\
-korektura: Jan Brzobohatý\\
+\noindent\zpimprintslot
 \begin{otherlanguage}{czech}
 Brno, \today\\
 \end{otherlanguage}
 %až se bude tisknout:
 %1. tištěné vydání\\
+\ifzpderived výběr \zpeditionsongcount{} písní ze zpěvníku \zpbooktitle{} (\zpbookauthor)\\\fi
 verze \zpversion\\
+\ifzpderived zdrojové soubory: \href{\zpbooksource}{\zpbooksourcetext}\\\fi
 vysázeno jazykem \LaTeXe\par
 \vspace{8mm}
 \input{shared-pages/notice}

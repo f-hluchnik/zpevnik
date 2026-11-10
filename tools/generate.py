@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""Generate the TeX files derived from the registry and the songs.
+"""Generate the TeX files of an edition, derived from the registry, the songs and the edition.
 
-Writes into generated/: artists.tex (one \\zpregisterartist{slug}{link label}{1 or 0}
-line per registry entry, which zpevnik.sty turns into lookups by slug), include.tex
-(the \\songinclude list of all songs in the Czech collation order), obsah-letters.tex
-(the letter part of the contents), obsah-artists.tex (the artist index and the artist
-sections) and version.tex (the songbook version, major.minor.patch).
+Writes into build/editions/<edition>/generated/: artists.tex (one
+\\zpregisterartist{slug}{link label}{1 or 0} line per registry entry, which zpevnik.sty
+turns into lookups by slug), include.tex (the \\songinclude list of the edition's songs in
+the Czech collation order), obsah-letters.tex (the letter part of the contents),
+obsah-artists.tex (the artist index and the artist sections), version.tex (the songbook
+version, major.minor.patch), macros.tex and pages.tex (the front matter, edition_tex.py).
+The version is the build's: it counts every song, whatever the edition selects.
 Generated files are build outputs (gitignored); `make` runs this before compiling.
 
-Usage: python3 tools/generate.py [repo-root]
-       python3 tools/generate.py --version [repo-root]   (print the version only)
+Usage: python3 tools/generate.py [--edition NAME] [repo-root]   (default edition: full)
+       python3 tools/generate.py --version [repo-root]          (print the version only)
 Python >= 3.11, standard library only.
 """
 import argparse
@@ -19,9 +21,12 @@ from pathlib import Path
 from artist_toc import artist_part_tex
 from build_version import build_patch
 from collation import section, sort_key
+from edition import Book, Edition, EditionError, edition_folder, read_book, read_edition
+from edition_tex import macros_tex, pages_tex
 from letter_toc import letters_tex
-from paths import (ARTIST_PART_TEX, ARTISTS_TEX, INCLUDE_TEX, LETTERS_TEX, REGISTRY_FILE, SONGS_DIR,
-                   VERSION_TEX, add_root_argument)
+from paths import (ARTIST_PART_TEX, ARTISTS_TEX, BOOK_FILE, EDITION_FILE_NAME, INCLUDE_TEX,
+                   LETTERS_TEX, MACROS_TEX, PAGES_TEX, REGISTRY_FILE, SONGS_DIR, VERSION_TEX,
+                   add_edition_argument, add_root_argument, generated_dir)
 from registry import check_entries, normalise, read_entries
 from songs import Song, read_songs, song_paths
 from tex_text import escape_tex
@@ -67,27 +72,32 @@ def version(song_count: int, patch: str) -> str:
     return f"{n // 100}.{n % 100:02d}.{patch}"
 
 
-def generated_files(entries: list[dict], songs: list[Song], patch: str) -> dict[Path, str]:
-    """The text of every generated file, by its path relative to the repository root."""
+def generated_files(entries: list[dict], songs: list[Song], book: Book, edition: Edition,
+                    book_version: str) -> dict[Path, str]:
+    """The text of every generated file of the edition, by its path in generated/.
+    `songs` are the edition's songs; `book_version` is the build's version."""
+    edition_source = f"{BOOK_FILE} and {edition_folder(edition.name) / EDITION_FILE_NAME}"
     return {
         ARTISTS_TEX: artists_tex(entries),
         INCLUDE_TEX: include_tex(songs),
         LETTERS_TEX: header(SONGS_SOURCE) + letters_tex(songs),
         ARTIST_PART_TEX: (header(f"{REGISTRY_FILE} and {SONGS_SOURCE}")
                           + artist_part_tex([normalise(e) for e in entries], songs)),
-        VERSION_TEX: (header(SONGS_SOURCE)
-                      + f"\\renewcommand{{\\zpversion}}{{{version(len(songs), patch)}}}\n"),
+        VERSION_TEX: header(SONGS_SOURCE) + f"\\renewcommand{{\\zpversion}}{{{book_version}}}\n",
+        MACROS_TEX: header(edition_source) + macros_tex(book, edition, len(songs)),
+        PAGES_TEX: header(edition_source) + pages_tex(edition),
     }
 
 
-def write_files(root: Path, files: dict[Path, str]) -> None:
+def write_files(directory: Path, files: dict[Path, str]) -> None:
+    directory.mkdir(parents=True, exist_ok=True)
     for path, text in files.items():
-        (root / path).parent.mkdir(exist_ok=True)
-        (root / path).write_text(text, encoding="utf-8")
+        (directory / path).write_text(text, encoding="utf-8")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    add_edition_argument(parser)
     add_root_argument(parser)
     parser.add_argument("--version", action="store_true", help="print the songbook version and exit")
     args = parser.parse_args()
@@ -99,11 +109,19 @@ def main() -> int:
     if errors:
         print(f"{REGISTRY_FILE} is invalid:", *errors, sep="\n  ", file=sys.stderr)
         return 1
-    songs = read_songs(args.root)
-    patch = build_patch(args.root)
-    write_files(args.root, generated_files(entries, songs, patch))
-    print(f"{ARTISTS_TEX}: {len(entries)} entries; {VERSION_TEX}: {version(len(songs), patch)}; "
-          f"{INCLUDE_TEX}: {len(songs)} songs; {LETTERS_TEX}; {ARTIST_PART_TEX}")
+    all_songs = read_songs(args.root)
+    try:
+        book = read_book(args.root)
+        edition = read_edition(args.root, args.edition, book, all_songs, {e["slug"] for e in entries})
+    except EditionError as error:
+        print(error, file=sys.stderr)
+        return 1
+    songs = edition.select(all_songs)
+    book_version = version(len(all_songs), build_patch(args.root))
+    directory = generated_dir(edition.name)
+    write_files(args.root / directory, generated_files(entries, songs, book, edition, book_version))
+    print(f"{directory}: edition {edition.name}, {len(songs)} of {len(all_songs)} songs, "
+          f"version {book_version}")
     return 0
 
 
