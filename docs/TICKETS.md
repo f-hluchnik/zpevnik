@@ -36,7 +36,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 |---|---|---|
 | K1 | todo | owner: chords for the 8 songs without them |
 | E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
-| R15 | in review | English names (D-143); before E2; the transitional old-folder handling is listed in R16 |
+| R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | todo | |
 | E3 | todo | |
