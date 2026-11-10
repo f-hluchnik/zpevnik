@@ -93,7 +93,7 @@ The web build downloads `songs.json` (and the PDF) from the `zpevnik` release pi
 - `name` is the section heading ("Surname, First" for people), so `sort` equals `name` for artists; collections have explicit sort keys and come after all artists. Whether `name` becomes the natural form is open (R6).
 - `filmy` and `lidove` are `kind = "collection"`. The forced line break in the `filmy` heading is not stored; R11 must reproduce it.
 - TeX side: `generated/artists.tex` calls `\zpregisterartist`; `zpevnik.sty` offers `\artistname`, `\artistlabel`, `\artistlinklabel` (R7, D-114), `\ifartistsection`; `\zpregisterartist` takes 5 arguments since R7. A missing file or unknown slug prints nothing (D-003, D-005).
-- Version (*amended by D-133: a third number counts the builds*): `tools/generate.py` computes *song files + 100* (733 → 8.33); the colophon uses `\zpversion` (shown as `?.??` without the generated file); CI reads it with `generate.py --version`.
+- Version (*amended by D-133: a third number counts the builds*): `tools/generate.py` computes *song files + 100* (733 → 8.33); the colophon uses `\zpversion` (shown as `?.??.?` without the generated file); CI reads it with `generate.py --version`.
 
 ### D-112 · Artist anchors and names after R6 — Implemented in R6 (4 Nov 2026), PR #30
 - Anchors are the lowercase ASCII name without spaces or a leading article (INVENTORY C1 renames applied). `trikyapovery` is split: `trikyapovery` = "Triky a pověry", `ricchiepoveri` = "Ricchi e Poveri" with its own section (between Redl and Rottrová) and index entry.
@@ -272,6 +272,7 @@ The refactoring took longer than expected, so after phase 11 the work goes: edit
 - `patch` comes from Git, not from GitHub: the number of first-parent commits since the last commit that changed the song count. Deterministic (CI and a local build with history agree), nothing stored. The first release after the switch therefore continues from the existing history (around 8.33.6x), not from 1; the old tag `v8.33` stays.
 - A tag is never overwritten or moved: CI fails if it exists (possible only if songs are removed and the count returns to an earlier value).
 - The colophon, the release, `version.txt` and the edition file names use the full version; without Git history the colophon shows `8.33.?`.
+- Details confirmed in E0: the song count "changed" in a commit when it adds more song files than it deletes, or the reverse (swapping one song for another does not restart the patch). A shallow clone, no Git or no repository gives `?`, never a wrong number. The tag check is its own CI step before anything is published. The first release after the switch is 8.33.67 (computed from the history of 10 Nov 2026).
 - Not adopted: counting releases through the GitHub API (not reproducible locally), Conventional-Commits semantic versioning (the version describes the PDF, not the code).
 
 ### D-134 · The planning docs live in the `zpevnik` repository — Agreed (owner, 6 Nov 2026)

@@ -47,8 +47,10 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky 
 Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
 
 1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje `zpevnik.tex` do PDF. U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
-2. Spočítá aktuální verzi zpěvníku podle počtu souborů ve složce `pisnicky` (počet písniček + 100, tedy 733 písniček dává verzi 8.33; počítá to `tools/generate.py`, stejně jako verzi v tiráži).
-3. Vytvoří GitHub Release s tagem odpovídajícím verzi (např. `v8.19`) a přiloží k němu zkompilované PDF ke stažení.
+2. Spočítá aktuální verzi zpěvníku, která má tři čísla `major.minor.patch` (např. `8.33.67`; počítá to `tools/generate.py`, stejně jako verzi v tiráži, a `python3 tools/generate.py --version` ji vypíše):
+   - `major.minor` je počet písniček ve složce `pisnicky` + 100 (733 písniček dává 8.33),
+   - `patch` je počet commitů v hlavní větvi (first-parent) od posledního commitu, který změnil počet písniček. Přidání písničky tedy začíná znovu od 0 a každá další změna (oprava textu, nástrojů, vzhledu) číslo zvýší o 1. Verze tak určuje jedno konkrétní sestavení PDF. Počítá se z historie Gitu, takže stejný výsledek dá CI i lokální sestavení s celou historií; bez ní (např. `git clone --depth 1`) vyjde `8.33.?`.
+3. Vytvoří GitHub Release s tagem `v<verze>` (např. `v8.33.67`) a názvem `Zpěvník v8.33.67` a přiloží k němu zkompilované PDF ke stažení. Existující tag se nikdy nepřepisuje ani nepřesouvá: pokud tag už existuje (stává se to jen tehdy, když se po smazání písniček vrátí počet na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Starý tag `v8.33` zůstává.
 4. Zapíše aktuální verzi a zkompilované PDF do repozitáře webu ([zpevnik-web](https://github.com/f-hluchnik/zpevnik-web)) a tuto změnu tam commitne a pushne.
 
 Push do repozitáře webu následně spustí jeho vlastní publikační workflow, který web přebuilduje (mimo jiné vypíše aktuální verzi na hlavní stránku) a nasadí přes GitHub Pages. Odkaz ke stažení na webu tedy vždy směřuje na nejnovější verzi zpěvníku, a stažený soubor má ve svém názvu i příslušné číslo verze.

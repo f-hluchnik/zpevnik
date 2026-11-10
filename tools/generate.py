@@ -5,7 +5,7 @@ Writes into generated/: artists.tex (one \\zpregisterartist{slug}{link label}{1 
 line per registry entry, which zpevnik.sty turns into lookups by slug), include.tex
 (the \\songinclude list of all songs in the Czech collation order), obsah-letters.tex
 (the letter part of the contents), obsah-artists.tex (the artist index and the artist
-sections) and version.tex (the songbook version).
+sections) and version.tex (the songbook version, major.minor.patch).
 Generated files are build outputs (gitignored); `make` runs this before compiling.
 
 Usage: python3 tools/generate.py [repo-root]
@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 
 from artist_toc import artist_part_tex
+from build_version import build_patch
 from collation import section, sort_key
 from letter_toc import letters_tex
 from paths import (ARTIST_PART_TEX, ARTISTS_TEX, INCLUDE_TEX, LETTERS_TEX, REGISTRY_FILE, SONGS_DIR,
@@ -60,13 +61,13 @@ def include_tex(songs: list[Song]) -> str:
     return "".join(lines)
 
 
-def version(song_count: int) -> str:
-    """Song count + VERSION_BASE, as major.minor."""
+def version(song_count: int, patch: str) -> str:
+    """Song count + VERSION_BASE as major.minor, then the build number (build_version.py)."""
     n = song_count + VERSION_BASE
-    return f"{n // 100}.{n % 100:02d}"
+    return f"{n // 100}.{n % 100:02d}.{patch}"
 
 
-def generated_files(entries: list[dict], songs: list[Song]) -> dict[Path, str]:
+def generated_files(entries: list[dict], songs: list[Song], patch: str) -> dict[Path, str]:
     """The text of every generated file, by its path relative to the repository root."""
     return {
         ARTISTS_TEX: artists_tex(entries),
@@ -75,7 +76,7 @@ def generated_files(entries: list[dict], songs: list[Song]) -> dict[Path, str]:
         ARTIST_PART_TEX: (header(f"{REGISTRY_FILE} and {SONGS_SOURCE}")
                           + artist_part_tex([normalise(e) for e in entries], songs)),
         VERSION_TEX: (header(SONGS_SOURCE)
-                      + f"\\renewcommand{{\\zpversion}}{{{version(len(songs))}}}\n"),
+                      + f"\\renewcommand{{\\zpversion}}{{{version(len(songs), patch)}}}\n"),
     }
 
 
@@ -91,7 +92,7 @@ def main() -> int:
     parser.add_argument("--version", action="store_true", help="print the songbook version and exit")
     args = parser.parse_args()
     if args.version:
-        print(version(len(song_paths(args.root))))
+        print(version(len(song_paths(args.root)), build_patch(args.root)))
         return 0
     entries = read_entries(args.root)
     errors = check_entries(entries)
@@ -99,8 +100,9 @@ def main() -> int:
         print(f"{REGISTRY_FILE} is invalid:", *errors, sep="\n  ", file=sys.stderr)
         return 1
     songs = read_songs(args.root)
-    write_files(args.root, generated_files(entries, songs))
-    print(f"{ARTISTS_TEX}: {len(entries)} entries; {VERSION_TEX}: {version(len(songs))}; "
+    patch = build_patch(args.root)
+    write_files(args.root, generated_files(entries, songs, patch))
+    print(f"{ARTISTS_TEX}: {len(entries)} entries; {VERSION_TEX}: {version(len(songs), patch)}; "
           f"{INCLUDE_TEX}: {len(songs)} songs; {LETTERS_TEX}; {ARTIST_PART_TEX}")
     return 0
 
