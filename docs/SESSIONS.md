@@ -50,7 +50,7 @@ R16 merged (PR #102). E7 merged (PR #103, D-146): `editions/lidovky/` with its o
 - **Notes:** Only the full book's URL `zpevnik_last.pdf` must stay (printed QR codes); the other PDFs may link to the release assets. The full book is the main button until `zpevnik-lite` exists. The `lidovky` button serves the edition and the committed 2020 PDF goes; then the owner archives `zpevnik-lidovky` himself. Which editions the page shows is configured in `zpevnik-web`. The songbook CI stops committing the PDF into `zpevnik-web` (a PR in `zpevnik`); merge order between the two PRs matters, say it in both. The owner's working copy of `zpevnik-web` was clean on 11 Nov 2026; ask about `templates/base.html` only if `git status` shows a change.
 
 ### Session 21c · P0 · Sonnet · `zpevnik`
-- **Needs:** nothing (E2's build).
+- **Needs:** the print edition (`editions/<name>/edition.toml`, prepared by the owner by hand, D-148); E5 and E6 first (owner, 11 Nov 2026).
 - **Read:** DECISIONS D-122, D-129, D-139, D-142, D-143, D-147 · PLAN WP9 · TICKETS P0, P1.
 - **Notes:** A report, not a change of the book: zero diff for the screen PDF, nothing merged except what the owner picks. Propose how the A5 geometry reaches the document (a parameter, no copy of `zpevnik.tex`) in the PR before coding. The owner answers P1 after reading the report.
 
