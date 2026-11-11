@@ -216,6 +216,7 @@ jobs:
         run: |
           set -euo pipefail
           notes=$(python3 tools/release.py "${{ steps.version.outputs.version }}")
+          echo "$notes"
           { echo "editions<<EDITIONSEOF"; echo "$notes"; echo "EDITIONSEOF"; } >> "$GITHUB_OUTPUT"
 
       - name: Checkout website repo
