@@ -40,6 +40,7 @@ TEX_ERROR_PREFIX = "! "  # TeX starts every error message with it
 TEX_FATAL_PREFIX = "!  ==>"  # and ends a run that -halt-on-error stopped with this line
 ERROR_EXCERPT_LINES = 10  # at most: the message, the line of the source it points at, the fatal line
 FALLBACK_EXCERPT_LINES = 20  # the end of the output, when it holds no TeX error
+TEX_OUTPUT_ENCODING = "utf-8"  # the log and the terminal output; a stray byte from TeX must not stop the build
 # TeX Live reads its settings from the environment too; one log line per message.
 LONG_LOG_LINES = {"max_print_line": "10000"}
 MISSING_TARGET = re.compile(r"name\{([^}]*)\} has been referenced but does not exist")
@@ -79,7 +80,8 @@ def failure_excerpt(output: str) -> str:
 
 def run_latexmk(command: list[str], root: Path, log: Path, environment: dict[str, str] | None = None) -> None:
     """Run latexmk in the root, silently; LatexError (with the excerpt and `log`) if it fails."""
-    result = subprocess.run(command, cwd=root, capture_output=True, text=True,
+    result = subprocess.run(command, cwd=root, capture_output=True,
+                            encoding=TEX_OUTPUT_ENCODING, errors="replace",
                             env={**os.environ, **(environment or {})})
     if result.returncode != 0:
         raise LatexError(f"latexmk failed ({result.returncode}); the full log is {log}\n"
@@ -106,7 +108,7 @@ def build(root: Path, edition: str) -> Path:
         (output / folder).mkdir(parents=True, exist_ok=True)
     run_latexmk(latexmk_command(edition), root, edition_output_dir(edition) / BOOK_LOG_NAME, LONG_LOG_LINES)
     pdf = pdf_path(edition)
-    log = (output / BOOK_LOG_NAME).read_text(encoding="utf-8", errors="replace")
+    log = (output / BOOK_LOG_NAME).read_text(encoding=TEX_OUTPUT_ENCODING, errors="replace")
     missing = missing_link_targets(log)
     if missing:
         raise MissingLinkTargets(pdf, missing)

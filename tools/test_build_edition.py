@@ -52,6 +52,10 @@ class Failure(unittest.TestCase):
         self.assertIn("! Missing $ inserted.", message)
         self.assertNotIn("(./a.tex)", message)
 
+    def test_a_stray_byte_in_the_output_does_not_stop_the_build(self):
+        code = "import sys; sys.stdout.buffer.write(b'caf\\xba\\n'); sys.exit(0)"
+        run_latexmk([sys.executable, "-c", code], Path("."), Path("build/x.log"))
+
 
 class LinkCheck(unittest.TestCase):
     def test_every_missing_target_is_reported_once(self):
