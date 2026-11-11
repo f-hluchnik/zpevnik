@@ -70,9 +70,6 @@ E6 (PRs f-hluchnik/zpevnik-web#3, merged first, and f-hluchnik/zpevnik#107, D-15
 - **Read:** TICKETS A3 · the CI workflow · the backlog item *CI speed*.
 - **Notes:** Measure before proposing; the PDF diff must stay at zero for every accepted change; one PR per accepted proposal.
 
-### Any session · K2 · Sonnet · `zpevnik`
-- **Needs:** nothing. Small; do it when convenient (it removes three warnings, no more).
-
 ### Any session · P4 · Sonnet · `zpevnik`
 - **Needs:** P3, and the final content: the owner's new songs and K1 (D-147).
 - **Read:** TICKETS P4 · the P1 entry.

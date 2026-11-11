@@ -16,6 +16,7 @@ import re
 import sys
 from pathlib import Path, PurePosixPath
 
+from allowlist import read_allowlist
 from paths import (BOOK_AUX_NAME, MULTIPAGE_ALLOWLIST, SONGS_DIR, add_edition_argument,
                    add_root_argument, edition_output_dir)
 
@@ -23,16 +24,6 @@ MAX_PAGES = 1
 MAX_PAGES_ALLOWLISTED = 2
 INCLUDED_FILE = re.compile(r"^\\@input\{(.+)\.aux\}$", re.M)  # \@input{songs/alfa.aux}
 PAGE_COUNTER = re.compile(r"\\setcounter\{page\}\{(\d+)\}")
-
-
-def read_allowlist(path: Path) -> set[str]:
-    ids = set()
-    if path.exists():
-        for line in path.read_text(encoding="utf-8").splitlines():
-            line = line.split("#", 1)[0].strip()
-            if line:
-                ids.add(line)
-    return ids
 
 
 def included_files(output_dir: Path) -> list[str]:

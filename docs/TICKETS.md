@@ -30,12 +30,12 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 `todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes).
 
-**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11), E5 and E6 (phase 9a).
+**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11), E5 and E6 (phase 9a), K1 and K2.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
-| K1 | todo | owner: chords for the 8 songs without them; also about ten new songs before the print (content, D-147) |
-| K2 | todo | lint allow-list for songs that are right without chords (answers K1's question) |
+| K1 | done | the five songs with only a `\chords` row got chords over the lyrics: PR #109; the three scores need none (K2). The owner's new songs (about ten) before the print are content work, not a ticket (D-147) |
+| K2 | done | `tools/no-chords-allowlist.txt` read by the lint (answers K1's question): PR #111 |
 | E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
 | R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |

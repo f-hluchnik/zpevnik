@@ -21,7 +21,7 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 2. Na řádek s příkazem `\song{}` doplním `\artist{<kotva>}` (více v části o interpretech níže). Pokud interpret ještě v registru není, přidám do souboru `data/artists.toml` nový záznam `[[entry]]` s kotvou (`slug`) a jménem (`name`, ve tvaru "Příjmení, Jméno").
 3. Otevřu si soubor s písničkou a začnu přepisovat. Více o přepisování písniček dále.
 4. Spustím `make`. Skript nejdřív vygeneruje seznam písniček seřazený podle abecedy, obsah a verzi (do `build/editions/full/generated/`; složka `build` se necommituje) a pak zkompiluje zpěvník do `build/editions/full/zpevnik.pdf`. Písnička se sama zařadí podle názvu v `\song{}`, do obsahu podle písmen i do sekce svého interpreta.
-5. Spustím `python3 tools/lint.py`. Zkontroluje, že každá písnička má `\song` a právě jeden řádek s `\artist`, že všechny kotvy jsou v registru a že každá sekce interpreta má písničky. Stejnou kontrolu spouští i GitHub Actions. Nezávažné nálezy (varování) jen vypíše.
+5. Spustím `python3 tools/lint.py`. Zkontroluje, že každá písnička má `\song` a právě jeden řádek s `\artist`, že všechny kotvy jsou v registru a že každá sekce interpreta má písničky. Stejnou kontrolu spouští i GitHub Actions. Nezávažné nálezy (varování) jen vypíše. Písnička bez akordů, která je správně (například jen nota), se zapíše do `tools/no-chords-allowlist.txt` s komentářem, proč; kontrola `tools/lint.py` pak nehlásí, že nemá akordy, a ohlásí id, které není písnička.
 6. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 
 Na kompilaci potřebuji Python 3.11 a novější, `latexmk` a TeX Live 2023 s češtinou (ve stejné verzi kompiluje zpěvník i GitHub Actions).
