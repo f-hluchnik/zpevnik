@@ -2,11 +2,13 @@
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-from build_edition import build, include_folders, latexmk_command, missing_link_targets
+from build_edition import (LatexError, build, failure_excerpt, include_folders, latexmk_command,
+                           missing_link_targets, pdf_path, run_latexmk)
 
 
 class Command(unittest.TestCase):
@@ -15,6 +17,44 @@ class Command(unittest.TestCase):
         self.assertIn("-outdir=build/editions/lite", command)
         self.assertIn("-usepretex=\\def\\zpgenerated{build/editions/lite/generated}", command)
         self.assertEqual(command[-1], "zpevnik.tex")
+
+
+class Paths(unittest.TestCase):
+    def test_the_pdf_is_in_the_output_folder_of_its_edition(self):
+        self.assertEqual(pdf_path("lite"), Path("build/editions/lite/zpevnik.pdf"))
+
+
+class Failure(unittest.TestCase):
+    TEX_OUTPUT = ("(./zpevnik.tex (o/zpevnik.aux)\n! Undefined control sequence.\nl.1 Hello \\undefined\n"
+                  "                        world\n!  ==> Fatal error occurred, no output PDF file produced!\n"
+                  "Transcript written on o/zpevnik.log.\nCollected error summary\n")
+
+    def test_the_excerpt_starts_at_the_first_tex_error_and_ends_with_the_fatal_line(self):
+        excerpt = failure_excerpt(self.TEX_OUTPUT).splitlines()
+        self.assertEqual(excerpt[0], "! Undefined control sequence.")
+        self.assertTrue(excerpt[-1].startswith("!  ==> Fatal error"))
+        self.assertEqual(len(excerpt), 4)
+
+    def test_without_a_tex_error_the_excerpt_is_the_end_of_the_output(self):
+        output = "".join(f"line {n}\n" for n in range(100))
+        self.assertEqual(failure_excerpt(output).splitlines(), [f"line {n}" for n in range(80, 100)])
+
+    def test_a_successful_run_raises_nothing(self):
+        run_latexmk([sys.executable, "-c", "print('lots of output')"], Path("."), Path("build/x.log"))
+
+    def test_a_failed_run_names_the_log_and_shows_the_tex_error(self):
+        code = "import sys; print('(./a.tex)\\n! Missing $ inserted.'); sys.exit(12)"
+        with self.assertRaises(LatexError) as caught:
+            run_latexmk([sys.executable, "-c", code], Path("."), Path("build/x.log"))
+        message = str(caught.exception)
+        self.assertIn("failed (12)", message)
+        self.assertIn("build/x.log", message)
+        self.assertIn("! Missing $ inserted.", message)
+        self.assertNotIn("(./a.tex)", message)
+
+    def test_a_stray_byte_in_the_output_does_not_stop_the_build(self):
+        code = "import sys; sys.stdout.buffer.write(b'caf\\xba\\n'); sys.exit(0)"
+        run_latexmk([sys.executable, "-c", code], Path("."), Path("build/x.log"))
 
 
 class LinkCheck(unittest.TestCase):

@@ -50,9 +50,10 @@ TABLE = Kind("a table", lambda v: isinstance(v, dict))
 PAGE_CHOICE = Kind(f'"{SHARED}" or "{OWN}"', lambda v: v in (SHARED, OWN))
 
 BOOK_KEYS = {"title": TEXT, "author": TEXT, "start_year": YEAR, "source": TEXT, "base_edition": TEXT}
-EDITION_REQUIRED = {"before_songs": TEXTS, "after_contents": TEXTS, "pages": TABLE}
+EDITION_REQUIRED = {"pages": TABLE}
 EDITION_OPTIONAL = {"title": TEXT, "subtitle": TEXT, "editors": TEXTS, "cover_image": TEXT,
-                    "imprint": TEXT, ALL: TRUE, SONGS: TEXTS, ARTISTS: TEXTS}
+                    "imprint": TEXT, "before_songs": TEXTS, "after_contents": TEXTS,
+                    ALL: TRUE, SONGS: TEXTS, ARTISTS: TEXTS}
 PAGE_KEYS = {page: PAGE_CHOICE for page in PAGES}
 
 
@@ -167,7 +168,7 @@ class EditionReader:
         return tex_path(path)
 
     def listed_files(self, key: str) -> tuple[str, ...]:
-        return tuple(self.listed_file(reference, key) for reference in self.table[key])
+        return tuple(self.listed_file(reference, key) for reference in self.table.get(key, []))
 
     def page(self, page: str, choice: str) -> str:
         if choice == SHARED:

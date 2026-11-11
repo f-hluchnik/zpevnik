@@ -11,11 +11,10 @@ differ slightly; CI stays the reference. Python >= 3.11, standard library only.
 """
 import argparse
 import re
-import subprocess
 import sys
 from pathlib import Path
 
-from build_edition import LATEXMK
+from build_edition import LATEXMK, LatexError, run_latexmk
 from paths import SINGLE_SONG_TEMPLATE, SONG_BUILD_DIR, SONGS_DIR, add_root_argument
 
 INCLUDE_LINE = re.compile(r"\\include\{" + re.escape(str(SONGS_DIR)) + r"/[^}]+\}")
@@ -38,7 +37,7 @@ def build(root: Path, song: str) -> Path:
     main = SONG_BUILD_DIR / f"{song}.tex"
     template = (root / SINGLE_SONG_TEMPLATE).read_text(encoding="utf-8")
     (root / main).write_text(main_file_text(template, song), encoding="utf-8")
-    subprocess.run([*LATEXMK, f"-outdir={SONG_BUILD_DIR}", str(main)], cwd=root, check=True)
+    run_latexmk([*LATEXMK, f"-outdir={SONG_BUILD_DIR}", str(main)], root, main.with_suffix(".log"))
     return main.with_suffix(".pdf")
 
 
@@ -49,10 +48,8 @@ def main() -> int:
     args = parser.parse_args()
     try:
         print(build(args.root, args.song))
-    except (FileNotFoundError, ValueError) as error:
+    except (FileNotFoundError, LatexError, ValueError) as error:
         print(f"error: {error}", file=sys.stderr)
-        return 1
-    except subprocess.CalledProcessError:
         return 1
     return 0
 

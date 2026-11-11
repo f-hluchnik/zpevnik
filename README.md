@@ -14,6 +14,35 @@ Filosofie tohoto zpěvníku je taková, že by se z něj mělo dobře zpívat a 
 3. Hraní > zpívání > vzhled.
     - Písnička musí být zapsaná tak, aby se hlavně dobře hrála. Na druhém místě se musí dobře zpívat, na třetím místě je vzhled. Tyto tři charakteristiky spolu samozřejmě úzce souvisí. V tomto bodě mám ale na mysli hlavně případy, kdy je například potřeba zvolit nestandardní odsazení či zalomení, a to z důvodu, aby hraní písničky bylo přirozené a hladké. Toto je samozřejmě velmi subjektivní.
     
+## Nastavení lokální kopie
+Zpěvník (celý i jednotlivá vydání) se dá sestavit na vlastním počítači. Postup platí pro macOS a Linux, příkazy jsou pro Homebrew a apt. Hotovo je, když projde `make check`.
+
+1. Stáhnu repozitář:
+   ```
+   git clone git@github.com:f-hluchnik/zpevnik.git
+   cd zpevnik
+   ```
+2. Python 3.11 nebo novější. Nástroje v `tools/` potřebují `tomllib`, který je ve standardní knihovně od verze 3.11; na starší verzi skončí `make` chybou `No module named 'tomllib'`. Jiné balíčky se neinstalují, nástroje používají jen standardní knihovnu. Na macOS stačí `brew install python`, na Linuxu balík `python3` v dost nové verzi. Aby `make` nespouštěl starší Python, který je v systému dřív v `PATH`, vytvořím si virtuální prostředí (složka `.venv` se necommituje) a aktivuji ho:
+   ```
+   python3.12 -m venv .venv      # příkaz Pythonu 3.11 nebo novějšího
+   source .venv/bin/activate
+   python3 --version             # musí být 3.11 nebo novější
+   ```
+   Aktivaci (`source .venv/bin/activate`) opakuji v každém novém terminálu, ve kterém spouštím `make`. `make` si verzi Pythonu zkontroluje a u starší skončí srozumitelnou chybou; jiný Python mu mohu zadat i napřímo: `make PYTHON=python3.12`.
+3. TeX Live s češtinou, `latexmk` a několik balíků (`csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `cm-super`, `musixtex-fonts` pro křížky a béčka v akordech). GitHub Actions kompiluje s TeX Live 2023; novější verze funguje také, výsledek se jen může mírně lišit, rozhodující je vždy GitHub Actions.
+   - **Linux (Debian, Ubuntu):** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music latexmk poppler-utils`. `poppler-utils` je na kontrolu stran a porovnání PDF (`tools/check_pages.py`, `tools/pdfdiff.py`).
+   - **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref cm-super musixtex-fonts latexmk`.
+4. Noty se exportují z MuseScoru (viz [Noty](#noty)), takže `make` potřebuje ještě tři věci:
+   - **MuseScore 4.6.5.** Stejnou verzi používá GitHub Actions; jiná verze může změnit rozvržení not, a tím i to, jestli se písnička vejde na jednu stranu. Stáhnu ji ze [stránky vydání 4.6.5](https://github.com/musescore/MuseScore/releases/tag/v4.6.5). Na macOS nainstalovanou aplikaci v `/Applications` najde `make` sám; leží-li jinde nebo je nainstalováno víc verzí, dám cestu k programu `mscore` do proměnné `MSCORE`, například `export MSCORE="/Applications/MuseScore 4.app/Contents/MacOS/mscore"`. Na Linuxu je to AppImage (cestu k němu dám do `MSCORE`; na stroji bez displeje se spouští přes `xvfb-run`).
+   - **`rsvg-convert`** (převod SVG na PDF): `brew install librsvg` nebo `sudo apt-get install librsvg2-bin`.
+   - **Písmo CMU Serif** (všechny texty v notách): `brew install --cask font-computer-modern` nebo `sudo apt-get install fonts-cmu`. Zkontroluji `fc-list | grep "CMU Serif"`; bez písma MuseScore tiše použije jiné a obrázky not se budou lišit od zpěvníku.
+5. Ověřím, že všechno funguje: `make check` (jiné vydání: `make check EDITION=<název>`). Spustí unit testy a kontroly, vyexportuje noty, zkompiluje zpěvník a zkontroluje, že je každá písnička na jedné stránce a že se nepřekrývají akordy. Poprvé to trvá déle, protože se exportují všechny noty. Každý krok má nadpis (`==> Unit tests`, `==> Lint`, …) a úspěšný běh končí řádkem `==> All checks passed. The PDF:` s úplnou cestou k hotovému PDF.
+
+Nejčastější chyby:
+- `the tools need Python 3.11 or newer` (nebo při přímém spuštění nástroje `No module named 'tomllib'`): Python je starší než 3.11, nebo není aktivní `.venv`.
+- `MuseScore 4 not found`: MuseScore je jinde, než ho `make` hledá; nastavím `MSCORE`.
+- `rsvg-convert not found`: nainstaluji `librsvg` (krok 4).
+
 ## Postup přidávání nové písničky
 V této části popíšu postup přidání nové písničky do Zpěvníku, jak jsem si to navykl dělat. Písnička je jediný soubor; seznam písniček, obsah (podle písmen i podle interpretů) i verzi zpěvníku generuje skript `tools/generate.py`, takže `zpevnik.tex` ani `shared-pages/contents.tex` ručně neupravuji.
 
@@ -24,17 +53,10 @@ V této části popíšu postup přidání nové písničky do Zpěvníku, jak j
 5. Spustím `python3 tools/lint.py`. Zkontroluje, že každá písnička má `\song` a právě jeden řádek s `\artist`, že všechny kotvy jsou v registru a že každá sekce interpreta má písničky. Stejnou kontrolu spouští i GitHub Actions. Nezávažné nálezy (varování) jen vypíše.
 6. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 
-Na kompilaci potřebuji Python 3.11 a novější, `latexmk` a TeX Live 2023 s češtinou (ve stejné verzi kompiluje zpěvník i GitHub Actions).
-
 ### Lokální sestavení
-Na kompilaci potřebuji Python 3.11 a novější a TeX Live s češtinou, `latexmk` a několik balíků (`csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `cm-super`, `musixtex-fonts` pro křížky a béčka v akordech).
+Co všechno k tomu potřebuji nainstalovat, popisuje [Nastavení lokální kopie](#nastavení-lokální-kopie).
 
-- **Linux (Debian, Ubuntu):** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music latexmk`. Na kontrolu stran a porovnání PDF (`tools/check_pages.py`, `tools/pdfdiff.py`) navíc `poppler-utils`.
-- **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref cm-super musixtex-fonts latexmk`. Python 3.11 a novější je například z Homebrew (`brew install python`).
-
-Noty (viz [Noty](#noty)) se exportují z MuseScoru, takže `make` potřebuje ještě MuseScore 4.6.5, `rsvg-convert` a písmo CMU Serif: na Linuxu `sudo apt-get install librsvg2-bin fonts-cmu` a MuseScore jako AppImage (cestu k němu dej do proměnné `MSCORE`), na macOS MuseScore 4 z musescore.org, `brew install librsvg` a písmo CMU Serif.
-
-`make` zkompiluje celý zpěvník, `make song SONG=<id>` jen jednu písničku. `<id>` je název souboru bez `.tex`, například `make song SONG=lonelystranger`. Hotové PDF je v `build/songs/<id>.pdf` a trvá to pár sekund. Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clean` ji smaže). Je to stejné nastavení jako na Overleafu: bez obsahu a bez odkazů na interprety. Lokální sestavení s novější verzí TeX Live se může od GitHub Actions mírně lišit; rozhodující je vždy GitHub Actions.
+`make` zkompiluje celý zpěvník, `make song SONG=<id>` jen jednu písničku. `<id>` je název souboru bez `.tex`, například `make song SONG=lonelystranger`. Hotové PDF je v `build/songs/<id>.pdf` a trvá to pár sekund. `make` samotný končí řádkem `==> The PDF is ready:` s úplnou cestou k PDF. Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clean` ji smaže). Je to stejné nastavení jako na Overleafu: bez obsahu a bez odkazů na interprety. Lokální sestavení s novější verzí TeX Live se může od GitHub Actions mírně lišit; rozhodující je vždy GitHub Actions. `make` vypisuje jen výsledek; když kompilace selže, vypíše první chybu TeXu a cestu k úplnému logu (`build/editions/<vydání>/zpevnik.log`, u jedné písničky `build/songs/<id>.log`).
 
 ### Název písničky v obsahu
 Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky na začátku řádku za `\song{}` na stránce nic nevysází, jen řídí obsah:
@@ -50,14 +72,13 @@ Vydání je výběr písniček s vlastními úvodními stranami, sestavený ze s
    ```toml
    artists = ["lidove"]
    cover_image = "../../images/cover_image.jpg"
-   before_songs = []
-   after_contents = []
 
    [pages]
    cover = "shared"
    halftitle = "shared"
    titlepage = "shared"
    ```
+   `cover_image` je obrázek, který sdílená obálka (`cover = "shared"`) roztáhne přes celou stranu; cesta je od složky vydání. U sdílené obálky je povinný, u vlastní obálky (`cover = "own"`) se neuvádí, protože obrázek patří do jejího `cover.tex`.
 2. Výběr písniček je `all = true` (všechny), `artists = ["<kotva>", ...]` (všechny písničky interpretů z registru) nebo `songs = ["<id>", ...]` (jednotlivé písničky podle názvu souboru bez `.tex`). `songs` a `artists` lze spojit. Neznámé `id` nebo kotvu ohlásí `make` i `tools/lint.py` jako chybu. Pořadí písniček je vždy jako v celém zpěvníku (abecední).
 3. Volitelně doplním `title`, `subtitle` (podtitul pod názvem na titulní straně), `editors` (seznam jmen), `imprint` (soubor s texty nad tiráží, např. poděkování) a stránky před písničkami (`before_songs`) a po obsahu (`after_contents`). Obálku, předtitul a titulní stranu lze nahradit vlastní: v `[pages]` je pak `"own"` a vedle `edition.toml` leží soubor `cover.tex`, `halftitle.tex` nebo `titlepage.tex` (příklad je vydání `lidovky` s vlastní obálkou). Soubor `.tex` ve složce vydání, na který se nic neodkazuje, je chyba. Všechny klíče a chyby popisuje `tools/edition.py`.
 4. Spustím `make check EDITION=<název>`: unit testy, kontrola písniček a definic vydání, sestavení (selže při odkazu, který vede nikam), jedna stránka na písničku a překryv akordů.

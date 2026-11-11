@@ -105,6 +105,9 @@ class SectionsTex(unittest.TestCase):
         tex = sections_tex([FILMY], [song("t", "Theme", artists=(), collections=("filmy",))])
         self.assertIn("\\subsection*{z pohádek,\\\\her}\n\\hypertarget{filmy}{}\n\\hyperlink{t}{Theme}\n", tex)
 
+    def test_the_columns_are_not_stretched_to_the_page_bottom(self):
+        self.assertIn("\\begin{multicols}{2}\\raggedcolumns\n", sections_tex([ABBA], []))
+
     def test_song_without_artist_is_in_no_section(self):
         self.assertNotIn("\\hyperlink", sections_tex([ABBA], [song("a", "Alfa")]))
 
@@ -116,8 +119,8 @@ class ArtistPartTex(unittest.TestCase):
     def test_index_rule_sections_in_this_order(self):
         tex = artist_part_tex([KRYL, ABBA], [song("a", "Alfa", artists=("abba",)),
                                              song("k", "Kryl", artists=("karelkryl",))])
-        self.assertLess(tex.index("\\hyperlink{abba}{ABBA}\\par"), tex.index("\\zprule{10cm}"))
-        self.assertLess(tex.index("\\zprule{10cm}"), tex.index("\\subsection*{ABBA}"))
+        self.assertLess(tex.index("\\hyperlink{abba}{ABBA}\\par"), tex.index("\\zprule{\\textwidth}"))
+        self.assertLess(tex.index("\\zprule{\\textwidth}"), tex.index("\\subsection*{ABBA}"))
         self.assertLess(tex.index("\\subsection*{ABBA}"), tex.index("\\subsection*{Kryl, Karel}"))
 
 

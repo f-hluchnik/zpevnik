@@ -131,9 +131,13 @@ class ReadEdition(unittest.TestCase):
         self.assertEqual(caught.exception.errors, ["no such file"])
 
     def test_missing_unknown_and_wrong_keys(self):
-        toml = 'songs = "alfa"\nfile = "x"\nafter_contents = []\n' + PAGES_SHARED
-        self.assertEqual(self.errors(toml), ["missing key 'before_songs'", "unknown key 'file'",
+        toml = 'songs = "alfa"\nfile = "x"\n'
+        self.assertEqual(self.errors(toml), ["missing key 'pages'", "unknown key 'file'",
                                              "'songs' must be a list of non-empty strings"])
+
+    def test_before_songs_and_after_contents_may_be_left_out(self):
+        edition = self.read(lite().replace("before_songs = []\nafter_contents = []\n", ""))
+        self.assertEqual((edition.before_songs, edition.after_contents), ((), ()))
 
     def test_every_page_must_be_declared_shared_or_own(self):
         pages = '[pages]\ncover = "shared"\nhalftitle = "mine"\nback = "own"\n'

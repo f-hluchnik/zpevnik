@@ -18,7 +18,7 @@ from tex_text import escape_tex
 COLLECTION = "collection"
 COLUMNS = 2  # the index and the sections are both set in two columns
 HEADING_BREAK = "\n"  # in a registry name: a forced line break in the section heading
-INDEX_TO_SECTIONS_RULE = "\\begin{center}\\zprule{10cm}\\end{center}\n"
+INDEX_TO_SECTIONS_RULE = "\\begin{center}\\zprule{\\textwidth}\\end{center}\n"
 
 
 def page_title(song: Song) -> str:
@@ -59,7 +59,9 @@ def index_tex(artists: list[Artist]) -> str:
 
 def sections_tex(artists: list[Artist], songs: list[Song]) -> str:
     """One section per artist: heading, link target and a link for each entry."""
-    lines = [f"\\begin{{multicols}}{{{COLUMNS}}}\n"]
+    # \raggedcolumns: a column that ends a page early keeps its natural spacing instead of
+    # stretching the few gaps it has (an artist with one song) down to the bottom of the page.
+    lines = [f"\\begin{{multicols}}{{{COLUMNS}}}\\raggedcolumns\n"]
     for artist in artists:
         lines.append(f"\\subsection*{{{heading_tex(artist)}}}\n{link_target(artist['slug'])}\n")
         lines += [link(e.song_id, e.text) + "\n\n" for e in sorted_entries(members(artist, songs), page_title)]
@@ -68,6 +70,6 @@ def sections_tex(artists: list[Artist], songs: list[Song]) -> str:
 
 
 def artist_part_tex(registry: list[Artist], songs: list[Song]) -> str:
-    """The index, a rule and the sections."""
+    """The index, a full-width rule and the sections. The contents start the index on a new page."""
     artists = ordered_artists(registry, songs)
     return index_tex(artists) + INDEX_TO_SECTIONS_RULE + sections_tex(artists, songs)

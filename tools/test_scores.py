@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 
 from scores import (ScoreError, StaffPosition, chord_colour, export_svg, is_up_to_date, outputs,
-                    paint_chord_names, placement_tex, remove_page_background, staff_position,
+                    paint_chord_names, placement_tex, remove_page_background, run, staff_position,
                     system_width_pt)
 
 # 100 SVG units are 10 mm wide, so one unit is 0.1 mm = 0.283465 pt.
@@ -175,6 +175,19 @@ class ExportTest(unittest.TestCase):
     def test_more_pages_fail(self):
         with self.assertRaisesRegex(ScoreError, "2 pages"):
             export_svg(self.fake_mscore(2), Path("scores/a.mscz"), Path("style.mss"), self.out_dir)
+
+
+class FailureTest(unittest.TestCase):
+    def test_the_message_names_the_program_and_drops_the_startup_warnings(self):
+        code = ('import sys; print("qt.qml.typeregistration: Invalid QML element name", file=sys.stderr);'
+                ' print("cannot open the score"); sys.exit(40)')
+        with self.assertRaises(ScoreError) as caught:
+            run([sys.executable, "-c", code], "export of a.mscz")
+        message = str(caught.exception)
+        self.assertIn("failed (40)", message)
+        self.assertIn(sys.executable, message)
+        self.assertIn("cannot open the score", message)
+        self.assertNotIn("typeregistration", message)
 
 
 if __name__ == "__main__":
