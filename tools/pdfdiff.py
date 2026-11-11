@@ -9,7 +9,8 @@ editions existed). Pages are mapped to song ids with the page checkpoints
 that check_pages.py reads, so a song is compared with itself wherever it sits
 in the book. The page-number footer is left out of every comparison. Front
 matter and the pages after the last song (the table of contents) are compared
-by position, with the colophon date line left out.
+by position, with the imprint's build date and version left out: they change with
+every build (the version counts the commits, D-133), not with the change under review.
 
 Writes a Markdown report to stdout. Differences never change the exit code
 (some tickets expect them); it exits 1 only when it cannot do its job.
@@ -27,6 +28,7 @@ from check_pages import song_pages
 from paths import BOOK_PDF_NAME, DEFAULT_EDITION, edition_output_dir
 
 FOOTER_TOP_PT = 805.0  # the page number sits at y = 808-817 pt on an A4 page
+VERSION = re.compile(r"\d+\.\d+\.(\d+|\?)")  # 8.33.71, or 8.33.? without Git history
 MONTHS = {
     "ledna", "února", "března", "dubna", "května", "června",
     "července", "srpna", "září", "října", "listopadu", "prosince",
@@ -64,10 +66,10 @@ class Build:
             for f in out.glob("p-*.pgm")
         }
         self.pages = len(self.files)
-        self.date_bands = self._date_bands()
+        self.build_bands = self._build_bands()
 
-    def _date_bands(self) -> dict[int, list[tuple[int, int]]]:
-        """Pixel rows of lines with a Czech month name on the front pages."""
+    def _build_bands(self) -> dict[int, list[tuple[int, int]]]:
+        """Pixel rows of the lines with the build date or version on the front pages."""
         bands: dict[int, list[tuple[int, int]]] = {}
         if self.first <= 1:
             return bands
@@ -79,7 +81,7 @@ class Build:
                 page += 1
                 continue
             m = re.search(r'yMin="([\d.]+)" xMax="[\d.]+" yMax="([\d.]+)">(.*?)</word>', line)
-            if m and html.unescape(m.group(3)).lower() in MONTHS:
+            if m and names_the_build(html.unescape(m.group(3))):
                 bands.setdefault(page, []).append((self._row(float(m.group(1))) - 1,
                                                    self._row(float(m.group(2))) + 2))
         return bands
@@ -95,6 +97,11 @@ class Build:
         for lo, hi in extra_masks:
             masked.update(range(lo, hi))
         return b"".join(pix[r * w:(r + 1) * w] for r in range(keep_to) if r not in masked)
+
+
+def names_the_build(word: str) -> bool:
+    """A word of the build date (its Czech month) or the version, which every build changes."""
+    return word.lower() in MONTHS or VERSION.fullmatch(word) is not None
 
 
 def run(cmd: list[str]) -> str:
@@ -192,7 +199,7 @@ def main() -> int:
         # front matter and back matter, compared by position
         diff_pages: list[int] = []
         for p in range(1, min(base.first, head.first)):
-            masks = base.date_bands.get(p, []) + head.date_bands.get(p, [])
+            masks = base.build_bands.get(p, []) + head.build_bands.get(p, [])
             if not pages_equal(base, p, head, p, masks):
                 diff_pages.append(p)
         base_back = list(range(base.last_end, base.pages + 1))
@@ -231,7 +238,7 @@ def main() -> int:
     out.append((fmt_pages(diff_pages) if diff_pages else "none") + front_note + back_note)
     out.append("")
     out.append("_Compared as grayscale renders at "
-               f"{args.dpi} dpi; page-number footers and the colophon date are ignored. "
+               f"{args.dpi} dpi; page-number footers and the imprint's build date and version are ignored. "
                "Footnote numbers run through the whole book, so adding or removing a song "
                "with a footnote changes every later song that has one._")
     print("\n".join(out))

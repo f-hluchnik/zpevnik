@@ -46,6 +46,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E7 | todo | owner confirms the `lidovky` song list |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | todo | needs the first song-count change after R15 (8.34.0) |
+| S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
 | P1 | todo | owner: print requirements and the deadline |
 | P2 | cancelled | the book is never sold (D-140) |
 | P3 | todo | |
@@ -143,6 +144,9 @@ D-143. The skeleton gets the Czech book order: cover, blank, halftitle, blank, t
 ### R16 · Drop the old song folder from the version — [agent] · S · needs the first song-count change after R15
 D-143, D-144. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename tests go. The other traces of the old folder and of the layout before editions, all removed here: `LEGACY_SONGS_DIR` in `tools/paths.py`, the `pisnicky/` pathspec of the *List newly added songs* step in the CI workflow, `book_output_dir`'s fallback to the root in `tools/pdfdiff.py` (a base built before E2) and the `else latexmk` branch of the *Compile base* step. (E2 already removed `songs_dir()` and the fallback of `tools/check_pages.py`.) **Expected differences:** none.
 
+
+### S4 · The PDF diff ignores the version line — [agent] · S · needs E0
+D-133. Since E0 the imprint prints the build's version, which counts the commits, so every PR's diff reported the imprint page as changed (base `8.33.N`, head the merge commit `8.33.N+1`). `tools/pdfdiff.py` leaves the version out like the build date: a word shaped like a version (`8.33.71`, or `8.33.?` without Git history) on the front-matter pages is masked with its line. **Expected differences:** none in the book; from this PR on, the imprint page is no longer reported unless something else on it changes.
 ---
 
 # Phase 3 – Print (D-122)
