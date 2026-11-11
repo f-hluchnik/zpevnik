@@ -32,6 +32,7 @@ BUILD_DIR = Path("build")
 SCORE_OUTPUT_DIR = BUILD_DIR / "scores"  # <name>.svg (web), .pdf (pdfLaTeX), .tex (placement)
 SONG_BUILD_DIR = BUILD_DIR / "songs"     # make song: <id>.pdf
 EDITION_BUILD_DIR = BUILD_DIR / "editions"
+RELEASE_DIR = BUILD_DIR / "release"      # the PDFs of a release under their asset names (release.py)
 DEFAULT_EDITION = "full"
 
 # The files tools/generate.py writes into an edition's generated/ directory.

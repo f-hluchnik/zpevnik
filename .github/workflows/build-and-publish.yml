@@ -18,9 +18,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Every edition (a folder of editions/) is built, checked and released; the one
+      # place that says what an edition is lists them, so a new edition needs no change here.
+      - name: List editions
+        id: editions
+        run: echo "names=$(python3 tools/build_edition.py --list | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+
       # Derived .tex files are build outputs, not committed.
       - name: Generate derived files
-        run: python3 tools/generate.py
+        run: |
+          for edition in ${{ steps.editions.outputs.names }}; do
+            python3 tools/generate.py --edition "$edition"
+          done
 
       # Unit tests: the Czech collation (song order), the generator and the lints.
       - name: Unit tests
@@ -62,26 +71,36 @@ jobs:
           echo "MSCORE=$MUSESCORE_DIR/squashfs-root/AppRun" >> "$GITHUB_ENV"
           MSCORE="$MUSESCORE_DIR/squashfs-root/AppRun" xvfb-run -a python3 tools/scores.py
 
-      # The same build as `make`: tools/build_edition.py runs latexmk for the full
-      # book into build/editions/full/. Pinned to TeX Live 2023 (pdfTeX 1.40.25): a
-      # frozen release, and the one the dev workspace uses, so local builds match CI.
-      # Moving to another year changes the layout; use the song-by-song diff to
-      # review it. The image is Alpine-based and has no Python, hence the apk line.
+      # The same build as `make`: tools/build_edition.py runs latexmk for every edition
+      # into build/editions/<name>/, and fails on a link to a missing target. Pinned to
+      # TeX Live 2023 (pdfTeX 1.40.25): a frozen release, and the one the dev workspace
+      # uses, so local builds match CI. Moving to another year changes the layout; use
+      # the song-by-song diff to review it. The image is Alpine-based and has no Python,
+      # hence the apk line; `set -eu` because that shell does not stop on an error by itself.
       - name: Compile LaTeX
         uses: xu-cheng/texlive-action@v2
         with:
           texlive_version: 2023
           run: |
+            set -eu
             apk add --no-cache python3
-            python3 tools/build_edition.py
+            for edition in ${{ steps.editions.outputs.names }}; do
+              python3 tools/build_edition.py --edition "$edition"
+            done
 
       - name: Check one song per page
-        run: python3 tools/check_pages.py
+        run: |
+          for edition in ${{ steps.editions.outputs.names }}; do
+            python3 tools/check_pages.py --edition "$edition"
+          done
 
       # Chord positions are written by every build (zpevnik.chords next to the PDF).
-      # Any overlap in the book fails.
+      # Any overlap in any edition fails.
       - name: Check chord overlaps
-        run: python3 tools/chord_gaps.py
+        run: |
+          for edition in ${{ steps.editions.outputs.names }}; do
+            python3 tools/chord_gaps.py --edition "$edition"
+          done
 
       # Overleaf setup: zpevnik.sty and one song, nothing else. The script builds
       # the five test documents (single song, \artist, metadata, chords, spacing)
@@ -189,6 +208,16 @@ jobs:
             echo "SONGSEOF"
           } >> "$GITHUB_OUTPUT"
 
+      # One PDF per edition under its asset name (zpevnik-<edition>-<version>.pdf) and the
+      # editions part of the release notes. Pull requests run it too, so a missing PDF or
+      # a broken edition shows before the merge; only the release below is push-only.
+      - name: Prepare release assets
+        id: assets
+        run: |
+          set -euo pipefail
+          notes=$(python3 tools/release.py "${{ steps.version.outputs.version }}")
+          { echo "editions<<EDITIONSEOF"; echo "$notes"; echo "EDITIONSEOF"; } >> "$GITHUB_OUTPUT"
+
       - name: Checkout website repo
         if: github.event_name == 'push'
         uses: actions/checkout@v4
@@ -213,8 +242,9 @@ jobs:
             name: Zpěvník v${{ steps.version.outputs.version }}
             body: |
                 ${{ steps.new_songs.outputs.block }}
-                
-            files: build/editions/full/zpevnik.pdf
+
+                ${{ steps.assets.outputs.editions }}
+            files: build/release/*.pdf
             make_latest: true
 
       - name: Commit and push

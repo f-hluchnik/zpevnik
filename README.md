@@ -42,15 +42,41 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky 
 - `\toctitle{<název v obsahu>}` - název pro obsah a řazení, když se musí lišit od `\song`, například `Marie (Klus)`, když existují dvě písničky se stejným názvem. Skript `tools/lint.py` na stejné názvy upozorní.
 - `\collection{<kotva>}` - zařadí písničku do sbírky, třeba `\collection{filmy}` do sekce "z pohádek, filmů, muzikálů, her a seriálů".
 
+## Vydání zpěvníku
+Vydání je výběr písniček s vlastními úvodními stranami, sestavený ze stejných souborů jako celý zpěvník. Celý zpěvník je také vydání (`editions/full/`); další je například `lidovky` (lidové písničky, dřív samostatný repozitář). Vydání je složka `editions/<název>/` se souborem `edition.toml` a PDF vznikne příkazem `make EDITION=<název>` do `build/editions/<název>/zpevnik.pdf`.
+
+### Jak vytvořit vydání
+1. Vytvořím složku `editions/<název>/` (název z malých písmen, číslic a pomlček) a v ní soubor `edition.toml`. Nejkratší vydání vybere písničky podle interpreta:
+   ```toml
+   artists = ["lidove"]
+   cover_image = "../../images/cover_image.jpg"
+   before_songs = []
+   after_contents = []
+
+   [pages]
+   cover = "shared"
+   halftitle = "shared"
+   titlepage = "shared"
+   ```
+2. Výběr písniček je `all = true` (všechny), `artists = ["<kotva>", ...]` (všechny písničky interpretů z registru) nebo `songs = ["<id>", ...]` (jednotlivé písničky podle názvu souboru bez `.tex`). `songs` a `artists` lze spojit. Neznámé `id` nebo kotvu ohlásí `make` i `tools/lint.py` jako chybu. Pořadí písniček je vždy jako v celém zpěvníku (abecední).
+3. Volitelně doplním `title`, `subtitle` (podtitul pod názvem na titulní straně), `editors` (seznam jmen), `imprint` (soubor s texty nad tiráží, např. poděkování) a stránky před písničkami (`before_songs`) a po obsahu (`after_contents`). Obálku, předtitul a titulní stranu lze nahradit vlastní: v `[pages]` je pak `"own"` a vedle `edition.toml` leží soubor `cover.tex`, `halftitle.tex` nebo `titlepage.tex` (příklad je vydání `lidovky` s vlastní obálkou). Soubor `.tex` ve složce vydání, na který se nic neodkazuje, je chyba. Všechny klíče a chyby popisuje `tools/edition.py`.
+4. Spustím `make check EDITION=<název>`: unit testy, kontrola písniček a definic vydání, sestavení (selže při odkazu, který vede nikam), jedna stránka na písničku a překryv akordů.
+
+### Jak přidat písničku do vydání
+Vydání podle interpreta se doplní samo: stačí, aby písnička měla `\artist{<kotva>}` z jeho seznamu. U vydání podle `songs` přidám `id` písničky do seznamu. Odkaz `\seealso` na písničku, která ve vydání není, se ve vydání nevytiskne.
+
+### Soukromé vydání
+Složka vydání, kterou necommituji, je soukromé vydání: sestaví se jen lokálně (`make EDITION=<název>`) a GitHub Actions o ní neví. Co je v repozitáři, se vydává.
+
 ## Automatické publikování
 
 Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
 
-1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje celý zpěvník do PDF (`build/editions/full/zpevnik.pdf`); sestavení selže, když nějaký odkaz vede nikam. U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
+1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje každé vydání (každou složku `editions/`) do PDF (`build/editions/<vydání>/zpevnik.pdf`); sestavení selže, když nějaký odkaz vede nikam, a kontroly stran a akordů běží pro každé vydání. Nové vydání se tak sestaví a zkontroluje samo, bez úpravy workflow. U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
 2. Spočítá aktuální verzi zpěvníku, která má tři čísla `major.minor.patch` (např. `8.33.67`; počítá to `tools/generate.py`, stejně jako verzi v tiráži, a `python3 tools/generate.py --version` ji vypíše):
    - `major.minor` je počet písniček ve složce `songs` + 100 (733 písniček dává 8.33),
    - `patch` je počet commitů v hlavní větvi (first-parent) od posledního commitu, který změnil počet písniček. Přidání písničky tedy začíná znovu od 0 a každá další změna (oprava textu, nástrojů, vzhledu) číslo zvýší o 1. Verze tak určuje jedno konkrétní sestavení PDF. Počítá se z historie Gitu, takže stejný výsledek dá CI i lokální sestavení s celou historií; bez ní (např. `git clone --depth 1`) vyjde `8.33.?`.
-3. Vytvoří GitHub Release s tagem `v<verze>` (např. `v8.33.67`) a názvem `Zpěvník v8.33.67` a přiloží k němu zkompilované PDF ke stažení. Existující tag se nikdy nepřepisuje ani nepřesouvá: pokud tag už existuje (stává se to jen tehdy, když se po smazání písniček vrátí počet na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Starý tag `v8.33` zůstává.
+3. Vytvoří GitHub Release s tagem `v<verze>` (např. `v8.33.67`) a názvem `Zpěvník v8.33.67` a přiloží k němu PDF každého vydání ke stažení jako `zpevnik-<vydání>-<verze>.pdf` (celý zpěvník jako `zpevnik-full-<verze>.pdf`); poznámky k vydání vyjmenují vydání i s počtem písniček. Existující tag se nikdy nepřepisuje ani nepřesouvá: pokud tag už existuje (stává se to jen tehdy, když se po smazání písniček vrátí počet na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Starý tag `v8.33` zůstává.
 4. Zapíše aktuální verzi a zkompilované PDF do repozitáře webu ([zpevnik-web](https://github.com/f-hluchnik/zpevnik-web)) a tuto změnu tam commitne a pushne.
 
 Push do repozitáře webu následně spustí jeho vlastní publikační workflow, který web přebuilduje (mimo jiné vypíše aktuální verzi na hlavní stránku) a nasadí přes GitHub Pages. Odkaz ke stažení na webu tedy vždy směřuje na nejnovější verzi zpěvníku, a stažený soubor má ve svém názvu i příslušné číslo verze.
