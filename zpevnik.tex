@@ -12,16 +12,20 @@
 \input{\zpgenerated/pages}
 
 \author{\zpbookauthor}
+% An empty page: the backs of the cover and of the halftitle.
+\newcommand{\blankpage}{\clearpage\mbox{}\clearpage}
 
 % \includeonly{songs/zelviblues, shared-pages/contents}
 
 \begin{document}
 \pagestyle{empty}
+% Czech book order (D-143): the title page is a right-hand page, the imprint on its back.
 \zpcoverpage
-\clearpage\mbox{}\clearpage
+\blankpage
 \zphalftitlepage
-\include{shared-pages/imprint}
+\blankpage
 \zptitlepage
+\include{shared-pages/imprint}
 \zpbeforesongs
 
 \clearpage

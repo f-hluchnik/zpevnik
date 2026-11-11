@@ -44,7 +44,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E5 | todo | |
 | E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
 | E7 | todo | owner confirms the `lidovky` song list |
-| E8 | todo | front matter in book order (D-143); every page number +1 |
+| E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | todo | needs the first song-count change after R15 (8.34.0) |
 | P1 | todo | owner: print requirements and the deadline |
 | P2 | cancelled | the book is never sold (D-140) |
@@ -138,7 +138,7 @@ All songs of the `zpevnik-lidovky` repository are already in the full book (owne
 
 ### E8 · Front matter in book order — [agent] · S · needs E3
 D-143. The skeleton gets the Czech book order: cover, blank, halftitle, blank, title page (a right-hand page), the imprint on its back, then `before_songs`. The songs start on page 9 instead of 8. (The `\hspace{10mm}` before the first credit went in E2, D-144.)
-**Expected differences:** the front-matter pages (order, one new blank page); every page number one higher, and the contents numbers with them. The song-by-song diff reports every song: check that each differs only in its page number.
+**Expected differences:** the front-matter pages (order, one new blank page); every page number one higher (the contents print no page numbers, only links). The song-by-song diff reports every song: check that each differs only in its page number.
 
 ### R16 · Drop the old song folder from the version — [agent] · S · needs the first song-count change after R15
 D-143, D-144. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename tests go. The other traces of the old folder and of the layout before editions, all removed here: `LEGACY_SONGS_DIR` in `tools/paths.py`, the `pisnicky/` pathspec of the *List newly added songs* step in the CI workflow, `book_output_dir`'s fallback to the root in `tools/pdfdiff.py` (a base built before E2) and the `else latexmk` branch of the *Compile base* step. (E2 already removed `songs_dir()` and the fallback of `tools/check_pages.py`.) **Expected differences:** none.

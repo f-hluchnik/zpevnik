@@ -27,15 +27,11 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 ### Session 20 · E0 and the editions review — done (10 Nov 2026)
 E0 merged (PR #93; first release `v8.33.68`). Planning E2 led to D-143 (English names, the full book as the edition `full`, an explicit page contract, one `build/` root, `make` as the only entry point), recorded in a docs-only PR. Verified in this session with TeX Live 2023: the edition passed by `-usepretex`, the `.aux` subfolders the build must create in the output directory, and the full book byte-identical without `\setcounter{page}{8}`.
 
-### Session 20a · R15 · Sonnet · `zpevnik`
-- **Needs:** E0 (done); D-143 merged.
-- **Read:** DECISIONS D-133, D-143 · TICKETS R15 · `tools/paths.py`, `tools/build_version.py`, the CI workflow, the Makefile, the README.
-- **Notes:** ⚠ ticket: no other PR touching songs may be open meanwhile. The owner's branch `new_songs` stays: never delete it (he re-adds its songs by hand after the merge). Check that `generate.py --version` keeps counting across the rename (previous patch + 1, not 0). Zero diff.
+### Session 20a · R15 — done (10 Nov 2026)
+R15 merged (PR #95): English names for the folders and front-matter files (D-143).
 
-### Session 20b · E2, E3, E8 · **strong model** · `zpevnik`
-- **Needs:** R15 done.
-- **Read:** DECISIONS D-107, D-119, D-133, D-139, D-141, D-143 · PLAN WP8 · TICKETS E2, E3, E8 · `zpevnik.tex`, `zpevnik.sty`, `shared-pages/`, `tools/generate.py`, `tools/artist_toc.py`, `tools/paths.py`, `tools/check_pages.py`, `tools/pdfdiff.py`, the Makefile, the CI workflow.
-- **Notes:** The design is decided (D-143); do not reopen it without a concrete problem. E2 sets the code structure every later ticket builds on, hence the strong model. Before coding E2, give the owner a short plan (module layout, the `edition.toml` schema in code, how the CI diff handles the old base layout) and wait. E2 and E3: zero diff for the full book (D-143: song-by-song diff and rendered front-matter pages, not `cmp`); test with a throwaway edition that is not committed. E8 last, its own PR, with the page-number shift checked song by song.
+### Session 20b · E2, E3, E8 — done (11 Nov 2026)
+E2 (PR #96, D-144): every book is an edition (`data/book.toml`, `editions/<name>/edition.toml`), generated into and built under `build/editions/<name>/` by `make [EDITION=<name>]`; the page check reads the main `.aux`; CI builds base and head in the same TeX Live action. E3 (PR #97, D-145): `\seealso` to a song outside the edition is left out, a link to a missing target fails the build, the lints validate every edition, `make check [EDITION=<name>]`. E8 (PR #98): front matter in Czech book order, the songs from page 9. All three verified with a throwaway edition (not committed); the full book unchanged by E2 and E3, every song exactly one page later after E8.
 
 ### Any session · R16 · Sonnet · `zpevnik`
 - **Needs:** a commit after R15 that changed the song count (`generate.py --version` gives 8.34.0 or later).
