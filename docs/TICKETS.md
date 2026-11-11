@@ -46,11 +46,11 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
-| P0 | todo | print feasibility report: A5, the printer checklist (D-147); runs on the owner's print edition, which he prepares by hand (D-148) |
-| P1 | todo | owner: print requirements and the deadline, after P0's report |
+| P0 | done | print feasibility report with the printer checklist: `docs/p0-print-report.md` (PR #113); the geometry trial stays a one-off branch (D-154) |
+| P1 | open | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
 | P2 | cancelled | the book is never sold (D-140) |
 | P3 | done | the scaled print: output formats `print`, `print-black` (D-154, PR #114), page numbers in the contents and `\seealso` (D-155, PR #115), the A5 PDF with the spine shift and `make print` (D-156, PR C); the geometry trial stays a one-off branch, only if the scaled text is too small on paper. P4 comes on the final content |
-| P4 | todo | owner signs off the proof, on the final content (after the new songs and K1) |
+| P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
 | A1 | todo | audit of the README |
 | A2 | todo | audit of the unit tests |
 | A3 | todo | audit of the build and CI speed |
@@ -163,7 +163,7 @@ D-147, D-142. The owner expects the facts for P1 to come out of this: does the b
 **Expected differences:** none for the screen PDF. The report is cheap to repeat: run it again after the owner's new songs.
 
 ### P1 · Print requirements — [you] · S
-Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (answered in D-148: the print book is its own edition, selected by hand by the owner; the rest of P1 is open). Answered after reading P0's report. The owner's new songs (about ten) and K1 do not block P1 or P3: content changes need only a rebuild.
+Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (answered in D-148: the print book is its own edition, selected by hand by the owner; the rest of P1 is open). Answered after reading P0's report. The owner's new songs do not block P1 or P3: content changes need only a rebuild. Status of the answers: D-157.
 
 ### P2 · Licensing check — [you] · S — **cancelled**
 Was: check the licensing before selling printed copies. The book is never sold (D-140).
@@ -175,7 +175,7 @@ D-142. The print format is a step after the build, separate from the edition (D-
 **Expected differences:** none for the screen PDF.
 
 ### P4 · Print proof check — [agent] + [you] · S · needs P3 and the final content
-Done on the final content, after the owner's new songs and K1 (D-147); until then P3's output is a draft. Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, colour space against the printer's requirement (report, convert only if asked), crops of the first page, a middle page, a two-column song and the contents at 100%. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
+Done on the final content, after the owner's new songs (D-147; K1 is done); until then P3's output is a draft. Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, colour space against the printer's requirement (report, convert only if asked), crops of the first page, a middle page, a two-column song and the contents at 100%. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
 
 ---
 
