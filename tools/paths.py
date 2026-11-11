@@ -20,6 +20,7 @@ SHARED_PAGES_DIR = Path("shared-pages")  # pages an edition can share, and the i
 BOOK_TEX = Path("zpevnik.tex")
 BOOK_PDF_NAME = "zpevnik.pdf"           # the PDF of every edition, in its output directory
 BOOK_AUX_NAME = "zpevnik.aux"           # its main auxiliary file, which lists every \include
+BOOK_LOG_NAME = "zpevnik.log"           # the log of its last LaTeX run
 CHORD_TRACE_NAME = "zpevnik.chords"     # written by every build, see \chord in zpevnik.sty
 MULTIPAGE_ALLOWLIST = Path("tools/multipage-allowlist.txt")
 SINGLE_SONG_TEMPLATE = Path("tests/single-song.tex")
@@ -37,6 +38,7 @@ DEFAULT_EDITION = "full"
 # The files tools/generate.py writes into an edition's generated/ directory.
 ARTISTS_TEX = Path("artists.tex")
 INCLUDE_TEX = Path("include.tex")
+SONG_LIST_TEX = Path("song-list.tex")
 LETTERS_TEX = Path("obsah-letters.tex")
 ARTIST_PART_TEX = Path("obsah-artists.tex")
 VERSION_TEX = Path("version.tex")

@@ -39,7 +39,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | done | editions in the generator and the build (D-144): PR #96 |
-| E3 | todo | |
+| E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
 | E4 | todo | owner picks the songs |
 | E5 | todo | |
 | E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
@@ -121,7 +121,7 @@ Test with a throwaway edition that is not committed: songs by id, one artist, an
 1. `\seealso` to a song outside the edition prints nothing and takes no space (D-139); a generated list of the songs present lets `zpevnik.sty` decide without a second pass (84 uses in 76 songs on 6 Nov 2026).
 2. A link to a missing target fails the edition build: pdfTeX's warning in the log (`… has been referenced but does not exist`). Verify with the throwaway edition that it catches the contents links, `\seealso` and the artist links.
 3. Run the one-page check and the lints on the edition.
-4. `make check [EDITION=<name>]` (D-143, D-144): the unit tests, the lints, the one-page check and the link check of the edition; the chord check on the full book.
+4. `make check [EDITION=<name>]` (D-143, D-144): the unit tests, the lints, the one-page check and the link check of the edition; the chord check on the edition too (D-145).
 **Expected differences:** none for the full book.
 
 ### E4 · Choose the songs for `zpevnik-lite` — [you] + [agent] · S · needs E2

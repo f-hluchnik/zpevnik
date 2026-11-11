@@ -46,7 +46,7 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky 
 
 Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
 
-1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje celý zpěvník do PDF (`build/editions/full/zpevnik.pdf`). U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
+1. Spustí unit testy a kontroly (`tools/lint.py`, počet stran jednotlivých písniček), vygeneruje odvozené soubory a zkompiluje celý zpěvník do PDF (`build/editions/full/zpevnik.pdf`); sestavení selže, když nějaký odkaz vede nikam. U pull requestů navíc porovná PDF po jednotlivých písničkách s PDF před změnou.
 2. Spočítá aktuální verzi zpěvníku, která má tři čísla `major.minor.patch` (např. `8.33.67`; počítá to `tools/generate.py`, stejně jako verzi v tiráži, a `python3 tools/generate.py --version` ji vypíše):
    - `major.minor` je počet písniček ve složce `songs` + 100 (733 písniček dává 8.33),
    - `patch` je počet commitů v hlavní větvi (first-parent) od posledního commitu, který změnil počet písniček. Přidání písničky tedy začíná znovu od 0 a každá další změna (oprava textu, nástrojů, vzhledu) číslo zvýší o 1. Verze tak určuje jedno konkrétní sestavení PDF. Počítá se z historie Gitu, takže stejný výsledek dá CI i lokální sestavení s celou historií; bez ní (např. `git clone --depth 1`) vyjde `8.33.?`.
@@ -178,10 +178,11 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - vygenerování obsahu a kompilace zpěvníku `make` (jen generování: `make generate`)
 - kompilace jiného vydání `make EDITION=<název>` (vydání je složka `editions/<název>/`, výsledek `build/editions/<název>/zpevnik.pdf`)
 - kompilace jedné písničky `make song SONG=<id>` (výsledek `build/songs/<id>.pdf`)
-- kontrola písniček a registru interpretů `python3 tools/lint.py`
+- všechny kontroly najednou `make check` (unit testy, kontrola písniček, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů; pro jiné vydání `make check EDITION=<název>`)
+- kontrola písniček, registru interpretů a definic vydání `python3 tools/lint.py`
 - unit testy nástrojů `python3 -m unittest discover -s tools`
-- kontrola, že každá písnička je na jedné stránce `python3 tools/check_pages.py` (po `make`)
-- kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; překryv akordů kdekoli v knize je chyba)
+- kontrola, že každá písnička je na jedné stránce `python3 tools/check_pages.py` (po `make`; jiné vydání `--edition <název>`)
+- kontrola, že se akordy na jednom řádku nepřekrývají `python3 tools/chord_gaps.py` (po `make`; překryv akordů kdekoli v knize je chyba; jiné vydání `--edition <název>`)
 
 ## Licence a autorská práva
 Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`songs/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`shared-pages/` kromě `contents.tex` a strany vydání v `editions/`, úvod celého zpěvníku cituje text Vlasty Redla) a obálku (`images/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Držitelé práv, kteří si nepřejí, aby zde jejich píseň byla, mi mohou napsat na frantahluchnik@gmail.com a píseň odstraním.

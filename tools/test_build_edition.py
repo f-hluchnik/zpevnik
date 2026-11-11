@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from build_edition import build, include_folders, latexmk_command
+from build_edition import build, include_folders, latexmk_command, missing_link_targets
 
 
 class Command(unittest.TestCase):
@@ -15,6 +15,17 @@ class Command(unittest.TestCase):
         self.assertIn("-outdir=build/editions/lite", command)
         self.assertIn("-usepretex=\\def\\zpgenerated{build/editions/lite/generated}", command)
         self.assertEqual(command[-1], "zpevnik.tex")
+
+
+class LinkCheck(unittest.TestCase):
+    def test_every_missing_target_is_reported_once(self):
+        log = ("pdfTeX warning (dest): name{beta} has been referenced but does not exist, replaced by a fixed one\n"
+               "pdfTeX warning (dest): name{artist-abba} has been referenced but does not exist, replaced by a fixed one\n"
+               "pdfTeX warning (dest): name{beta} has been referenced but does not exist, replaced by a fixed one\n")
+        self.assertEqual(missing_link_targets(log), ["artist-abba", "beta"])
+
+    def test_a_clean_log_has_none(self):
+        self.assertEqual(missing_link_targets("Output written on zpevnik.pdf (757 pages).\n"), [])
 
 
 class Folders(unittest.TestCase):

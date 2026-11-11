@@ -45,17 +45,17 @@ class Book(unittest.TestCase):
         for page in (2, 3):
             with self.subTest(page=page), TemporaryDirectory() as tmp:
                 self.build(Path(tmp), overlap_page=page)
-                self.assertEqual(check_book(Path(tmp)), 1)
+                self.assertEqual(check_book(Path(tmp), DEFAULT_EDITION), 1)
 
     def test_an_overlap_outside_the_songs_fails(self):
         with TemporaryDirectory() as tmp:
             self.build(Path(tmp), overlap_page=1)
-            self.assertEqual(check_book(Path(tmp)), 1)
+            self.assertEqual(check_book(Path(tmp), DEFAULT_EDITION), 1)
 
     def test_a_book_without_overlaps_passes(self):
         with TemporaryDirectory() as tmp:
             self.build(Path(tmp), overlap_page=None)
-            self.assertEqual(check_book(Path(tmp)), 0)
+            self.assertEqual(check_book(Path(tmp), DEFAULT_EDITION), 0)
 
     def test_the_trace_is_read_in_order(self):
         with TemporaryDirectory() as tmp:
