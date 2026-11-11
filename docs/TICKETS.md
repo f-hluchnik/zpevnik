@@ -30,7 +30,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 `todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes).
 
-**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11).
+**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11), E5 and E6 (phase 9a).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
@@ -42,8 +42,6 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E2 | done | editions in the generator and the build (D-144): PR #96 |
 | E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
-| E5 | done | CI and release for every edition, found not listed (D-149): PR #106; the release step is first seen on the merge |
-| E6 | todo | `zpevnik-web`; takes over the PDF half of W1; the `lidovky` edition replaces the static PDF, so `zpevnik-lidovky` can be archived |
 | E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; the owner archives `zpevnik-lidovky` after E5 |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
@@ -78,7 +76,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 |---|---|---|
 | 1, 2, 4, 5, 6, 11 | done | Safety net, generated lists, clean sources, automatic chord and vertical spacing, code quality and the final command names (HISTORY.md) |
 | 10 Editions | E0–E4, E7, E8, R15, R16 | Song subsets such as `zpevnik-lite` and `lidovky` built from the same files, with their own pages; the full book is one of them (D-121, D-139, D-143). E4 (`zpevnik-lite`) waits until after the printed edition (D-147) |
-| 9a Delivery | E5, E6 | CI builds and releases every edition, the download page shows them, `zpevnik-lidovky` can be archived (D-147) |
+| 9a Delivery | E5, E6 (done) | CI builds and releases every edition, the download page shows them, `zpevnik-lidovky` can be archived (D-147, D-149, D-150) |
 | 3 Print | P0, P1, P3, then P4 | The A5 facts and the printer's requirements, a print build, and a checked proof on the final content (D-122, D-147) |
 | 12 Audits | A1–A3 | The README, the unit tests and the build speed reviewed before the converter (D-147) |
 | 7 Converter | J0–J5 | `songs.json` and score SVGs on every release |
@@ -244,26 +242,7 @@ A short text in Czech and English: non-commercial, contact address for removal r
 
 # Phase 9 – Delivery and the website (`zpevnik-web`)
 
-E5 and E6 come first (D-147): they put every edition into the release and onto the download page, which is also what lets the owner archive the repository `zpevnik-lidovky`. Then W1–W7, the online songbook.
-
-### E5 · CI and release for every edition — [agent] · M · needs E3, E7
-D-139, D-143, D-147. The editions are found, not listed: `edition_names()` in `tools/edition.py` is the one place that says what an edition is (a folder in `editions/`), so adding an edition is adding a folder, with no change to the CI (owner, 11 Nov 2026).
-1. `tools/build_edition.py --list` prints the edition names, one per line (from `edition_names()`; no second rule in YAML).
-2. CI builds every edition on pull requests, in one run of the TeX Live step (a loop, not a container per edition), and runs the one-page, chord and link checks on each; the build, the one-page check and the link check must pass.
-3. On pushes to master the release gets `zpevnik-<edition>-<version>.pdf` of each edition, the full book included (`zpevnik-full-<version>.pdf` replaces `zpevnik.pdf`; nothing reads the old name until E6), with the build version (D-143); the release notes list the editions with their song counts.
-4. The PDF diff keeps comparing the full book only.
-5. Czech README section on editions: how to make one (by song ids or by artist), how to add a song to one, and that an uncommitted edition folder is a private edition built only locally.
-**Verification:** the PR run shows the loop and the checks for `full` and `lidovky`. The release step runs only on a push to master, so its first real run is the merge: read that run before claiming anything about it, and say so in the PR. **Expected differences:** none in the book.
-
-### E6 · Download page with editions — [agent] · M · needs E5 released once · `zpevnik-web` (and a small PR in `zpevnik`)
-D-139, D-110, D-147. The website gets the PDFs from the release (this takes over the PDF half of W1): `build.py` downloads the PDFs of the release tagged `v<version.txt>`; the songbook CI stops committing the PDF into `zpevnik-web` and only writes `version.txt`. Which editions the page shows, and how, is configured in `zpevnik-web` (the songbook has no `publish` flag).
-- The full book is the main button and is also served at its fixed URL `zpevnik_last.pdf` (printed QR codes point to it); only that URL must stay fixed.
-- `lidovky` is the edition from the release; it replaces the committed `static/files/zpevnik_lidovky.pdf` (the 2020 book, 2.2 MB). That is the website's only tie to the old repository `zpevnik-lidovky`, so after this the owner can archive it (he does it himself, once the page is live and the button works).
-- The koledy songbook stays a static file in its own section.
-- `zpevnik-lite` takes over the main button when it exists (E4, after the print edition); then adding it is one line of configuration.
-- The committed `zpevnik_last.pdf` and `zpevnik_lidovky.pdf` leave the repository (not its history); the `zpevnik-web` README ("Updating the PDFs") is rewritten.
-- Two PRs (`zpevnik-web` and the small one in `zpevnik`); the merge order matters, say it in both.
-Earlier notes said the owner had an uncommitted change in `templates/base.html` (6 Nov 2026). His working copy was clean on 11 Nov 2026 (and five releases behind `origin`), so ask only if `git status` shows one again.
+E5 and E6 came first (D-147) and are done: every edition is in the release and on the download page, which is also what lets the owner archive the repository `zpevnik-lidovky` (their texts: [archive/phase-9a-delivery/TICKETS.md](archive/phase-9a-delivery/TICKETS.md)). Then W1–W7, the online songbook.
 
 ### W1 · Load the data — [agent] · M · needs J4
 `build.py` downloads `songs.json` from the release tagged `v<version.txt>` (the songbook CI already writes `version.txt` after creating the release) into an uncommitted folder, validates `schemaVersion`, and fails loudly if missing. Add a local option to point at a file.
