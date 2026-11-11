@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Compile an edition into build/editions/<edition>/ and print the path of its PDF.
 
+--format <name> builds it in another output format (tools/formats.py) into a folder of its own
+in the edition's: build/editions/<edition>/<format>/.
+
 latexmk runs quietly: its output is the same as the log's, so it is printed only when the run
 fails, cut down to the TeX error; the full log stays in the output folder.
 
@@ -14,7 +17,8 @@ runs both). LaTeX writes the auxiliary file of every \\include-d file into the o
 directory under the file's own folder, but does not create that folder, so the build
 creates one for each folder an \\include can come from: the songs, the shared pages and
 the edition folders (edition.py keeps an edition's files directly in one of them).
-The edition reaches zpevnik.tex as one definition before the document, \\zpgenerated.
+The edition reaches zpevnik.tex as one definition before the document, \\zpgenerated; the
+format adds its own definitions (formats.py).
 
 `--list` prints the editions, one per line: the one place that says what an edition is (a folder of
 editions/), so the CI builds every edition without a list of its own.
@@ -32,6 +36,7 @@ import sys
 from pathlib import Path
 
 from edition import edition_names
+from formats import SCREEN, add_format_argument, pretex
 from paths import (BOOK_LOG_NAME, BOOK_PDF_NAME, BOOK_TEX, EDITIONS_DIR, PAGES_TEX, SHARED_PAGES_DIR,
                    SONGS_DIR, add_edition_argument, add_root_argument, edition_output_dir, generated_dir)
 
@@ -62,9 +67,10 @@ def include_folders(root: Path) -> list[Path]:
     return [SONGS_DIR, SHARED_PAGES_DIR, *(EDITIONS_DIR / name for name in edition_names(root))]
 
 
-def latexmk_command(edition: str) -> list[str]:
-    definition = f"\\def\\zpgenerated{{{generated_dir(edition).as_posix()}}}"
-    return [*LATEXMK, f"-outdir={edition_output_dir(edition)}", f"-usepretex={definition}", str(BOOK_TEX)]
+def latexmk_command(edition: str, format_name: str = SCREEN) -> list[str]:
+    definitions = f"\\def\\zpgenerated{{{generated_dir(edition).as_posix()}}}" + pretex(format_name)
+    return [*LATEXMK, f"-outdir={edition_output_dir(edition, format_name)}", f"-usepretex={definitions}",
+            str(BOOK_TEX)]
 
 
 def failure_excerpt(output: str) -> str:
@@ -93,21 +99,22 @@ def missing_link_targets(log: str) -> list[str]:
     return sorted(set(MISSING_TARGET.findall(log)))
 
 
-def pdf_path(edition: str) -> Path:
-    """The PDF of an edition, relative to the root; it exists once the edition is built."""
-    return edition_output_dir(edition) / BOOK_PDF_NAME
+def pdf_path(edition: str, format_name: str = SCREEN) -> Path:
+    """The PDF of an edition in a format, relative to the root; it exists once it is built."""
+    return edition_output_dir(edition, format_name) / BOOK_PDF_NAME
 
 
-def build(root: Path, edition: str) -> Path:
-    """Compile the edition and check its links; the path of its PDF, relative to the root."""
+def build(root: Path, edition: str, format_name: str = SCREEN) -> Path:
+    """Compile the edition in a format and check its links; the path of its PDF, relative to the root."""
     if not (root / generated_dir(edition) / PAGES_TEX).is_file():
         raise FileNotFoundError(f"{generated_dir(edition)} is missing: "
                                 f"run tools/generate.py --edition {edition} first")
-    output = root / edition_output_dir(edition)
+    output = root / edition_output_dir(edition, format_name)
     for folder in include_folders(root):
         (output / folder).mkdir(parents=True, exist_ok=True)
-    run_latexmk(latexmk_command(edition), root, edition_output_dir(edition) / BOOK_LOG_NAME, LONG_LOG_LINES)
-    pdf = pdf_path(edition)
+    run_latexmk(latexmk_command(edition, format_name), root,
+                edition_output_dir(edition, format_name) / BOOK_LOG_NAME, LONG_LOG_LINES)
+    pdf = pdf_path(edition, format_name)
     log = (output / BOOK_LOG_NAME).read_text(encoding=TEX_OUTPUT_ENCODING, errors="replace")
     missing = missing_link_targets(log)
     if missing:
@@ -118,6 +125,7 @@ def build(root: Path, edition: str) -> Path:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_edition_argument(parser)
+    add_format_argument(parser)
     add_root_argument(parser)
     what = parser.add_mutually_exclusive_group()
     what.add_argument("--list", action="store_true", help="print the editions, one per line, and exit")
@@ -127,10 +135,10 @@ def main() -> int:
         print(*edition_names(args.root), sep="\n")
         return 0
     if args.path:
-        print(pdf_path(args.edition))
+        print(pdf_path(args.edition, args.format))
         return 0
     try:
-        print(build(args.root, args.edition))
+        print(build(args.root, args.edition, args.format))
     except (FileNotFoundError, LatexError, MissingLinkTargets) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1

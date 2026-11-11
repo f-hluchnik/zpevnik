@@ -49,7 +49,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P0 | todo | print feasibility report: A5, the printer checklist (D-147); runs on the owner's print edition, which he prepares by hand (D-148) |
 | P1 | todo | owner: print requirements and the deadline, after P0's report |
 | P2 | cancelled | the book is never sold (D-140) |
-| P3 | todo | |
+| P3 | in progress | PR A: output formats `print`, `print-black` (D-154); then page numbers in the contents, then the A5 scaling with the binding offset |
 | P4 | todo | owner signs off the proof, on the final content (after the new songs and K1) |
 | A1 | todo | audit of the README |
 | A2 | todo | audit of the unit tests |

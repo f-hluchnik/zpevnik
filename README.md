@@ -89,6 +89,9 @@ Vydání podle interpreta se doplní samo: stačí, aby písnička měla `\artis
 ### Soukromé vydání
 Složka vydání, kterou necommituji, je soukromé vydání: sestaví se jen lokálně (`make EDITION=<název>`) a GitHub Actions o ní neví. Co je v repozitáři, se vydává.
 
+### Formát pro tisk
+Vydání se dá sestavit i pro papír: `make EDITION=<název> FORMAT=print` (akordy barevně) nebo `FORMAT=print-black` (akordy černě, pro tisk jednou barvou). PDF je v `build/editions/<název>/<formát>/zpevnik.pdf`, vedle PDF pro obrazovku, které se nemění. Na papíře nejdou odkazy kliknout, proto zmizí „→ obsah" za názvem písničky a šipka před jménem interpreta (jméno zůstává, šedě). Rozložení stránek je stejné jako na obrazovce, takže se písničky vejdou na jednu stranu; ověří to `make check EDITION=<název> FORMAT=print`. Formáty jsou v `tools/formats.py`.
+
 ## Automatické publikování
 
 Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
@@ -223,6 +226,7 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`
 - kontrola počtu písniček `ls songs/*.tex | wc -l`
 - vygenerování obsahu a kompilace zpěvníku `make` (jen generování: `make generate`)
+- kompilace pro papír `make EDITION=<název> FORMAT=print` (nebo `print-black`, černé akordy)
 - kompilace jiného vydání `make EDITION=<název>` (vydání je složka `editions/<název>/`, výsledek `build/editions/<název>/zpevnik.pdf`)
 - kompilace jedné písničky `make song SONG=<id>` (výsledek `build/songs/<id>.pdf`)
 - všechny kontroly najednou `make check` (unit testy, kontrola písniček, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů; pro jiné vydání `make check EDITION=<název>`)

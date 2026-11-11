@@ -8,7 +8,7 @@ included before it and takes the difference to its own checkpoint. The page coun
 is never set by hand, so it equals the PDF page index. Songs listed in
 ``tools/multipage-allowlist.txt`` may take two pages.
 
-Usage: python3 tools/check_pages.py [--edition NAME] [repo-root]   (run after compiling)
+Usage: python3 tools/check_pages.py [--edition NAME] [--format NAME] [repo-root]   (run after compiling)
 Python >= 3.11, standard library only.
 """
 import argparse
@@ -17,6 +17,7 @@ import sys
 from pathlib import Path, PurePosixPath
 
 from allowlist import read_allowlist
+from formats import add_format_argument
 from paths import (BOOK_AUX_NAME, MULTIPAGE_ALLOWLIST, SONGS_DIR, add_edition_argument,
                    add_root_argument, edition_output_dir)
 
@@ -74,10 +75,11 @@ def song_pages(output_dir: Path) -> tuple[list[tuple[str, int, int]], list[str]]
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_edition_argument(parser)
+    add_format_argument(parser)
     add_root_argument(parser)
     args = parser.parse_args()
     allow = read_allowlist(args.root / MULTIPAGE_ALLOWLIST)
-    output_dir = args.root / edition_output_dir(args.edition)
+    output_dir = args.root / edition_output_dir(args.edition, args.format)
     songs, errors = song_pages(output_dir)
     notes: list[str] = []
     seen_allowed: set[str] = set()

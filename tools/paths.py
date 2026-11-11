@@ -8,6 +8,8 @@ Python >= 3.11, standard library only.
 import argparse
 from pathlib import Path
 
+from formats import SCREEN
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SONGS_DIR = Path("songs")
@@ -47,14 +49,16 @@ MACROS_TEX = Path("macros.tex")
 PAGES_TEX = Path("pages.tex")
 
 
-def edition_output_dir(edition: str) -> Path:
-    """Where an edition is built: its PDF, LaTeX's auxiliary files and generated/."""
-    return EDITION_BUILD_DIR / edition
+def edition_output_dir(edition: str, format_name: str = SCREEN) -> Path:
+    """Where an edition is built: its PDF and LaTeX's auxiliary files. The screen format
+    keeps the edition's own folder; every other format has a folder of its own in it."""
+    folder = EDITION_BUILD_DIR / edition
+    return folder if format_name == SCREEN else folder / format_name
 
 
 def generated_dir(edition: str) -> Path:
-    """The generated .tex files of an edition."""
-    return edition_output_dir(edition) / "generated"
+    """The generated .tex files of an edition, shared by all its formats."""
+    return EDITION_BUILD_DIR / edition / "generated"
 
 
 def add_edition_argument(parser: argparse.ArgumentParser) -> None:
