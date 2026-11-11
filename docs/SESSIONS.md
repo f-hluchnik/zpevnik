@@ -43,7 +43,7 @@ R16 merged (PR #102). E7 merged (PR #103, D-146): `editions/lidovky/` with its o
 E5 merged (PR #106, D-149): the CI finds, builds, checks and releases every edition by `edition_names()`; first release with it `v8.38.5`.
 
 ### Session 21b · E6 — done (11 Nov 2026)
-E6 (PRs f-hluchnik/zpevnik-web#3, merged first, and f-hluchnik/zpevnik#PRNUM, D-150): the website downloads the PDFs from the release `v<version.txt>`, the buttons come from `EDITION_DOWNLOADS` in its `build.py`, the songbook CI writes only `version.txt`. The owner archives `zpevnik-lidovky` himself once the page is live.
+E6 (PRs f-hluchnik/zpevnik-web#3, merged first, and f-hluchnik/zpevnik#107, D-150): the website downloads the PDFs from the release `v<version.txt>`, the buttons come from `EDITION_DOWNLOADS` in its `build.py`, the songbook CI writes only `version.txt`. The owner archives `zpevnik-lidovky` himself once the page is live.
 
 ### Session 21c · P0 · Sonnet · `zpevnik`
 - **Needs:** the print edition (`editions/<name>/edition.toml`, prepared by the owner by hand, D-148); E5 and E6 first (owner, 11 Nov 2026).

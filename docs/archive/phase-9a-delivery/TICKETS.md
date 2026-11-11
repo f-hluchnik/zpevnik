@@ -5,7 +5,7 @@ The ticket texts and status rows of the delivery phase as they were when it ende
 | Ticket | Status | Notes / PR |
 |---|---|---|
 | E5 | done | CI and release for every edition, found not listed (D-149): PR #106; the release step is first seen on the merge |
-| E6 | done | the download page shows the editions from the release; the songbook CI no longer commits the PDF (D-150): PRs f-hluchnik/zpevnik-web#3 and f-hluchnik/zpevnik#PRNUM; `zpevnik-lidovky` can be archived by the owner |
+| E6 | done | the download page shows the editions from the release; the songbook CI no longer commits the PDF (D-150): PRs f-hluchnik/zpevnik-web#3 and f-hluchnik/zpevnik#107; `zpevnik-lidovky` can be archived by the owner |
 
 ### E5 · CI and release for every edition — [agent] · M · needs E3, E7
 D-139, D-143, D-147. The editions are found, not listed: `edition_names()` in `tools/edition.py` is the one place that says what an edition is (a folder in `editions/`), so adding an edition is adding a folder, with no change to the CI (owner, 11 Nov 2026).
