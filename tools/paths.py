@@ -11,7 +11,6 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SONGS_DIR = Path("songs")
-LEGACY_SONGS_DIR = Path("pisnicky")  # the folder before the rename (R15), for the version; dropped by R16
 REGISTRY_FILE = Path("data/artists.toml")
 BOOK_FILE = Path("data/book.toml")      # facts of the songbook every edition shares
 EDITIONS_DIR = Path("editions")         # editions/<name>/edition.toml and its own pages

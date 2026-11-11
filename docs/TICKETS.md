@@ -45,7 +45,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
 | E7 | todo | owner confirms the `lidovky` song list |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
-| R16 | todo | needs the first song-count change after R15 (8.34.0) |
+| R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
 | P1 | todo | owner: print requirements and the deadline |
 | P2 | cancelled | the book is never sold (D-140) |

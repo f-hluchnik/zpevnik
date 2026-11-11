@@ -33,9 +33,8 @@ R15 merged (PR #95): English names for the folders and front-matter files (D-143
 ### Session 20b · E2, E3, E8 — done (11 Nov 2026)
 E2 (PR #96, D-144): every book is an edition (`data/book.toml`, `editions/<name>/edition.toml`), generated into and built under `build/editions/<name>/` by `make [EDITION=<name>]`; the page check reads the main `.aux`; CI builds base and head in the same TeX Live action. E3 (PR #97, D-145): `\seealso` to a song outside the edition is left out, a link to a missing target fails the build, the lints validate every edition, `make check [EDITION=<name>]`. E8 (PR #98): front matter in Czech book order, the songs from page 9. All three verified with a throwaway edition (not committed); the full book unchanged by E2 and E3, every song exactly one page later after E8.
 
-### Any session · R16 · Sonnet · `zpevnik`
-- **Needs:** a commit after R15 that changed the song count (`generate.py --version` gives 8.34.0 or later).
-- **Notes:** small; do it in the first session after that commit.
+### Any session · R16 — done in session 21 (11 Nov 2026)
+The song count changed after R15 (version 8.38); the traces of the old folder and of the layout before editions are gone.
 
 ### Session 21 · E4, E5, E7 · Sonnet · `zpevnik`
 - **Needs:** E3, E8; the owner's song list for `zpevnik-lite` (E4); for E7 the owner's confirmation of the `lidovky` list.
