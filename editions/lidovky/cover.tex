@@ -1,0 +1,12 @@
+% The cover of the folk songs: the book's photo with the caption the book has always had.
+% The caption sits where the repository zpevnik-lidovky printed it: measured on that book's
+% PDF, 12 mm from the left edge and 84.8 mm from the top (the same to the pixel at 100 dpi).
+\newgeometry{bottom=10mm, right=10mm}
+\tikz[remember picture,overlay]{
+	\node[inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{images/cover_image.jpg}};
+	\node[anchor=north west, inner sep=0pt, text=white, font=\fontfamily{frc}\fontsize{35}{40}\selectfont]
+		at ([shift={(12mm,-84.8mm)}]current page.north west)
+		{\textbf{\textsl{lidové písničky}}};
+}
+\restoregeometry
+\newpage

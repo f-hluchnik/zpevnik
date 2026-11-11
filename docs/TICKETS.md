@@ -43,7 +43,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E4 | todo | owner picks the songs |
 | E5 | todo | |
 | E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
-| E7 | done | `editions/lidovky/` (D-146): PR #103; the owner archives `zpevnik-lidovky` |
+| E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; the owner archives `zpevnik-lidovky` after E5 |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
