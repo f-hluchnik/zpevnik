@@ -1,0 +1,13 @@
+# The folk songs: the songs tagged `\artist{lidove}`, the book that was the repository
+# zpevnik-lidovky. Its own cover (the photo with the caption "lidové písničky"), the shared
+# half-title and title page with the subtitle; the imprint says it is a selection.
+subtitle = "lidové písničky"
+artists = ["lidove"]
+imprint = "credits.tex"
+before_songs = []
+after_contents = []
+
+[pages]
+cover = "own"
+halftitle = "shared"
+titlepage = "shared"
