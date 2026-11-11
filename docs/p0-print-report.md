@@ -29,24 +29,18 @@ A5 page, margins of the A4 book × 0.707 (top 1.06, bottom 1.41, left 1.41, righ
 
 So with today's body size and no per-song fixes, the A5 geometry is not an option for this edition: 38 % of the songs spill. The scaled print has none, by construction. The full list of spilling songs with a proposed fix per song, and the side-by-side pages, come after the owner's OK on section 3.
 
-## 3. Proposal: how the A5 geometry reaches the document (needs the owner's OK)
+## 3. Plan agreed with the owner (11 Nov 2026, supersedes the earlier proposal)
 
-**Mechanism.** Next to `\zpgenerated`, the build defines two more macros with `-usepretex`:
+The default is the scaled print. Hiding the links and black chords cannot be done on a finished PDF, so the scaled print needs a *print variant* of the A4 document; that variant is the build-time macro mechanism (D-154) that a geometry trial would reuse.
 
-- `\zpgeometry`, the option list of the `geometry` package, including the paper (`a5paper, top=…, left=…`);
-- `\zpbodysize`, the name of the size declaration that wraps the songs.
+1. **Output formats `print` and `print-black`** (PR #114): the "→ obsah" label and the arrow before the artist are left out (the artist stays, grey); black chords as an option. Screen PDF unchanged.
+2. **Page numbers** in the contents, the artist index and the `\seealso` lines of the print formats (a printed contents without them cannot be used; today the contents is hyperlinks only).
+3. **Scaling step** to A5 with the binding offset (opposite directions on odd and even pages, the printer names the clear margin the rings need) and an even page count; the cover stays outside.
+4. **Geometry trial** (A5 typeset, `\large` first, bigger chord superscripts, songs spilling on purpose and starting on a left-hand page so the spread is read without a page turn) only on a one-off feature branch, and only if the scaled text (about 10.2 pt) is too small on paper.
 
-`zpevnik.sty` and `zpevnik.tex` give both a default with `\providecommand` (today's margins, `Large`), so a build without them stays as it is today. No copy of `zpevnik.tex`. Checked in the scratch copy: the paper option of `geometry` overrides the `a4paper` of `\documentclass`, and the output is 419.5 × 595.3 pt.
+Measured so far for the trial (scratch copy, indicative): A5 with the A4 margins × 0.707: `\Large` 224 pages / 58 of 152 songs spill, `\large` 173 / 7, `\normalsize` 169 / 3.
 
-**Build side.** A *format* (D-139: never part of an edition) is a named set of those two values, kept as constants in one small module of `tools/`; `tools/build_edition.py` and the checks get `--format <name>`; every combination has its own output directory (D-139). This is the concept P3 needs anyway (the scaled print would be another format), so the trial does not build a throwaway.
-
-**Alternatives rejected.** A copy of `zpevnik.tex` (forbidden by the ticket). Geometry in `edition.toml` (D-139: an edition never chooses geometry). An environment variable (hidden state, not visible in the latexmk command, and TeX would need an extra package to read it).
-
-**Variants to run on the print edition** (each with the one-page check, the spill list, the page count): body `\Large` and `\large`; margins × 0.707 and 15 mm / 10 mm (left / right; the book is one-sided, the binding offset is P1's). Per-song `\large` as D-129 allows, or a two-page allow-list entry, only proposed in the report, never applied.
-
-**If the owner does not pick the geometry**, the branch of the trial is simply not merged; only this report (or nothing) stays.
-
-**Not verified yet:** that a build without the two macros is byte-identical to today's (to be checked with the PDF diff before the trial is committed); that `check_pages.py` and `chord_gaps.py` work with a format's output directory.
+Smallest text after scaling: footnote text 8 pt → about 5.7 pt and its number 6 pt → about 4.2 pt (9 pages of the edition: 11, 17, 43, 55, 73, 80, 106, 111, 131); the imprint 7 pt → about 5 pt; chord superscripts about 10 pt → about 7 pt.
 
 ## 4. Printer checklist
 
