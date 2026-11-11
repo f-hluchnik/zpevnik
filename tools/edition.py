@@ -61,6 +61,7 @@ class EditionError(Exception):
 
     def __init__(self, where: Path, errors: list[str]):
         super().__init__(f"{where} is invalid:\n  " + "\n  ".join(errors))
+        self.where = where
         self.errors = errors
 
 
@@ -240,3 +241,23 @@ def read_edition(root: Path, name: str, book: Book, songs: list[Song], slugs: se
     if reader.errors:
         raise EditionError(where, reader.errors)
     return edition
+
+
+def edition_names(root: Path) -> list[str]:
+    """Every edition folder of the repository."""
+    return sorted(path.name for path in (root / EDITIONS_DIR).iterdir() if path.is_dir())
+
+
+def edition_problems(root: Path, songs: list[Song], slugs: set[str]) -> list[str]:
+    """Every problem of the book file and of every edition, one line each (for the lints)."""
+    try:
+        book = read_book(root)
+    except EditionError as error:
+        return [f"{error.where}: {message}" for message in error.errors]
+    problems = []
+    for name in edition_names(root):
+        try:
+            read_edition(root, name, book, songs, slugs)
+        except EditionError as error:
+            problems += [f"{error.where}: {message}" for message in error.errors]
+    return problems

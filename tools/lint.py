@@ -17,7 +17,9 @@ Errors fail the build:
     RENAMED_COMMANDS) or the old two-brace `\\vers{n}{...}`;
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs;
-  - a song sets `\\score{name}` and there is no `scores/<name>.mscz`.
+  - a song sets `\\score{name}` and there is no `scores/<name>.mscz`;
+  - data/book.toml or an edition (editions/<name>/edition.toml) is invalid (see edition.py):
+    every edition in the repository is published with the build, so a broken one fails it.
 Warnings are listed and do not fail:
   - a song has no `\\chord` or `\\chords`;
   - an artist without a section has MIN_SONGS_FOR_SECTION songs or more;
@@ -36,6 +38,7 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+from edition import edition_problems
 from paths import SCORES_DIR, add_root_argument
 from registry import Artist, check_entries, normalise, read_entries
 from songs import ARTIST, Song, parse_song, song_paths
@@ -228,6 +231,7 @@ def lint(root: Path) -> Findings:
     if not errors:  # the lints below need valid entries and readable songs
         registry = [normalise(entry) for entry in entries]
         errors += unknown_slugs(songs, registry) + empty_sections(songs, registry)
+        errors += edition_problems(root, songs, {artist["slug"] for artist in registry})
         warnings += artists_ready_for_section(songs, registry) + duplicate_titles(songs)
     available_scores = score_names(root)
     errors += unknown_scores(songs, available_scores)

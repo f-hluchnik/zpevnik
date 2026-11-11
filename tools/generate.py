@@ -4,7 +4,8 @@
 Writes into build/editions/<edition>/generated/: artists.tex (one
 \\zpregisterartist{slug}{link label}{1 or 0} line per registry entry, which zpevnik.sty
 turns into lookups by slug), include.tex (the \\songinclude list of the edition's songs in
-the Czech collation order), obsah-letters.tex (the letter part of the contents),
+the Czech collation order), song-list.tex (one \\zpregistersong{id} per song of the edition,
+so that a \\seealso to a song outside it prints nothing), obsah-letters.tex (the letter part of the contents),
 obsah-artists.tex (the artist index and the artist sections), version.tex (the songbook
 version, major.minor.patch), macros.tex and pages.tex (the front matter, edition_tex.py).
 The version is the build's: it counts every song, whatever the edition selects.
@@ -25,7 +26,7 @@ from edition import Book, Edition, EditionError, edition_folder, read_book, read
 from edition_tex import macros_tex, pages_tex
 from letter_toc import letters_tex
 from paths import (ARTIST_PART_TEX, ARTISTS_TEX, BOOK_FILE, EDITION_FILE_NAME, INCLUDE_TEX,
-                   LETTERS_TEX, MACROS_TEX, PAGES_TEX, REGISTRY_FILE, SONGS_DIR, VERSION_TEX,
+                   LETTERS_TEX, MACROS_TEX, PAGES_TEX, REGISTRY_FILE, SONG_LIST_TEX, SONGS_DIR, VERSION_TEX,
                    add_edition_argument, add_root_argument, generated_dir)
 from registry import check_entries, normalise, read_entries
 from songs import Song, read_songs, song_paths
@@ -51,6 +52,11 @@ def artists_tex(entries: list[dict]) -> str:
 def ordered(songs: list[Song]) -> list[Song]:
     """Songs in songbook order: by title, the file name only breaks a tie."""
     return sorted(songs, key=lambda s: (sort_key(s.sort_title), s.id))
+
+
+def song_list_tex(songs: list[Song]) -> str:
+    """One \\zpregistersong per song of the edition (zpevnik.sty's \\seealso reads them)."""
+    return header(SONGS_SOURCE) + "".join(f"\\zpregistersong{{{song.id}}}\n" for song in songs)
 
 
 def include_tex(songs: list[Song]) -> str:
@@ -80,6 +86,7 @@ def generated_files(entries: list[dict], songs: list[Song], book: Book, edition:
     return {
         ARTISTS_TEX: artists_tex(entries),
         INCLUDE_TEX: include_tex(songs),
+        SONG_LIST_TEX: song_list_tex(songs),
         LETTERS_TEX: header(SONGS_SOURCE) + letters_tex(songs),
         ARTIST_PART_TEX: (header(f"{REGISTRY_FILE} and {SONGS_SOURCE}")
                           + artist_part_tex([normalise(e) for e in entries], songs)),

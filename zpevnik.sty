@@ -6,7 +6,7 @@
 % (tools/build_edition.py); a song compiled alone has none and keeps the defaults.
 %
 % Public interface used by the generated files and by zpevnik.tex:
-% \songinclude, \zpregisterartist, \zpscoregeometry, \zpversion and \zprule.
+% \songinclude, \zpregisterartist, \zpregistersong, \zpscoregeometry, \zpversion and \zprule.
 % Internal macros carry the \zp@ prefix and may be renamed freely.
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{zpevnik}[2026/11/06 Songbook packages and macros]
@@ -188,8 +188,18 @@
 % separator). The note itself has the normal gap above it, except at the start
 % of a song.
 \newcommand{\note}[1]{\ifvmode\ifzp@top\else\zp@blockgap\fi\fi\emph{#1}\global\zp@nogaptrue\global\zp@topfalse}
-% Link line to another song, pulled up to the previous block.
-\newcommand{\seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\zp@labelindent\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
+% Link line to another song, pulled up to the previous block. A link to a song outside the
+% edition is left out completely (D-139): the generated song-list.tex registers the songs of
+% the edition; a song compiled alone has no list and keeps every link.
+\newif\ifzp@songlist
+\newcommand*{\zpregistersong}[1]{\global\zp@songlisttrue\global\expandafter\let\csname zp@song@#1\endcsname\@empty}
+\newcommand{\zp@seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\zp@labelindent\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
+\newcommand{\seealso}[2]{%
+  \ifzp@songlist
+    \ifcsname zp@song@#1\endcsname\zp@seealso{#1}{#2}\fi
+  \else
+    \zp@seealso{#1}{#2}%
+  \fi}
 
 %SCORES
 % \score{name} sets the image of scores/<name>.mscz, exported by tools/scores.py
@@ -404,6 +414,8 @@
 \newcommand{\ifartistsection}[3]{%
   \ifcsname zp@section@#1\endcsname\csname zp@section@#1\endcsname{#2}{#3}\else#3\fi}
 \ifdefined\zpgenerated\input{\zpgenerated/artists}\fi
+% The generated song-list.tex registers the songs of the edition for \seealso.
+\ifdefined\zpgenerated\input{\zpgenerated/song-list}\fi
 
 %VERSION
 % The generated version.tex (tools/generate.py) sets the real version: song count + 100,

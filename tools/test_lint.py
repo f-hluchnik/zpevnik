@@ -10,6 +10,7 @@ from registry import Artist
 from lint import (artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
                   chord_warnings, lint, text_problems, unknown_scores, unknown_slugs, unused_scores)
 from songs import Song
+from test_edition import Repository
 
 
 def artist(slug: str, section: bool = True) -> Artist:
@@ -192,13 +193,13 @@ class Scores(unittest.TestCase):
 
 class LintTree(unittest.TestCase):
     def make(self, registry: str, **songs: str) -> Path:
+        """A checkout with the registry, the songs, the book file and the full edition."""
         tmp = Path(tempfile.mkdtemp())
         self.addCleanup(lambda: __import__("shutil").rmtree(tmp))
-        (tmp / "data").mkdir()
-        (tmp / "songs").mkdir()
-        (tmp / "data" / "artists.toml").write_text(registry, encoding="utf-8")
+        repo = Repository(str(tmp))
+        repo.write("data/artists.toml", registry)
         for name, text in songs.items():
-            (tmp / "songs" / f"{name}.tex").write_text(text, encoding="utf-8")
+            repo.write(f"songs/{name}.tex", text)
         return tmp
 
     def test_clean_tree(self):
@@ -218,6 +219,11 @@ class LintTree(unittest.TestCase):
         errors = lint(root).errors
         self.assertTrue(any("a.tex: no \\song" in e for e in errors))
         self.assertTrue(any("b: 2 lines with \\artist" in e for e in errors))
+
+    def test_an_invalid_edition_fails(self):
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\chord{C}a\n")
+        (root / "editions" / "full" / "stray.tex").write_text("")
+        self.assertEqual(lint(root).errors, ["editions/full/edition.toml: stray.tex is not referenced by edition.toml"])
 
     def test_unknown_slug_and_empty_section_fail(self):
         root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{nobody}\n")

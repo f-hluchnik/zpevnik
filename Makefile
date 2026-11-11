@@ -5,10 +5,12 @@
 # make scores   only export the score images from MuseScore into build/scores/
 #               (tools/scores.py; skips scores that are up to date)
 # make song SONG=<id>  build only that song into build/songs/<id>.pdf (tools/build_song.py)
+# make check [EDITION=<name>]  the unit tests and the lints, then build the edition (which
+#               fails on a link to a missing target) and run the one-page and chord checks on it
 # make clean    delete build/
 EDITION ?= full
 
-.PHONY: all generate scores pdf song clean
+.PHONY: all generate scores pdf song check clean
 
 all: pdf
 
@@ -23,6 +25,13 @@ pdf: generate scores
 
 song: scores
 	python3 tools/build_song.py $(SONG)
+
+check:
+	python3 -m unittest discover -s tools
+	python3 tools/lint.py
+	$(MAKE) pdf EDITION=$(EDITION)
+	python3 tools/check_pages.py --edition $(EDITION)
+	python3 tools/chord_gaps.py --edition $(EDITION)
 
 clean:
 	rm -rf build
