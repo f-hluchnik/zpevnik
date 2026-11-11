@@ -48,7 +48,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
-| P0 | todo | print feasibility report: A5, the printer checklist (D-147) |
+| P0 | todo | print feasibility report: A5, the printer checklist (D-147); runs on the owner's print edition, which he prepares by hand (D-148) |
 | P1 | todo | owner: print requirements and the deadline, after P0's report |
 | P2 | cancelled | the book is never sold (D-140) |
 | P3 | todo | |
@@ -157,15 +157,15 @@ D-133. Since E0 the imprint prints the build's version, which counts the commits
 
 The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff).
 
-### P0 · Print feasibility report — [agent] · M · needs nothing
+### P0 · Print feasibility report — [agent] · M · needs the print edition (the owner prepares it by hand, D-148)
 D-147, D-142. The owner expects the facts for P1 to come out of this: does the book work at A5, and what has to be asked of the printer. Nothing is decided and nothing is merged; the output is a report with attachments.
-1. **Scaled sample:** the full book's screen PDF scaled to A5 (1/√2), about ten pages (a dense song, a two-column song, a score, the contents), and the page counts at A4 and A5; the owner prints the A4 PDF "2 per sheet" to see the size on paper (D-142).
-2. **Geometry trial:** the full book built once with an A5 page geometry. No copy of `zpevnik.tex`: the geometry is a parameter like the edition, and how it reaches the document is proposed in the PR before coding. The one-page check on it; every song that spills listed with a proposed fix per song (a `\large` as D-129 allows, a two-page allow-list entry), never fixed silently; a few pages of both versions side by side.
+1. **Scaled sample:** the print edition's screen PDF scaled to A5 (1/√2), about ten pages (a dense song, a two-column song, a score, the contents), and the page counts at A4 and A5; the owner prints the A4 PDF "2 per sheet" to see the size on paper (D-142).
+2. **Geometry trial:** the print edition built once with an A5 page geometry (a first run on the full book gave the numbers in D-148; the trial needs only the songs of the print edition, which may not contain the problematic ones). No copy of `zpevnik.tex`: the geometry is a parameter like the edition, and how it reaches the document is proposed in the PR before coding. The one-page check on it; every song that spills listed with a proposed fix per song (a `\large` as D-129 allows, a two-page allow-list entry), never fixed silently; a few pages of both versions side by side.
 3. **Printer checklist**, ready to send as it is: page count and binding limits (the book is about 760 pages at A4), ring or glued binding and the gutter, paper weight and the thickness of that many pages, PDF version or PDF/X, fonts, colour or black and white, bleed and crop marks, cover in the file or separate, a proof copy, number of copies and price.
 **Expected differences:** none for the screen PDF. The report is cheap to repeat: run it again after the owner's new songs.
 
 ### P1 · Print requirements — [you] · S
-Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (a subset needs E4 first, which is after the print edition by D-147: so a subset means the order changes). Answered after reading P0's report. The owner's new songs (about ten) and K1 do not block P1 or P3: content changes need only a rebuild.
+Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (answered in D-148: the print book is its own edition, selected by hand by the owner; the rest of P1 is open). Answered after reading P0's report. The owner's new songs (about ten) and K1 do not block P1 or P3: content changes need only a rebuild.
 
 ### P2 · Licensing check — [you] · S — **cancelled**
 Was: check the licensing before selling printed copies. The book is never sold (D-140).
