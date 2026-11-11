@@ -39,7 +39,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | done | editions in the generator and the build (D-144): PR #96 |
-| E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #? |
+| E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
 | E4 | todo | owner picks the songs |
 | E5 | todo | |
 | E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
