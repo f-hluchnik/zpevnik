@@ -15,7 +15,7 @@ Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or
 5. **Every change is checked against a baseline PDF**, built in the same CI job from the base commit with the same pinned TeX Live, and compared song by song (D-105, D-106).
 6. **Songs are ordered by Czech collation of their title**, never by file name (D-107).
 
-## Order of work (D-108, D-132)
+## Order of work (D-108, D-132, D-147)
 
 | WP | What | Status | Tickets |
 |---|---|---|---|
@@ -25,13 +25,15 @@ Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or
 | 2 | Chord spacing | done | C1–C5 |
 | 3 | Vertical spacing | done | V1–V9 |
 | Q | Code quality and final command names | done | Q1–Q6 |
-| 8 | Editions (song subsets), build version | **next** | E0–E7 |
-| 9 | Print | then | P1–P4 |
+| 8 | Editions (song subsets), build version | done except E4 (after print) | E0–E4, E7, E8 |
+| 6a | Delivery of the editions: CI release, download page | **next** | E5–E6 |
+| 9 | Print | then; P4 after the owner's new songs | P0, P1, P3, P4 |
+| A | Audits: README, unit tests, build speed | then, before the converter | A1–A3 |
 | 5 | Converter and `songs.json` | later | J1–J5 |
 | 7 | Legal hygiene | later, before WP6 goes online | L1–L2 |
 | 6 | Website | later | W1–W7 |
 
-WP0–WP4 are described in HISTORY.md (results) and in the archived plan (the original problem statements). The cleanup came before the converter so that the converter is written once, against semantic macros only, and `songs.json` carries no layout (D-108). Editions and print were pulled ahead of the converter in D-132.
+WP0–WP4 are described in HISTORY.md (results) and in the archived plan (the original problem statements). The cleanup came before the converter so that the converter is written once, against semantic macros only, and `songs.json` carries no layout (D-108). Editions and print were pulled ahead of the converter in D-132; D-147 added the delivery of the editions and the audits before it, and moved `zpevnik-lite` behind the print edition.
 
 ---
 

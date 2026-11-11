@@ -2,7 +2,7 @@
 
 Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. What is already done: [HISTORY.md](HISTORY.md). The full text of the finished tickets, as they were on 6 Nov 2026: [archive/snapshot-2026-11-06/TICKETS.md](archive/snapshot-2026-11-06/TICKETS.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
 
-Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring is done (HISTORY.md); what is left is editions and print, then the converter, legal and the website (D-132).
+Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring is done (HISTORY.md); what is left is the delivery of the editions, print and the audits, then the converter, legal and the website (D-132, amended by D-147).
 
 Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or review · **⚠** touches many song files, so never run two ⚠ tickets in parallel and merge each before the next · **[strong model]** needs design judgement beyond following the steps: run it with the strongest available model, or have one review the result before merge · size S/M/L.
 
@@ -20,7 +20,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 - **Planning docs** live in `docs/` of the `zpevnik` repository (D-134), so a session needs only the repository: no link to the owner's computer. They change through pull requests like the code. Large binary files (review PDFs, page images) are not committed: attach them to the PR, or the owner keeps them locally (the older ones are in `songbook-project/docs/archive/` on his computer, see archive/README.md).
 - **Building and testing:** use the cloud workspace.
-  - Run `apt-get update`, then `apt-get install -y texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music poppler-utils latexmk` in each new session (without the update the packages had no install candidate). The full book then compiles in ≈8 s with one `pdflatex` pass. Python there is 3.13.
+  - Run `apt-get update`, then `apt-get install -y texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music poppler-utils latexmk` in each new session (without the update the packages had no install candidate). Python there is 3.13. The score export (D-136) needs more, verified on 11 Nov 2026: `apt-get install -y librsvg2-bin fonts-cmu xvfb`, and MuseScore as the AppImage named by `MUSESCORE_URL` in the CI workflow (download, `--appimage-extract`, `MSCORE=<dir>/squashfs-root/AppRun`); then `xvfb-run -a make …`. From scratch the full book takes ≈18 s for the scores and ≈20 s for LaTeX; both are skipped when up to date.
   - That TeX Live is 2023 (pdfTeX 1.40.25) like CI, but a local build is only compared with another local build (base vs head). CI is the reference.
 - **The owner's computer** (Linux VM shell, if a session is linked to it) has TeX Live 2022 *without* Czech babel and Python 3.10, so neither the book nor the tools run there. It is needed only for the owner's local files, e.g. uncommitted changes in `zpevnik-web`.
 - **Cloud session tooling:** `gh pr create` does not work there (GraphQL is blocked); open PRs with `gh api repos/f-hluchnik/zpevnik/pulls -f title=… -f head=<branch> -f base=master -F body=@file`. The clone is shallow: after the first push set the upstream by hand (`git config branch.<b>.remote origin` and `branch.<b>.merge refs/heads/<b>`). CI job logs contain the PDF diff summary (`gh api repos/f-hluchnik/zpevnik/actions/jobs/<id>/logs`).
@@ -34,23 +34,28 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
-| K1 | todo | owner: chords for the 8 songs without them |
+| K1 | todo | owner: chords for the 8 songs without them; also about ten new songs before the print (content, D-147) |
+| K2 | todo | lint allow-list for songs that are right without chords (answers K1's question) |
 | E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
 | R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | done | editions in the generator and the build (D-144): PR #96 |
 | E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
-| E4 | todo | owner picks the songs |
-| E5 | todo | |
-| E6 | todo | `zpevnik-web`; takes over the PDF half of W1 |
+| E4 | todo | owner picks the songs, after the printed edition (D-147) |
+| E5 | todo | CI and release for every edition, found not listed; in the delivery phase (D-147) |
+| E6 | todo | `zpevnik-web`; takes over the PDF half of W1; the `lidovky` edition replaces the static PDF, so `zpevnik-lidovky` can be archived |
 | E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; the owner archives `zpevnik-lidovky` after E5 |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
-| P1 | todo | owner: print requirements and the deadline |
+| P0 | todo | print feasibility report: A5, the printer checklist (D-147) |
+| P1 | todo | owner: print requirements and the deadline, after P0's report |
 | P2 | cancelled | the book is never sold (D-140) |
 | P3 | todo | |
-| P4 | todo | owner signs off the proof |
+| P4 | todo | owner signs off the proof, on the final content (after the new songs and K1) |
+| A1 | todo | audit of the README |
+| A2 | todo | audit of the unit tests |
+| A3 | todo | audit of the build and CI speed |
 | J0 | done | song quirks: PR #88 (D-135); scores: PR #89 (D-136) |
 | J1 | todo | strong model (parser design) |
 | J2 | todo | strong model (data model = contract between repos) |
@@ -72,21 +77,26 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | Phase | Tickets | After it you have |
 |---|---|---|
 | 1, 2, 4, 5, 6, 11 | done | Safety net, generated lists, clean sources, automatic chord and vertical spacing, code quality and the final command names (HISTORY.md) |
-| 10 Editions | E0–E8, R15, R16 | Song subsets such as `zpevnik-lite` and `lidovky` built from the same files, with their own pages; the full book is one of them (D-121, D-139, D-143) |
-| 3 Print | P1–P4 | A print build and a checked proof (D-122) |
+| 10 Editions | E0–E4, E7, E8, R15, R16 | Song subsets such as `zpevnik-lite` and `lidovky` built from the same files, with their own pages; the full book is one of them (D-121, D-139, D-143). E4 (`zpevnik-lite`) waits until after the printed edition (D-147) |
+| 9a Delivery | E5, E6 | CI builds and releases every edition, the download page shows them, `zpevnik-lidovky` can be archived (D-147) |
+| 3 Print | P0, P1, P3, then P4 | The A5 facts and the printer's requirements, a print build, and a checked proof on the final content (D-122, D-147) |
+| 12 Audits | A1–A3 | The README, the unit tests and the build speed reviewed before the converter (D-147) |
 | 7 Converter | J0–J5 | `songs.json` and score SVGs on every release |
 | 8 Legal | L1–L2 | Notice, hide switch |
 | 9 Website | W1–W7 | Online songbook |
 
-The converter is written once, against the final command names of phase 11 (D-108, D-131). Phase 8 must be done before the songs go online (W6). Print needs phase 10 only if the printed book is a subset (P1).
+The converter is written once, against the final command names of phase 11 (D-108, D-131). Phase 8 must be done before the songs go online (W6). Print needs phase 10 only if the printed book is a subset (P1). The owner's new songs and K1 are content work that runs beside the converter and the website; P4 comes after them (D-147).
 
 ---
 
 # Content
 
 ### K1 · Songs without chords — [you] · S · needs nothing
-8 songs have no chords over the lyrics: 5 have only a `\chords` row (gronskapisnicka, marieklus, noe, panubohudooken, vranabuty), 3 only a score image (ladovskazima, scarboroughfaircarthy, triandele). The owner decides per song whether to add chords (content work). The lint warns about songs without `\chord`. - ladovskazima, scarboroughfaircarthy, triandele are correct without chords. I wonder what would adding an empty `\chord` command with a comment saying it's for linters do? The other songs should be adjusted (read, chords should be added properly, not as list, at least where possible).
+8 songs have no chords over the lyrics: 5 have only a `\chords` row (gronskapisnicka, marieklus, noe, panubohudooken, vranabuty), 3 only a score image (ladovskazima, scarboroughfaircarthy, triandele). The owner decides per song whether to add chords (content work). The lint warns about songs without `\chord`. - ladovskazima, scarboroughfaircarthy, triandele are correct without chords. I wonder what would adding an empty `\chord` command with a comment saying it's for linters do? The other songs should be adjusted (read, chords should be added properly, not as list, at least where possible). The question about an empty `\chord` for the linters is answered by K2. About ten new songs before the print are content work too (owner, 11 Nov 2026): not a ticket, every new song passes `make check`.
 
+
+### K2 · Songs that are right without chords — [agent] · S · needs nothing
+D-147. The lint warns about a song that has no `\chord` or `\chords` (`tools/lint.py`): today `ladovskazima`, `scarboroughfaircarthy` and `triandele`, which are a score and are correct (K1). An empty `\chord` in the song just to silence the warning would put a marker inside the content that the converter (J1) would have to know and `songs.json` would carry; the repository already has the other answer, an allow-list read by a tool (`tools/multipage-allowlist.txt`). So: `tools/no-chords-allowlist.txt`, one song id per line with a `#` comment saying why, read by the lint like the multipage allow-list; the warning stays for every other song; a unit test that an allow-listed song passes, an unlisted one warns, and an id that is not a song fails. **Expected differences:** none (no song and no PDF changes).
 ---
 
 # Phase 10 – Editions (song subsets, D-121)
@@ -125,16 +135,10 @@ Test with a throwaway edition that is not committed: songs by id, one artist, an
 4. `make check [EDITION=<name>]` (D-143, D-144): the unit tests, the lints, the one-page check and the link check of the edition; the chord check on the edition too (D-145).
 **Expected differences:** none for the full book.
 
-### E4 · Choose the songs for `zpevnik-lite` — [you] + [agent] · S · needs E2
-The agent adds a small helper that lists song ids with title and artist (filter by artist) to pick from. The owner picks the songs; the agent writes `editions/lite/edition.toml`. **Expected differences:** none for the full book.
+### E4 · Choose the songs for `zpevnik-lite` — [you] + [agent] · S · needs E2 · **after the printed edition (D-147)**
+The agent adds a small helper that lists song ids with title and artist (filter by artist) to pick from. The owner picks the songs; the agent writes `editions/lite/edition.toml`. **Expected differences:** none for the full book. Owner, 11 Nov 2026: later, after the print edition is done; nothing waits for it (E5 finds editions by itself, E6 shows what exists).
 
-### E5 · CI and release — [agent] · M · needs E3, E4
-CI builds every edition in `editions/` on pull requests (the build, the one-page check and the link check must pass) and, on pushes to master, attaches `zpevnik-<edition>-<version>.pdf` of each edition (the build version, D-143) to the release of the full book; the release notes list the editions. The PDF diff keeps comparing the full book only. Czech README section on editions: how to make one (by song ids or by artist), how to add a song to one, and that an uncommitted edition folder is a private edition built only locally.
-
-### E6 · Download page with editions — [agent] · M · needs E5 · `zpevnik-web` (and a small PR in `zpevnik`)
-D-139, D-110. The website gets the PDFs from the release (this takes over the PDF half of W1): `build.py` downloads the PDFs of the release tagged `v<version.txt>`; the songbook CI stops committing the PDF into `zpevnik-web` and only writes `version.txt`. Which editions the download page shows, and how, is configured in `zpevnik-web` (the songbook has no `publish` flag): `zpevnik-lite` as the main button, the full book as the second one, also served at its fixed URL `zpevnik_last.pdf` (printed QR codes point to it); further editions such as `lidovky` and the separate koledy songbook in their own section. Only `zpevnik_last.pdf` needs a fixed URL; the others may link to the release assets. The owner had an uncommitted change in `templates/base.html` (6 Nov 2026): ask before touching it.
-
-### E7 · `lidovky` as an edition — [you] + [agent] · S · needs E4
+### E7 · `lidovky` as an edition — [you] + [agent] · S · **done** (PR #103, D-146)
 All songs of the `zpevnik-lidovky` repository are already in the full book (owner, 9 Nov 2026), and the 76 songs tagged `\artist{lidove}` match the 2020 book (D-139). The agent writes `editions/lidovky/edition.toml` with `artists = ["lidove"]`, compares the result with the song list of the old repository (by title, with E4's helper) and reports any difference, and, if the old book has its own title page or foreword, adds its front matter; the owner confirms the list and the front matter, and archives the old repository himself.
 
 ### E8 · Front matter in book order — [agent] · S · needs E3
@@ -153,20 +157,42 @@ D-133. Since E0 the imprint prints the build's version, which counts the commits
 
 The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff).
 
+### P0 · Print feasibility report — [agent] · M · needs nothing
+D-147, D-142. The owner expects the facts for P1 to come out of this: does the book work at A5, and what has to be asked of the printer. Nothing is decided and nothing is merged; the output is a report with attachments.
+1. **Scaled sample:** the full book's screen PDF scaled to A5 (1/√2), about ten pages (a dense song, a two-column song, a score, the contents), and the page counts at A4 and A5; the owner prints the A4 PDF "2 per sheet" to see the size on paper (D-142).
+2. **Geometry trial:** the full book built once with an A5 page geometry. No copy of `zpevnik.tex`: the geometry is a parameter like the edition, and how it reaches the document is proposed in the PR before coding. The one-page check on it; every song that spills listed with a proposed fix per song (a `\large` as D-129 allows, a two-page allow-list entry), never fixed silently; a few pages of both versions side by side.
+3. **Printer checklist**, ready to send as it is: page count and binding limits (the book is about 760 pages at A4), ring or glued binding and the gutter, paper weight and the thickness of that many pages, PDF version or PDF/X, fonts, colour or black and white, bleed and crop marks, cover in the file or separate, a proof copy, number of copies and price.
+**Expected differences:** none for the screen PDF. The report is cheap to repeat: run it again after the owner's new songs.
+
 ### P1 · Print requirements — [you] · S
-Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (a subset needs E1–E4 first).
+Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (a subset needs E4 first, which is after the print edition by D-147: so a subset means the order changes). Answered after reading P0's report. The owner's new songs (about ten) and K1 do not block P1 or P3: content changes need only a rebuild.
 
 ### P2 · Licensing check — [you] · S — **cancelled**
 Was: check the licensing before selling printed copies. The book is never sold (D-140).
 
-### P3 · Print build — [agent] · M · needs P1 (and E4 for a subset)
+### P3 · Print build — [agent] · M · needs P0, P1 (and E4 for a subset)
 D-142. The print format is a step after the build, separate from the edition (D-139): it combines with the full book or any edition and writes into an output directory of its own; no copy of song content.
 1. **Scaled print (the default):** scale the edition's screen PDF to the print page size from P1 (A4 to A5 is exactly 1/√2), with the offset of odd and even pages for the binding if P1 asks for it, blank pages where a spread needs them (songs starting on a right-hand page, an even page count), and the cover outside the numbered book block if P1 says so. Use what the pinned TeX Live has (`pdfpages` in a small wrapper document, or `pdfjam`); no new dependency. Check page size and page count; the contents links still work.
-2. **Geometry trial:** for the specific printed edition, build it once with a LaTeX page geometry for the print size (E2's parameters, no copy of `zpevnik.tex`), run the one-page check, report every song that spills, and attach a few pages of both versions for comparison; propose a fix per song (a `\large` as D-129 allows, a two-page allow-list entry), never fix silently. The owner chooses; the trial is not merged unless he picks it.
+2. **Geometry trial:** done in P0. If the owner picks it, P3 makes it an option of the print format (merged only if he picks it); the scaled print stays the default.
 **Expected differences:** none for the screen PDF.
 
-### P4 · Print proof check — [agent] + [you] · S · needs P3
-Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, colour space against the printer's requirement (report, convert only if asked), crops of the first page, a middle page, a two-column song and the contents at 100%. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
+### P4 · Print proof check — [agent] + [you] · S · needs P3 and the final content
+Done on the final content, after the owner's new songs and K1 (D-147); until then P3's output is a draft. Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, colour space against the printer's requirement (report, convert only if asked), crops of the first page, a middle page, a two-column song and the contents at 100%. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
+
+---
+
+# Phase 12 – Audits (before the converter, D-147)
+
+The owner wants these before the converter and the website start. Each audit reports first and changes only what the owner agrees to; each change is its own PR with zero diff for the book.
+
+### A1 · README audit — [agent] · M · after P3 (the README then covers editions and print)
+The README (Czech, about 190 lines) against reality: run every command and check every path and claim; what is stale (editions, print, `make`), duplicated in `docs/`, or in the wrong place for its reader; whether the order of sections fits how the owner works (write a song, build, publish). Report: a list of findings and the proposed structure. After the owner's OK: the rewritten README, a list of what moved or was dropped. The README stays Czech (D-131).
+
+### A2 · Unit-test audit — [agent] · M · after P3
+203 tests in 17 modules on 11 Nov 2026 (`test_lint` 38, `test_scores` 22, `test_edition` 21, `test_artist_toc` 17, `test_collation` 14, `test_songs` 13, …). The owner wants only the meaningful ones. Criteria: a test stays if it protects a decision or a failure that no other check catches (the song-by-song diff, the lints, the one-page, chord and link checks); it goes or merges if it duplicates another, pins an implementation detail (an exact TeX string, an internal name) or can't fail in practice. Evidence per module, not opinion: what it protects, which CI check also covers it, and whether the test fails when the code it targets is broken (done by hand or with `coverage` installed for the audit only, not added to the repository). Report: a table module by module (keep, merge, drop, reason). After the owner's OK: one PR with the removals, the test count before and after, and `make check` green.
+
+### A3 · Build and CI speed audit — [agent] · M · after P3
+"What takes so long, and could we optimise it?" Baseline measured on 11 Nov 2026: locally, the full book from scratch takes ≈18 s for the score export and ≈20 s for LaTeX (both ≈0.1–0.3 s when up to date); the unit tests 2 s; the lints and checks under 1 s; the PDF diff renders each book (≈7 s) and compares. In CI a pull-request run takes ≈170 s: the first TeX Live container step 96 s, of which ≈80 s is pulling the image (the same step for the base takes 15 s), then the PDF diff 13 s, installing the score tools 13 s, the score export 8 s and 7 s, the base compile 15 s. These are measurements, not conclusions. Questions to answer with measurements: how much of the 20 s of LaTeX is the 1.8 MB cover photo, TikZ, the contents and the passes; what is the cost of each edition once E5 builds all of them on every PR; what `ci/native-texlive` (an old branch) and the other attempts in the backlog (*CI speed*) taught; whether docs-only changes could skip the build; whether parallel jobs per edition pay off. Report: ranked proposals with the expected saving and the risk to identical output. After the owner's OK: each accepted proposal is its own PR, and the PDF diff must stay at zero.
 
 ---
 
@@ -216,7 +242,28 @@ A short text in Czech and English: non-commercial, contact address for removal r
 
 ---
 
-# Phase 9 – Website (`zpevnik-web`)
+# Phase 9 – Delivery and the website (`zpevnik-web`)
+
+E5 and E6 come first (D-147): they put every edition into the release and onto the download page, which is also what lets the owner archive the repository `zpevnik-lidovky`. Then W1–W7, the online songbook.
+
+### E5 · CI and release for every edition — [agent] · M · needs E3, E7
+D-139, D-143, D-147. The editions are found, not listed: `edition_names()` in `tools/edition.py` is the one place that says what an edition is (a folder in `editions/`), so adding an edition is adding a folder, with no change to the CI (owner, 11 Nov 2026).
+1. `tools/build_edition.py --list` prints the edition names, one per line (from `edition_names()`; no second rule in YAML).
+2. CI builds every edition on pull requests, in one run of the TeX Live step (a loop, not a container per edition), and runs the one-page, chord and link checks on each; the build, the one-page check and the link check must pass.
+3. On pushes to master the release gets `zpevnik-<edition>-<version>.pdf` of each edition, the full book included (`zpevnik-full-<version>.pdf` replaces `zpevnik.pdf`; nothing reads the old name until E6), with the build version (D-143); the release notes list the editions with their song counts.
+4. The PDF diff keeps comparing the full book only.
+5. Czech README section on editions: how to make one (by song ids or by artist), how to add a song to one, and that an uncommitted edition folder is a private edition built only locally.
+**Verification:** the PR run shows the loop and the checks for `full` and `lidovky`. The release step runs only on a push to master, so its first real run is the merge: read that run before claiming anything about it, and say so in the PR. **Expected differences:** none in the book.
+
+### E6 · Download page with editions — [agent] · M · needs E5 released once · `zpevnik-web` (and a small PR in `zpevnik`)
+D-139, D-110, D-147. The website gets the PDFs from the release (this takes over the PDF half of W1): `build.py` downloads the PDFs of the release tagged `v<version.txt>`; the songbook CI stops committing the PDF into `zpevnik-web` and only writes `version.txt`. Which editions the page shows, and how, is configured in `zpevnik-web` (the songbook has no `publish` flag).
+- The full book is the main button and is also served at its fixed URL `zpevnik_last.pdf` (printed QR codes point to it); only that URL must stay fixed.
+- `lidovky` is the edition from the release; it replaces the committed `static/files/zpevnik_lidovky.pdf` (the 2020 book, 2.2 MB). That is the website's only tie to the old repository `zpevnik-lidovky`, so after this the owner can archive it (he does it himself, once the page is live and the button works).
+- The koledy songbook stays a static file in its own section.
+- `zpevnik-lite` takes over the main button when it exists (E4, after the print edition); then adding it is one line of configuration.
+- The committed `zpevnik_last.pdf` and `zpevnik_lidovky.pdf` leave the repository (not its history); the `zpevnik-web` README ("Updating the PDFs") is rewritten.
+- Two PRs (`zpevnik-web` and the small one in `zpevnik`); the merge order matters, say it in both.
+Earlier notes said the owner had an uncommitted change in `templates/base.html` (6 Nov 2026). His working copy was clean on 11 Nov 2026 (and five releases behind `origin`), so ask only if `git status` shows one again.
 
 ### W1 · Load the data — [agent] · M · needs J4
 `build.py` downloads `songs.json` from the release tagged `v<version.txt>` (the songbook CI already writes `version.txt` after creating the release) into an uncommitted folder, validates `schemaVersion`, and fails loudly if missing. Add a local option to point at a file.
