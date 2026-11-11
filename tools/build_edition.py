@@ -13,7 +13,10 @@ creates one for each folder an \\include can come from: the songs, the shared pa
 the edition folders (edition.py keeps an edition's files directly in one of them).
 The edition reaches zpevnik.tex as one definition before the document, \\zpgenerated.
 
-Usage: python3 tools/build_edition.py [--edition NAME] [repo-root]   (or: make [EDITION=<name>])
+`--list` prints the editions, one per line: the one place that says what an edition is (a folder of
+editions/), so the CI builds every edition without a list of its own.
+
+Usage: python3 tools/build_edition.py [--edition NAME | --list] [repo-root]   (or: make [EDITION=<name>])
 Python >= 3.11, standard library only.
 """
 import argparse
@@ -76,7 +79,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_edition_argument(parser)
     add_root_argument(parser)
+    parser.add_argument("--list", action="store_true", help="print the editions, one per line, and exit")
     args = parser.parse_args()
+    if args.list:
+        print(*edition_names(args.root), sep="\n")
+        return 0
     try:
         print(build(args.root, args.edition))
     except (FileNotFoundError, MissingLinkTargets) as error:

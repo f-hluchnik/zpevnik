@@ -42,7 +42,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E2 | done | editions in the generator and the build (D-144): PR #96 |
 | E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
-| E5 | todo | CI and release for every edition, found not listed; in the delivery phase (D-147) |
+| E5 | done | CI and release for every edition, found not listed (D-149): PR #106; the release step is first seen on the merge |
 | E6 | todo | `zpevnik-web`; takes over the PDF half of W1; the `lidovky` edition replaces the static PDF, so `zpevnik-lidovky` can be archived |
 | E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; the owner archives `zpevnik-lidovky` after E5 |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
