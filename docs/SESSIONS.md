@@ -39,15 +39,11 @@ The song count changed after R15 (version 8.38); the traces of the old folder an
 ### Session 21 · E7, R16 — done (11 Nov 2026)
 R16 merged (PR #102). E7 merged (PR #103, D-146): `editions/lidovky/` with its own cover (the photo and the caption "lidové písničky" as in the old book) and the subtitle "lidové písničky". The planning of the rest of the session led to D-147 (the order below).
 
-### Session 21a · E5 · Sonnet · `zpevnik`
-- **Needs:** E3, E7.
-- **Read:** DECISIONS D-110, D-139, D-143, D-145, D-146, D-147 · TICKETS E5 · the CI workflow.
-- **Notes:** Editions are found by `edition_names()`, never listed by hand in the workflow. Release assets only on pushes to master, so the release step is first seen on the merge: read that run before claiming anything about it. Do not touch `zpevnik-web` (that is E6).
+### Session 21a · E5 — done (11 Nov 2026)
+E5 merged (PR #106, D-149): the CI finds, builds, checks and releases every edition by `edition_names()`; first release with it `v8.38.5`.
 
-### Session 21b · E6 · Sonnet · `zpevnik-web` (and a small PR in `zpevnik`)
-- **Needs:** E5 merged and released at least once (the release then has `zpevnik-lidovky-<version>.pdf`).
-- **Read:** DECISIONS D-103, D-110, D-139, D-143, D-146, D-147 · TICKETS E6 · zpevnik-web README.
-- **Notes:** Only the full book's URL `zpevnik_last.pdf` must stay (printed QR codes); the other PDFs may link to the release assets. The full book is the main button until `zpevnik-lite` exists. The `lidovky` button serves the edition and the committed 2020 PDF goes; then the owner archives `zpevnik-lidovky` himself. Which editions the page shows is configured in `zpevnik-web`. The songbook CI stops committing the PDF into `zpevnik-web` (a PR in `zpevnik`); merge order between the two PRs matters, say it in both. The owner's working copy of `zpevnik-web` was clean on 11 Nov 2026; ask about `templates/base.html` only if `git status` shows a change.
+### Session 21b · E6 — done (11 Nov 2026)
+E6 (PRs f-hluchnik/zpevnik-web#3, merged first, and f-hluchnik/zpevnik#PRNUM, D-150): the website downloads the PDFs from the release `v<version.txt>`, the buttons come from `EDITION_DOWNLOADS` in its `build.py`, the songbook CI writes only `version.txt`. The owner archives `zpevnik-lidovky` himself once the page is live.
 
 ### Session 21c · P0 · Sonnet · `zpevnik`
 - **Needs:** the print edition (`editions/<name>/edition.toml`, prepared by the owner by hand, D-148); E5 and E6 first (owner, 11 Nov 2026).

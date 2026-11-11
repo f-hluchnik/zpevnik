@@ -219,6 +219,9 @@ jobs:
           echo "$notes"
           { echo "editions<<EDITIONSEOF"; echo "$notes"; echo "EDITIONSEOF"; } >> "$GITHUB_OUTPUT"
 
+      # The website holds no PDFs (E6, D-150): its build downloads them from the release
+      # named in version.txt. So the release is created first and the version is pushed
+      # after it, and the website never points at a release that does not exist yet.
       - name: Checkout website repo
         if: github.event_name == 'push'
         uses: actions/checkout@v4
@@ -230,10 +233,6 @@ jobs:
       - name: Write version file
         if: github.event_name == 'push'
         run: echo "${{ steps.version.outputs.version }}" > website/version.txt
-
-      - name: Update PDF
-        if: github.event_name == 'push'
-        run: cp build/editions/full/zpevnik.pdf website/static/files/zpevnik_last.pdf
 
       - name: Create GitHub Release
         if: github.event_name == 'push'
@@ -254,6 +253,6 @@ jobs:
         run: |
           git config user.name "songbook-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add version.txt static/files/zpevnik_last.pdf
+          git add version.txt
           git commit -m "Update songbook to v${{ steps.version.outputs.version }}" || echo "nothing to commit"
           git push

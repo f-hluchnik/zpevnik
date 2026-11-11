@@ -86,6 +86,12 @@ What changed in the songbook refactoring and why, phase by phase (DECISIONS D-12
 - Found in that review and ticketed for later: the version names a song count, not a build (D-133, E0); score images are placed by hand, and a few song quirks need a decision before the converter (J0).
 - Helper files: none (the Q4 migration script was never committed).
 
+## Phase 9a · Delivery of the editions (E5, E6) · 11 Nov 2026 · PRs #106, PRNUM, zpevnik-web#3
+
+- E5 (#106, D-149): the CI finds the editions by `edition_names()`, builds and checks every one in a single TeX Live step, and attaches `zpevnik-<edition>-<version>.pdf` of each to the release, with the song counts in the release notes; adding an edition is adding a folder. First release with it `v8.38.5` (`full` and `lidovky`).
+- E6 (zpevnik-web#3 and #PRNUM, D-150): the website holds no songbook PDF; its build downloads the PDFs of the release named in `version.txt`, and the songbook CI only writes that file after creating the release. The download buttons are a list in the web's `build.py`; the full book keeps the fixed URL `zpevnik_last.pdf` (printed QR codes), `lidovky` is the edition from the release instead of the 2020 book, so the repository `zpevnik-lidovky` can be archived.
+- Helper files: archive/phase-9a-delivery/ (the two ticket texts).
+
 ## Closing the refactoring · 6 Nov 2026
 
 With Q6 (#86) the refactoring is finished: phases 1, 2, 4, 5, 6 and 11, 61 merged pull requests (#23–#86) in four days. The planning docs moved from the owner's computer into `docs/` of this repository (D-134), so work can continue from any device.

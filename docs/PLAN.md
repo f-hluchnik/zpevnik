@@ -26,8 +26,8 @@ Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or
 | 3 | Vertical spacing | done | V1–V9 |
 | Q | Code quality and final command names | done | Q1–Q6 |
 | 8 | Editions (song subsets), build version | done except E4 (after print) | E0–E4, E7, E8 |
-| 6a | Delivery of the editions: CI release, download page | **next** | E5–E6 |
-| 9 | Print | then; P4 after the owner's new songs | P0, P1, P3, P4 |
+| 6a | Delivery of the editions: CI release, download page | done | E5–E6 |
+| 9 | Print | **next**; P4 after the owner's new songs | P0, P1, P3, P4 |
 | A | Audits: README, unit tests, build speed | then, before the converter | A1–A3 |
 | 5 | Converter and `songs.json` | later | J1–J5 |
 | 7 | Legal hygiene | later, before WP6 goes online | L1–L2 |
