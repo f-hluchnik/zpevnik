@@ -46,7 +46,7 @@ Smallest text after scaling: footnote text 8 pt → about 5.7 pt and its number 
 
 ### What is ready (the facts to give the printer)
 - A5 portrait (148 × 210 mm), about 162 pages without the cover (164 with it); two-sided, so about 81 sheets. Ring binding, the cover a separate image.
-- Vector PDF: all fonts embedded (`pdffonts`, 23 of 23 on the A5 file), no raster images in the book block except what the printer sees in the cover.
+- Vector PDF: all fonts embedded (`pdffonts`, 23 of 23 on the A5 file) and no raster image at all (`pdfimages -list`); the cover is a separate image for the printer.
 - Colour: the red chords and the grey labels in `print`; everything black and white except the grey in `print-black` (the grey stays). Both files come from the same sources.
 - Nothing reaches the page edge: the page is white and the ink starts 7.1 mm inside every edge, so no bleed is built in.
 - Page numbers are printed; the contents and the "see also" lines carry them; no links are shown.
