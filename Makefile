@@ -8,30 +8,53 @@
 # make check [EDITION=<name>]  the unit tests and the lints, then build the edition (which
 #               fails on a link to a missing target) and run the one-page and chord checks on it
 # make clean    delete build/
+# PYTHON=<command>  the Python the tools run with (default python3); it must be 3.11 or newer
 EDITION ?= full
+PYTHON ?= python3
+REQUIRED_PYTHON := 3.11
 
-.PHONY: all generate scores pdf song check clean
+# make check prints a heading per step; make and make check end with the path of the PDF.
+step = @printf '\n==> %s\n' '$(1)'
+finish = @printf '\n==> %s\n    %s/%s\n\n' '$(1)' "$(CURDIR)" "$$($(PYTHON) tools/build_edition.py --edition $(EDITION) --path)"
+
+.PHONY: all generate scores compile pdf song check check-python clean
 
 all: pdf
 
-generate:
-	python3 tools/generate.py --edition $(EDITION)
+check-python:
+	@if ! $(PYTHON) -c 'import sys; sys.exit(sys.version_info[:2] < tuple(map(int, "$(REQUIRED_PYTHON)".split("."))))' 2>/dev/null; then \
+		echo "error: the tools need Python $(REQUIRED_PYTHON) or newer, but '$(PYTHON)' is: $$($(PYTHON) --version 2>&1)" >&2; \
+		echo "       Activate the virtual environment (source .venv/bin/activate) or run make PYTHON=python3.12" >&2; \
+		echo "       (README, Nastavení lokální kopie)" >&2; \
+		exit 1; \
+	fi
 
-scores:
-	python3 tools/scores.py
+generate: check-python
+	@$(PYTHON) tools/generate.py --edition $(EDITION)
 
-pdf: generate scores
-	python3 tools/build_edition.py --edition $(EDITION)
+scores: check-python
+	@$(PYTHON) tools/scores.py
+
+compile: generate scores
+	@$(PYTHON) tools/build_edition.py --edition $(EDITION) > /dev/null
+
+pdf: compile
+	$(call finish,The PDF is ready:)
 
 song: scores
-	python3 tools/build_song.py $(SONG)
+	@$(PYTHON) tools/build_song.py $(SONG)
 
-check:
-	python3 -m unittest discover -s tools
-	python3 tools/lint.py
-	$(MAKE) pdf EDITION=$(EDITION)
-	python3 tools/check_pages.py --edition $(EDITION)
-	python3 tools/chord_gaps.py --edition $(EDITION)
+check: check-python
+	$(call step,Unit tests)
+	@$(PYTHON) -m unittest discover -s tools -q
+	$(call step,Lint)
+	@$(PYTHON) tools/lint.py
+	$(call step,Build of the $(EDITION) edition)
+	@$(MAKE) --no-print-directory compile
+	$(call step,Checks of the built edition)
+	@$(PYTHON) tools/check_pages.py --edition $(EDITION)
+	@$(PYTHON) tools/chord_gaps.py --edition $(EDITION)
+	$(call finish,All checks passed. The PDF:)
 
 clean:
 	rm -rf build

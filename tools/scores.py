@@ -59,6 +59,11 @@ SVG_LENGTH_MM = re.compile(r"([\d.]+)mm")
 # What MuseScore writes before the drawing.
 SVG_METADATA_TAGS = frozenset(f"{{{SVG_NAMESPACE}}}{name}" for name in ("title", "desc"))
 
+# MuseScore prints these warnings on every start, however the run ends; left in, they fill
+# the end of the output and hide the message that says why an export failed.
+MSCORE_STARTUP_NOISE = "qt.qml.typeregistration"
+FAILURE_LINES = 5
+
 MSCORE_ENVIRONMENT_VARIABLE = "MSCORE"
 MSCORE_COMMANDS = ("mscore4portable", "mscore", "mscore4", "musescore")
 MSCORE_MACOS_APPS = (Path("/Applications/MuseScore 4.app/Contents/MacOS/mscore"),
@@ -213,7 +218,14 @@ def find_mscore() -> str:
         if candidate:
             return candidate
     raise ScoreError(f"MuseScore 4 not found: install it or set {MSCORE_ENVIRONMENT_VARIABLE} "
-                     "to its executable (README, section Noty)")
+                     "to its executable (README, Nastavení lokální kopie)")
+
+
+def failure_details(output: str) -> str:
+    """The last lines of what a failed program printed, without MuseScore's start-up warnings."""
+    lines = [line.strip() for line in output.splitlines()
+             if line.strip() and MSCORE_STARTUP_NOISE not in line]
+    return " | ".join(lines[-FAILURE_LINES:]) or "no other output"
 
 
 def run(command: list[str], what: str, extra_environment: dict[str, str] | None = None) -> None:
@@ -221,10 +233,10 @@ def run(command: list[str], what: str, extra_environment: dict[str, str] | None 
     try:
         result = subprocess.run(command, capture_output=True, text=True, env=environment)
     except FileNotFoundError as error:
-        raise ScoreError(f"{what}: {command[0]} not found (README, section Noty)") from error
+        raise ScoreError(f"{what}: {command[0]} not found (README, Nastavení lokální kopie)") from error
     if result.returncode != 0:
-        output = (result.stderr or result.stdout).strip().splitlines()[-5:]
-        raise ScoreError(f"{what} failed ({result.returncode}): " + " | ".join(output))
+        details = failure_details(result.stderr + result.stdout)
+        raise ScoreError(f"{what} failed ({result.returncode}) with {command[0]}: {details}")
 
 
 def export_svg(mscore: str, score: Path, style: Path, work_dir: Path) -> Path:

@@ -239,16 +239,25 @@ def lint(root: Path) -> Findings:
     return Findings(errors, warnings, empty_artist_info(songs))
 
 
+def block(title: str, lines: list[str]) -> list[str]:
+    """A titled bullet list followed by a blank line; nothing when there is nothing to list."""
+    return [f"{title}:", *(f"  - {line}" for line in lines), ""] if lines else []
+
+
+def format_report(findings: Findings) -> str:
+    """What the lint prints: a block each for errors, warnings and info, then the verdict."""
+    lines = [*block(f"Errors ({len(findings.errors)})", findings.errors),
+             *block(f"Warnings ({len(findings.warnings)})", findings.warnings),
+             *block("Info", [findings.info] if findings.info else []),
+             f"Lint: {len(findings.errors)} error(s), {len(findings.warnings)} warning(s)"]
+    return "\n".join(lines)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_root_argument(parser)
     findings = lint(parser.parse_args().root)
-    for line in findings.warnings:
-        print(f"warning: {line}")
-    for line in findings.errors:
-        print(f"error: {line}")
-    print(f"info: {findings.info}")
-    print(f"{len(findings.errors)} error(s), {len(findings.warnings)} warning(s)")
+    print(format_report(findings))
     return 1 if findings.errors else 0
 
 

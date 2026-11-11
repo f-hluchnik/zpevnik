@@ -7,8 +7,9 @@ import unittest
 from pathlib import Path
 
 from registry import Artist
-from lint import (artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
-                  chord_warnings, lint, text_problems, unknown_scores, unknown_slugs, unused_scores)
+from lint import (Findings, artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
+                  chord_warnings, format_report, lint, text_problems, unknown_scores, unknown_slugs,
+                  unused_scores)
 from songs import Song
 from test_edition import Repository
 
@@ -22,6 +23,16 @@ def song(song_id: str, title: str = "T", toctitle: str | None = None,
          artists: tuple[str, ...] = (), collections: tuple[str, ...] = (),
          scores: tuple[str, ...] = ()) -> Song:
     return Song(song_id, title, toctitle, (), artists, collections, scores)
+
+
+class Report(unittest.TestCase):
+    def test_every_kind_gets_its_own_block_and_the_verdict_comes_last(self):
+        report = format_report(Findings(["bad"], ["w1", "w2"], "3 songs have no artist"))
+        self.assertEqual(report, "Errors (1):\n  - bad\n\nWarnings (2):\n  - w1\n  - w2\n\n"
+                                 "Info:\n  - 3 songs have no artist\n\nLint: 1 error(s), 2 warning(s)")
+
+    def test_a_kind_without_findings_has_no_block(self):
+        self.assertEqual(format_report(Findings([], [], "")), "Lint: 0 error(s), 0 warning(s)")
 
 
 class TextProblems(unittest.TestCase):

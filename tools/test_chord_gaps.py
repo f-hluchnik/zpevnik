@@ -2,7 +2,9 @@
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
+import io
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -41,21 +43,33 @@ class Book(unittest.TestCase):
             rows += [Chord(0, 5, overlap_page, pt(8)), Chord(pt(4), 5, overlap_page, pt(8))]
         (output_dir / CHORD_TRACE_NAME).write_text("".join(f"{c.x} {c.y} {c.page} {c.width}\n" for c in rows))
 
+    def check(self, root: Path) -> tuple[int, str]:
+        """The exit status and the report of the book check; the report is captured, not printed."""
+        with redirect_stdout(io.StringIO()) as report:
+            status = check_book(root, DEFAULT_EDITION)
+        return status, report.getvalue()
+
     def test_an_overlap_in_any_song_fails(self):
-        for page in (2, 3):
+        for page, song in ((2, "one"), (3, "two")):
             with self.subTest(page=page), TemporaryDirectory() as tmp:
                 self.build(Path(tmp), overlap_page=page)
-                self.assertEqual(check_book(Path(tmp), DEFAULT_EDITION), 1)
+                status, report = self.check(Path(tmp))
+                self.assertEqual(status, 1)
+                self.assertIn(f"ERROR: {song}: chords overlap by 4.00 pt on p. {page}", report)
 
     def test_an_overlap_outside_the_songs_fails(self):
         with TemporaryDirectory() as tmp:
             self.build(Path(tmp), overlap_page=1)
-            self.assertEqual(check_book(Path(tmp), DEFAULT_EDITION), 1)
+            status, report = self.check(Path(tmp))
+        self.assertEqual(status, 1)
+        self.assertIn("ERROR: outside the songs: chords overlap by 4.00 pt on p. 1", report)
 
     def test_a_book_without_overlaps_passes(self):
         with TemporaryDirectory() as tmp:
             self.build(Path(tmp), overlap_page=None)
-            self.assertEqual(check_book(Path(tmp), DEFAULT_EDITION), 0)
+            status, report = self.check(Path(tmp))
+        self.assertEqual(status, 0)
+        self.assertNotIn("ERROR", report)
 
     def test_the_trace_is_read_in_order(self):
         with TemporaryDirectory() as tmp:

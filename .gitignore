@@ -318,3 +318,6 @@ __pycache__/
 
 # MuseScore backup copies, next to any saved score
 .mscbackup/
+
+# The virtual environment of tools/ (README, Nastavení lokální kopie)
+/.venv/
