@@ -3,6 +3,9 @@
 #                              compile build/editions/<name>/zpevnik.pdf (default edition: full);
 #                              FORMAT=print|print-black builds it for paper into build/editions/<name>/<format>/
 #                              (tools/formats.py; default: screen)
+# make print [EDITION=<name>] [FORMAT=<name>] [PRINT_ARGS=...]  build the edition for paper (FORMAT default:
+#               print) and scale it to A5 for a printer: build/editions/<name>/<format>/zpevnik-a5.pdf
+#               (tools/print_pdf.py; PRINT_ARGS="--spine-shift-mm 3 --skip-first 2" are its options)
 # make generate [EDITION=<name>]  only run the generator (tools/generate.py)
 # make scores   only export the score images from MuseScore into build/scores/
 #               (tools/scores.py; skips scores that are up to date)
@@ -20,7 +23,7 @@ REQUIRED_PYTHON := 3.11
 step = @printf '\n==> %s\n' '$(1)'
 finish = @printf '\n==> %s\n    %s/%s\n\n' '$(1)' "$(CURDIR)" "$$($(PYTHON) tools/build_edition.py --edition $(EDITION) --format $(FORMAT) --path)"
 
-.PHONY: all generate scores compile pdf song check check-python clean
+.PHONY: all generate scores compile pdf print song check check-python clean
 
 all: pdf
 
@@ -43,6 +46,10 @@ compile: generate scores
 
 pdf: compile
 	$(call finish,The PDF is ready:)
+
+print: FORMAT = print
+print: compile
+	@$(PYTHON) tools/print_pdf.py --edition $(EDITION) --format $(FORMAT) $(PRINT_ARGS)
 
 song: scores
 	@$(PYTHON) tools/build_song.py $(SONG)

@@ -31,7 +31,7 @@ def pretex(format_name: str) -> str:
     return "".join(f"\\def\\{name}{{{body}}}" for name, body in FORMATS[format_name].items())
 
 
-def add_format_argument(parser: argparse.ArgumentParser) -> None:
+def add_format_argument(parser: argparse.ArgumentParser, default: str = SCREEN) -> None:
     """The --format option of the tools that work on one built format."""
-    parser.add_argument("--format", default=SCREEN, choices=sorted(FORMATS),
-                        help=f"the output format (default: {SCREEN})")
+    parser.add_argument("--format", default=default, choices=sorted(FORMATS),
+                        help=f"the output format (default: {default})")
