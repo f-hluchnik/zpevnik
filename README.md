@@ -90,7 +90,7 @@ Vydání podle interpreta se doplní samo: stačí, aby písnička měla `\artis
 Složka vydání, kterou necommituji, je soukromé vydání: sestaví se jen lokálně (`make EDITION=<název>`) a GitHub Actions o ní neví. Co je v repozitáři, se vydává.
 
 ### Formát pro tisk
-Vydání se dá sestavit i pro papír: `make EDITION=<název> FORMAT=print` (akordy barevně) nebo `FORMAT=print-black` (akordy černě, pro tisk jednou barvou). PDF je v `build/editions/<název>/<formát>/zpevnik.pdf`, vedle PDF pro obrazovku, které se nemění. Na papíře nejdou odkazy kliknout, proto zmizí „→ obsah" za názvem písničky a šipka před jménem interpreta (jméno zůstává, šedě). Rozložení stránek je stejné jako na obrazovce, takže se písničky vejdou na jednu stranu; ověří to `make check EDITION=<název> FORMAT=print`. Formáty jsou v `tools/formats.py`.
+Vydání se dá sestavit i pro papír: `make EDITION=<název> FORMAT=print` (akordy barevně) nebo `FORMAT=print-black` (akordy černě, pro tisk jednou barvou). PDF je v `build/editions/<název>/<formát>/zpevnik.pdf`, vedle PDF pro obrazovku, které se nemění. Na papíře nejdou odkazy kliknout, proto zmizí „→ obsah" za názvem písničky a šipka před jménem interpreta (jméno zůstává, šedě). Obsah, rejstřík interpretů a řádky „→ viz také“ mají na papíře čísla stran (na obrazovce jsou to odkazy); zmizí řádek písmen nad obsahem a věta o hypertextových odkazech. Rozložení stránek písniček je stejné jako na obrazovce, takže se písničky vejdou na jednu stranu; ověří to `make check EDITION=<název> FORMAT=print`. Formáty jsou v `tools/formats.py`.
 
 ## Automatické publikování
 

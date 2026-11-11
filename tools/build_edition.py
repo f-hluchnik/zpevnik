@@ -10,7 +10,8 @@ fails, cut down to the TeX error; the full log stays in the output folder.
 A link to a missing target fails the build (D-139): pdfTeX warns about it in the log
 ("name{...} has been referenced but does not exist"), which covers the contents, the
 \\seealso links and the artist links of every edition. TeX runs with long log lines,
-so a warning is never split.
+so a warning is never split. A page number of the print formats that stays "??" fails it too
+("Reference `zp:...' on page N undefined" after the last run).
 
 The edition's generated files must exist (tools/generate.py --edition <edition>; `make`
 runs both). LaTeX writes the auxiliary file of every \\include-d file into the output
@@ -49,6 +50,7 @@ TEX_OUTPUT_ENCODING = "utf-8"  # the log and the terminal output; a stray byte f
 # TeX Live reads its settings from the environment too; one log line per message.
 LONG_LOG_LINES = {"max_print_line": "10000"}
 MISSING_TARGET = re.compile(r"name\{([^}]*)\} has been referenced but does not exist")
+UNDEFINED_LABEL = re.compile(r"Reference `([^']*)' on page \d+ undefined")  # a \pageref of the print formats
 
 
 class LatexError(Exception):
@@ -60,6 +62,13 @@ class MissingLinkTargets(Exception):
 
     def __init__(self, pdf: Path, targets: list[str]):
         super().__init__(f"{pdf}: links to missing targets: {', '.join(targets)}")
+
+
+class UndefinedLabels(Exception):
+    """References (the page numbers of the print formats) that still point nowhere after the last run."""
+
+    def __init__(self, pdf: Path, labels: list[str]):
+        super().__init__(f"{pdf}: page numbers of undefined labels: {', '.join(labels)}")
 
 
 def include_folders(root: Path) -> list[Path]:
@@ -99,6 +108,11 @@ def missing_link_targets(log: str) -> list[str]:
     return sorted(set(MISSING_TARGET.findall(log)))
 
 
+def undefined_labels(log: str) -> list[str]:
+    """The labels a \\pageref could not resolve, each once."""
+    return sorted(set(UNDEFINED_LABEL.findall(log)))
+
+
 def pdf_path(edition: str, format_name: str = SCREEN) -> Path:
     """The PDF of an edition in a format, relative to the root; it exists once it is built."""
     return edition_output_dir(edition, format_name) / BOOK_PDF_NAME
@@ -119,6 +133,9 @@ def build(root: Path, edition: str, format_name: str = SCREEN) -> Path:
     missing = missing_link_targets(log)
     if missing:
         raise MissingLinkTargets(pdf, missing)
+    undefined = undefined_labels(log)
+    if undefined:
+        raise UndefinedLabels(pdf, undefined)
     return pdf
 
 
@@ -139,7 +156,7 @@ def main() -> int:
         return 0
     try:
         print(build(args.root, args.edition, args.format))
-    except (FileNotFoundError, LatexError, MissingLinkTargets) as error:
+    except (FileNotFoundError, LatexError, MissingLinkTargets, UndefinedLabels) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
     return 0

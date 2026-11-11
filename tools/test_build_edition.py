@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 
 from build_edition import (LatexError, build, failure_excerpt, include_folders, latexmk_command,
-                           missing_link_targets, pdf_path, run_latexmk)
+                           missing_link_targets, pdf_path, run_latexmk, undefined_labels)
 from formats import PRINT, PRINT_BLACK
 from paths import generated_dir
 
@@ -80,6 +80,17 @@ class LinkCheck(unittest.TestCase):
 
     def test_a_clean_log_has_none(self):
         self.assertEqual(missing_link_targets("Output written on zpevnik.pdf (757 pages).\n"), [])
+
+
+class UndefinedLabels(unittest.TestCase):
+    def test_each_unresolved_page_number_is_reported_once(self):
+        log = ("LaTeX Warning: Reference `zp:beta' on page 3 undefined on input line 9.\n"
+               "LaTeX Warning: Reference `zp:alfa' on page 4 undefined on input line 9.\n"
+               "LaTeX Warning: Reference `zp:beta' on page 8 undefined on input line 9.\n")
+        self.assertEqual(undefined_labels(log), ["zp:alfa", "zp:beta"])
+
+    def test_a_log_without_the_warning_has_none(self):
+        self.assertEqual(undefined_labels("Output written on zpevnik.pdf (757 pages).\n"), [])
 
 
 class Folders(unittest.TestCase):
