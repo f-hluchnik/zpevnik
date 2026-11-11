@@ -10,7 +10,7 @@ of the song files, not from a second list.
 Python >= 3.11, standard library only.
 """
 from collation import sort_key
-from letter_toc import ARTIST_INDEX_ANCHOR, link, link_target, sorted_entries
+from letter_toc import ARTIST_INDEX_ANCHOR, entry_tex, link_target, sorted_entries
 from registry import Artist
 from songs import Song
 from tex_text import escape_tex
@@ -52,7 +52,7 @@ def index_tex(artists: list[Artist]) -> str:
     lines = [link_target(ARTIST_INDEX_ANCHOR) + "\n",
              "\\begin{Large}\n",
              f"\\begin{{multicols}}{{{COLUMNS}}}\\raggedright\n"]
-    lines += [link(a["slug"], escape_tex(index_text(a))) + "\\par\n" for a in artists]
+    lines += [entry_tex(a["slug"], escape_tex(index_text(a))) + "\\par\n" for a in artists]
     lines.append("\\end{multicols}\n\\end{Large}\n")
     return "".join(lines)
 
@@ -64,7 +64,7 @@ def sections_tex(artists: list[Artist], songs: list[Song]) -> str:
     lines = [f"\\begin{{multicols}}{{{COLUMNS}}}\\raggedcolumns\n"]
     for artist in artists:
         lines.append(f"\\subsection*{{{heading_tex(artist)}}}\n{link_target(artist['slug'])}\n")
-        lines += [link(e.song_id, e.text) + "\n\n" for e in sorted_entries(members(artist, songs), page_title)]
+        lines += [entry_tex(e.song_id, e.text) + "\n\n" for e in sorted_entries(members(artist, songs), page_title)]
     lines.append("\\end{multicols}\n")
     return "".join(lines)
 

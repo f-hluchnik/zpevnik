@@ -48,8 +48,8 @@ class LettersTex(unittest.TestCase):
 
     def test_sections_follow_the_alphabet_and_ch_follows_h(self):
         tex = letters_tex(self.SONGS)
-        order = [line for line in tex.splitlines() if line.startswith("\\hypertarget{")]
-        self.assertEqual(order, ["\\hypertarget{A}{}", "\\hypertarget{C}{}", "\\hypertarget{Cc}{}", "\\hypertarget{D}{}", "\\hypertarget{CH}{}", "\\hypertarget{Z}{}"])
+        order = [line for line in tex.splitlines() if line.startswith("\\zptarget{")]
+        self.assertEqual(order, ["\\zptarget{A}", "\\zptarget{C}", "\\zptarget{Cc}", "\\zptarget{D}", "\\zptarget{CH}", "\\zptarget{Z}"])
 
     def test_no_section_for_d_caron(self):
         self.assertNotIn("\\subsection*{Ď}", letters_tex(self.SONGS))
@@ -58,17 +58,21 @@ class LettersTex(unittest.TestCase):
         tex = letters_tex(self.SONGS)
         self.assertIn(r"\hyperlink{A}{A}\hfill \hyperlink{C}{C}\hfill \hyperlink{Cc}{Č}\hfill "
                       r"\hyperlink{D}{D}\hfill \hyperlink{CH}{CH}\hfill \hyperlink{Z}{Z}", tex)
-        self.assertIn(r"\hyperlink{podleinterpreta}{řazení podle interpretů}", tex)
+        self.assertIn(r"\zpscreenorprint{\hyperlink{podleinterpreta}{řazení podle interpretů}}{}", tex)
+
+    def test_the_letter_row_is_for_the_screen_only(self):
+        tex = letters_tex(self.SONGS)
+        self.assertLess(tex.index("\\zpscreenorprint{\\hyperlink{A}{A}"), tex.index("\\vspace{5pt}\n\n}{}"))
 
     def test_alternative_title_is_listed_under_its_own_letter(self):
         tex = letters_tex(self.SONGS)
-        a_section = tex.split("\\hypertarget{A}")[1].split("\\hypertarget{C}")[0]
-        self.assertIn(r"\hyperlink{cerny}{\emph{Abeceda} (Černá)}", a_section)
+        a_section = tex.split("\\zptarget{A}")[1].split("\\zptarget{C}")[0]
+        self.assertIn(r"\zpcontentsentry{cerny}{\emph{Abeceda} (Černá)}", a_section)
 
     def test_entries_are_ordered_within_a_section(self):
         tex = letters_tex([song("b", "Beta"), song("a", "Alfa"), song("ab", "A beta")])
-        entry_lines = [line for line in tex.splitlines() if line.startswith("\\hyperlink{") and "}{" in line][-3:]
-        self.assertEqual(entry_lines, [r"\hyperlink{ab}{A beta}", r"\hyperlink{a}{Alfa}", r"\hyperlink{b}{Beta}"])
+        entry_lines = [line for line in tex.splitlines() if line.startswith("\\zpcontentsentry{") and "}{" in line][-3:]
+        self.assertEqual(entry_lines, [r"\zpcontentsentry{ab}{A beta}", r"\zpcontentsentry{a}{Alfa}", r"\zpcontentsentry{b}{Beta}"])
 
 
 if __name__ == "__main__":

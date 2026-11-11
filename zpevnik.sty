@@ -36,6 +36,15 @@
 \newif\ifzp@print
 \ifdefined\zpprint\zp@printtrue\fi
 \providecommand*{\zpchordcolor}{chordred}
+% \zpscreenorprint{screen}{print}: the first on the screen, the second on paper.
+\newcommand{\zpscreenorprint}[2]{\ifzp@print#2\else#1\fi}
+% The contents (generated/obsah-*.tex, shared-pages/contents.tex). \zpcontentsentry{target}{text}:
+% a link, and on paper also a dotted leader and the page of the target. \noindent: the style's
+% negative \parindent would start the line left of its column, and a long title would run into
+% the neighbouring column instead of wrapping inside its own.
+\newcommand{\zpcontentsentry}[2]{%
+  \noindent\hyperlink{#1}{#2}%
+  \zpscreenorprint{}{\nobreak\dotfill\nobreak\makebox[2em][r]{\pageref{zp:#1}}}}
 
 %PAGE LAYOUT AND NAMED LENGTHS
 % The label (R., 1., I., ...) hangs in the left margin by this much: the first
@@ -90,7 +99,13 @@
 % (e.g. \large in a song that does not fit otherwise) from leaking into the next one.
 \newcommand{\zp@songid}{}
 \newcommand{\songinclude}[1]{\begingroup\gdef\zp@songid{#1}\include{songs/#1}\endgroup}
-\newcommand{\zp@songtarget}{\ifx\zp@songid\empty\else\hypertarget{\zp@songid}{}\gdef\zp@songid{}\fi}
+% \zptarget{name}: the link target of a song, a letter section, an artist section or the artist
+% index. On paper it also sets a label zp:<name>, so that the contents and \seealso can print the
+% page. The label name is expanded at once: \zp@songid is cleared right after.
+\newcommand{\zptarget}[1]{%
+  \hypertarget{#1}{}%
+  \ifzp@print\edef\zp@targetlabel{zp:#1}\expandafter\label\expandafter{\zp@targetlabel}\fi}
+\newcommand{\zp@songtarget}{\ifx\zp@songid\empty\else\zptarget{\zp@songid}\gdef\zp@songid{}\fi}
 % Small capitals as the old \sc did: \normalfont also drops the bold that the
 % headings set, so only the title (\textbf in \song) stays bold.
 \newcommand*{\zp@smallcaps}{\normalfont\scshape}
@@ -213,7 +228,9 @@
 % the edition; a song compiled alone has no list and keeps every link.
 \newif\ifzp@songlist
 \newcommand*{\zpregistersong}[1]{\global\zp@songlisttrue\global\expandafter\let\csname zp@song@#1\endcsname\@empty}
-\newcommand{\zp@seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\zp@labelindent\hyperlink{#1}{\textbf{$\rightarrow$#2}}}
+% On paper the line also names the page of the song, which a reader cannot click to.
+\newcommand{\zp@seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\zp@labelindent
+  \hyperlink{#1}{\textbf{$\rightarrow$#2\zpscreenorprint{}{ (str.~\pageref{zp:#1})}}}}
 \newcommand{\seealso}[2]{%
   \ifzp@songlist
     \ifcsname zp@song@#1\endcsname\zp@seealso{#1}{#2}\fi

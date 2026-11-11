@@ -1,8 +1,10 @@
 """The letter part of the table of contents.
 
 `letters_tex` returns the letter row and the letter sections of shared-pages/contents.tex:
-one `\\hyperlink` per song, in songbook order, and an italic entry for each
-alternative title, ordered by that title under its own letter.
+one `\\zpcontentsentry` (zpevnik.sty: a link on the screen, a dotted entry with the page on
+paper) per song, in songbook order, and an italic entry for each alternative title, ordered by
+that title under its own letter. The letter row and the link to the artist index only exist on the
+screen: they jump somewhere.
 
 Python >= 3.11, standard library only.
 """
@@ -53,11 +55,17 @@ def anchor(letter: str) -> str:
 
 
 def link_target(name: str) -> str:
-    return f"\\hypertarget{{{name}}}{{}}"
+    """A target of a link; on paper zpevnik.sty also labels it, so that its page can be printed."""
+    return f"\\zptarget{{{name}}}"
 
 
 def link(target: str, text: str) -> str:
     return f"\\hyperlink{{{target}}}{{{text}}}"
+
+
+def entry_tex(target: str, text: str) -> str:
+    """An entry of the contents: a link, with its page on paper."""
+    return f"\\zpcontentsentry{{{target}}}{{{text}}}"
 
 
 def sorted_entries(songs: list[Song], title_of: TitleOf = contents_title) -> list[Entry]:
@@ -73,14 +81,13 @@ def letters_tex(songs: list[Song]) -> str:
     row = "\\hfill ".join(link(anchor(letter), letter) for letter, _ in sections)
     lines = [
         "\\begin{center}\n\\begin{Large}\n",
-        row + "\n",
-        "\\vspace{5pt}\n\n",
-        link(ARTIST_INDEX_ANCHOR, ARTIST_INDEX_LINK) + "\n",
+        f"\\zpscreenorprint{{{row}\n\\vspace{{5pt}}\n\n}}{{}}\n",
+        f"\\zpscreenorprint{{{link(ARTIST_INDEX_ANCHOR, ARTIST_INDEX_LINK)}}}{{}}\n",
         "\\end{Large}\n\n\\zprule{10cm}\n\\end{center}\n\n\n",
         "\\begin{multicols}{2}\n",
     ]
     for letter, group in sections:
         lines.append(f"{link_target(anchor(letter))}\n\\subsection*{{{letter}}}\n")
-        lines += [link(e.song_id, e.text) + "\n\n" for e in group]
+        lines += [entry_tex(e.song_id, e.text) + "\n\n" for e in group]
     lines.append("\\end{multicols}\n")
     return "".join(lines)
