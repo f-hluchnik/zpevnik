@@ -1,0 +1,13 @@
+# The folk songs: the songs tagged `\artist{lidove}`, the book that was the repository
+# zpevnik-lidovky. The standard front matter of an edition (shared cover, half-title and
+# title page, no title or subtitle of its own); the imprint says it is a selection.
+artists = ["lidove"]
+cover_image = "../../images/cover_image.jpg"
+imprint = "credits.tex"
+before_songs = []
+after_contents = []
+
+[pages]
+cover = "shared"
+halftitle = "shared"
+titlepage = "shared"
