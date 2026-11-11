@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import NamedTuple
 
 from check_pages import song_pages
+from formats import SCREEN, add_format_argument
 from paths import CHORD_TRACE_NAME, add_edition_argument, add_root_argument, edition_output_dir
 
 SP_PER_PT = 65536
@@ -62,8 +63,8 @@ def song_of_page(output_dir: Path) -> dict[int, str]:
     return {page: song for song, first, count in songs for page in range(first, first + count)}
 
 
-def check_book(root: Path, edition: str) -> int:
-    output_dir = root / edition_output_dir(edition)
+def check_book(root: Path, edition: str, format_name: str = SCREEN) -> int:
+    output_dir = root / edition_output_dir(edition, format_name)
     chords = read_trace(output_dir / CHORD_TRACE_NAME)
     pairs = same_line_pairs(chords)
     overlaps = overlapping(pairs)
@@ -85,11 +86,12 @@ def check_trace(trace: Path) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_edition_argument(parser)
+    add_format_argument(parser)
     add_root_argument(parser)
     parser.add_argument("--trace", type=Path, metavar="FILE",
                         help="check this trace file instead of the book")
     args = parser.parse_args()
-    return check_trace(args.trace) if args.trace else check_book(args.root, args.edition)
+    return check_trace(args.trace) if args.trace else check_book(args.root, args.edition, args.format)
 
 
 if __name__ == "__main__":

@@ -9,6 +9,8 @@ from pathlib import Path
 
 from build_edition import (LatexError, build, failure_excerpt, include_folders, latexmk_command,
                            missing_link_targets, pdf_path, run_latexmk)
+from formats import PRINT, PRINT_BLACK
+from paths import generated_dir
 
 
 class Command(unittest.TestCase):
@@ -18,10 +20,22 @@ class Command(unittest.TestCase):
         self.assertIn("-usepretex=\\def\\zpgenerated{build/editions/lite/generated}", command)
         self.assertEqual(command[-1], "zpevnik.tex")
 
+    def test_a_format_adds_its_definitions_and_has_its_own_output_folder(self):
+        command = latexmk_command("lite", PRINT_BLACK)
+        self.assertIn("-outdir=build/editions/lite/print-black", command)
+        self.assertIn("-usepretex=\\def\\zpgenerated{build/editions/lite/generated}"
+                      "\\def\\zpprint{}\\def\\zpchordcolor{black}", command)
+
 
 class Paths(unittest.TestCase):
     def test_the_pdf_is_in_the_output_folder_of_its_edition(self):
         self.assertEqual(pdf_path("lite"), Path("build/editions/lite/zpevnik.pdf"))
+
+    def test_the_pdf_of_another_format_is_in_a_folder_of_that_format(self):
+        self.assertEqual(pdf_path("lite", PRINT), Path("build/editions/lite/print/zpevnik.pdf"))
+
+    def test_all_formats_of_an_edition_share_its_generated_files(self):
+        self.assertEqual(generated_dir("lite"), Path("build/editions/lite/generated"))
 
 
 class Failure(unittest.TestCase):

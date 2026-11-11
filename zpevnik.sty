@@ -29,6 +29,13 @@
 \RequirePackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true, linkcolor=gray, urlcolor=gray} % a web link looks like a link inside the book
 \pdfminorversion=7
+% The output format (tools/formats.py) reaches the book as macros defined before the document is
+% read. The default is the screen PDF, so a song compiled alone and the screen build define
+% nothing. \zpprint: typeset for paper, where a link cannot be followed, so the labels that only
+% exist to be clicked are left out. \zpchordcolor: the xcolor colour of the chords.
+\newif\ifzp@print
+\ifdefined\zpprint\zp@printtrue\fi
+\providecommand*{\zpchordcolor}{chordred}
 
 %PAGE LAYOUT AND NAMED LENGTHS
 % The label (R., 1., I., ...) hangs in the left margin by this much: the first
@@ -87,9 +94,16 @@
 % Small capitals as the old \sc did: \normalfont also drops the bold that the
 % headings set, so only the title (\textbf in \song) stays bold.
 \newcommand*{\zp@smallcaps}{\normalfont\scshape}
+% The link back to the contents after the title. On paper only its size (\Large) stays, so the
+% heading is laid out exactly as on the screen.
+\ifzp@print
+  \newcommand{\zp@obsahlink}{\Large}
+\else
+  \newcommand{\zp@obsahlink}{\Large\hyperlink{obsah}{\hspace{\songlinkgap} $\rightarrow$~obsah}}
+\fi
 \newcommand{\song}[1]{%
   \global\zp@toptrue\global\zp@nogapfalse\zp@songtarget\zp@artistreset
-  \section*{\Huge\zp@smallcaps\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\Large\hyperlink{obsah}{\hspace{\songlinkgap} $\rightarrow$~obsah}}
+  \section*{\Huge\zp@smallcaps\hypersetup{linkcolor=black}\hyperlink{obsah}{\textbf{#1}}\hypersetup{linkcolor=gray}\zp@obsahlink}
 }
 % \@nobreakfalse: right after a heading (\song) LaTeX would drop the space above
 % \subsection*; the subtitle needs it.
@@ -114,7 +128,13 @@
     \begin{minipage}{\wd\zp@artistbox}\noindent{\parbox{\wd\zp@artistbox}{\noindent\unhcopy\zp@artistbox}}\end{minipage}\kern\zp@artistedge}}}}
 \newcommand{\zp@artistreset}{\global\zp@artistcount=0 \global\let\zp@artistlist\@empty}
 \zp@artistreset
-\newcommand{\zp@artistlink}[2]{\hyperlink{#1}{$\rightarrow$~#2}}
+% The arrow shows that the artist is a link; on paper the artist's name stands alone.
+\ifzp@print
+  \newcommand{\zp@linkarrow}{}
+\else
+  \newcommand{\zp@linkarrow}{$\rightarrow$~}
+\fi
+\newcommand{\zp@artistlink}[2]{\hyperlink{#1}{\zp@linkarrow#2}}
 % Adds a link (slug #1, text #2): the first one is registered for the page and
 % stays rightmost, the second goes to its left.
 \newcommand{\zp@addartist}[2]{%
@@ -296,7 +316,7 @@
   \ifnum\lastnodetype=7 \zp@afterlettertrue\fi   % or a ligature
   % The chord stands on the first row of a two-row tabular aligned at its bottom: the
   % empty second row sits on the baseline of the text, so the chord is one line above it.
-  \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{chordred}{#1}\\
+  \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{\zpchordcolor}{#1}\\
     \mbox{}\end{tabular}}}%
   \zp@pad\zp@pend \global\zp@pend\z@
   \zp@segtoks{}%
@@ -351,7 +371,7 @@
   \edef\zp@rowsep{\the\dimexpr#1\relax}%
   \leavevmode\zp@chords@#2 \zp@chordsend{} \endgroup}
 \def\zp@chords@#1 {\ifx\zp@chordsend#1\else
-  \textbf{\textcolor{chordred}{#1}}\zp@chordsnext\fi}
+  \textbf{\textcolor{\zpchordcolor}{#1}}\zp@chordsnext\fi}
 % Jumps out of the \ifx above before reading on, so the conditionals do not nest per chord.
 \def\zp@chordsnext#1\fi{\fi\zp@chordsmore}
 \def\zp@chordsmore{\futurelet\zp@next\zp@chordsmore@}
