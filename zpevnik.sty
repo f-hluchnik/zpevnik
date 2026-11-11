@@ -228,8 +228,13 @@
 % the edition; a song compiled alone has no list and keeps every link.
 \newif\ifzp@songlist
 \newcommand*{\zpregistersong}[1]{\global\zp@songlisttrue\global\expandafter\let\csname zp@song@#1\endcsname\@empty}
-% On paper the line also names the page of the song, which a reader cannot click to.
-\newcommand{\zp@seealso}[2]{\global\zp@topfalse\vspace{\seealsoshift}\zp@labelindent
+% On paper the line also names the page of the song, which a reader cannot click to, and every
+% link has a line of its own: with the page the links are longer, and two of them on one line
+% would not fit (TeX cannot wrap that line, so it would run into the margin). The shift up
+% belongs to the first link only.
+\newcommand{\zp@seealso}[2]{\global\zp@topfalse
+  \zpscreenorprint{\vspace{\seealsoshift}\zp@labelindent}
+    {\ifhmode\newline\else\vspace{\seealsoshift}\zp@labelindent\fi}%
   \hyperlink{#1}{\textbf{$\rightarrow$#2\zpscreenorprint{}{ (str.~\pageref{zp:#1})}}}}
 \newcommand{\seealso}[2]{%
   \ifzp@songlist
