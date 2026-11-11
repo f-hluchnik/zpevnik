@@ -36,18 +36,11 @@ MONTHS = {
 MAX_LISTED = 60
 
 
-def book_output_dir(root: Path) -> Path:
-    """Where a checkout has its full book: the edition's output directory, or the root
-    of a checkout from before editions (the base of the PR that introduced them)."""
-    output_dir = root / edition_output_dir(DEFAULT_EDITION)
-    return output_dir if (output_dir / BOOK_PDF_NAME).exists() else root
-
-
 class Build:
     def __init__(self, root: Path, dpi: int, tmp: Path, label: str):
         self.root = root
         self.dpi = dpi
-        output_dir = book_output_dir(root)
+        output_dir = root / edition_output_dir(DEFAULT_EDITION)
         self.pdf = output_dir / BOOK_PDF_NAME
         if not self.pdf.exists():
             raise SystemExit(f"ERROR: {self.pdf} not found")

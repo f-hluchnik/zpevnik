@@ -8,7 +8,6 @@ import unittest
 from pathlib import Path
 
 from build_version import UNKNOWN_PATCH, build_patch, song_count_change
-from paths import LEGACY_SONGS_DIR, SONGS_DIR
 
 
 class SongCountChange(unittest.TestCase):
@@ -67,21 +66,6 @@ class BuildPatch(unittest.TestCase):
         self.commit("songs", {"songs/a.tex": "a"})
         self.commit("swap", {"songs/a.tex": None, "songs/b.tex": "b"})
         self.assertEqual(build_patch(self.root), "1")
-
-    def test_renaming_the_song_folder_keeps_counting(self):
-        old, new = LEGACY_SONGS_DIR, SONGS_DIR
-        self.commit("songs", {f"{old}/a.tex": "a", f"{old}/b.tex": "b"})
-        self.commit("tools", {"notes": "1"})
-        self.commit("rename", {f"{old}/a.tex": None, f"{old}/b.tex": None,
-                               f"{new}/a.tex": "a", f"{new}/b.tex": "b"})
-        self.assertEqual(build_patch(self.root), "2")
-
-    def test_a_song_added_after_the_rename_restarts_the_count(self):
-        old, new = LEGACY_SONGS_DIR, SONGS_DIR
-        self.commit("song", {f"{old}/a.tex": "a"})
-        self.commit("rename", {f"{old}/a.tex": None, f"{new}/a.tex": "a"})
-        self.commit("new song", {f"{new}/b.tex": "b"})
-        self.assertEqual(build_patch(self.root), "0")
 
     def test_only_the_first_parent_is_counted(self):
         self.commit("song", {"songs/a.tex": "a"})

@@ -117,8 +117,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: if [ -f base/tools/scores.py ]; then xvfb-run -a python3 base/tools/scores.py base; fi
 
-      # In the same TeX Live as the head, so the image never shows in the diff. A base
-      # from before editions has no build tool and compiles zpevnik.tex in its root.
+      # In the same TeX Live as the head, so the image never shows in the diff.
       - name: Compile base
         if: github.event_name == 'pull_request'
         uses: xu-cheng/texlive-action@v2
@@ -127,11 +126,7 @@ jobs:
           run: |
             apk add --no-cache python3
             cd base
-            if [ -f tools/build_edition.py ]; then
-              python3 tools/build_edition.py
-            else
-              latexmk -pdf -interaction=nonstopmode -halt-on-error zpevnik.tex
-            fi
+            python3 tools/build_edition.py
 
       - name: Install poppler
         if: github.event_name == 'pull_request'
@@ -176,9 +171,8 @@ jobs:
              || ! git cat-file -e "$base" 2>/dev/null; then
             added=""
           else
-            # Both folders, with rename detection: the commit that renamed pisnicky/
-            # to songs/ must not list every song as new.
-            added=$(git diff -M --name-status "$base" "${{ github.sha }}" -- songs/ pisnicky/ \
+            # With rename detection: a renamed song is not new.
+            added=$(git diff -M --name-status "$base" "${{ github.sha }}" -- songs/ \
                     | awk '$1=="A" {print $2}')
           fi
 
