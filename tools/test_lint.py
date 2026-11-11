@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from paths import NO_CHORDS_ALLOWLIST
 from registry import Artist
 from lint import (Findings, artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
                   chord_warnings, format_report, lint, text_problems, unknown_scores, unknown_slugs,
@@ -223,6 +224,21 @@ class LintTree(unittest.TestCase):
         findings = lint(root)
         self.assertEqual(findings.errors, [])
         self.assertEqual(findings.warnings, ["a: no \\chord or \\chords"])
+
+    def test_allowlisted_song_without_chords_passes_and_an_unlisted_one_warns(self):
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n',
+                         a="\\song{A} \\artist{abba}\n", b="\\song{B} \\artist{abba}\n")
+        (root / NO_CHORDS_ALLOWLIST).parent.mkdir(parents=True, exist_ok=True)
+        (root / NO_CHORDS_ALLOWLIST).write_text("a  # a score only\n")
+        findings = lint(root)
+        self.assertEqual(findings.errors, [])
+        self.assertEqual(findings.warnings, ["b: no \\chord or \\chords"])
+
+    def test_allowlisted_id_that_is_not_a_song_is_an_error(self):
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\chord{C}a\n")
+        (root / NO_CHORDS_ALLOWLIST).parent.mkdir(parents=True, exist_ok=True)
+        (root / NO_CHORDS_ALLOWLIST).write_text("a\nnosuchsong\n")
+        self.assertEqual(lint(root).errors, [f"{NO_CHORDS_ALLOWLIST}: 'nosuchsong' is not a song"])
 
     def test_song_without_song_command_is_an_error_and_does_not_stop_the_others(self):
         root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n',

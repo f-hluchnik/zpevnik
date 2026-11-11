@@ -18,10 +18,11 @@ Errors fail the build:
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs;
   - a song sets `\\score{name}` and there is no `scores/<name>.mscz`;
+  - tools/no-chords-allowlist.txt lists an id that is not a song;
   - data/book.toml or an edition (editions/<name>/edition.toml) is invalid (see edition.py):
     every edition in the repository is published with the build, so a broken one fails it.
 Warnings are listed and do not fail:
-  - a song has no `\\chord` or `\\chords`;
+  - a song has no `\\chord` or `\\chords` and is not in tools/no-chords-allowlist.txt;
   - an artist without a section has MIN_SONGS_FOR_SECTION songs or more;
   - several songs have the same title in the contents and none tells them apart
     with a `\\toctitle`;
@@ -38,8 +39,9 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+from allowlist import read_allowlist
 from edition import edition_problems
-from paths import SCORES_DIR, add_root_argument
+from paths import NO_CHORDS_ALLOWLIST, SCORES_DIR, add_root_argument
 from registry import Artist, check_entries, normalise, read_entries
 from songs import ARTIST, Song, parse_song, song_paths
 
@@ -144,6 +146,10 @@ def chord_warnings(song_id: str, text: str) -> list[str]:
     return [] if CHORD_USE.search(text) else [f"{song_id}: no \\chord or \\chords"]
 
 
+def unknown_allowlisted(allowlisted: set[str], song_ids: set[str]) -> list[str]:
+    return [f"{NO_CHORDS_ALLOWLIST}: '{song_id}' is not a song" for song_id in sorted(allowlisted - song_ids)]
+
+
 def songs_by_group(songs: list[Song]) -> dict[str, list[Song]]:
     """The songs of each registry slug they are tagged with (`\\artist`, `\\collection`)."""
     groups: dict[str, list[Song]] = defaultdict(list)
@@ -202,13 +208,16 @@ def empty_artist_info(songs: list[Song]) -> str:
     return f"{len(without)} songs have an empty \\artist{{}} ({in_collection} of them are in a collection)"
 
 
-def load_songs(root: Path) -> tuple[list[Song], list[str], list[str]]:
-    """Every readable song, and the problems and warnings of all song files."""
+def load_songs(root: Path, without_chords_ok: set[str]) -> tuple[list[Song], list[str], list[str]]:
+    """Every readable song, and the problems and warnings of all song files.
+
+    A song of `without_chords_ok` may have no chords."""
     songs, problems, warnings = [], [], []
     for path in song_paths(root):
         text = path.read_text(encoding="utf-8")
         problems += text_problems(path.stem, text)
-        warnings += chord_warnings(path.stem, text)
+        if path.stem not in without_chords_ok:
+            warnings += chord_warnings(path.stem, text)
         try:
             songs.append(parse_song(path.stem, text))
         except ValueError as error:
@@ -226,8 +235,9 @@ class Findings:
 def lint(root: Path) -> Findings:
     entries = read_entries(root)
     errors = check_entries(entries)
-    songs, problems, warnings = load_songs(root)
-    errors += problems
+    without_chords_ok = read_allowlist(root / NO_CHORDS_ALLOWLIST)
+    songs, problems, warnings = load_songs(root, without_chords_ok)
+    errors += problems + unknown_allowlisted(without_chords_ok, {path.stem for path in song_paths(root)})
     if not errors:  # the lints below need valid entries and readable songs
         registry = [normalise(entry) for entry in entries]
         errors += unknown_slugs(songs, registry) + empty_sections(songs, registry)

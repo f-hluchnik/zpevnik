@@ -1,0 +1,7 @@
+# Song ids (file names in songs/ without .tex), one per line, that are right without
+# a \chord or \chords, so tools/lint.py does not warn about them. Every other song
+# without chords still gets the warning. "#" starts a comment; say why next to each id.
+
+ladovskazima            # a score only
+scarboroughfaircarthy   # a score only
+triandele               # a score only

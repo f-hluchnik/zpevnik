@@ -22,6 +22,7 @@ BOOK_AUX_NAME = "zpevnik.aux"           # its main auxiliary file, which lists e
 BOOK_LOG_NAME = "zpevnik.log"           # the log of its last LaTeX run
 CHORD_TRACE_NAME = "zpevnik.chords"     # written by every build, see \chord in zpevnik.sty
 MULTIPAGE_ALLOWLIST = Path("tools/multipage-allowlist.txt")
+NO_CHORDS_ALLOWLIST = Path("tools/no-chords-allowlist.txt")  # songs that are right without chords (lint.py)
 SINGLE_SONG_TEMPLATE = Path("tests/single-song.tex")
 STYLE_FILE = Path("zpevnik.sty")
 SCORES_DIR = Path("scores")              # MuseScore sources, one .mscz per image
