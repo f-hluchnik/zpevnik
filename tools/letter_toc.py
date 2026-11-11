@@ -3,7 +3,8 @@
 `letters_tex` returns the letter row and the letter sections of shared-pages/contents.tex:
 one `\\zpcontentsentry` (zpevnik.sty: a link on the screen, a dotted entry with the page on
 paper) per song, in songbook order, and an italic entry for each alternative title, ordered by
-that title under its own letter. The letter row only exists on the screen: it jumps to a section.
+that title under its own letter. The letter row and the link to the artist index only exist on the
+screen: they jump somewhere.
 
 Python >= 3.11, standard library only.
 """
@@ -63,7 +64,7 @@ def link(target: str, text: str) -> str:
 
 
 def entry_tex(target: str, text: str) -> str:
-    """An entry of the contents: a link on the screen, with its page on paper."""
+    """An entry of the contents: a link, with its page on paper."""
     return f"\\zpcontentsentry{{{target}}}{{{text}}}"
 
 
@@ -81,7 +82,7 @@ def letters_tex(songs: list[Song]) -> str:
     lines = [
         "\\begin{center}\n\\begin{Large}\n",
         f"\\zpscreenorprint{{{row}\n\\vspace{{5pt}}\n\n}}{{}}\n",
-        f"\\zpcontentsnote{{{ARTIST_INDEX_ANCHOR}}}{{{ARTIST_INDEX_LINK}}}\n",
+        f"\\zpscreenorprint{{{link(ARTIST_INDEX_ANCHOR, ARTIST_INDEX_LINK)}}}{{}}\n",
         "\\end{Large}\n\n\\zprule{10cm}\n\\end{center}\n\n\n",
         "\\begin{multicols}{2}\n",
     ]

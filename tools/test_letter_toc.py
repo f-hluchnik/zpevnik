@@ -58,7 +58,7 @@ class LettersTex(unittest.TestCase):
         tex = letters_tex(self.SONGS)
         self.assertIn(r"\hyperlink{A}{A}\hfill \hyperlink{C}{C}\hfill \hyperlink{Cc}{Č}\hfill "
                       r"\hyperlink{D}{D}\hfill \hyperlink{CH}{CH}\hfill \hyperlink{Z}{Z}", tex)
-        self.assertIn(r"\zpcontentsnote{podleinterpreta}{řazení podle interpretů}", tex)
+        self.assertIn(r"\zpscreenorprint{\hyperlink{podleinterpreta}{řazení podle interpretů}}{}", tex)
 
     def test_the_letter_row_is_for_the_screen_only(self):
         tex = letters_tex(self.SONGS)

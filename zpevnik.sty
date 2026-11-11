@@ -39,15 +39,12 @@
 % \zpscreenorprint{screen}{print}: the first on the screen, the second on paper.
 \newcommand{\zpscreenorprint}[2]{\ifzp@print#2\else#1\fi}
 % The contents (generated/obsah-*.tex, shared-pages/contents.tex). \zpcontentsentry{target}{text}:
-% a link on the screen; on paper the text, a dotted leader and the page of the target. \noindent:
-% the style's negative \parindent would start the line left of its column and end the leader
-% in the gap of the next one.
-% \zpcontentsnote{target}{text}: the same for a line that only points somewhere.
+% a link, and on paper also a dotted leader and the page of the target. \noindent: the style's
+% negative \parindent would start the line left of its column, and a long title would run into
+% the neighbouring column instead of wrapping inside its own.
 \newcommand{\zpcontentsentry}[2]{%
-  \zpscreenorprint{\hyperlink{#1}{#2}}
-    {\noindent\hyperlink{#1}{#2}\nobreak\dotfill\nobreak\makebox[2em][r]{\pageref{zp:#1}}}}
-\newcommand{\zpcontentsnote}[2]{%
-  \zpscreenorprint{\hyperlink{#1}{#2}}{#2\ (str.~\pageref{zp:#1})}}
+  \noindent\hyperlink{#1}{#2}%
+  \zpscreenorprint{}{\nobreak\dotfill\nobreak\makebox[2em][r]{\pageref{zp:#1}}}}
 
 %PAGE LAYOUT AND NAMED LENGTHS
 % The label (R., 1., I., ...) hangs in the left margin by this much: the first
