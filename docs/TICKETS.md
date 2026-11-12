@@ -59,7 +59,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | J3 | done | `tools/songs.schema.json` (JSON Schema 2020-12) and its tests with `jsonschema` pinned in `requirements-dev.txt`; CI installs it: PR #128 (D-165) |
 | J4 | done | CI builds `songs.json` and validates the whole file against the schema on every run; a push to `master` releases `songs.json` and `scores.zip` (the score SVGs) with the PDFs (D-166): PR #129 |
 | J5 | done | done with J0's scores (D-136): PR #89 |
-| W1 | todo | |
+| W1 | done | `build.py` of `zpevnik-web` downloads `songs.json` from the release into `build/` and checks `schemaVersion` (`--songs-json FILE` for a local one): zpevnik-web PR #4 |
 | W2 | todo | |
 | W3 | todo | |
 | W4 | todo | |
