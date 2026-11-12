@@ -105,9 +105,13 @@ That push to `zpevnik-web` starts its workflow (`deploy.yml`). `build.py` reads 
 
 ## Where the weak points are
 
-- **The chord rule exists twice**: in TeX (`zpevnik.sty`) and in CSS. The PDF is protected by the PDF diff and the overlap check; I found no automated check that the web layout matches it (`check_site.py` checks pages and links, not layout). W6a, the narrow-screen wrapping of `folsomprisonblues`, is a consequence of the two implementations differing.
-- **The converter is a second reader of the song files**: `songs.py` still reads the same files with regexes (backlog item, D-164).
+Already tracked:
+
+- **The converter is a second reader of the song files**: `songs.py` still reads the same files with regexes (TICKETS.md, backlog *One reader of the songs*, D-164).
 - **Not verified on real devices**: the wake lock, the search keyboard, `#page=N` in a phone's PDF viewer (HISTORY.md, phase 9).
+- **Chords wrap oddly on a narrow screen**: the chord rule is implemented twice, in TeX (`zpevnik.sty`) and in CSS, by design (D-123 on the web). A browser moves a chord-and-text `inline-block` to the next line whole, where TeX breaks at any space. This is W6a, optional (TICKETS.md).
+
+Not tracked anywhere: **nothing automated compares the web layout with the PDF.** The PDF is protected by the PDF diff and the overlap check; `check_site.py` checks that pages exist and links resolve, not how a line looks. W6a's own verification is by hand (screenshots, measuring in a browser), so a change to `songbook.css` or `_song.html` could break the rule on the web unnoticed. Whether that is worth a ticket is the owner's call.
 
 ## Where to look when…
 
