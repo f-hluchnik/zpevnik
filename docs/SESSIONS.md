@@ -45,30 +45,20 @@ E5 merged (PR #106, D-149): the CI finds, builds, checks and releases every edit
 ### Session 21b · E6 — done (11 Nov 2026)
 E6 (PRs f-hluchnik/zpevnik-web#3, merged first, and f-hluchnik/zpevnik#107, D-150): the website downloads the PDFs from the release `v<version.txt>`, the buttons come from `EDITION_DOWNLOADS` in its `build.py`, the songbook CI writes only `version.txt`. The owner archives `zpevnik-lidovky` himself once the page is live.
 
-### Session 21c · P0 · Sonnet · `zpevnik`
-- **Needs:** the print edition (`editions/<name>/edition.toml`, prepared by the owner by hand, D-148); E5 and E6 first (owner, 11 Nov 2026).
-- **Read:** DECISIONS D-122, D-129, D-139, D-142, D-143, D-147 · PLAN WP9 · TICKETS P0, P1.
-- **Notes:** A report, not a change of the book: zero diff for the screen PDF, nothing merged except what the owner picks. Propose how the A5 geometry reaches the document (a parameter, no copy of `zpevnik.tex`) in the PR before coding. The owner answers P1 after reading the report.
+### Session 21c · P0 — done (11 Nov 2026)
+P0 merged (PR #113): the print feasibility report with the printer checklist (`docs/p0-print-report.md`); the geometry trial stays a one-off branch (D-154).
 
-### Session 22 · P3 · Sonnet · `zpevnik`
-- **Needs:** P0, and P1 answered by the owner (page size, binding, deadline, full book or subset, the scaled PDF checked on paper); E4 only if a subset.
-- **Read:** DECISIONS D-122, D-129, D-139, D-142, D-143 (format, page numbering) and the P1 entry · PLAN WP9 · README (one page per song).
-- **Notes:** The screen PDF must not change (zero diff). The scaled print is the default; the geometry trial was P0's report and is merged only if the owner picks it. P4 is not here: it needs the final content.
+### Session 22 · P3 — done (11–12 Nov 2026)
+P3 merged (PRs #114–#116, D-154–D-157): the print formats `print` and `print-black`, page numbers on paper, the A5 PDF with the spine shift (`make print`). P1 (the printer's and the owner's answers) and P4 (the proof, on the final content) are open.
 
-### Session 22a · A1 · Sonnet · `zpevnik`
-- **Needs:** P3 (the README then covers editions and print).
-- **Read:** the README and `docs/` as the reader sees them · TICKETS A1.
-- **Notes:** Report first, change after the owner's OK. Run every command the README gives.
+### Session 22a · A1 — done (12 Nov 2026)
+A1 merged (PR #117, D-158): the README follows the owner's work; changes reach `master` only through a pull request.
 
-### Session 22b · A2 · Sonnet · `zpevnik`
-- **Needs:** nothing, but after P3 so that the tests it adds are included.
-- **Read:** TICKETS A2 · `tools/test_*.py` · DECISIONS for the decisions the tests protect.
-- **Notes:** Report first (a table, module by module, with evidence), removals only after the owner's OK. `coverage` may be installed for the audit, not added to the repository.
+### Session 22b · A2 — done (12 Nov 2026)
+A2 merged (PR #118, D-159): 8 tests dropped (252 → 244), the rest kept on the evidence of a mutation run.
 
-### Session 22c · A3 · Sonnet · `zpevnik`
-- **Needs:** E5 (every edition builds in CI) and P3.
-- **Read:** TICKETS A3 · the CI workflow · the backlog item *CI speed*.
-- **Notes:** Measure before proposing; the PDF diff must stay at zero for every accepted change; one PR per accepted proposal.
+### Session 22c · A3 — done (12 Nov 2026)
+A3 (PRs #119 and #120, D-160): the apt step hardened, the PDF diff compares every edition; the other speed-ups were measured and not adopted. Phase 12 closed (HISTORY.md, archive/phase-12-audits/).
 
 ### Any session · P4 · Sonnet · `zpevnik`
 - **Needs:** P3, and the final content: the owner's new songs and K1 (D-147).
@@ -112,5 +102,5 @@ E6 (PRs f-hluchnik/zpevnik-web#3, merged first, and f-hluchnik/zpevnik#107, D-15
 | Decision | Where | Blocks |
 |---|---|---|
 | E4 songs for `zpevnik-lite` | TICKETS E4 | after the printed edition (D-147): nothing now |
-| P1 print requirements and deadline, after P0's report | TICKETS P1 | session 22 |
+| P1 print requirements and deadline (the printer's answers, D-157) | TICKETS P1 | P4 |
 | The owner's new songs (about ten) and K1 chords | TICKETS K1 | P4 |

@@ -125,18 +125,27 @@ jobs:
 
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
-      # differ. The report never fails the build.
+      # and pages differ, for every edition the base has too (an edition's own
+      # pages are only in its PDF). The report never fails the build.
       - name: Check out base for the PDF diff
+        id: base
         if: github.event_name == 'pull_request'
         run: |
           base=HEAD^1
           git rev-parse --verify -q HEAD^2 >/dev/null || base="${{ github.event.pull_request.base.sha }}"
           git worktree add base "$base"
+          shared=""
+          for edition in ${{ steps.editions.outputs.names }}; do
+            if [ -f "base/editions/$edition/edition.toml" ]; then shared="$shared $edition"; fi
+          done
+          echo "editions=$shared" >> "$GITHUB_OUTPUT"
 
-      # The base only has a generator once an earlier ticket has added one.
       - name: Generate derived files for base
         if: github.event_name == 'pull_request'
-        run: if [ -f base/tools/generate.py ]; then python3 base/tools/generate.py base; fi
+        run: |
+          for edition in ${{ steps.base.outputs.editions }}; do
+            python3 base/tools/generate.py --edition "$edition" base
+          done
 
       # A base with tools/scores.py exports its scores like the head; an older base
       # has the images committed.
@@ -151,13 +160,25 @@ jobs:
         with:
           texlive_version: 2023
           run: |
+            set -eu
             apk add --no-cache python3
             cd base
-            python3 tools/build_edition.py
+            for edition in ${{ steps.base.outputs.editions }}; do
+              python3 tools/build_edition.py --edition "$edition"
+            done
 
+      # An edition the base does not have is new: nothing to compare it with. A diff
+      # that cannot run is named in the summary, and the other editions are still compared.
       - name: Song-by-song PDF diff
         if: github.event_name == 'pull_request'
-        run: python3 tools/pdfdiff.py --base base --head . | tee -a "$GITHUB_STEP_SUMMARY"
+        run: |
+          for edition in ${{ steps.editions.outputs.names }}; do
+            case " ${{ steps.base.outputs.editions }} " in
+              *" $edition "*) python3 tools/pdfdiff.py --base base --head . --edition "$edition" \
+                                || printf '## Song-by-song PDF diff: %s\n\nFAILED: see the log.\n\n' "$edition" ;;
+              *) printf '## Song-by-song PDF diff: %s\n\nA new edition: the base has nothing to compare it with.\n\n' "$edition" ;;
+            esac
+          done | tee -a "$GITHUB_STEP_SUMMARY"
 
       - name: Compute version
         id: version
