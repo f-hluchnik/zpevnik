@@ -53,7 +53,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
 | A1 | done | README rewritten in the order of the owner's work; no direct push to `master` (D-158) |
 | A2 | done | 8 tests dropped (252 → 244), the rest kept on evidence (D-159) |
-| A3 | todo | audit of the build and CI speed |
+| A3 | in progress | measured and agreed (D-160): apt hardening (this PR), then the PDF diff of every edition |
 | J0 | done | song quirks: PR #88 (D-135); scores: PR #89 (D-136) |
 | J1 | todo | strong model (parser design) |
 | J2 | todo | strong model (data model = contract between repos) |
@@ -289,4 +289,4 @@ Done for every phase up to 11 (HISTORY.md, docs/archive/). At the end of each ph
 - **Grouping verses, tight versus loose** (owner, `ejhorahora`): short one-line verses looked better tight; a way to group verses (tight inside, normal gap between groups). Not necessary.
 - **Bigger gap between groups of verses, and bilingual songs** (owner, `jednoubudemdal`): the Czech and the English version share one page; by the logic of the songbook they should be two songs. Not necessary.
 - **Refactoring story on the website** (owner, 5 Nov 2026): notes are in HISTORY.md; write the article when the online songbook exists.
-- **CI speed** (4 Nov 2026): a PR check takes about 3.5 min; 132 s is the first `xu-cheng/latex-action` step downloading the TeX Live 2023 container, poppler adds 12–29 s. Tried and not adopted: Ubuntu's own TeX Live 2023 via apt (identical output, but a 15 min install; PR #37, closed). Not tried: skip the poppler install if the runner has it; a smaller TeX image with the needed packages. Q3 may change the picture.
+- **CI speed:** measured and decided in A3 (D-160): most of a run is pulling the TeX Live image (about 80 s), and the options to avoid it were not adopted. Tried earlier and not adopted: Ubuntu's own TeX Live 2023 via apt (identical output, but a 15 min install; PR #37, closed).

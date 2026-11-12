@@ -13,6 +13,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # A normal run takes about 4 minutes; a hung step must not hold the runner for the
+    # default 6 hours.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,13 +44,18 @@ jobs:
 
       # MuseScore runs headless under a virtual display (xvfb); it needs some X and
       # OpenGL libraries the runner may lack. rsvg-convert turns the SVGs into PDFs
-      # for pdfLaTeX. CMU Serif is the font of the shared score style.
-      - name: Install the score export tools
+      # for pdfLaTeX. CMU Serif is the font of the shared score style. Poppler is for
+      # the PDF diff of pull requests; one apt call for all of them. The step normally
+      # takes about 15 s: the time limit and the retries keep a mirror outage from
+      # holding the run for 15 minutes (as on 11 Nov 2026); re-run the job then.
+      - name: Install the score export and PDF diff tools
+        timeout-minutes: 5
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb librsvg2-bin fonts-cmu libopengl0 libegl1 \
-            libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
-            libxcb-render-util0 libxcb-xinerama0 libxcb-shape0
+          apt="sudo apt-get -o Acquire::Retries=3"
+          $apt update
+          $apt install -y xvfb librsvg2-bin fonts-cmu poppler-utils \
+            libopengl0 libegl1 libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-shape0
 
       - name: Cache MuseScore
         id: musescore-cache
@@ -146,10 +154,6 @@ jobs:
             apk add --no-cache python3
             cd base
             python3 tools/build_edition.py
-
-      - name: Install poppler
-        if: github.event_name == 'pull_request'
-        run: sudo apt-get update && sudo apt-get install -y poppler-utils
 
       - name: Song-by-song PDF diff
         if: github.event_name == 'pull_request'
