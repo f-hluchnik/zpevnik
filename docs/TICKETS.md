@@ -61,7 +61,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | J5 | done | done with J0's scores (D-136): PR #89 |
 | W1 | done | `build.py` of `zpevnik-web` downloads `songs.json` from the release into `build/` and checks `schemaVersion` (`--songs-json FILE` for a local one): zpevnik-web PR #4 |
 | W2 | done | one page per song at `/zpivej/<id>/` from `songs.json` and `scores.zip`, the chord rule of D-123 in CSS, noindex, font-size control, 404 for unknown songs (D-167); the hyphen inside a split word is shown only where the gap is wide enough (README of `zpevnik-web`): zpevnik-web PR #5 |
-| W3 | todo | |
+| W3 | done | the index at `/zpivej/` (the contents of `songs.json`, never re-sorted), the artists and collections at `/zpivej/interpret/`, the navigation, links between songs and artists, previous/next in book order, "open in PDF" at the song's page, the link from the download page and from `404.html` (D-168): zpevnik-web PR #6 |
 | W4 | todo | |
 | W5 | todo | |
 | W6 | todo | |
