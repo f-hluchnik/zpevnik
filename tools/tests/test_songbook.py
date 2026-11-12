@@ -49,6 +49,10 @@ class TexRules(unittest.TestCase):
         self.assertEqual(len([item for item in row if item.chord]), 2)
         self.assertEqual(plain(row[-1].text), " in C♯ dur")
 
+    def test_a_slash_before_anything_but_a_note_name_is_text(self):
+        row = first_block(r"\vers{\chord{D\add{6/9}}a \chord{1. E\7 / 2. C}b}").lines[0].items
+        self.assertEqual([part.text for item in row for part in item.chord.parts], ["D", "6/9", "1. E", "7", " / 2. C"])
+
     def test_a_chord_ends_at_the_end_of_its_group(self):
         block = first_block(r"\vers{\rep{\chord{A}la} da \chord{B}di}")
         self.assertEqual(line_texts(block), ["|[A]la| da [B]di"])
@@ -139,6 +143,7 @@ class Errors(unittest.TestCase):
         "is only in a part": "\\note{\\chord{A}a}",
         "a backslash at the end of a line": "\\vers{a\\\nchord{A}b}",
         "a sharp is": "\\vers{\\chord{\\bas{A A\\#}}a}",
+        "a bass note written as": "\\vers{\\chords{C/G}}",
         "unknown environment": "\\begin{center}\\vers{a}\\end{center}",
         "after an empty line": "\\vers{a\\\\\n\\\\\nb}",
     }

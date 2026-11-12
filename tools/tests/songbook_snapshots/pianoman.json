@@ -211,8 +211,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "G/H",
+          "text": "G/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
          }
         ]
        },
@@ -231,8 +236,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "F/A",
+          "text": "F/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "A",
+          "position": "subscript"
          }
         ]
        },
@@ -251,8 +261,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "C/G",
+          "text": "C/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "subscript"
          }
         ]
        },
@@ -295,8 +310,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "C/E",
+          "text": "C/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "subscript"
          }
         ]
        },
@@ -391,8 +411,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "G/H",
+          "text": "G/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
          }
         ]
        },
@@ -411,8 +436,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "F/A",
+          "text": "F/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "A",
+          "position": "subscript"
          }
         ]
        },
@@ -431,8 +461,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "C/G",
+          "text": "C/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "subscript"
          }
         ]
        },
@@ -606,8 +641,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "Am/G",
+          "text": "Am/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "subscript"
          }
         ]
        },
@@ -626,13 +666,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "D/F",
+          "text": "D/",
           "position": "base"
          },
          {
           "type": "ChordPart",
-          "text": "♯",
-          "position": "superscript"
+          "text": "F♯",
+          "position": "subscript"
          }
         ]
        },
@@ -689,8 +729,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "Am/G",
+          "text": "Am/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "subscript"
          }
         ]
        },
@@ -709,13 +754,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "D/F",
+          "text": "D/",
           "position": "base"
          },
          {
           "type": "ChordPart",
-          "text": "♯",
-          "position": "superscript"
+          "text": "F♯",
+          "position": "subscript"
          }
         ]
        },
@@ -778,8 +823,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "G/F",
+          "text": "G/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "subscript"
          }
         ]
        },
@@ -792,8 +842,13 @@
         "parts": [
          {
           "type": "ChordPart",
-          "text": "C/E",
+          "text": "C/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "subscript"
          }
         ]
        },
@@ -816,8 +871,13 @@
          },
          {
           "type": "ChordPart",
-          "text": "/D",
+          "text": "/",
           "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "subscript"
          }
         ]
        },
