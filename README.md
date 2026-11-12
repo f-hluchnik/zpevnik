@@ -127,7 +127,7 @@ Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
 - Celý zpěvník je v `\Large`. Když se písnička nevejde na stranu ani s mezerami smrštěnými na nulu, přidá se za hlavičku `\large` a komentář proč. Velikost písma se do dalších písniček nepřenáší (každá písnička běží ve skupině).
 - Ruční `\vspace` do písniček nepiš: mezery mezi bloky jsou automatické a noty se zarovnají samy (viz [Noty](#noty)).
 
-`make check` hlásí každou písničku, která zabere víc než jednu stranu. Když se písnička opravdu musí zapsat na dvě strany (viz [Filosofie zpěvníku](#filosofie-zpěvníku), bod 1), zapíšu její `id` do `tools/multipage-allowlist.txt` s komentářem proč; kontrola ji pak pustí.
+`make check` hlásí každou písničku, která zabere víc než jednu stranu. Když se písnička opravdu musí zapsat na dvě strany (viz [Filosofie zpěvníku](#filosofie-zpěvníku), bod 1), zapíšu její `id` do `data/multipage-allowlist.txt` s komentářem proč; kontrola ji pak pustí.
 
 ### Noty
 Každý obrázek s notami je jeden soubor `scores/<název>.mscz` z MuseScoru 4 a v písničce ho vysází `\score{<název>}`. Na začátku bloku stojí vedle štítku (`\intro{` + `\score{pohadka}` + `}`), jinde na vlastním řádku. Do písničky se nepíše žádné odsazení, posun ani šířka: obrázek začíná tam, kde text bloku, štítek stojí uprostřed první osnovy a všechny noty mají stejné měřítko (celý systém přesně vyplní řádek).
@@ -155,7 +155,7 @@ Mezery mezi akordy a texty se nepíšou ručně, o rozestup se stará sazba: ako
 - `\gap{n}` - záměrná pauza (akord zazní a zpívá se až za chvíli), `n` je počet znaků po půl em, například `\chord{G}\gap{4}text`. Uvnitř slova pauzu nepíšu.
 - `\chords{}` - řádek samých akordů bez slov (intro, konec řádku, `\intro{\chords{Am F G}}`), akordy se píšou oddělené mezerou a vysázejí se červeně. Jeden řádek lze zúžit nebo rozšířit volitelným parametrem, např. `\chords[0.55em]{Am F G}`.
 
-Písničku bez akordů `make check` ohlásí jako varování. Je-li bez akordů správně (například obsahuje jen noty), zapíšu její `id` do `tools/no-chords-allowlist.txt` s komentářem proč; kontrola ji pak nehlásí a ohlásí naopak `id`, které není písnička.
+Písničku bez akordů `make check` ohlásí jako varování. Je-li bez akordů správně (například obsahuje jen noty), zapíšu její `id` do `data/no-chords-allowlist.txt` s komentářem proč; kontrola ji pak nehlásí a ohlásí naopak `id`, které není písnička.
 
 ### Interpreti a registr interpretů
 Každá písnička má na řádku s `\song{}` příkaz `\artist{<kotva>}`, například `\artist{ericclapton}` pro Erica Claptona. Kotva je záznam v souboru `data/artists.toml`; odtud se bere i jméno interpreta, které se vysází vpravo nahoře jako odkaz na jeho sekci v obsahu. Jméno lze u jedné písničky přepsat: `\artist[Jiné jméno]{ericclapton}`. Má-li písnička dva interprety, napíšu `\artist{prvni}\artist{druhy}` (první je vpravo, třetí se nevysází). Písnička bez známého interpreta má `\artist{}`; prázdná nebo neznámá kotva nevysází nic (`make check` ale neznámou kotvu nahlásí jako chybu).
