@@ -200,7 +200,7 @@ PDF pro tiskárnu v A5: `make print EDITION=<název>` (formát `print`, nebo `FO
 ## Publikování
 Do větve `master` se nepushuje přímo: každá změna jde přes vlastní větev a pull request.
 
-1. **Pull request.** GitHub Actions (`.github/workflows/build-and-publish.yml`) spustí stejné kontroly jako `make check` pro každé vydání (každou složku `editions/`), takže nové vydání se kontroluje samo, bez úpravy workflow. Navíc porovná PDF celého zpěvníku po jednotlivých písničkách s PDF před změnou; výsledek je v souhrnu běhu. Rozdíly build neshodí, ale před sloučením je projdu.
+1. **Pull request.** GitHub Actions (`.github/workflows/build-and-publish.yml`) spustí stejné kontroly jako `make check` pro každé vydání (každou složku `editions/`), takže nové vydání se kontroluje samo, bez úpravy workflow. Navíc porovná PDF každého vydání po jednotlivých písničkách i stranách s PDF před změnou (nové vydání nemá s čím); výsledek je v souhrnu běhu. Rozdíly build neshodí, ale před sloučením je projdu.
 2. **Sloučení do `master`.** Workflow znovu sestaví každé vydání, vytvoří GitHub Release `v<verze>` s PDF každého vydání (`zpevnik-<vydání>-<verze>.pdf`, celý zpěvník jako `zpevnik-full-<verze>.pdf`) a zapíše verzi do repozitáře webu ([zpevnik-web](https://github.com/f-hluchnik/zpevnik-web)). Ten si PDF z Release stáhne a nasadí web https://zpevnik.hluchnikovi.cz. Celý zpěvník je navíc stále na pevné adrese https://zpevnik.hluchnikovi.cz/static/files/zpevnik_last.pdf, na kterou míří vytištěné QR kódy. Která vydání web nabízí a v jakém pořadí, se nastavuje v repozitáři webu (`EDITION_DOWNLOADS` v `build.py`).
 
 Verze zpěvníku má tři čísla `major.minor.patch` a vypíše ji `python3 tools/generate.py --version`:

@@ -92,6 +92,14 @@ What changed in the songbook refactoring and why, phase by phase (DECISIONS D-12
 - E6 (zpevnik-web#3 and #107, D-150): the website holds no songbook PDF; its build downloads the PDFs of the release named in `version.txt`, and the songbook CI only writes that file after creating the release. The download buttons are a list in the web's `build.py`; the full book keeps the fixed URL `zpevnik_last.pdf` (printed QR codes), `lidovky` is the edition from the release instead of the 2020 book, so the repository `zpevnik-lidovky` can be archived.
 - Helper files: archive/phase-9a-delivery/ (the two ticket texts).
 
+## Phase 12 · Audits (A1–A3) · 12 Nov 2026 · PRs #117–#120
+
+The owner wanted the README, the tests and the build reviewed before the converter (D-147); each audit reported first and changed only what he agreed to.
+- A1 (#117, D-158): every command of the README run and every path checked: nothing was wrong, but the song procedure was written twice, `make check` three times, and the two-page allow-list not at all. The README now follows the owner's work (setup, a new song, the writing reference, editions and print, publishing, one list of commands). Changes reach `master` only through a pull request.
+- A2 (#118, D-159): 252 tests checked with coverage per test and a throwaway mutation run (1,771 small code changes): they catch 96 % of the logic changes, so the suite stays; 8 tests that another check covers were dropped (244 left).
+- A3 (#119, #120, D-160): most of a CI run (about 80 s of 170–210 s) is pulling the TeX Live image, and none of the ways around it was worth its risk. The apt step got retries and time limits after a mirror outage held a run for 15 minutes; the PDF diff compares every edition, so an edition's own pages (cover, title page, imprint, contents) are reviewed too, for about 8 s per pull request.
+- Helper files: archive/phase-12-audits/ (the three ticket texts). The audit scripts (coverage, mutation) were throwaway and not committed.
+
 ## Closing the refactoring · 6 Nov 2026
 
 With Q6 (#86) the refactoring is finished: phases 1, 2, 4, 5, 6 and 11, 61 merged pull requests (#23–#86) in four days. The planning docs moved from the owner's computer into `docs/` of this repository (D-134), so work can continue from any device.

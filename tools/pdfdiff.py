@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Song-by-song PDF diff between two builds of the songbook.
 
-Usage: python3 tools/pdfdiff.py --base BASE_DIR --head HEAD_DIR [--dpi 72]
+Usage: python3 tools/pdfdiff.py --base BASE_DIR --head HEAD_DIR [--edition NAME] [--dpi 72]
 
-Both directories hold a compiled checkout; the full book is compared (its PDF and
-auxiliary files in build/editions/full/, or in the root for a base built before
-editions existed). Pages are mapped to song ids with the page checkpoints
+Both directories hold a compiled checkout; one edition is compared (default: full),
+its PDF and auxiliary files in build/editions/<name>/ of both. CI runs it for every
+edition the base has too, so an edition's own pages are compared like the full
+book's. Pages are mapped to song ids with the page checkpoints
 that check_pages.py reads, so a song is compared with itself wherever it sits
 in the book. The page-number footer is left out of every comparison. Front
 matter and the pages after the last song (the table of contents) are compared
@@ -25,7 +26,7 @@ import tempfile
 from pathlib import Path
 
 from check_pages import song_pages
-from paths import BOOK_PDF_NAME, DEFAULT_EDITION, edition_output_dir
+from paths import BOOK_PDF_NAME, add_edition_argument, edition_output_dir
 
 FOOTER_TOP_PT = 805.0  # the page number sits at y = 808-817 pt on an A4 page
 VERSION = re.compile(r"\d+\.\d+\.(\d+|\?)")  # 8.33.71, or 8.33.? without Git history
@@ -37,10 +38,10 @@ MAX_LISTED = 60
 
 
 class Build:
-    def __init__(self, root: Path, dpi: int, tmp: Path, label: str):
+    def __init__(self, root: Path, edition: str, dpi: int, tmp: Path, label: str):
         self.root = root
         self.dpi = dpi
-        output_dir = root / edition_output_dir(DEFAULT_EDITION)
+        output_dir = root / edition_output_dir(edition)
         self.pdf = output_dir / BOOK_PDF_NAME
         if not self.pdf.exists():
             raise SystemExit(f"ERROR: {self.pdf} not found")
@@ -159,13 +160,14 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", required=True, type=Path)
     ap.add_argument("--head", required=True, type=Path)
+    add_edition_argument(ap)
     ap.add_argument("--dpi", type=int, default=72)
     args = ap.parse_args()
 
     with tempfile.TemporaryDirectory() as t:
         tmp = Path(t)
-        base = Build(args.base.resolve(), args.dpi, tmp, "base")
-        head = Build(args.head.resolve(), args.dpi, tmp, "head")
+        base = Build(args.base.resolve(), args.edition, args.dpi, tmp, "base")
+        head = Build(args.head.resolve(), args.edition, args.dpi, tmp, "head")
 
         added = [s for s in head.order if s not in base.songs]
         removed = [s for s in base.order if s not in head.songs]
@@ -207,7 +209,7 @@ def main() -> int:
         if len(base_back) != len(head_back):
             back_note = f" Pages after the songs: {len(base_back)} → {len(head_back)}."
 
-    out = ["## Song-by-song PDF diff", ""]
+    out = [f"## Song-by-song PDF diff: {args.edition}", ""]
     out.append(f"Base: {base.pages} pages, {len(base.songs)} songs · "
                f"Head: {head.pages} pages, {len(head.songs)} songs · "
                f"unchanged songs: {len(common) - len(changed)}")
