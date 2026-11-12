@@ -63,7 +63,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | W2 | done | one page per song at `/zpivej/<id>/` from `songs.json` and `scores.zip`, the chord rule of D-123 in CSS, noindex, font-size control, 404 for unknown songs (D-167); the hyphen inside a split word is shown only where the gap is wide enough (README of `zpevnik-web`): zpevnik-web PR #5 |
 | W3 | done | the index at `/zpivej/` (the contents of `songs.json`, never re-sorted), the artists and collections at `/zpivej/interpret/`, the navigation, links between songs and artists, previous/next in book order, "open in PDF" at the song's page, the link from the download page and from `404.html` (D-168): zpevnik-web PR #6 |
 | W3a | done | two levels of navigation: the tabs "Stáhnout" and "Zobrazit online" on every page, the songbook's own row under `/zpivej/` (D-169), smaller font buttons: zpevnik-web PR #7 |
-| W4 | in review | `/zpivej/hledat/` and `static/search-index.json` (title, other titles, artists, lyrics; 262 kB gzipped), loaded when the field is first used, case and diacritics ignored, all words must occur, ranked title / artist / lyrics, the query in `?q=` (D-170): zpevnik-web PR #8 |
+| W4 | done | `/zpivej/hledat/` and `static/search-index.json` (title, other titles, artists, lyrics; 262 kB gzipped), loaded when the field is first used, case and diacritics ignored, all words must occur, ranked title / artist / lyrics, the query in `?q=` (D-170): zpevnik-web PR #8 |
+| W4a | in review | search matches from the start of words; style sheets, scripts and the search index get a content hash in their URL, so a browser never combines new pages with an old style sheet (D-171): zpevnik-web PR #9 |
 | W5 | todo | |
 | W6 | todo | |
 | W6a | todo | segments of a line wrap freely (D-123 on the web), after W6 |
@@ -246,6 +247,9 @@ The owner looked at the live W3 pages: the link to the songbook was a download-s
 
 ### W4 · Search — [agent] · M · needs W2
 Build-time index over title, alternative titles, artist and lyrics (about 270 kB gzipped), loaded on first use, diacritics-insensitive, no libraries unless tiny.
+
+### W4a · Search from the start of words, versioned URLs — [agent] · S · needs W4 · added after W4 (owner, 12 Nov 2026)
+The owner tried the live search. (1) A word of the query must begin a word of the text (`jede` no longer finds `pojedeme`). (2) On his desktop the search page looked unstyled (a tiny box, a numbered list) while his phone showed it right: the browser had `songbook.css` from before W4 cached (GitHub Pages: ten minutes), so the new page met the old style sheet. Style sheets, scripts and the search index are now asked for as `<path>?v=<hash of the content>`. See D-171.
 
 ### W5 · Wake lock — [agent] · S · needs W2
 A toggle on the song page using the Screen Wake Lock API; hidden where unsupported.
