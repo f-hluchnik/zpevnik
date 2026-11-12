@@ -66,9 +66,9 @@ A print version of any edition: by default the screen PDF scaled to the print pa
 4. Published as a **release asset** of `zpevnik`; the web build downloads the version pinned in its `version.txt` instead of committing generated data into the web repo (D-110).
 5. One file for now (≈370 kB gzipped); split only if it passes a few MB.
 
-**Contents.** `version`, `songs[]` (`id`, `title`, `altTitles`, `artists`, `subtitle`, `see`, `order`, `page`, `footnotes`, `images`, `columns`, `blocks[]` → lines → chord/text segments), `artists[]` (from the registry).
+**Contents.** `version`, `songs[]` (`id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see`, `order`, `page`, `footnotes`, `images`, `columns`, `blocks[]` → lines → chord/text segments), `artists[]` (from the registry). The exact shape follows the converter's model (D-164) and is decided in J2.
 
-**Steps.** First the owner decides the remaining song quirks (score images get a `\score` command, echo lines, layout-only places; J0). Then the converter in `tools/`, strict (an unknown macro is an error), with snapshot tests and a whole-book parse (J1); `songs.json` with registry, metadata and `page` (J2); JSON Schema (J3); CI and release asset (J4); score images exported from the `.mscz` files with a pinned MuseScore, for the PDF and the web (J5, D-125).
+**Steps.** First the owner decides the remaining song quirks (score images get a `\score` command, echo lines, layout-only places; J0). Then the converter in `tools/`, strict (an unknown macro is an error), with snapshot tests and a whole-book parse (J1); `songs.json` with registry, metadata and `page` (J2); JSON Schema (J3); CI and release asset (J4); score images exported from the `.mscz` files with a pinned MuseScore, for the PDF and the web (J5, D-125; done with J0, D-136). Done so far: J0, J0a, J1, J5.
 
 ## WP7 – Legal hygiene (reasonable effort, not legal advice)
 
