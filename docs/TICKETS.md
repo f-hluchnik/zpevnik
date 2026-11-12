@@ -49,9 +49,9 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P0 | done | print feasibility report with the printer checklist: `docs/p0-print-report.md` (PR #113); the geometry trial stays a one-off branch (D-154) |
 | P1 | open | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
 | P2 | cancelled | the book is never sold (D-140) |
-| P3 | done | the scaled print: output formats `print`, `print-black` (D-154, PR #114), page numbers in the contents and `\seealso` (D-155, PR #115), the A5 PDF with the spine shift and `make print` (D-156, PR C); the geometry trial stays a one-off branch, only if the scaled text is too small on paper. P4 comes on the final content |
+| P3 | done | the scaled print: output formats `print`, `print-black` (D-154, PR #114), page numbers in the contents and `\seealso` (D-155, PR #115), the A5 PDF with the spine shift and `make print` (D-156, PR #116); the geometry trial stays a one-off branch, only if the scaled text is too small on paper. P4 comes on the final content |
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
-| A1 | todo | audit of the README |
+| A1 | done | README rewritten in the order of the owner's work; no direct push to `master` (D-158) |
 | A2 | todo | audit of the unit tests |
 | A3 | todo | audit of the build and CI speed |
 | J0 | done | song quirks: PR #88 (D-135); scores: PR #89 (D-136) |
