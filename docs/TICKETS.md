@@ -42,12 +42,12 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | E2 | done | editions in the generator and the build (D-144): PR #96 |
 | E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
-| E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; the owner archives `zpevnik-lidovky` after E5 |
+| E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; `zpevnik-lidovky` is archived (owner, after E5) |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
 | P0 | done | print feasibility report with the printer checklist: `docs/p0-print-report.md` (PR #113); the geometry trial stays a one-off branch (D-154) |
-| P1 | open | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
+| P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
 | P2 | cancelled | the book is never sold (D-140) |
 | P3 | done | the scaled print: output formats `print`, `print-black` (D-154, PR #114), page numbers in the contents and `\seealso` (D-155, PR #115), the A5 PDF with the spine shift and `make print` (D-156, PR #116); the geometry trial stays a one-off branch, only if the scaled text is too small on paper. P4 comes on the final content |
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
