@@ -51,7 +51,7 @@ Not a goal of this refactor. The only constraint: the generator takes an ordered
 *Context:* the lidovky PDF (2020) equals today's 76 songs tagged `lidove`, so a later edition could be a tag filter.
 
 ### D-103 · The online songbook lives in `zpevnik-web`, separate from the download page — Agreed (3 Nov 2026)
-One repo, one build, one GitHub Pages site and domain. The download page stays as it is at `/`; the online songbook lives under `/zpevnik/` (song pages `/zpevnik/<id>/`, artist pages `/zpevnik/interpret/<slug>/`) with its own templates and navigation. The download page links to it.
+One repo, one build, one GitHub Pages site and domain. The download page stays as it is at `/`; the online songbook lives under `/zpivej/` (song pages `/zpivej/<id>/`, artist pages `/zpivej/interpret/<slug>/`; first agreed as `/zpevnik/`, changed by D-167) with its own templates and navigation. The download page links to it.
 
 ### D-104 · Generated `.tex` files are produced at build time, not committed — Agreed (3 Nov 2026)
 `generated/` is gitignored. `make` runs the generator and then compiles; CI does the same. This supersedes PLAN principle 4 ("generated files are committed, CI checks they are up to date").
@@ -575,3 +575,8 @@ The owner reviewed the shape on two songs next to their PDF pages (Imagine, Acro
 - **Names without a version:** the PDFs are versioned because people save them (D-143); the website reads the release its `version.txt` pins (D-110), and the tag already carries the version, so `releases/download/v<version>/songs.json` is all W1 needs. `songs.json` has `version` inside it. The scores are referenced by the `score` items of `songs.json` (`name` → `<name>.svg` in the zip), so nothing else lists them.
 - **Not verified before the merge:** the release step and the push of `version.txt` run on `master` only; the first release after this PR is their test (check that it holds `songs.json` and `scores.zip` before session 26).
 - Completes J5's remaining item (D-136, D-125): the SVGs reach the release.
+
+### D-167 · The online songbook lives under `/zpivej/`; unknown songs get the site's 404 — Agreed (owner, 12 Nov 2026, session 26), ticket W2
+- **The path** of the online songbook is `/zpivej/`, not `/zpevnik/` (D-103): song pages `/zpivej/<id>/`, artist pages `/zpivej/interpret/<slug>/`. The rest of D-103 stands. `zpevnik-web` keeps it in one constant (`SONGBOOK_URL_PATH`), so a later change is one line.
+- **The link from the download page** comes with the index in W3, not in W2: until `/zpivej/` exists, a link to it would lead to a 404 on the live site. In between, the W2 pages are live, `noindex` and linked from nowhere.
+- **An unknown song** (`/zpivej/<anything else>`) gets `404.html`, which GitHub Pages serves for every path it cannot match. `404.html` therefore says that this page or song does not exist and leads to the download page (and, from W3, to the songbook's index). The local `--serve` does the same, so that this can be seen before a deploy. A link inside the site to a song that does not exist (a `see` entry) stops the build.

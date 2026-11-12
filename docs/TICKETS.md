@@ -233,11 +233,11 @@ E5 and E6 came first (D-147) and are done: every edition is in the release and o
 The PDFs already come from the release since E6 (D-110, D-138); W1 adds `songs.json` the same way.
 
 ### W2 · Song pages — [agent] · L · needs W1
-The online songbook is separate from the download page (D-103): it lives under `/zpevnik/`, with its own templates and navigation; the download page at `/` stays as it is, plus one link to the songbook.
-Jinja template, one page per song at `/zpevnik/<id>/`: chords above lyrics (each chord and its text in an inline-block that keeps spaces; chord width is respected, the rule of D-123), labels, footnotes, score SVGs, the existing dark mode, a font-size control. It must read well without JavaScript. Every page carries `<meta name="robots" content="noindex">`.
+The online songbook is separate from the download page (D-103): it lives under `/zpivej/` (D-167), with its own templates and navigation; the download page at `/` stays as it is (the link to the songbook comes with the index, W3). An unknown song gets `404.html` (D-167).
+Jinja template, one page per song at `/zpivej/<id>/`: chords above lyrics (each chord and its text in an inline-block that keeps spaces; chord width is respected, the rule of D-123), labels, footnotes, score SVGs, the existing dark mode, a font-size control. It must read well without JavaScript. Every page carries `<meta name="robots" content="noindex">`.
 
 ### W3 · Index, artists, navigation — [agent] · M · needs W2
-Alphabetical index (same order as the PDF, taken from `songs.json`, never re-sorted), artist pages at `/zpevnik/interpret/<slug>/`, collection pages, alternative titles listed, previous/next links in book order, "open in PDF" using `page`.
+Alphabetical index (same order as the PDF, taken from `songs.json`, never re-sorted), artist pages at `/zpivej/interpret/<slug>/`, collection pages, alternative titles listed, previous/next links in book order, "open in PDF" using `page`. The download page gets its link to the songbook here (D-167).
 
 ### W4 · Search — [agent] · M · needs W2
 Build-time index over title, alternative titles, artist and lyrics (about 270 kB gzipped), loaded on first use, diacritics-insensitive, no libraries unless tiny.
