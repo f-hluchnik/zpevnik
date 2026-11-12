@@ -12,7 +12,7 @@ from lint import (Findings, artists_ready_for_section, duplicate_titles, empty_a
                   chord_warnings, format_report, lint, text_problems, unknown_scores, unknown_slugs,
                   unused_scores)
 from songs import Song
-from test_edition import Repository
+from .test_edition import Repository
 
 
 def artist(slug: str, section: bool = True) -> Artist:
@@ -261,7 +261,3 @@ class LintTree(unittest.TestCase):
         root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{nobody}\n")
         errors = lint(root).errors
         self.assertEqual(len(errors), 2)
-
-
-if __name__ == "__main__":
-    unittest.main()

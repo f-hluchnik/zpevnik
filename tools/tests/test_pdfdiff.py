@@ -19,7 +19,3 @@ class NamesTheBuild(unittest.TestCase):
         for word in ("verze", "8.33", "11.", "2019–2026", "1.2.3a"):
             with self.subTest(word=word):
                 self.assertFalse(names_the_build(word))
-
-
-if __name__ == "__main__":
-    unittest.main()

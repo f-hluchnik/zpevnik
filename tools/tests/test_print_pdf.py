@@ -82,7 +82,3 @@ class Check(unittest.TestCase):
     def test_an_odd_page_count_is_refused(self):
         with self.assertRaisesRegex(PrintError, "odd number"):
             self.check(PDFINFO.replace("164", "163"))
-
-
-if __name__ == "__main__":
-    unittest.main()

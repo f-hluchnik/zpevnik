@@ -67,7 +67,3 @@ class SongPages(unittest.TestCase):
             write_compiled_book(Path(tmp), [("songs/one", 3)])
             (Path(tmp) / "songs" / "two.aux").write_text("\\@setckpt{songs/one}{\n\\setcounter{page}{9}\n}\n")
             self.assertIsNone(checkpoint_page(Path(tmp), "songs/two"))
-
-
-if __name__ == "__main__":
-    unittest.main()

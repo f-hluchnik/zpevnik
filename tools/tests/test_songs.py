@@ -95,7 +95,3 @@ class Published(unittest.TestCase):
     def test_without_the_list_every_song_is_published(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual(published(self.SONGS, Path(tmp)), self.SONGS)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -73,7 +73,3 @@ class LettersTex(unittest.TestCase):
         tex = letters_tex([song("b", "Beta"), song("a", "Alfa"), song("ab", "A beta")])
         entry_lines = [line for line in tex.splitlines() if line.startswith("\\zpcontentsentry{") and "}{" in line][-3:]
         self.assertEqual(entry_lines, [r"\zpcontentsentry{ab}{A beta}", r"\zpcontentsentry{a}{Alfa}", r"\zpcontentsentry{b}{Beta}"])
-
-
-if __name__ == "__main__":
-    unittest.main()

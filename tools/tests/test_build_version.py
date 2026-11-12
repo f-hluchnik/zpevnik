@@ -96,7 +96,3 @@ class BuildPatch(unittest.TestCase):
             subprocess.run(["git", "clone", "-q", "--depth", "1", f"file://{self.root}", str(clone)],
                            check=True, capture_output=True)
             self.assertEqual(build_patch(clone), UNKNOWN_PATCH)
-
-
-if __name__ == "__main__":
-    unittest.main()

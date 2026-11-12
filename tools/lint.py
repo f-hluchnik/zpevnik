@@ -18,11 +18,11 @@ Errors fail the build:
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs;
   - a song sets `\\score{name}` and there is no `scores/<name>.mscz`;
-  - tools/no-chords-allowlist.txt or data/hidden.txt lists an id that is not a song;
+  - data/no-chords-allowlist.txt or data/hidden.txt lists an id that is not a song;
   - data/book.toml or an edition (editions/<name>/edition.toml) is invalid (see edition.py):
     every edition in the repository is published with the build, so a broken one fails it.
 Warnings are listed and do not fail:
-  - a song has no `\\chord` or `\\chords` and is not in tools/no-chords-allowlist.txt;
+  - a song has no `\\chord` or `\\chords` and is not in data/no-chords-allowlist.txt;
   - an artist without a section has MIN_SONGS_FOR_SECTION songs or more;
   - several songs have the same title in the contents and none tells them apart
     with a `\\toctitle`;

@@ -40,7 +40,3 @@ class CheckEntries(unittest.TestCase):
         for part in ("missing 'slug'", "'name' is empty", "'section' must be bool",
                      "'kind' must be one of", "duplicate slug", "unknown field 'colour'"):
             self.assertTrue(any(part in error for error in errors), part)
-
-
-if __name__ == "__main__":
-    unittest.main()

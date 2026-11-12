@@ -6,7 +6,7 @@ writes a checkpoint into each file's own .aux that records the page counter *aft
 the file. A song (a file of songs/) therefore starts at the checkpoint of the file
 included before it and takes the difference to its own checkpoint. The page counter
 is never set by hand, so it equals the PDF page index. Songs listed in
-``tools/multipage-allowlist.txt`` may take two pages.
+``data/multipage-allowlist.txt`` may take two pages.
 
 Usage: python3 tools/check_pages.py [--edition NAME] [--format NAME] [repo-root]   (run after compiling)
 Python >= 3.11, standard library only.

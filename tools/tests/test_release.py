@@ -68,7 +68,3 @@ class Repository(unittest.TestCase):
         out = subprocess.run([sys.executable, str(BUILD_EDITION), "--list"], capture_output=True,
                              text=True, check=True).stdout
         self.assertEqual(out.splitlines(), edition_names(REPO_ROOT))
-
-
-if __name__ == "__main__":
-    unittest.main()

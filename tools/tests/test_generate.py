@@ -13,8 +13,8 @@ from generate import generated_files, include_tex, song_list_tex, version
 from paths import (ARTIST_PART_TEX, ARTISTS_TEX, HIDDEN_SONGS, INCLUDE_TEX, LETTERS_TEX, MACROS_TEX, PAGES_TEX,
                    REPO_ROOT, SONG_LIST_TEX, VERSION_TEX, generated_dir)
 from songs import Song
-from test_edition import Repository
-from test_edition_tex import BOOK, edition
+from .test_edition import Repository
+from .test_edition_tex import BOOK, edition
 
 
 def song(song_id: str, title: str) -> Song:
@@ -84,7 +84,3 @@ class HiddenSongs(unittest.TestCase):
             self.assertNotIn("alfa", (generated / INCLUDE_TEX).read_text(encoding="utf-8"))
             self.assertNotIn("alfa", (generated / SONG_LIST_TEX).read_text(encoding="utf-8"))
             self.assertIn("1.02.", (generated / VERSION_TEX).read_text(encoding="utf-8"))
-
-
-if __name__ == "__main__":
-    unittest.main()

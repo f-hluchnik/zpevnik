@@ -79,7 +79,3 @@ class Collation(unittest.TestCase):
     def test_unknown_letter_is_an_error(self):
         with self.assertRaises(ValueError):
             sort_key("Ωmega")
-
-
-if __name__ == "__main__":
-    unittest.main()

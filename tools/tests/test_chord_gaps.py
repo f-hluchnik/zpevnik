@@ -10,7 +10,7 @@ from tempfile import TemporaryDirectory
 
 from chord_gaps import SP_PER_PT, Chord, Pair, check_book, overlapping, read_trace, same_line_pairs
 from paths import CHORD_TRACE_NAME, DEFAULT_EDITION, edition_output_dir
-from test_check_pages import write_compiled_book
+from .test_check_pages import write_compiled_book
 
 
 def pt(points: float) -> int:
@@ -76,7 +76,3 @@ class Book(unittest.TestCase):
             self.build(Path(tmp), overlap_page=2)
             trace = Path(tmp) / edition_output_dir(DEFAULT_EDITION) / CHORD_TRACE_NAME
             self.assertEqual(len(read_trace(trace)), 4)
-
-
-if __name__ == "__main__":
-    unittest.main()
