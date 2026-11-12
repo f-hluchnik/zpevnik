@@ -86,10 +86,11 @@ J4 (PR #129, D-166): CI builds `songs.json` after the compile and validates the 
 - **Needs:** W2, L1.
 - **Read:** DECISIONS D-006, D-103, D-107 · PLAN WP6.
 - **Notes:** The index order must match the PDF exactly (it comes from `songs.json`, never re-sorted in the web build). The search index needs no library unless it is tiny.
+- **Progress:** W3 is done (zpevnik-web PR #6, D-168). W3a (two levels of navigation, D-169, zpevnik-web PR #7) came after it at the owner's request and goes before W4: the search lives in the new row. W4, W5 and W6 are left; each is its own PR, after the one before is merged.
 
-### Session 28 · W7 · Sonnet · `zpevnik-web`
-- **Needs:** W3–W6.
-- **Read:** TICKETS W7 · zpevnik-web README.
+### Session 28 · W6a, W7 · `zpevnik-web`
+- **Needs:** W3–W6. Model: W6a needs design judgement (TICKETS tag), so run it with the strongest available model, or have one review it before the merge; W7 alone is fine with Sonnet.
+- **Read:** TICKETS W6a, W7 · D-123 (the chord rule) · zpevnik-web README.
 - **Notes:** Screenshots at phone size; check that every internal link resolves; update the README. Then the refactoring story for the website (HISTORY.md, *Notes for the website article*), if the owner wants it now.
 
 ---
