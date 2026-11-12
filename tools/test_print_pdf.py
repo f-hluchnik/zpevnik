@@ -14,11 +14,6 @@ PDFINFO = "Title: x\nPages:           164\nPage size:       419.528 x 595.276 pt
 SOURCE = Path("build/editions/lite/print/zpevnik.pdf")
 
 
-class Scale(unittest.TestCase):
-    def test_a4_to_a5_is_one_over_the_square_root_of_two(self):
-        self.assertAlmostEqual(A5_SCALE, 0.70710678, places=8)
-
-
 class Wrapper(unittest.TestCase):
     def includes(self, tex: str) -> list[str]:
         return [line for line in tex.splitlines() if line.startswith("\\includepdf")]

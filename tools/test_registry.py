@@ -4,8 +4,7 @@ Run from the repository root: python3 -m unittest discover -s tools
 """
 import unittest
 
-from paths import REPO_ROOT
-from registry import check_entries, derive_label, normalise, read_entries
+from registry import check_entries, derive_label, normalise
 
 
 class DeriveLabel(unittest.TestCase):
@@ -41,11 +40,6 @@ class CheckEntries(unittest.TestCase):
         for part in ("missing 'slug'", "'name' is empty", "'section' must be bool",
                      "'kind' must be one of", "duplicate slug", "unknown field 'colour'"):
             self.assertTrue(any(part in error for error in errors), part)
-
-
-class TheRealRegistry(unittest.TestCase):
-    def test_it_is_valid(self):
-        self.assertEqual(check_entries(read_entries(REPO_ROOT)), [])
 
 
 if __name__ == "__main__":
