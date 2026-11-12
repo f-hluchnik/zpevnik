@@ -64,9 +64,13 @@ class Chord:
 class Segment:
     """A chord and the text under it: the text runs up to the next chord, the end of
     the line or the end of the TeX group the chord stands in (the rule of \\chord).
-    A segment without a chord is text before the first chord of a line."""
+    A segment without a chord is text before the first chord of a line.
+    `in_word`: the chord stands inside a word, with a character of the text right before it
+    and a letter right after it (the test of \\chord); where the PDF widens the gap before
+    such a chord, it prints a hyphen in the gap."""
     chord: Chord | None
     text: Text = ()
+    in_word: bool = False
 
 
 @dataclass(frozen=True)
@@ -79,6 +83,9 @@ class RepeatEnd:
     """The end of `\\rep{...}`: the PDF prints :\\."""
 
 
+LABEL_END = "."  # what the PDF prints after the label of a part and of a cue: "R2."
+
+
 @dataclass(frozen=True)
 class Cue:
     """`\\cue{label}`: the place where a part written out before is sung again.
@@ -86,6 +93,11 @@ class Cue:
     cue; a cue without one is an error."""
     label: str
     target: int
+
+    @property
+    def printed_label(self) -> str:
+        """The label the PDF prints, "R2." (zpevnik.sty's \\cue)."""
+        return self.label + LABEL_END
 
 
 @dataclass(frozen=True)
@@ -140,7 +152,7 @@ class Block:
     @property
     def label(self) -> str:
         """The label the PDF prints, "R2."; empty for an unnumbered verse."""
-        return self.key + "." if self.key else ""
+        return self.key + LABEL_END if self.key else ""
 
 
 @dataclass(frozen=True)
@@ -197,6 +209,16 @@ class Song:
     columns: int = 1
     footnotes: tuple[tuple[Text, ...], ...] = ()  # each footnote is lines of text
     body: tuple[BodyItem, ...] = ()
+
+    @property
+    def contents_title(self) -> str:
+        """The title the contents list: the TOC title, if the song has one."""
+        return self.toc_title if self.toc_title is not None else plain(self.title)
+
+    @property
+    def page_title(self) -> str:
+        """The title printed on the song's page, as plain text (the artist sections list it)."""
+        return plain(self.title)
 
 
 def plain(text: Text) -> str:

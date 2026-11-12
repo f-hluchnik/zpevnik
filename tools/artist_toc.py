@@ -34,11 +34,16 @@ def members(artist: Artist, songs: list[Song]) -> list[Song]:
     return [song for song in songs if artist["slug"] in song.groups]
 
 
+def book_order(artist: Artist) -> tuple:
+    """Sort key of the artist index: by sort key, collections last."""
+    return artist["kind"] == COLLECTION, sort_key(artist["sort"])
+
+
 def ordered_artists(registry: list[Artist], songs: list[Song]) -> list[Artist]:
-    """Artists with a section and a song among `songs`, in the order of the book: by sort
-    key, collections last. The full book's rules, so an edition never differs from it."""
+    """Artists with a section and a song among `songs`, in the order of the book (book_order).
+    The full book's rules, so an edition never differs from it."""
     listed = (artist for artist in registry if artist["section"] and members(artist, songs))
-    return sorted(listed, key=lambda a: (a["kind"] == COLLECTION, sort_key(a["sort"])))
+    return sorted(listed, key=book_order)
 
 
 def index_text(artist: Artist) -> str:

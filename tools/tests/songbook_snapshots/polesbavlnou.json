@@ -86,7 +86,8 @@
          "text": "Pane ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -106,7 +107,8 @@
          "text": "můj, co na nebi je tvůj ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -131,7 +133,8 @@
          "text": "dům, má máma můj ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -151,7 +154,8 @@
          "text": "život dala ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -171,7 +175,8 @@
          "text": "katům,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -188,7 +193,8 @@
          "text": "katům ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -208,7 +214,8 @@
          "text": "mým v polích s bavl",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -233,7 +240,8 @@
          "text": "nou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -250,7 +258,8 @@
          "text": "Pane ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -270,7 +279,8 @@
          "text": "můj, co na nebi je tvůj ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -295,7 +305,8 @@
          "text": "dům, má máma můj ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -315,7 +326,8 @@
          "text": "život dala ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -335,7 +347,8 @@
          "text": "katům,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -352,7 +365,8 @@
          "text": "katům ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -372,7 +386,8 @@
          "text": "mým v ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -397,7 +412,8 @@
          "text": "polích s bavl",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -417,7 +433,8 @@
          "text": "nou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -455,7 +472,8 @@
          "text": "Den za dnem ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -475,7 +493,8 @@
          "text": "kůže zná bič katů,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -492,7 +511,8 @@
          "text": "vidíš ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -512,7 +532,8 @@
          "text": "jen černý záda bratrů,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -529,7 +550,8 @@
          "text": "jak tam ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -549,7 +571,8 @@
          "text": "jdou v polích s bavl",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -574,7 +597,8 @@
          "text": "nou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -591,7 +615,8 @@
          "text": "To, co ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -611,7 +636,8 @@
          "text": "znáš ty v Louisi",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -636,7 +662,8 @@
          "text": "aně,",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -653,7 +680,8 @@
          "text": "černý záda ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -673,7 +701,8 @@
          "text": "znaj’ i v Texark",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -702,7 +731,8 @@
          "text": ",",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -719,7 +749,8 @@
          "text": "i tam ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -739,7 +770,8 @@
          "text": "jsou v ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -764,7 +796,8 @@
          "text": "polích s bavl",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -784,7 +817,8 @@
          "text": "nou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -811,7 +845,8 @@
          "text": "Já vím, že brzy musí přijít soud,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -828,7 +863,8 @@
          "text": "černý záda práva na něm vyhrajou,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -845,15 +881,11 @@
          "text": "boží soud v polích s bavlnou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "RepeatEnd"
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       },
       {
        "type": "Cue",
@@ -885,7 +917,8 @@
          "text": "Chtěl bych jít na potem vlhký lány,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -902,7 +935,8 @@
          "text": "tak řekni, pane můj, černý zvoň hrany,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -919,15 +953,11 @@
          "text": "katům mým v polích s bavlnou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "RepeatEnd"
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       },
       {
        "type": "Cue",
@@ -959,7 +989,8 @@
          "text": "Dnes měj, pane, co v nebi je tvůj dům,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -976,7 +1007,8 @@
          "text": "mou duši, když život patří katům,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -993,25 +1025,16 @@
          "text": "katům mým v polích s bavlnou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "RepeatEnd"
       },
       {
-       "type": "Segment",
-       "chord": null,
-       "text": []
-      },
-      {
        "type": "Cue",
        "label": "R",
        "target": 1
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       }
      ],
      "group_start": false

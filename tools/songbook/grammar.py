@@ -43,6 +43,7 @@ GROUP_BREAK = "groupbreak"
 CHORD = "chord"
 CHORD_ROW = "chords"  # \chords[width]{A B C}: chords without text; the width is layout
 GAP = "gap"
+GAP_UNIT_EM = 0.5  # \gap{n} is n times \gapunit of zpevnik.sty, half an em of the text
 REPEAT = "rep"
 RECITATIVE = "rec"
 TIMES = "ntimes"
@@ -68,6 +69,7 @@ TEXT_SYMBOLS = {DOTS: "…", "&": "&", "ss": "ß", " ": " ", "textdagger": "†"
 # Math is allowed for these symbols only (D-135).
 MATH_SYMBOLS = {"times": "×", "rightarrow": "→"}
 TIE = " "  # ~
+HYPHEN = "-"  # TeX puts a discretionary after it, so no character is the last node
 TIMES_SIGN = MATH_SYMBOLS["times"]
 RECITATIVE_LABEL = "rec: "  # \rec{x} prints "rec: " in italics, then /x/
 RECITATIVE_DELIMITER = "/"

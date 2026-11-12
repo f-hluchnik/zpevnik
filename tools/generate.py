@@ -18,6 +18,7 @@ Python >= 3.11, standard library only.
 """
 import argparse
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from artist_toc import artist_part_tex
@@ -97,6 +98,35 @@ def generated_files(entries: list[dict], songs: list[Song], book: Book, edition:
     }
 
 
+class InputError(Exception):
+    """The registry or the edition is invalid; the message says what is wrong."""
+
+
+@dataclass(frozen=True)
+class EditionInputs:
+    entries: list[dict]   # the registry, as written
+    all_songs: list[Song]  # every song file, hidden ones too (the version counts them)
+    book: Book
+    edition: Edition
+    songs: list[Song]     # the edition's published songs, in file-name order
+
+
+def read_inputs(root: Path, edition_name: str) -> EditionInputs:
+    """What an edition is made of; InputError if the registry or the edition is invalid.
+    Shared with songs_json.py, so songs.json selects its songs exactly as the book does."""
+    entries = read_entries(root)
+    errors = check_entries(entries)
+    if errors:
+        raise InputError("\n  ".join([f"{REGISTRY_FILE} is invalid:", *errors]))
+    all_songs = read_songs(root)
+    try:
+        book = read_book(root)
+        edition = read_edition(root, edition_name, book, all_songs, {e["slug"] for e in entries})
+    except EditionError as error:
+        raise InputError(str(error)) from error
+    return EditionInputs(entries, all_songs, book, edition, edition.select(published(all_songs, root)))
+
+
 def write_files(directory: Path, files: dict[Path, str]) -> None:
     directory.mkdir(parents=True, exist_ok=True)
     for path, text in files.items():
@@ -112,23 +142,17 @@ def main() -> int:
     if args.version:
         print(version(len(song_paths(args.root)), build_patch(args.root)))
         return 0
-    entries = read_entries(args.root)
-    errors = check_entries(entries)
-    if errors:
-        print(f"{REGISTRY_FILE} is invalid:", *errors, sep="\n  ", file=sys.stderr)
-        return 1
-    all_songs = read_songs(args.root)
     try:
-        book = read_book(args.root)
-        edition = read_edition(args.root, args.edition, book, all_songs, {e["slug"] for e in entries})
-    except EditionError as error:
+        inputs = read_inputs(args.root, args.edition)
+    except InputError as error:
         print(error, file=sys.stderr)
         return 1
-    songs = edition.select(published(all_songs, args.root))
-    book_version = version(len(all_songs), build_patch(args.root))
+    edition = inputs.edition
+    book_version = version(len(inputs.all_songs), build_patch(args.root))
     directory = generated_dir(edition.name)
-    write_files(args.root / directory, generated_files(entries, songs, book, edition, book_version))
-    print(f"{directory}: edition {edition.name}, {len(songs)} of {len(all_songs)} songs, "
+    write_files(args.root / directory,
+                generated_files(inputs.entries, inputs.songs, inputs.book, edition, book_version))
+    print(f"{directory}: edition {edition.name}, {len(inputs.songs)} of {len(inputs.all_songs)} songs, "
           f"version {book_version}")
     return 0
 

@@ -57,7 +57,8 @@
          "text": "I’m a ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -77,7 +78,8 @@
          "text": "passen",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -97,7 +99,8 @@
          "text": "ger, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -111,7 +114,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -131,7 +135,8 @@
          "text": "and I ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -151,7 +156,8 @@
          "text": "ride and I ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -171,7 +177,8 @@
          "text": "ride, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -185,7 +192,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -202,7 +210,8 @@
          "text": "I ride through the city backsides, I see the stars come out of the sky.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -219,7 +228,8 @@
          "text": "Yeah, they’re bright in a hollow sky, you know it looks so good tonight.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -243,7 +253,8 @@
          "text": "I am the passenger, I stay under glass.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -260,7 +271,8 @@
          "text": "I look through my window so bright, I see the stars come out tonight.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -277,7 +289,8 @@
          "text": "I see the bright and hollow sky over the city’s ripping sky,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -294,7 +307,8 @@
          "text": "and everything looks good tonight.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -318,7 +332,8 @@
          "text": "Singing ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -338,7 +353,8 @@
          "text": "la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -358,7 +374,8 @@
          "text": "la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -378,7 +395,8 @@
          "text": "la la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -398,7 +416,8 @@
          "text": "la, a ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -418,7 +437,8 @@
          "text": "la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -438,7 +458,8 @@
          "text": "la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -458,7 +479,8 @@
          "text": "la la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -478,7 +500,8 @@
          "text": "la,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -504,7 +527,8 @@
          "text": "la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -524,7 +548,8 @@
          "text": "la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -544,7 +569,8 @@
          "text": "la la la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -564,7 +590,8 @@
          "text": "la, la ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -584,7 +611,8 @@
          "text": "la. ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -598,7 +626,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -612,7 +641,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -626,7 +656,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -650,7 +681,8 @@
          "text": "Get into the car, we’ll be the passenger,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -667,7 +699,8 @@
          "text": "we’ll ride through the city tonight, we’ll see the city’s ripped backsides",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -684,7 +717,8 @@
          "text": "we’ll see the bright and hollow sky, we’ll see the stars that shine so bright,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -701,7 +735,8 @@
          "text": "the stars made for us tonight.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -725,7 +760,8 @@
          "text": "Oh, the passenger, oh, how you ride,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -742,7 +778,8 @@
          "text": "oh the passenger, he rides and he rides.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -759,7 +796,8 @@
          "text": "He looks through his window, and what does he see?",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -776,7 +814,8 @@
          "text": "He sees the bright and hollow sky, he sees the stars come out tonight.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -793,7 +832,8 @@
          "text": "He sees the city’s ripped backsides, he sees the winding ocean drive.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -810,7 +850,8 @@
          "text": "And everything was made for you and me, all of it was made for you and me.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -827,7 +868,8 @@
          "text": "’Cause it just belongs to you and me, so let’s take a ride and see what’s mine.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -856,7 +898,8 @@
          "text": "Are you the passenger? He sees things from under glass.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -873,7 +916,8 @@
          "text": "He looks through his window side, he sees the things he knows are his.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -890,7 +934,8 @@
          "text": "He sees the bright and hollow sky, he sees the city sleeping at night.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -907,7 +952,8 @@
          "text": "He sees the stars are out tonight, and all of it is yours and mine.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -924,17 +970,13 @@
          "text": "And all of it is yours and mine, so let’s all ride and ride and ride and ride.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
        "label": "R",
        "target": 2
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       }
      ],
      "group_start": false

@@ -32,6 +32,7 @@ IN_FOOTNOTE = Allowed(line_breaks=True, music=False, footnotes=False)
 IN_TITLE = Allowed(line_breaks=False, music=False, footnotes=True)
 IN_LABEL = Allowed(line_breaks=False, music=False, footnotes=False)  # a note, a link text, a name
 
+UTF8_TWO_BYTES = 2  # zpevnik.sty takes any character of two bytes in UTF-8 for a letter
 CHORD_SYMBOL_STYLES = {ChordPosition.BASE: Style.PLAIN, ChordPosition.SUPERSCRIPT: Style.SUPERSCRIPT,
                        ChordPosition.SUBSCRIPT: Style.SUBSCRIPT}
 
@@ -56,6 +57,7 @@ class SongState:
 class OpenSegment:
     chord: Chord | None
     text: list[Inline] = field(default_factory=list)
+    in_word: bool = False
 
 
 class InlineParser:
@@ -68,6 +70,10 @@ class InlineParser:
         self.segment: OpenSegment | None = None
         # A space is kept only after something else than a space; the start of a line counts as one.
         self.after_space = not self.items
+        # TeX's last node is a character (\chord's test for a chord inside a word): only text
+        # leaves one; a space, a hyphen, a symbol, a mark, a chord or the end of a style group does not.
+        self.after_character = False
+        self.character_before_chord = False
 
     # --- reading -------------------------------------------------------------------------
 
@@ -78,6 +84,7 @@ class InlineParser:
             match token.kind:
                 case Kind.TEXT:
                     self.add_text(printed_text(token.text), style)
+                    self.after_character = not token.text.endswith(grammar.HYPHEN)
                 case Kind.SPACE:
                     self.add_text(" ", style)
                 case Kind.TIE:
@@ -117,6 +124,7 @@ class InlineParser:
         elif name in grammar.STYLES:
             [content] = stream.arguments(token, grammar.TEXT_COMMANDS[name])
             self.read_group(content, style | grammar.STYLES[name])
+            self.after_character = False  # an italic correction or a box ends the group
         elif name in grammar.QUOTES:
             self.quote(stream, token, style)
         elif name == grammar.FOOTNOTE:
@@ -129,6 +137,8 @@ class InlineParser:
         elif name in grammar.PART_COMMANDS:
             self.require(self.allowed.music, token, "only in a part")
             MUSIC[name](self, stream.arguments(token, grammar.PART_COMMANDS[name]), token, style)
+            if name == grammar.CHORD:
+                self.decide_in_word(stream.peek())
         elif name in grammar.CHORD_COMMANDS:  # a chord named in the text, not played
             for part in chord_symbol_parts(stream, token):
                 self.add_text(part.text, style | CHORD_SYMBOL_STYLES[part.position])
@@ -179,6 +189,7 @@ class InlineParser:
     def recitative(self, arguments: list[Argument], token: Token, style: Style) -> None:
         self.add_text(grammar.RECITATIVE_LABEL, style | Style.ITALIC)
         self.add_text(grammar.RECITATIVE_DELIMITER, style)
+        self.after_character = True  # the "/" is a character node, as \\chord sees it
         self.read_group(arguments[0], style)
         self.add_text(grammar.RECITATIVE_DELIMITER, style)
 
@@ -207,24 +218,35 @@ class InlineParser:
         self.close_segment()
         self.segment = OpenSegment(chord)
         self.after_space = False
+        self.character_before_chord = self.after_character
+        self.after_character = False
+
+    def decide_in_word(self, following: Token | None) -> None:
+        """The chord just read stands inside a word if TeX's last node before it is a character
+        and the next token is a letter (\\chord in zpevnik.sty); a chord of \\chords never does."""
+        self.segment.in_word = (self.character_before_chord and following is not None
+                                and following.kind is Kind.TEXT and is_tex_letter(following.text[0]))
 
     def close_segment(self) -> None:
         if self.segment is not None:
-            self.items.append(Segment(self.segment.chord, tuple(self.segment.text)))
+            self.items.append(Segment(self.segment.chord, tuple(self.segment.text), self.segment.in_word))
             self.segment = None
 
     def add_mark(self, mark: Mark) -> None:
         self.close_segment()
         self.items.append(mark)
         self.after_space = False
+        self.after_character = False
 
     def add_inline(self, item: Inline) -> None:
         if self.segment is None:
             self.segment = OpenSegment(None)
         self.segment.text.append(item)
         self.after_space = False
+        self.after_character = False
 
     def add_text(self, text: str, style: Style) -> None:
+        self.after_character = False  # text from a token sets it again (read)
         if text == " ":
             if self.after_space:
                 return
@@ -243,6 +265,7 @@ class InlineParser:
         self.close_segment()
         self.lines.append(Line(trimmed(tuple(self.items)), self.group_start))
         self.items = []
+        self.after_character = False
         self.group_start = False
         self.after_space = True
 
@@ -256,12 +279,23 @@ class InlineParser:
 
 
 def trimmed(items: tuple[Segment | Mark, ...]) -> tuple[Segment | Mark, ...]:
-    """The line without the space TeX drops before its end (the start never has one)."""
+    """The line without the space TeX drops before its end (the start never has one), and
+    without a segment that holds nothing once it is gone (the space after a closing mark)."""
     match items:
-        case (*before, Segment(chord, (*text, Run(last, style)))) if last.endswith(" "):
+        case (*before, Segment(chord, (*text, Run(last, style)), in_word)) if last.endswith(" "):
             kept = (Run(last.rstrip(" "), style),) if last.strip(" ") else ()
-            return (*before, Segment(chord, (*text, *kept)))
+            if chord is None and not text and not kept:
+                return tuple(before)
+            return (*before, Segment(chord, (*text, *kept), in_word))
     return items
+
+
+def is_tex_letter(character: str) -> bool:
+    """A letter as zpevnik.sty's \\zp@testnextletter sees it: an ASCII letter (catcode 11) or
+    any character of two bytes in UTF-8 (á, č, ž, ...)."""
+    if character.isascii():
+        return character.isalpha()
+    return len(character.encode("utf-8")) == UTF8_TWO_BYTES
 
 
 def printed_text(tex: str) -> str:

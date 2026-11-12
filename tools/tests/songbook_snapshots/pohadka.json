@@ -44,11 +44,6 @@
       {
        "type": "Score",
        "name": "pohadka"
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       }
      ],
      "group_start": false
@@ -79,7 +74,8 @@
          "text": "/ Takhle nějak to bylo: Jedlo se, zpívalo, pilo,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -96,7 +92,8 @@
          "text": "princezna zářila štěstím v hotelu nad náměstím.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -113,7 +110,8 @@
          "text": "Drak hlídal u dveří sálu, na krku pletenou šálu,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": true
@@ -130,7 +128,8 @@
          "text": "dědové Vševědi okolo Popelky žvatlavě slibují šaty a kabelky.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -147,7 +146,8 @@
          "text": "Každý si odnáší kousíček úsměvu, dešťový mraky se chystaly ke zpěvu,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": true
@@ -164,7 +164,8 @@
          "text": "hosté se sjíždějí k veliké veselce, paprsky luceren metají kozelce.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -181,7 +182,8 @@
          "text": "A stíny ořechů orvaných dohola pletou se letícím kočárům pod kola.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": true
@@ -198,7 +200,8 @@
          "text": "Šmudla si přivezl v odřeným Wartburgu kámošku z dětství, prej nějakou Sněhurku.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -215,7 +218,8 @@
          "text": "Vrátný se zohýbá pro tučné spropitné, a kdo mu proklouzne, tak toho nechytne.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": true
@@ -232,7 +236,8 @@
          "text": "Kouzelník za dvacku vykouzlí pět bonů a vítr na věži opřel se do zvonů.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -249,7 +254,8 @@
          "text": "Honzové, princové, víly i sudičky chopí se poháru, nože i vidličky.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": true
@@ -266,7 +272,8 @@
          "text": "„Na zdraví nevěsty, na zdraví ženicha!“, dvě sousta do kapsy a jedno do břicha.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -283,7 +290,8 @@
          "text": "Náhle se za oknem objevil skřítek, rozhrnul oponu z máminých kytek,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": true
@@ -300,7 +308,8 @@
          "text": "pěkně se usmál a pěkně se podíval, a pak mi potichu do ucha zazpíval. /",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -333,7 +342,8 @@
          "text": "Dej mi ruku ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -353,7 +363,8 @@
          "text": "svou, studenou ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -373,7 +384,8 @@
          "text": "od okenních ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -393,7 +405,8 @@
          "text": "skel,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -410,7 +423,8 @@
          "text": "všichni tě ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -430,7 +444,8 @@
          "text": "mezi sebe ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -450,7 +465,8 @@
          "text": "zvou a ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -470,7 +486,8 @@
          "text": "já jsem ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -490,7 +507,8 @@
          "text": "tu proto, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -510,7 +528,8 @@
          "text": "abys šel.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -521,11 +540,6 @@
       {
        "type": "Score",
        "name": "pohadka_chorus"
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       }
      ],
      "group_start": false
@@ -556,7 +570,8 @@
          "text": "/ Na plný obrátky letíme světem, všechny ty pohádky patřily dětem.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -573,7 +588,8 @@
          "text": "Píšeš mi z ciziny zoufalý dopisy, koukám se z okna a vzpomínám na kdysi,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -590,7 +606,8 @@
          "text": "jak se mi za oknem objevil skřítek, rozhrnul oponu z máminých kytek.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": true
@@ -607,7 +624,8 @@
          "text": "Pěkně se usmál a pěkně se podíval, a pak mi potichu do ucha zazpíval. / ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -623,7 +641,8 @@
          "text": " ×2",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false

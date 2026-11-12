@@ -53,6 +53,31 @@ class TexRules(unittest.TestCase):
         row = first_block(r"\vers{\chord{D\add{6/9}}a \chord{1. E\7 / 2. C}b}").lines[0].items
         self.assertEqual([part.text for item in row for part in item.chord.parts], ["D", "6/9", "1. E", "7", " / 2. C"])
 
+    def test_a_mark_at_the_end_of_a_line_leaves_no_empty_segment(self):
+        lines = first_block("\\vers{\\rep{a} \\\\\nb}").lines
+        self.assertEqual([type(item).__name__ for item in lines[0].items], ["RepeatStart", "Segment", "RepeatEnd"])
+
+    def test_a_chord_inside_a_word_as_zpevnik_sty_tests_it(self):
+        """A character right before the chord and a letter right after it; checked against TeX's
+        own test on every chord of the book (session 24, D-165)."""
+        cases = {
+            r"slip a\chord{A}way": True,
+            r"slip a \chord{A}away": False,                  # a space before the chord
+            r"la-\chord{A}la": False,                        # TeX puts a discretionary after a hyphen
+            r"\emph{yester\chord{A}day}": True,             # inside one group
+            r"\emph{dotý}\chord{A}\emph{ká}": False,         # the italic correction ends the group
+            r"wor\chord{A}\emph{d}": False,                  # the next token is a command
+            r"\rec{\chord{A}Co}": True,                      # the "/" of \rec is a character
+            r"ab\gap{1}\chord{A}cd": False,
+            r"ab\chords{A}cd": False,                        # \chords never splits a word
+            r"a\chord{A}čas": True,                           # a two-byte letter
+            r"a\chord{A}2": False,
+        }
+        for source, expected in cases.items():
+            with self.subTest(source):
+                items = first_block(f"\\vers{{{source}}}").lines[0].items
+                self.assertEqual(any(item.in_word for item in items if isinstance(item, Segment)), expected)
+
     def test_a_chord_ends_at_the_end_of_its_group(self):
         block = first_block(r"\vers{\rep{\chord{A}la} da \chord{B}di}")
         self.assertEqual(line_texts(block), ["|[A]la| da [B]di"])

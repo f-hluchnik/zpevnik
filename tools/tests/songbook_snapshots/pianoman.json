@@ -48,7 +48,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -67,7 +68,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -78,7 +80,8 @@
          "text": ", akordy jako ve sloce",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -105,7 +108,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -119,7 +123,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -133,7 +138,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -147,7 +153,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -158,7 +165,8 @@
          "text": " ×2",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -182,7 +190,8 @@
          "text": "It’s ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -202,7 +211,8 @@
          "text": "nine ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -227,7 +237,8 @@
          "text": "o’clock on a ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -252,7 +263,8 @@
          "text": "Saturday,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -281,7 +293,8 @@
          "text": "the ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -301,7 +314,8 @@
          "text": "regular ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -326,7 +340,8 @@
          "text": "crowd shuffles ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -351,7 +366,8 @@
          "text": "in. ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -365,7 +381,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -382,7 +399,8 @@
          "text": "There’s an ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -402,7 +420,8 @@
          "text": "old man ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -427,7 +446,8 @@
          "text": "sittin’ ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -452,7 +472,8 @@
          "text": "next to me,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -481,7 +502,8 @@
          "text": "makin’ ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -501,7 +523,8 @@
          "text": "love to his ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -521,7 +544,8 @@
          "text": "tonic and ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -541,7 +565,8 @@
          "text": "gin.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -565,7 +590,8 @@
          "text": "He says, \"Son, can you play me a memory? I’m not really sure how it goes,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -582,7 +608,8 @@
          "text": "but it’s sad and it’s sweet and I knew it complete",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -599,7 +626,8 @@
          "text": "when I wore a younger man’s clothes.\"",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -632,7 +660,8 @@
          "text": "La, la-",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -657,7 +686,8 @@
          "text": "la, di-di-",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -682,7 +712,8 @@
          "text": "da, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -696,7 +727,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -720,7 +752,8 @@
          "text": "la-",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -745,7 +778,8 @@
          "text": "la, di-di-",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -770,7 +804,8 @@
          "text": "da, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -794,7 +829,8 @@
          "text": "da-",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -814,7 +850,8 @@
          "text": "dum.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -833,7 +870,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -852,7 +890,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -881,7 +920,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -905,7 +945,8 @@
          "text": "Sing us a song, you’re the piano man, sing us a song tonight.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -922,7 +963,8 @@
          "text": "Well, we’re all in the mood for a melody, and you’ve got us feelin’ alright.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -951,7 +993,8 @@
          "text": "Now John at the bar is a friend of mine, he gets me my drinks for free,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -968,7 +1011,8 @@
          "text": "and he’s quick with a joke or to light up your smoke,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -985,7 +1029,8 @@
          "text": "but there’s some place that he’d rather be.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1009,7 +1054,8 @@
          "text": "He says, \"Bill, I believe this is killing me,\" as the smile ran away from his face,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1026,7 +1072,8 @@
          "text": "\"Well, I’m sure that I could be a movie star if I could get out of this place\".",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -1055,7 +1102,8 @@
          "text": "Now Paul is a real estate novelist, who never had time for a wife.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1072,7 +1120,8 @@
          "text": "And he’s talkin’ with Davy, who’s still in the Navy and probably will be for life.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1096,7 +1145,8 @@
          "text": "And the waitress is practicing politics, as the businessmen slowly get stoned.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1113,7 +1163,8 @@
          "text": "Yes, they’re sharing a drink they call loneliness,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1130,7 +1181,8 @@
          "text": "but it’s better than drinkin’ alone.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -1146,7 +1198,8 @@
          "text": " ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -1175,7 +1228,8 @@
          "text": "It’s a pretty good crowd for a Saturday, and the manager gives me a smile,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1192,7 +1246,8 @@
          "text": "’cause he knows that it’s me they’ve been comin’ to see,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1209,7 +1264,8 @@
          "text": "to forget about life for a while.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1233,7 +1289,8 @@
          "text": "And the piano, it sounds like a carnival, and the microphone smells like a beer,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1250,7 +1307,8 @@
          "text": "and they sit at the bar and put bread in my jar",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1267,7 +1325,8 @@
          "text": "and say, \"Man, what are you doin’ here?\"",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -1283,7 +1342,8 @@
          "text": " ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -1299,17 +1359,13 @@
          "text": " ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
        "label": "S1",
        "target": 1
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       }
      ],
      "group_start": false
