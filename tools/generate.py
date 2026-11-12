@@ -8,7 +8,8 @@ the Czech collation order), song-list.tex (one \\zpregistersong{id} per song of 
 so that a \\seealso to a song outside it prints nothing), obsah-letters.tex (the letter part of the contents),
 obsah-artists.tex (the artist index and the artist sections), version.tex (the songbook
 version, major.minor.patch), macros.tex and pages.tex (the front matter, edition_tex.py).
-The version is the build's: it counts every song, whatever the edition selects.
+The version is the build's: it counts every song, whatever the edition selects. An edition
+selects only from the songs that are not hidden (data/hidden.txt, songs.published).
 Generated files are build outputs (gitignored); `make` runs this before compiling.
 
 Usage: python3 tools/generate.py [--edition NAME] [repo-root]   (default edition: full)
@@ -29,7 +30,7 @@ from paths import (ARTIST_PART_TEX, ARTISTS_TEX, BOOK_FILE, EDITION_FILE_NAME, I
                    LETTERS_TEX, MACROS_TEX, PAGES_TEX, REGISTRY_FILE, SONG_LIST_TEX, SONGS_DIR, VERSION_TEX,
                    add_edition_argument, add_root_argument, generated_dir)
 from registry import check_entries, normalise, read_entries
-from songs import Song, read_songs, song_paths
+from songs import Song, published, read_songs, song_paths
 from tex_text import escape_tex
 
 SONGS_SOURCE = f"{SONGS_DIR}/*.tex"
@@ -123,7 +124,7 @@ def main() -> int:
     except EditionError as error:
         print(error, file=sys.stderr)
         return 1
-    songs = edition.select(all_songs)
+    songs = edition.select(published(all_songs, args.root))
     book_version = version(len(all_songs), build_patch(args.root))
     directory = generated_dir(edition.name)
     write_files(args.root / directory, generated_files(entries, songs, book, edition, book_version))

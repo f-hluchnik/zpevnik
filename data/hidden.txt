@@ -1,0 +1,6 @@
+# Hidden songs (L2): song ids (file names in songs/ without .tex), one per line,
+# each with a comment saying why. A hidden song stays in the repository but is left
+# out of every edition with its contents and artist index (and of songs.json, the
+# online songbook, from J2 on); a \seealso to it prints nothing. Deleting the song
+# file removes it for good.
+# "#" starts a comment. tools/lint.py fails on an id that is not a song.

@@ -18,7 +18,7 @@ from pathlib import Path
 from edition import EditionError, edition_names, read_book, read_edition
 from paths import BOOK_PDF_NAME, RELEASE_DIR, add_root_argument, edition_output_dir
 from registry import read_entries
-from songs import read_songs
+from songs import published, read_songs
 
 FEW_SONGS_MAX = 4  # Czech: 1 píseň, 2-4 písně, 5 and more písní
 
@@ -60,12 +60,13 @@ def edition_notes(root: Path, version: str) -> str:
     """The release notes' list of editions, with the song count of each."""
     entries = read_entries(root)
     all_songs = read_songs(root)
+    songs = published(all_songs, root)
     book = read_book(root)
     slugs = {entry["slug"] for entry in entries}
     lines = []
     for name in edition_names(root):
         edition = read_edition(root, name, book, all_songs, slugs)
-        lines.append(edition_line(name, edition.subtitle, len(edition.select(all_songs)),
+        lines.append(edition_line(name, edition.subtitle, len(edition.select(songs)),
                                   asset_name(name, version)))
     return "\n".join(["**Vydání**", *lines])
 

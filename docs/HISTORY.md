@@ -100,6 +100,12 @@ The owner wanted the README, the tests and the build reviewed before the convert
 - A3 (#119, #120, D-160): most of a CI run (about 80 s of 170–210 s) is pulling the TeX Live image, and none of the ways around it was worth its risk. The apt step got retries and time limits after a mirror outage held a run for 15 minutes; the PDF diff compares every edition, so an edition's own pages (cover, title page, imprint, contents) are reviewed too, for about 8 s per pull request.
 - Helper files: archive/phase-12-audits/ (the three ticket texts). The audit scripts (coverage, mutation) were throwaway and not committed.
 
+## Phase 8 · Legal (L1, L2) · 9–12 Nov 2026 · PR #121
+
+- L1 (D-141): the notice (non-commercial, rights holders write and the song goes) in the colophon of every book and later in the web footer; the Apache licence covers only the owner's own work, not the songs, scores, front matter or cover.
+- L2 (#121, D-161): `data/hidden.txt` hides a song from every book within one pull request, without deleting it: `songs.published()` applies the list before an edition selects its songs, so the contents, the artist index and every `\seealso` follow. The converter will use the same function (J2); the version still counts every song file.
+- Helper files: archive/phase-8-legal/ (the two ticket texts).
+
 ## Closing the refactoring · 6 Nov 2026
 
 With Q6 (#86) the refactoring is finished: phases 1, 2, 4, 5, 6 and 11, 61 merged pull requests (#23–#86) in four days. The planning docs moved from the owner's computer into `docs/` of this repository (D-134), so work can continue from any device.

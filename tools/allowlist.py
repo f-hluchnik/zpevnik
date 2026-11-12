@@ -2,7 +2,8 @@
 
 A tool that has an exception to a rule keeps the song ids in a text file of tools/
 (paths.py) instead of marking the song itself, so the song files stay free of markers
-for the tools. A missing file is an empty list.
+for the tools. The hidden songs (data/hidden.txt) are a list in the same format.
+A missing file is an empty list.
 
 Python >= 3.11, standard library only.
 """

@@ -15,6 +15,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SONGS_DIR = Path("songs")
 REGISTRY_FILE = Path("data/artists.toml")
 BOOK_FILE = Path("data/book.toml")      # facts of the songbook every edition shares
+HIDDEN_SONGS = Path("data/hidden.txt")  # songs left out of every book and of songs.json (L2)
 EDITIONS_DIR = Path("editions")         # editions/<name>/edition.toml and its own pages
 EDITION_FILE_NAME = "edition.toml"
 SHARED_PAGES_DIR = Path("shared-pages")  # pages an edition can share, and the imprint core
