@@ -1,0 +1,634 @@
+{
+ "type": "Song",
+ "id": "pohadka",
+ "title": [
+  {
+   "type": "Run",
+   "text": "Pohádka",
+   "style": []
+  }
+ ],
+ "toc_title": null,
+ "alt_titles": [],
+ "subtitle": null,
+ "artists": [
+  {
+   "type": "ArtistRef",
+   "slug": "karelplihal",
+   "label": null
+  }
+ ],
+ "collections": [],
+ "see": [],
+ "columns": 1,
+ "footnotes": [],
+ "body": [
+  {
+   "type": "Note",
+   "text": [
+    {
+     "type": "Run",
+     "text": "capo 4",
+     "style": []
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "I",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Score",
+       "name": "pohadka"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "rec: ",
+         "style": [
+          "ITALIC"
+         ]
+        },
+        {
+         "type": "Run",
+         "text": "/ Takhle nějak to bylo: Jedlo se, zpívalo, pilo,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "princezna zářila štěstím v hotelu nad náměstím.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Drak hlídal u dveří sálu, na krku pletenou šálu,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": true
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "dědové Vševědi okolo Popelky žvatlavě slibují šaty a kabelky.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Každý si odnáší kousíček úsměvu, dešťový mraky se chystaly ke zpěvu,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": true
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "hosté se sjíždějí k veliké veselce, paprsky luceren metají kozelce.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A stíny ořechů orvaných dohola pletou se letícím kočárům pod kola.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": true
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Šmudla si přivezl v odřeným Wartburgu kámošku z dětství, prej nějakou Sněhurku.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Vrátný se zohýbá pro tučné spropitné, a kdo mu proklouzne, tak toho nechytne.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": true
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Kouzelník za dvacku vykouzlí pět bonů a vítr na věži opřel se do zvonů.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Honzové, princové, víly i sudičky chopí se poháru, nože i vidličky.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": true
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "„Na zdraví nevěsty, na zdraví ženicha!“, dvě sousta do kapsy a jedno do břicha.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Náhle se za oknem objevil skřítek, rozhrnul oponu z máminých kytek,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": true
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "pěkně se usmál a pěkně se podíval, a pak mi potichu do ucha zazpíval. /",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "R",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Dej mi ruku ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "svou, studenou ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Em",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "od okenních ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Hm",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "skel,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "všichni tě ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "mezi sebe ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Hm",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "zvou a ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "já jsem ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "tu proto, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "abys šel.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Score",
+       "name": "pohadka_chorus"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "rec: ",
+         "style": [
+          "ITALIC"
+         ]
+        },
+        {
+         "type": "Run",
+         "text": "/ Na plný obrátky letíme světem, všechny ty pohádky patřily dětem.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Píšeš mi z ciziny zoufalý dopisy, koukám se z okna a vzpomínám na kdysi,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "jak se mi za oknem objevil skřítek, rozhrnul oponu z máminých kytek.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": true
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Pěkně se usmál a pěkně se podíval, a pak mi potichu do ucha zazpíval. / ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "R",
+       "target": 3
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": " ×2",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  }
+ ]
+}

@@ -10,7 +10,7 @@
 # make scores   only export the score images from MuseScore into build/scores/
 #               (tools/scores.py; skips scores that are up to date)
 # make song SONG=<id>  build only that song into build/songs/<id>.pdf (tools/build_song.py)
-# make check [EDITION=<name>] [FORMAT=<name>]  the unit tests and the lints, then build the edition (which
+# make check [EDITION=<name>] [FORMAT=<name>]  the unit tests, the lints and the converter, then build the edition (which
 #               fails on a link to a missing target) and run the one-page and chord checks on it
 # make clean    delete build/
 # PYTHON=<command>  the Python the tools run with (default python3); it must be 3.11 or newer
@@ -59,6 +59,8 @@ check: check-python
 	@$(PYTHON) -m unittest discover -s tools -q
 	$(call step,Lint)
 	@$(PYTHON) tools/lint.py
+	$(call step,Converter)
+	@$(PYTHON) tools/convert.py
 	$(call step,Build of the $(EDITION) edition)
 	@$(MAKE) --no-print-directory compile
 	$(call step,Checks of the built edition)

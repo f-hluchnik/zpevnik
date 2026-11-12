@@ -1,0 +1,1158 @@
+{
+ "type": "Song",
+ "id": "rockyraccoon",
+ "title": [
+  {
+   "type": "Run",
+   "text": "Rocky Raccoon",
+   "style": []
+  }
+ ],
+ "toc_title": null,
+ "alt_titles": [],
+ "subtitle": null,
+ "artists": [
+  {
+   "type": "ArtistRef",
+   "slug": "beatles",
+   "label": null
+  }
+ ],
+ "collections": [],
+ "see": [],
+ "columns": 1,
+ "footnotes": [
+  [
+   [
+    {
+     "type": "Run",
+     "text": "Je typické, že v hotelových nočních stolcích bývají Gedeonské Bible, takzvané gedeonky, vydávané Mezinárodním svazem Gedeonů. Tento svaz je mezidenominační společenství křesťanů (zvláště podnikatelů a odborných pracovníků), kteří jsou členy protestantských/evangelikálních církví. Inspirováni podobenstvím o Rozsévači, Gedeoni bezplatně distribuují Bibli na různá místa, jako hotely, školy, nemocnice, vězení, státní instituce…Tyto Bible nejsou určeny pro církve, ale pro nevěřící. Gedeoni také drží nepřetržitý modlitební řetěz za všechny země světa (např. za Česku republiku se modlí každý 9. den v měsíci).",
+     "style": []
+    }
+   ]
+  ]
+ ],
+ "body": [
+  {
+   "type": "Block",
+   "kind": "I",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Now ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "somewhere in the Black Mountain Hills of Dakota,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "there lived a ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "74",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "young boy name of Rocky Racc",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "oon",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "and ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "one day his woman ran of with a",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "nother guy,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "hit young Rocky in the ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "eye. Rocky didn’t like that, he said “I’m ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "going to get that boy.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "”",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "So one ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "day he walked into town and booked himself a room in the ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "local saloon.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "1",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Rocky Raccoon checked ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "into his room ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "only to find Gideon’s ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Bible.",
+         "style": []
+        },
+        {
+         "type": "FootnoteRef",
+         "number": 1
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
+         }
+        ]
+       },
+       "text": []
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Rocky had come eq",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "uipped with a gun to ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "shoot off the legs of his ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "rival.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
+         }
+        ]
+       },
+       "text": []
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "His ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "rival, it seems, had ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "broken his dreams by ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "stealing the girl of his ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "fancy.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
+         }
+        ]
+       },
+       "text": []
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Her ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "name was Magill, and she ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "called herself ‘Lil’, but ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "everyone knew her as ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Nancy.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
+         }
+        ]
+       },
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "2",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Now, she and the man, who called himself Dan were in the next room in the hoedown.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Rocky burst in, and grinning a grin, he said, “Danny, boy, this is a showdown.”",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Bud Daniel was hot, he drew first and shot and Rocky collapsed in the corner.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "R",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Da-n-da da da-n-da da da…",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "subscript"
+         }
+        ]
+       },
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "3",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Now, the doctor came in, stinking of gin and proceeded to lie on the table.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "He said, “Rocky, you met your match.”, but Rocky said “Doc, it’s only a scratch",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "and I’ll be better…I’ll be better, doc, as soon as I am able.”",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "4",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Now, Rocky Raccoon, he fell back in his room only to find Gideon’s Bible.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Gideon checked out, and he left it no doubt to help with good Rocky’s revival.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "R",
+       "target": 3
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  }
+ ]
+}

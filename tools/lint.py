@@ -10,7 +10,8 @@ Errors fail the build:
   - a song still uses the old spacing `\\ns \\cns \\vnv \\vinv \\lsp` (the gap between blocks
     is automatic, see the README);
   - a song places or spaces something by hand (`\\includegraphics`, `\\vspace`, `\\hspace`) or
-    writes an echo, repeat signs or a sharp (`\\#`) by hand (see HAND_WRITTEN_FORMS);
+    writes an echo or repeat signs by hand (see HAND_WRITTEN_FORMS; a sharp `\\#` in a chord is
+    reported by the converter, tools/convert.py);
   - a song has text, `\\rec` or `\\chords` outside a block (a paragraph must start with a block or a separator);
   - a song has a block without text (`\\bridge{}`, `\\vers[3]{}`); a label alone is `\\cue{...}`;
   - a song still uses a renamed command (`\\refrain`, `\\sub`, `\\refsm`, ... see
@@ -63,7 +64,6 @@ RENAMED_COMMANDS = {
 HAND_WRITTEN_FORMS = {
     "textsuperscript": "write \\echo{...} for an echo or backing vocals",
     "backslash": "write \\rep{...}", "textbackslash": "write \\rep{...}",
-    "#": "write \\kk for a sharp",
     "includegraphics": "write \\score{name} for scores/<name>.mscz",
     "vspace": "the gaps between blocks are automatic and scores place themselves",
     "hspace": "chord spacing is automatic (a pause is \\gap{n}) and scores place themselves",
