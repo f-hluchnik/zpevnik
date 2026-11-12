@@ -30,29 +30,29 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 `todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes).
 
-**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8).
+**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8); of phase 7 so far J0, J0a, J1 and J5.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
 | K1 | done | the five songs with only a `\chords` row got chords over the lyrics: PR #109; the three scores need none (K2). The owner's new songs (about ten) before the print are content work, not a ticket (D-147) |
-| K2 | done | `tools/no-chords-allowlist.txt` read by the lint (answers K1's question): PR #111 |
+| K2 | done | `tools/no-chords-allowlist.txt` (since D-162 `data/no-chords-allowlist.txt`) read by the lint (answers K1's question): PR #111 |
 | E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
 | R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
 | E1 | done | D-138, superseded by D-139 |
 | E2 | done | editions in the generator and the build (D-144): PR #96 |
 | E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
-| E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; the owner archives `zpevnik-lidovky` after E5 |
+| E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; `zpevnik-lidovky` is archived (owner, after E5) |
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
 | P0 | done | print feasibility report with the printer checklist: `docs/p0-print-report.md` (PR #113); the geometry trial stays a one-off branch (D-154) |
-| P1 | open | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
+| P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
 | P2 | cancelled | the book is never sold (D-140) |
 | P3 | done | the scaled print: output formats `print`, `print-black` (D-154, PR #114), page numbers in the contents and `\seealso` (D-155, PR #115), the A5 PDF with the spine shift and `make print` (D-156, PR #116); the geometry trial stays a one-off branch, only if the scaled text is too small on paper. P4 comes on the final content |
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
 | J0 | done | song quirks: PR #88 (D-135); scores: PR #89 (D-136) |
-| J0a | done | structure the converter's grammar needs: cues, scores in a part, no `\\` at the end of a part and no empty line in one (D-163) |
+| J0a | done | structure the converter's grammar needs: cues, scores in a part, no `\\` at the end of a part and no empty line in one: PR #123 (D-163) |
 | J1 | done | the converter `tools/songbook/` and `tools/convert.py`, a `make check` and CI step; 20 songs fixed for it: PR #124 (D-164) |
 | J2 | todo | strong model (data model = contract between repos) |
 | J3 | todo | strong model (schema = contract between repos) |
@@ -201,13 +201,13 @@ Found while designing J1 (session 23): J0 listed the macros, environments and ma
 3. Tests: snapshot tests for 10 songs plus a whole-book parse that must succeed for all songs in under 5 s.
 
 ### J2 · Assemble `songs.json` — [agent] · **[strong model]** · M · needs J1
-Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated include order), `artists[]` from the registry. Each song: `id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see` (from `\seealso`), `order`, `page` (from the page checkpoints), `footnotes`, `images`, `columns`, `blocks[]` (lines of chord/text segments). **Hidden songs (L2, D-161):** select the songs with `songs.published()`, like the generator, so a hidden song is not in `songs.json`.
+Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated include order), `artists[]` from the registry. Each song: `id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see` (from `\seealso`), `order`, `page` (from the page checkpoints), `footnotes`, `images`, `columns`, `blocks[]` (lines of chord/text segments). This list predates the converter: the shape comes from its model (D-164), whose body also has cue blocks, notes, rules and speaker blocks, and whose scores are marks in the lines. **Hidden songs (L2, D-161):** select the songs with `songs.published()`, like the generator, so a hidden song is not in `songs.json`.
 
 ### J3 · JSON Schema — [agent] · **[strong model]** · S · needs J2
 `tools/songs.schema.json`; validate the output in tests and in CI.
 
 ### J4 · CI and release asset — [agent] · M · needs J3
-After the compile, run the converter and the schema validation. On pushes to master, add `songs.json` to the `files:` of the release step. PRs only validate.
+The converter already runs in CI (J1). J4 builds `songs.json` after the compile and validates it against the schema; on pushes to master it adds `songs.json` and the score SVGs (`build/scores/*.svg`, one zip, D-136) to the `files:` of the release step. PRs only validate.
 
 ### J5 · Scores from MuseScore — [agent] + [you] · M · needs J4
 **Done together with J0 item 1 (D-136), 8 Nov 2026:** the export is `tools/scores.py` with a shared style, the PDF uses the converted SVG, and every score places itself with `\score{name}`. Left for J4: put the SVGs (`build/scores/*.svg` since E2, D-143) into the release and reference them from `songs.json`. The text below is the original plan.

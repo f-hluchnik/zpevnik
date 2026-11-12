@@ -64,7 +64,7 @@ A3 (PRs #119 and #120, D-160): the apt step hardened, the PDF diff compares ever
 L2 (PR #121, D-161): `data/hidden.txt` and `songs.published()`; every book leaves hidden songs out. J2 selects the songs of `songs.json` with the same function.
 
 ### Any session · P4 · Sonnet · `zpevnik`
-- **Needs:** P3, and the final content: the owner's new songs and K1 (D-147).
+- **Needs:** P3, and the final content: the owner's new songs (D-147; K1 is done).
 - **Read:** TICKETS P4 · the P1 entry.
 - **Notes:** P4 ends with the owner's sign-off, not with the agent's.
 
@@ -74,7 +74,7 @@ J0a (PR #123, D-163): the song structure the converter reads, fixed in 22 songs.
 ### Session 24 · J2, J3 · **strong model** · `zpevnik`
 - **Needs:** J1.
 - **Read:** DECISIONS D-001, D-110, D-161 (hidden songs), D-164 (the model to turn into JSON) · PLAN WP5 (Design, Contents).
-- **Notes:** Propose the JSON shape for two representative songs (one with chord-only rows and `\cue`, one with footnotes and scores) and get the owner's OK before writing the schema.
+- **Notes:** Propose the JSON shape for two representative songs (one with chord-only rows and `\cue`, one with footnotes and scores) and get the owner's OK before writing the schema. Start from the model (D-164), not from the field list in TICKETS J2, which predates it: the body has cue blocks, notes, rules and speaker blocks besides the parts, and scores are marks in the lines. Two questions for the proposal: `page` is the page in which edition (the full book?), and how J3 validates the schema with the standard library only (TICKETS rule 4: a small validator for the part of JSON Schema the schema uses, or a dependency for CI only).
 
 ### Session 25 · J4 · Sonnet · `zpevnik`
 - **Needs:** J3.
@@ -84,7 +84,7 @@ J0a (PR #123, D-163): the song structure the converter reads, fixed in 22 songs.
 ### Session 26 · W1, W2 · Sonnet · `zpevnik-web`
 - **Needs:** J4 released at least once.
 - **Read:** DECISIONS D-103, D-110, D-123 · PLAN WP6 · zpevnik-web README.
-- **Notes:** The PDFs already come from the release (E6); W1 adds `songs.json`. The download page at `/` must look and work as before. The songbook lives under `/zpevnik/`. W2 implements the chord rule in CSS and must read well without JavaScript. The owner had an uncommitted change in `zpevnik-web/templates/base.html` (6 Nov 2026): ask before touching that file.
+- **Notes:** The PDFs already come from the release (E6); W1 adds `songs.json`. The download page at `/` must look and work as before. The songbook lives under `/zpevnik/`. W2 implements the chord rule in CSS and must read well without JavaScript.
 
 ### Session 27 · W3, W4, W5, W6 · Sonnet · `zpevnik-web`
 - **Needs:** W2, L1.
@@ -104,4 +104,4 @@ J0a (PR #123, D-163): the song structure the converter reads, fixed in 22 songs.
 |---|---|---|
 | E4 songs for `zpevnik-lite` | TICKETS E4 | after the printed edition (D-147): nothing now |
 | P1 print requirements and deadline (the printer's answers, D-157) | TICKETS P1 | P4 |
-| The owner's new songs (about ten) and K1 chords | TICKETS K1 | P4 |
+| The owner's new songs (about ten), content work | D-147 | P4 |
