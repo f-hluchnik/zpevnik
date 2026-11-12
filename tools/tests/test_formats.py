@@ -16,7 +16,3 @@ class Definitions(unittest.TestCase):
 
     def test_the_black_print_format_adds_the_chord_colour(self):
         self.assertEqual(pretex(PRINT_BLACK), "\\def\\zpprint{}\\def\\zpchordcolor{black}")
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -188,7 +188,3 @@ class FailureTest(unittest.TestCase):
         self.assertIn(sys.executable, message)
         self.assertIn("cannot open the score", message)
         self.assertNotIn("typeregistration", message)
-
-
-if __name__ == "__main__":
-    unittest.main()

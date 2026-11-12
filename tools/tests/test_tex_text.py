@@ -51,7 +51,3 @@ class BraceGroup(unittest.TestCase):
     def test_unbalanced_is_an_error(self):
         with self.assertRaises(ValueError):
             brace_group("{abc", 0)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -27,7 +27,3 @@ class UnknownSong(unittest.TestCase):
     def test_an_unknown_id_is_reported_before_anything_is_written(self):
         with self.assertRaises(FileNotFoundError):
             build(REPO_ROOT, "no-such-song-id")
-
-
-if __name__ == "__main__":
-    unittest.main()

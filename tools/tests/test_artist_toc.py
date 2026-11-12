@@ -122,7 +122,3 @@ class ArtistPartTex(unittest.TestCase):
         self.assertLess(tex.index("\\zpcontentsentry{abba}{ABBA}\\par"), tex.index("\\zprule{\\textwidth}"))
         self.assertLess(tex.index("\\zprule{\\textwidth}"), tex.index("\\subsection*{ABBA}"))
         self.assertLess(tex.index("\\subsection*{ABBA}"), tex.index("\\subsection*{Kryl, Karel}"))
-
-
-if __name__ == "__main__":
-    unittest.main()

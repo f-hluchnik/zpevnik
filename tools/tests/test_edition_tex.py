@@ -51,7 +51,3 @@ class Pages(unittest.TestCase):
 
     def test_no_imprint_fragment_leaves_the_slot_empty(self):
         self.assertIn("\\newcommand*{\\zpimprintslot}{}\n", pages_tex(edition("lite")))
-
-
-if __name__ == "__main__":
-    unittest.main()

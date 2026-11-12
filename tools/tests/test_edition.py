@@ -188,7 +188,3 @@ class ReadEdition(unittest.TestCase):
     def test_an_unreferenced_tex_file_in_the_folder_is_an_error(self):
         self.assertEqual(self.errors(lite(), **{"titulnilist.tex": ""}),
                          ["titulnilist.tex is not referenced by edition.toml"])
-
-
-if __name__ == "__main__":
-    unittest.main()

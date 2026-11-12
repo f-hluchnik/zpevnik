@@ -106,7 +106,3 @@ class Folders(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(FileNotFoundError):
                 build(Path(tmp), "full")
-
-
-if __name__ == "__main__":
-    unittest.main()
