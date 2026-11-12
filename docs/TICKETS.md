@@ -52,6 +52,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P3 | done | the scaled print: output formats `print`, `print-black` (D-154, PR #114), page numbers in the contents and `\seealso` (D-155, PR #115), the A5 PDF with the spine shift and `make print` (D-156, PR #116); the geometry trial stays a one-off branch, only if the scaled text is too small on paper. P4 comes on the final content |
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
 | J0 | done | song quirks: PR #88 (D-135); scores: PR #89 (D-136) |
+| J0a | done | structure the converter's grammar needs: cues, scores in a part, no `\\` at the end of a part and no empty line in one (D-163) |
 | J1 | todo | strong model (parser design) |
 | J2 | todo | strong model (data model = contract between repos) |
 | J3 | todo | strong model (schema = contract between repos) |
@@ -74,7 +75,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | 9a Delivery | E5, E6 (done) | CI builds and releases every edition, the download page shows them, `zpevnik-lidovky` can be archived (D-147, D-149, D-150) |
 | 3 Print | P0, P1, P3, then P4 | The A5 facts and the printer's requirements, a print build, and a checked proof on the final content (D-122, D-147) |
 | 12 Audits | A1–A3 (done) | The README, the unit tests and the build speed reviewed before the converter (D-147, D-158–D-160) |
-| 7 Converter | J0–J5 | `songs.json` and score SVGs on every release |
+| 7 Converter | J0, J0a, J1–J5 | `songs.json` and score SVGs on every release |
 | 8 Legal | L1–L2 (done) | Notice, hide switch (D-141, D-161) |
 | 9 Website | W1–W7 | Online songbook |
 
@@ -185,9 +186,18 @@ The converter is strict (an unknown macro is an error), so every remaining speci
 5. Anything else the strict parser of J1 would reject; footnotes in `\song{}` stay (Q5).
 **Decided (owner, 8 Nov 2026):** items 2–5 and the rest of the list in D-135; item 1 together with J5 (a standard MuseScore export that places itself, no per-song offsets).
 
-### J1 · Converter package — [agent] · **[strong model]** · L · needs Q4, Q5, J0
+### J0a · Song structure before the converter — [agent] + [you] · S · needs J0
+Found while designing J1 (session 23): J0 listed the macros, environments and math in the songs, but not their structure, which TeX accepts silently and only a parser sees. The owner decided each fix and reviewed the before/after pages; the rules are in D-163.
+1. A brace closing a part in the wrong place (`idzepostaridze`: verse 2 contained the next part); a pause inside a chord (`pepita`).
+2. A cue that refers to no part written before it with that label (13 cues in 11 songs).
+3. A score outside a part (`batalion`, `scarboroughfaircarthy`, `svazceskychbohemu`).
+4. `\\` at the end of a part (11 parts in 5 songs) and an empty line inside a part (`pohadka`, `waterlooabba`).
+**Expected differences:** the songs with a changed cue, score or line break; the markup-only fixes none.
+
+### J1 · Converter package — [agent] · **[strong model]** · L · needs Q4, Q5, J0, J0a
 1. Write the converter in `tools/songbook/` as a package: parser, model, command line. It starts from scratch (the earlier `tex2json.py` prototype is in neither repository). Strict: an unknown macro is an error; it understands only the command set after Q4 (D-108, D-131).
 2. Song metadata (`\artist`, `\alttitle`, `\toctitle`, `\collection`); the title and its footnote apart (Q5 item 4); `\cue` as a reference to another block; repeat marks rendered as the PDF does.
+   The structure rules of D-163 are errors of the converter, and the whole-book parse is a `make check` step.
 3. Tests: snapshot tests for 10 songs plus a whole-book parse that must succeed for all songs in under 5 s.
 
 ### J2 · Assemble `songs.json` — [agent] · **[strong model]** · M · needs J1
@@ -252,5 +262,6 @@ Done for every phase up to 11 (HISTORY.md, docs/archive/). At the end of each ph
 - **Capo note versus song remark** (owner, 6 Nov 2026): `\note` belongs to the next block (right for "capo 3"); a standalone remark is written as an unnumbered `\vers{\emph{…}}`. A separate remark command would give the web version a note type; decide in J1 if the converter needs it.
 - **Grouping verses, tight versus loose** (owner, `ejhorahora`): short one-line verses looked better tight; a way to group verses (tight inside, normal gap between groups). Not necessary.
 - **Bigger gap between groups of verses, and bilingual songs** (owner, `jednoubudemdal`): the Czech and the English version share one page; by the logic of the songbook they should be two songs. Not necessary.
+- **One reader of the songs** (D-164): after J2 the generator takes the song metadata from the converter, and the regexes of `songs.py` (and `tex_text.plain_text` for titles) go.
 - **Refactoring story on the website** (owner, 5 Nov 2026): notes are in HISTORY.md; write the article when the online songbook exists.
 - **CI speed:** measured and decided in A3 (D-160): most of a run is pulling the TeX Live image (about 80 s), and the options to avoid it were not adopted. Tried earlier and not adopted: Ubuntu's own TeX Live 2023 via apt (identical output, but a 15 min install; PR #37, closed).

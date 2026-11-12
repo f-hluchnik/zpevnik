@@ -76,7 +76,7 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky 
 
 #### Bloky
 
-Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Text bloku se píše do složených závorek a smí obsahovat prázdné řádky. Číslo je volitelný parametr v hranatých závorkách; prázdný nebo vynechaný parametr znamená bez čísla.
+Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Text bloku se píše do složených závorek; řádky odděluje `\\`, skupiny řádků `\groupbreak`. Uvnitř bloku není prázdný řádek a text nekončí `\\` (to by vysázelo prázdný řádek navíc). Číslo je volitelný parametr v hranatých závorkách; prázdný nebo vynechaný parametr znamená bez čísla.
 
 | Příkaz | Štítek | Příklad |
 |---|---|---|
@@ -104,7 +104,7 @@ Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnan�
 | `\echo{}` | ozvěna nebo vokály v pozadí: kurzívou, zvednuté, ve velikosti okolního textu | `srdce \echo{(že na)} svírá` |
 | `\rec{}` | označení recitativu v textu | `\rec{Text}` |
 
-`\cue` se chová podle místa: po prázdném řádku je to samostatný blok s mezerou nad sebou a se štítkem zarovnaným jako ostatní štítky, za blokem nebo uvnitř něj se připojí na konec řádku (`\vers[1]{...} \cue{R}`).
+`\cue` se chová podle místa: po prázdném řádku je to samostatný blok s mezerou nad sebou a se štítkem zarovnaným jako ostatní štítky, za blokem nebo uvnitř něj se připojí na konec řádku (`\vers[1]{...} \cue{R}`). Odkazuje na poslední část se stejným štítkem napsanou před ním: jsou-li refrény číslované (`\chorus[1]`, `\chorus[2]`), píše se `\cue{R1}`, ne `\cue{R}`.
 
 #### Řádky a oddělovače
 
@@ -130,7 +130,7 @@ Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
 `make check` hlásí každou písničku, která zabere víc než jednu stranu. Když se písnička opravdu musí zapsat na dvě strany (viz [Filosofie zpěvníku](#filosofie-zpěvníku), bod 1), zapíšu její `id` do `data/multipage-allowlist.txt` s komentářem proč; kontrola ji pak pustí.
 
 ### Noty
-Každý obrázek s notami je jeden soubor `scores/<název>.mscz` z MuseScoru 4 a v písničce ho vysází `\score{<název>}`. Na začátku bloku stojí vedle štítku (`\intro{` + `\score{pohadka}` + `}`), jinde na vlastním řádku. Do písničky se nepíše žádné odsazení, posun ani šířka: obrázek začíná tam, kde text bloku, štítek stojí uprostřed první osnovy a všechny noty mají stejné měřítko (celý systém přesně vyplní řádek).
+Každý obrázek s notami je jeden soubor `scores/<název>.mscz` z MuseScoru 4 a v písničce ho vysází `\score{<název>}`. Noty stojí vždy uvnitř bloku: na jeho začátku vedle štítku (`\intro{` + `\score{pohadka}` + `}`), jinde na vlastním řádku za `\\`. Do písničky se nepíše žádné odsazení, posun ani šířka: obrázek začíná tam, kde text bloku, štítek stojí uprostřed první osnovy a všechny noty mají stejné měřítko (celý systém přesně vyplní řádek).
 
 - Před úpravou noty načti v MuseScoru sdílený styl `scores/zpevnik.mss` (Formát → Styl → Načíst styl). Sestavení ho stejně použije na každý soubor, takže jen tak uvidíš rozdělení do systémů, jaké bude ve zpěvníku.
 - Nota je vždy na jedné stránce. Víc obrázků v jedné písničce znamená víc souborů (`morseovka_1.mscz`, `morseovka_2.mscz`).
