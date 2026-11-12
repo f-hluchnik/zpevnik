@@ -62,8 +62,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | W1 | done | `build.py` of `zpevnik-web` downloads `songs.json` from the release into `build/` and checks `schemaVersion` (`--songs-json FILE` for a local one): zpevnik-web PR #4 |
 | W2 | done | one page per song at `/zpivej/<id>/` from `songs.json` and `scores.zip`, the chord rule of D-123 in CSS, noindex, font-size control, 404 for unknown songs (D-167); the hyphen inside a split word is shown only where the gap is wide enough (README of `zpevnik-web`): zpevnik-web PR #5 |
 | W3 | done | the index at `/zpivej/` (the contents of `songs.json`, never re-sorted), the artists and collections at `/zpivej/interpret/`, the navigation, links between songs and artists, previous/next in book order, "open in PDF" at the song's page, the link from the download page and from `404.html` (D-168): zpevnik-web PR #6 |
-| W3a | in review | two levels of navigation: the tabs "Stáhnout" and "Zobrazit online" on every page, the songbook's own row under `/zpivej/` (D-169), smaller font buttons: zpevnik-web PR #7 |
-| W4 | todo | |
+| W3a | done | two levels of navigation: the tabs "Stáhnout" and "Zobrazit online" on every page, the songbook's own row under `/zpivej/` (D-169), smaller font buttons: zpevnik-web PR #7 |
+| W4 | in review | `/zpivej/hledat/` and `static/search-index.json` (title, other titles, artists, lyrics; 262 kB gzipped), loaded when the field is first used, case and diacritics ignored, all words must occur, ranked title / artist / lyrics, the query in `?q=` (D-170): zpevnik-web PR #8 |
 | W5 | todo | |
 | W6 | todo | |
 | W6a | todo | segments of a line wrap freely (D-123 on the web), after W6 |
