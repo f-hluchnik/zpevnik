@@ -4,8 +4,13 @@ The chord symbols of zpevnik.sty become the characters the PDF prints, each on t
 base line, in superscript or in subscript; everything inside `\\bas{...}` is a
 subscript (a sharp of a bass note too), everything inside `\\add` and `\\sus` a superscript.
 
+A bass note written as plain text (`C/G`) is an error: the PDF would print it on the base
+line, unlike every `\\bas{G}` (a slash before anything else, `\\add{6/9}`, `E\\7 / 2. C`, is text).
+
 Python >= 3.11, standard library only.
 """
+import re
+
 from songbook import grammar
 from songbook.errors import SongSyntaxError
 from songbook.lexer import DEPTH_CHANGE, Kind, Token
@@ -13,6 +18,7 @@ from songbook.model import Chord, ChordPart, ChordPosition
 from songbook.stream import TokenStream
 
 ChordRow = list[list[Token]]
+PLAIN_BASS = re.compile(r"/[A-H]")  # C/G: a note name right after a slash on the base line
 MINOR = "m"  # may follow a chord symbol after a space TeX drops: the chord name goes on (F\\kk m)
 # The position everything inside these commands takes.
 ARGUMENT_POSITIONS = {grammar.BASS: ChordPosition.SUBSCRIPT, grammar.ADDED: ChordPosition.SUPERSCRIPT,
@@ -25,7 +31,17 @@ def parse_chord(tokens: list[Token], command: Token) -> Chord:
     chord = Chord(tuple(merged(stripped(parts))))
     if not chord.parts:
         raise SongSyntaxError(command.line, "an empty chord")
+    check_plain_bass(chord, command)
     return chord
+
+
+def check_plain_bass(chord: Chord, command: Token) -> None:
+    """A bass note is `\\bas{G}`, never `/G` on the base line (D-164, J1a)."""
+    for part in chord.parts:
+        match = PLAIN_BASS.search(part.text) if part.position is ChordPosition.BASE else None
+        if match:
+            raise SongSyntaxError(command.line, f"a bass note written as {match.group()!r}: "
+                                  f"write \\{grammar.BASS}{{{match.group()[1:]}}}")
 
 
 def chord_symbol_parts(stream: TokenStream, command: Token) -> list[ChordPart]:
