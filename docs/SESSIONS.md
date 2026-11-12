@@ -80,7 +80,7 @@ J4 (PR #129, D-166): CI builds `songs.json` after the compile and validates the 
 ### Session 26 · W1, W2 · Sonnet · `zpevnik-web`
 - **Needs:** J4 released at least once: the release after the merge of PR #129 holds `songs.json` and `scores.zip`; check the release page before starting.
 - **Read:** DECISIONS D-103, D-110, D-123, D-165 (the shape of `songs.json`; `tools/songs.schema.json` is the contract) · PLAN WP6 · zpevnik-web README.
-- **Notes:** The PDFs already come from the release (E6); W1 adds `songs.json`. The download page at `/` must look and work as before. The songbook lives under `/zpevnik/`. W2 implements the chord rule in CSS and must read well without JavaScript.
+- **Notes:** The PDFs already come from the release (E6); W1 adds `songs.json`. The download page at `/` must look and work as before. The songbook lives under `/zpivej/` (D-167). W2 implements the chord rule in CSS and must read well without JavaScript.
 
 ### Session 27 · W3, W4, W5, W6 · Sonnet · `zpevnik-web`
 - **Needs:** W2, L1.

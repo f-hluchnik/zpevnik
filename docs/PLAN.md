@@ -81,7 +81,7 @@ The book is never sold, printed or not (D-140), so there is no licensing check f
 
 ## WP6 – Website (`zpevnik-web`)
 
-The online songbook lives in the web repo but is clearly separate from the download page (D-103): the download page stays at `/`; the songbook lives under `/zpevnik/` with its own templates and navigation, and the download page links to it. The web build gets `songs.json` and the PDF from the release assets pinned in `version.txt` instead of committed files (D-110).
+The online songbook lives in the web repo but is clearly separate from the download page (D-103): the download page stays at `/`; the songbook lives under `/zpivej/` (D-167) with its own templates and navigation, and the download page links to it. The web build gets `songs.json` and the PDF from the release assets pinned in `version.txt` instead of committed files (D-110).
 1. `build.py` renders one page per song, an alphabetical index, artist pages and prev/next in book order (Jinja, no framework).
 2. Chord CSS (inline-block, the rule of D-123), font-size control, existing dark mode.
 3. Build-time search index over title, alternative titles, artist and lyrics (diacritics-insensitive), lazy-loaded.

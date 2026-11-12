@@ -7,7 +7,7 @@ This project maintains a songbook in two forms, in two repositories:
 - `f-hluchnik/zpevnik` (this repository) — LaTeX source of the songbook (the only source of song content), compiled to the PDF. It also holds the planning docs (`docs/`) of both repositories.
 - `f-hluchnik/zpevnik-web` — website published through GitHub Pages; today a download page for the PDFs.
 
-The project is being refactored so that the songbook is available both as a downloadable PDF and as an online HTML songbook on the website (under `/zpevnik/`, separate from the download page), both built from the same LaTeX files. The technical debt in the LaTeX source has been paid off (`docs/HISTORY.md`). Editions (song subsets) and a print edition are in scope (D-121, D-122) and come before the converter and the website (D-132); the koledy songbook is out of scope. See `docs/DECISIONS.md` (D-100 onwards).
+The project is being refactored so that the songbook is available both as a downloadable PDF and as an online HTML songbook on the website (under `/zpivej/`, separate from the download page), both built from the same LaTeX files. The technical debt in the LaTeX source has been paid off (`docs/HISTORY.md`). Editions (song subsets) and a print edition are in scope (D-121, D-122) and come before the converter and the website (D-132); the koledy songbook is out of scope. See `docs/DECISIONS.md` (D-100 onwards).
 
 The architecture and the relationship between the two repositories were reviewed on 3 Nov 2026 and are described in `docs/PLAN.md` and `docs/DECISIONS.md`. Verify them against the code before relying on them.
 
