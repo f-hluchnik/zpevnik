@@ -10,7 +10,9 @@ import os
 import unittest
 from pathlib import Path
 
-from songbook import SongSyntaxError, parse_song, read_song
+from songbook import SongSyntaxError, grammar, parse_song, read_song
+from songbook.inline import MUSIC
+from songbook.parser import SONG_LEVEL, STANDALONE
 from songbook.dump import to_json
 from songbook.model import (Block, ChordPart, ChordPosition, CueBlock, FootnoteRef, Note, RepeatEnd,
                             RepeatStart, Rule, RuleKind, Run, Segment, Speaker, SpeakerBlock, Style, plain)
@@ -150,6 +152,15 @@ class Errors(unittest.TestCase):
     def test_a_song_needs_a_title(self):
         with self.assertRaisesRegex(SongSyntaxError, "no \\\\song"):
             parse_song("x", "\\vers{a}")
+
+
+class Grammar(unittest.TestCase):
+    def test_every_command_of_the_grammar_has_exactly_one_handler(self):
+        song_level = (grammar.METADATA | grammar.BLOCKS | grammar.RULES | grammar.ENVIRONMENT_COMMANDS
+                      | grammar.LAYOUT_COMMANDS)
+        self.assertEqual(set(SONG_LEVEL), set(song_level))
+        self.assertEqual(set(MUSIC), set(grammar.PART_COMMANDS))
+        self.assertEqual(set(STANDALONE), set(grammar.MODE_DEPENDENT))
 
 
 class Snapshots(unittest.TestCase):

@@ -61,8 +61,10 @@ ENGLISH_QUOTES = "enquote"  # \enquote{} and the inner quotes \enquote*{}
 QUOTES = {CZECH_QUOTES: ("„", "“"), ENGLISH_QUOTES: ("‘", "’")}
 INNER_QUOTES = ("“", "”")  # \enquote*: what the British style of csquotes prints
 TEXT_COMMANDS = {CZECH_QUOTES: "m", ENGLISH_QUOTES: "sm", FOOTNOTE: "m", TIMES: "m"} | {name: "m" for name in STYLES}
-TEXT_SYMBOLS = {"dots": "…", "&": "&", "ss": "ß", " ": " ", "textdagger": "†", "textasteriskcentered": "∗",
-                "#": "#"}  # \# is a plain sign in text, e.g. note names in lowercase letters; in a chord it is \kk
+DOTS = "dots"
+SHARP_SIGN = "#"  # \#: a plain sign in text (note names in lowercase letters); in a chord a sharp is \kk
+TEXT_SYMBOLS = {DOTS: "…", "&": "&", "ss": "ß", " ": " ", "textdagger": "†", "textasteriskcentered": "∗",
+                SHARP_SIGN: "#"}
 # Math is allowed for these symbols only (D-135).
 MATH_SYMBOLS = {"times": "×", "rightarrow": "→"}
 TIE = " "  # ~
@@ -84,4 +86,4 @@ BASS_SEPARATOR = "/"
 ADDED = "add"         # \add{x}: x as a superscript
 SUSPENDED = "sus"     # \sus{x}: "sus" and x as a superscript
 SUSPENDED_PREFIX = "sus"
-CHORD_COMMANDS = {BASS: "m", ADDED: "m", SUSPENDED: "m", "dots": ""} | {name: "" for name in CHORD_SYMBOLS}
+CHORD_COMMANDS = {BASS: "m", ADDED: "m", SUSPENDED: "m", DOTS: ""} | {name: "" for name in CHORD_SYMBOLS}

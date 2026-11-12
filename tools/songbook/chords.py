@@ -13,13 +13,15 @@ from songbook.model import Chord, ChordPart, ChordPosition
 from songbook.stream import TokenStream
 
 ChordRow = list[list[Token]]
-SHARP_SIGN = "#"  # \\#: a plain sign in text, never in a chord
-MINOR = "m"  # what may follow a chord symbol after a space TeX drops: the chord name goes on (F\\kk m)
+MINOR = "m"  # may follow a chord symbol after a space TeX drops: the chord name goes on (F\\kk m)
+# The position everything inside these commands takes.
+ARGUMENT_POSITIONS = {grammar.BASS: ChordPosition.SUBSCRIPT, grammar.ADDED: ChordPosition.SUPERSCRIPT,
+                      grammar.SUSPENDED: ChordPosition.SUPERSCRIPT}
 
 
 def parse_chord(tokens: list[Token], command: Token) -> Chord:
     parts: list[ChordPart] = []
-    read_parts(tokens, None, parts)
+    read_all(tokens, None, parts)
     chord = Chord(tuple(merged(stripped(parts))))
     if not chord.parts:
         raise SongSyntaxError(command.line, "an empty chord")
@@ -27,61 +29,72 @@ def parse_chord(tokens: list[Token], command: Token) -> Chord:
 
 
 def chord_symbol_parts(stream: TokenStream, command: Token) -> list[ChordPart]:
-    """The parts of one chord symbol named in running text (`C\\kk dur`), with its argument."""
-    signature = grammar.CHORD_COMMANDS[command.text]
-    tokens = [command] + [token for argument in stream.arguments(command, signature)
-                          for token in braced(argument, command)]
+    """The parts of a chord symbol named in running text (`C\\kk{} dur`), with its argument."""
     parts: list[ChordPart] = []
-    read_parts(tokens, None, parts)
+    read_command(stream, command, None, parts)
+    check_dropped_space(command, stream.peek())
     return merged(parts)
 
 
-def braced(argument: list[Token], command: Token) -> list[Token]:
-    return [Token(Kind.BEGIN_GROUP, "{", command.line), *argument, Token(Kind.END_GROUP, "}", command.line)]
+def read_token(stream: TokenStream, forced: ChordPosition | None, parts: list[ChordPart]) -> None:
+    """Append the parts of the next token (with its argument); `forced` is the position
+    everything inside \\bas, \\add or \\sus takes."""
+    token = stream.next()
+    check_dropped_space(token, stream.peek())
+    if token.kind in (Kind.TEXT, Kind.SPACE):
+        parts.append(ChordPart(token.text, forced or ChordPosition.BASE))
+    elif token.kind is Kind.BEGIN_GROUP:  # \maj{}: a group only ends the command name
+        read_all(stream.rest_of_group(token), forced, parts)
+    elif token.kind is Kind.COMMAND:
+        read_command(stream, token, forced, parts)
+    else:
+        raise SongSyntaxError(token.line, f"{token.text!r} is not allowed in a chord")
 
 
-def read_parts(tokens: list[Token], forced: ChordPosition | None, parts: list[ChordPart]) -> None:
-    """Append the parts of `tokens`; `forced` is the position everything inside \\bas, \\add or \\sus takes."""
-    def add(text: str, position: ChordPosition) -> None:
-        parts.append(ChordPart(text, forced or position))
-
+def read_all(tokens: list[Token], forced: ChordPosition | None, parts: list[ChordPart]) -> None:
     stream = TokenStream(tokens)
     while not stream.at_end():
-        token = stream.next()
-        check_dropped_space(token, stream.peek())
-        if token.kind in (Kind.TEXT, Kind.SPACE):
-            add(token.text, ChordPosition.BASE)
-        elif token.kind is Kind.BEGIN_GROUP:  # \maj{}: a group only ends the command name
-            read_parts(stream.rest_of_group(token), forced, parts)
-        elif token.kind is Kind.COMMAND and token.text in grammar.CHORD_SYMBOLS:
-            add(*grammar.CHORD_SYMBOLS[token.text])
-        elif token.kind is Kind.COMMAND and token.text == "dots":
-            add(grammar.TEXT_SYMBOLS["dots"], ChordPosition.BASE)
-        elif token.kind is Kind.COMMAND and token.text == grammar.BASS:
-            add(grammar.BASS_SEPARATOR, ChordPosition.BASE)
-            read_parts(stream.group(token), forced or ChordPosition.SUBSCRIPT, parts)
-        elif token.kind is Kind.COMMAND and token.text == grammar.ADDED:
-            read_parts(stream.group(token), forced or ChordPosition.SUPERSCRIPT, parts)
-        elif token.kind is Kind.COMMAND and token.text == grammar.SUSPENDED:
-            add(grammar.SUSPENDED_PREFIX, ChordPosition.SUPERSCRIPT)
-            read_parts(stream.group(token), forced or ChordPosition.SUPERSCRIPT, parts)
-        elif token.kind is Kind.COMMAND and token.text == SHARP_SIGN:
-            raise SongSyntaxError(token.line, "\\# is not allowed in a chord: a sharp is \\kk")
-        else:
-            shown = "\\" + token.text if token.kind is Kind.COMMAND else repr(token.text)
-            raise SongSyntaxError(token.line, f"{shown} is not allowed in a chord")
+        read_token(stream, forced, parts)
+
+
+def read_command(stream: TokenStream, token: Token, forced: ChordPosition | None, parts: list[ChordPart]) -> None:
+    name = token.text
+    if name in grammar.CHORD_SYMBOLS:
+        text, position = grammar.CHORD_SYMBOLS[name]
+        parts.append(ChordPart(text, forced or position))
+    elif name == grammar.DOTS:
+        parts.append(ChordPart(grammar.TEXT_SYMBOLS[name], forced or ChordPosition.BASE))
+    elif name in ARGUMENT_POSITIONS:
+        if name == grammar.BASS:
+            parts.append(ChordPart(grammar.BASS_SEPARATOR, forced or ChordPosition.BASE))
+        elif name == grammar.SUSPENDED:
+            parts.append(ChordPart(grammar.SUSPENDED_PREFIX, forced or ChordPosition.SUPERSCRIPT))
+        read_all(stream.group(token), forced or ARGUMENT_POSITIONS[name], parts)
+    elif name == grammar.SHARP_SIGN:
+        raise SongSyntaxError(token.line, "\\# is not allowed in a chord: a sharp is \\kk")
+    else:
+        raise SongSyntaxError(token.line, f"\\{name} is not allowed in a chord")
+
+
+def check_dropped_space(token: Token, following: Token | None) -> None:
+    """TeX drops the space after a chord symbol named with letters (`\\kk`, `\\maj`). That is
+    right inside a chord name, before `m` or another symbol (`F\\kk m`); before anything else
+    the space was meant to be printed (`\\bas{C\\kk F}`, `C\\kk dur`, `\\chords{Dm\\maj Dm}`)."""
+    if (token.kind is Kind.COMMAND and token.text in grammar.CHORD_SYMBOLS and token.swallowed_space
+            and following is not None and following.kind is Kind.TEXT and not following.text.startswith(MINOR)):
+        raise SongSyntaxError(token.line, f"TeX drops the space after \\{token.text}: "
+                              f"write \\{token.text}{{}} to keep it")
 
 
 def stripped(parts: list[ChordPart]) -> list[ChordPart]:
     """Without the spaces at the start and the end of the chord."""
-    while parts and not parts[0].text.strip():
-        parts.pop(0)
-    while parts and not parts[-1].text.strip():
-        parts.pop()
-    if parts:
-        parts[0] = ChordPart(parts[0].text.lstrip(), parts[0].position)
-        parts[-1] = ChordPart(parts[-1].text.rstrip(), parts[-1].position)
-    return parts
+    first = next((index for index, part in enumerate(parts) if part.text.strip()), len(parts))
+    last = max((index for index, part in enumerate(parts) if part.text.strip()), default=-1)
+    kept = parts[first:last + 1]
+    if kept:
+        kept[0] = ChordPart(kept[0].text.lstrip(), kept[0].position)
+        kept[-1] = ChordPart(kept[-1].text.rstrip(), kept[-1].position)
+    return kept
 
 
 def merged(parts: list[ChordPart]) -> list[ChordPart]:
@@ -93,16 +106,6 @@ def merged(parts: list[ChordPart]) -> list[ChordPart]:
         else:
             result.append(part)
     return result
-
-
-def check_dropped_space(token: Token, following: Token | None) -> None:
-    """TeX drops the space after a chord symbol named with letters (`\\kk`, `\\maj`). That is
-    right inside a chord name, before `m` or another symbol (`F\\kk m`); before anything else
-    the space was meant to be printed (`\\bas{C\\kk F}`, `C\\kk dur`, `\\chords{Dm\\maj Dm}`)."""
-    if (token.kind is Kind.COMMAND and token.text in grammar.CHORD_SYMBOLS and token.swallowed_space
-            and following is not None and following.kind is Kind.TEXT and not following.text.startswith(MINOR)):
-        raise SongSyntaxError(token.line, f"TeX drops the space after \\{token.text}: "
-                              f"write \\{token.text}{{}} to keep it")
 
 
 def split_chord_row(tokens: list[Token]) -> ChordRow:

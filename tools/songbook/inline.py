@@ -11,13 +11,12 @@ Python >= 3.11, standard library only.
 from dataclasses import dataclass, field
 
 from songbook import grammar
-from songbook.chords import check_dropped_space, chord_symbol_parts, parse_chord, split_chord_row
+from songbook.chords import chord_symbol_parts, parse_chord, split_chord_row
 from songbook.errors import SongSyntaxError
 from songbook.lexer import Kind, Token
-from songbook.model import (Chord, ChordPosition, Cue, FootnoteRef, Gap, Inline, Line, Mark, Note, RepeatEnd, RepeatStart, Run,
-                            Score, Segment, Speaker, Style, Text)
-from songbook.stream import TokenStream, group_number, group_text
-from songbook.text import printed_text
+from songbook.model import (Chord, ChordPosition, Cue, FootnoteRef, Gap, Inline, Line, Mark, Note, RepeatEnd,
+                            RepeatStart, Run, Score, Segment, Speaker, Style, Text)
+from songbook.stream import Argument, TokenStream, group_number, group_text
 
 
 @dataclass(frozen=True)
@@ -76,22 +75,23 @@ class InlineParser:
         stream = TokenStream(tokens)
         while not stream.at_end():
             token = stream.next()
-            if token.kind is Kind.TEXT:
-                self.add_text(printed_text(token.text), style)
-            elif token.kind is Kind.SPACE:
-                self.add_text(" ", style)
-            elif token.kind is Kind.TIE:
-                self.add_text(grammar.TIE, style)
-            elif token.kind is Kind.MATH:
-                self.add_text(self.math(stream, token), style)
-            elif token.kind is Kind.BEGIN_GROUP:
-                self.read_group(stream.rest_of_group(token), style)
-            elif token.kind is Kind.PAR:
-                raise SongSyntaxError(token.line, "an empty line inside a part: a new line is \\\\")
-            elif token.kind is Kind.COMMAND:
-                self.command(stream, token, style)
-            else:
-                raise SongSyntaxError(token.line, f"unexpected {token.text!r}")
+            match token.kind:
+                case Kind.TEXT:
+                    self.add_text(printed_text(token.text), style)
+                case Kind.SPACE:
+                    self.add_text(" ", style)
+                case Kind.TIE:
+                    self.add_text(grammar.TIE, style)
+                case Kind.MATH:
+                    self.add_text(self.math(stream, token), style)
+                case Kind.BEGIN_GROUP:
+                    self.read_group(stream.rest_of_group(token), style)
+                case Kind.PAR:
+                    raise SongSyntaxError(token.line, "an empty line inside a part: a new line is \\\\")
+                case Kind.COMMAND:
+                    self.command(stream, token, style)
+                case _:
+                    raise SongSyntaxError(token.line, f"unexpected {token.text!r}")
 
     def read_group(self, tokens: list[Token], style: Style) -> None:
         """A TeX group: a chord that starts inside it does not reach past its end."""
@@ -128,11 +128,10 @@ class InlineParser:
             self.line_break(token)
         elif name in grammar.PART_COMMANDS:
             self.require(self.allowed.music, token, "only in a part")
-            self.music(stream, token, style)
+            MUSIC[name](self, stream.arguments(token, grammar.PART_COMMANDS[name]), token, style)
         elif name in grammar.CHORD_COMMANDS:  # a chord named in the text, not played
             for part in chord_symbol_parts(stream, token):
                 self.add_text(part.text, style | CHORD_SYMBOL_STYLES[part.position])
-            check_dropped_space(token, stream.peek())
         else:
             raise SongSyntaxError(token.line, f"unknown command \\{name}")
 
@@ -158,35 +157,44 @@ class InlineParser:
         self.end_line()
         self.group_start = token.text == grammar.GROUP_BREAK
 
-    def music(self, stream: TokenStream, token: Token, style: Style) -> None:
-        name = token.text
-        arguments = stream.arguments(token, grammar.PART_COMMANDS[name])
-        if name == grammar.CHORD:
-            self.start_segment(parse_chord(arguments[0], token))
-        elif name == grammar.CHORD_ROW:  # the optional width is layout
-            for chord in split_chord_row(arguments[1]):
-                self.start_segment(parse_chord(chord, token))
-            self.close_segment()
-        elif name == grammar.GAP:
-            self.add_inline(Gap(group_number(arguments[0], token)))
-        elif name == grammar.REPEAT:
-            self.add_mark(RepeatStart())
-            self.read_group(arguments[0], style)
-            self.add_mark(RepeatEnd())
-        elif name == grammar.RECITATIVE:
-            self.add_text(grammar.RECITATIVE_LABEL, style | Style.ITALIC)
-            self.add_text(grammar.RECITATIVE_DELIMITER, style)
-            self.read_group(arguments[0], style)
-            self.add_text(grammar.RECITATIVE_DELIMITER, style)
-        elif name == grammar.SCORE:
-            self.add_mark(Score(group_text(arguments[0], token)))
-        elif name == grammar.CUE:
-            self.add_mark(self.state.cue(group_text(arguments[0], token), token.line))
-        elif name == grammar.NOTE:
-            self.add_mark(Note(read_text(arguments[0], self.state, IN_LABEL, token)))
-        elif name == grammar.SPEAKER:  # the text is not a group in zpevnik.sty: \emph{#1:}~#2
-            self.add_mark(Speaker(group_text(arguments[0], token)))
-            self.read(arguments[1], style)
+    # Music in a part: each takes the command's arguments (grammar.PART_COMMANDS).
+
+    def chord(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        self.start_segment(parse_chord(arguments[0], token))
+
+    def chord_row(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        _width, row = arguments  # the width is layout
+        for chord in split_chord_row(row):
+            self.start_segment(parse_chord(chord, token))
+        self.close_segment()
+
+    def gap(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        self.add_inline(Gap(group_number(arguments[0], token)))
+
+    def repeat(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        self.add_mark(RepeatStart())
+        self.read_group(arguments[0], style)
+        self.add_mark(RepeatEnd())
+
+    def recitative(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        self.add_text(grammar.RECITATIVE_LABEL, style | Style.ITALIC)
+        self.add_text(grammar.RECITATIVE_DELIMITER, style)
+        self.read_group(arguments[0], style)
+        self.add_text(grammar.RECITATIVE_DELIMITER, style)
+
+    def score(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        self.add_mark(Score(group_text(arguments[0], token)))
+
+    def cue(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        self.add_mark(self.state.cue(group_text(arguments[0], token), token.line))
+
+    def note(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        self.add_mark(Note(read_text(arguments[0], self.state, IN_LABEL, token)))
+
+    def speaker(self, arguments: list[Argument], token: Token, style: Style) -> None:
+        name, text = arguments
+        self.add_mark(Speaker(group_text(name, token)))
+        self.read(text, style)  # not a group in zpevnik.sty: \emph{#1:}~#2
 
     @staticmethod
     def require(condition: bool, token: Token, reason: str) -> None:
@@ -248,16 +256,19 @@ class InlineParser:
 
 
 def trimmed(items: tuple[Segment | Mark, ...]) -> tuple[Segment | Mark, ...]:
-    """The line without the space TeX drops before its end."""
-    if not items or not isinstance(items[-1], Segment) or not items[-1].text:
-        return items
-    last = items[-1]
-    *text, run = last.text
-    if not isinstance(run, Run):
-        return items
-    stripped = run.text.rstrip(" ")
-    kept = tuple(text) + ((Run(stripped, run.style),) if stripped else ())
-    return items[:-1] + (Segment(last.chord, kept),)
+    """The line without the space TeX drops before its end (the start never has one)."""
+    match items:
+        case (*before, Segment(chord, (*text, Run(last, style)))) if last.endswith(" "):
+            kept = (Run(last.rstrip(" "), style),) if last.strip(" ") else ()
+            return (*before, Segment(chord, (*text, *kept)))
+    return items
+
+
+def printed_text(tex: str) -> str:
+    """The characters the PDF prints for a run of TeX text: `--` is an en dash, `'` a right quote, ..."""
+    for ligature, character in grammar.LIGATURES:
+        tex = tex.replace(ligature, character)
+    return tex
 
 
 def read_lines(tokens: list[Token], state: SongState, allowed: Allowed, command: Token,
@@ -270,10 +281,18 @@ def read_lines(tokens: list[Token], state: SongState, allowed: Allowed, command:
 
 def line_text(line: Line) -> Text:
     """The text of a line that holds no chords and no marks."""
-    return tuple(inline for segment in line.items if isinstance(segment, Segment) for inline in segment.text)
+    return tuple(inline for item in line.items if isinstance(item, Segment) for inline in item.text)
 
 
 def read_text(tokens: list[Token], state: SongState, allowed: Allowed, command: Token) -> Text:
     """One line of text without music, such as a title."""
     [line] = read_lines(tokens, state, allowed, command)
     return line_text(line)
+
+
+MUSIC = {
+    grammar.CHORD: InlineParser.chord, grammar.CHORD_ROW: InlineParser.chord_row, grammar.GAP: InlineParser.gap,
+    grammar.REPEAT: InlineParser.repeat, grammar.RECITATIVE: InlineParser.recitative,
+    grammar.SCORE: InlineParser.score, grammar.CUE: InlineParser.cue, grammar.NOTE: InlineParser.note,
+    grammar.SPEAKER: InlineParser.speaker,
+}

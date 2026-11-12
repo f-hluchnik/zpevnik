@@ -15,9 +15,7 @@ from songbook.inline import IN_LABEL, IN_PART, IN_TITLE, SongState, read_lines, 
 from songbook.lexer import DEPTH_CHANGE, Kind, Token, tokenize
 from songbook.model import (ArtistRef, Block, BodyItem, CueBlock, Line, Note, Rule, RuleKind, SeeAlso, Song,
                             SpeakerBlock, Text, plain)
-from songbook.stream import TokenStream, group_number, group_text
-
-LINE_CARRIERS = (Block, SpeakerBlock)  # body items whose last line takes what follows in the paragraph
+from songbook.stream import Argument, TokenStream, group_number, group_text
 
 
 @dataclass
@@ -35,9 +33,10 @@ class SongBuilder:
     body: list[BodyItem] = field(default_factory=list)
 
     def song(self) -> Song:
-        return Song(self.song_id, self.title, self.toc_title, tuple(self.alt_titles), self.subtitle,
-                    tuple(self.artists), tuple(self.collections), tuple(self.see), self.columns,
-                    tuple(self.state.footnotes), tuple(self.body))
+        return Song(id=self.song_id, title=self.title, toc_title=self.toc_title, alt_titles=tuple(self.alt_titles),
+                    subtitle=self.subtitle, artists=tuple(self.artists), collections=tuple(self.collections),
+                    see=tuple(self.see), columns=self.columns, footnotes=tuple(self.state.footnotes),
+                    body=tuple(self.body))
 
 
 class SongParser:
@@ -72,7 +71,7 @@ class SongParser:
         self.vertical = True
         self.carrier = None
 
-    def arguments(self, token: Token) -> list:
+    def arguments(self, token: Token) -> list[Argument]:
         return self.stream.arguments(token, SIGNATURES[token.text])
 
     # --- metadata ------------------------------------------------------------------------
@@ -181,28 +180,29 @@ class SongParser:
             self.append_to_carrier(tokens, tokens[0])
 
     def standalone(self, tokens: list[Token]) -> None:
-        """A paragraph that is not a part: a cue, a note or a speaker block."""
+        """A paragraph that is not a part: a cue, a note or a speaker block, and the rest of its line."""
         stream = TokenStream(tokens)
         first = stream.next()
         if first.kind is not Kind.COMMAND or first.text not in grammar.MODE_DEPENDENT:
             raise SongSyntaxError(first.line, "text outside a part")
         arguments = stream.arguments(first, grammar.MODE_DEPENDENT[first.text])
-        rest = tokens[stream.pos:]
-        state = self.song.state
-        if first.text == grammar.CUE:
-            cue = state.cue(group_text(arguments[0], first), first.line)
-            line = Line(()) if is_blank(rest) else self.one_line(rest, first)
-            self.add(CueBlock(cue, line), carries_line=False)
-        elif first.text == grammar.NOTE:
-            if not is_blank(rest):
-                raise SongSyntaxError(first.line, "text after a \\note: start a new paragraph")
-            self.add(Note(read_text(arguments[0], state, IN_LABEL, first)), carries_line=False)
-        else:
-            name, content = arguments
-            lines = read_lines(content, state, IN_PART, first)
-            self.add(SpeakerBlock(group_text(name, first), tuple(lines)), carries_line=True)
-            if not is_blank(rest):
-                self.append_to_carrier(rest, first)
+        STANDALONE[first.text](self, arguments, tokens[stream.pos:], first)
+
+    def standalone_cue(self, arguments: list[Argument], rest: list[Token], command: Token) -> None:
+        cue = self.song.state.cue(group_text(arguments[0], command), command.line)
+        line = Line(()) if is_blank(rest) else self.one_line(rest, command)
+        self.add(CueBlock(cue, line), carries_line=False)
+
+    def standalone_note(self, arguments: list[Argument], rest: list[Token], command: Token) -> None:
+        if not is_blank(rest):
+            raise SongSyntaxError(command.line, "text after a \\note: start a new paragraph")
+        self.add(Note(read_text(arguments[0], self.song.state, IN_LABEL, command)), carries_line=False)
+
+    def standalone_speaker(self, arguments: list[Argument], rest: list[Token], command: Token) -> None:
+        name, content = arguments
+        lines = read_lines(content, self.song.state, IN_PART, command)
+        self.add(SpeakerBlock(group_text(name, command), tuple(lines)), carries_line=True)
+        self.append_to_carrier(rest, command)
 
     def one_line(self, tokens: list[Token], command: Token) -> Line:
         lines = read_lines(tokens, self.song.state, IN_PART, command)
@@ -234,6 +234,8 @@ SONG_LEVEL = {
     **{name: SongParser.layout for name in grammar.LAYOUT_COMMANDS},
 }
 SIGNATURES = grammar.METADATA | grammar.ENVIRONMENT_COMMANDS | grammar.LAYOUT_COMMANDS
+STANDALONE = {grammar.CUE: SongParser.standalone_cue, grammar.NOTE: SongParser.standalone_note,
+              grammar.SPEAKER: SongParser.standalone_speaker}
 
 
 def parse_song(song_id: str, source: str) -> Song:

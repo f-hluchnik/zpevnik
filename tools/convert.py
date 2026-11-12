@@ -12,6 +12,7 @@ Exits 1 on errors. Python >= 3.11, standard library only.
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from paths import SONGS_DIR, add_root_argument
 from songbook import SongSyntaxError, read_song
@@ -21,7 +22,7 @@ from songs import song_paths
 JSON_INDENT = 1
 
 
-def check_all(root) -> int:
+def check_all(root: Path) -> int:
     paths = song_paths(root)
     errors = []
     for path in paths:
@@ -35,7 +36,7 @@ def check_all(root) -> int:
     return 1 if errors else 0
 
 
-def print_song(root, song_id: str) -> int:
+def print_song(root: Path, song_id: str) -> int:
     path = root / SONGS_DIR / f"{song_id}.tex"
     if not path.is_file():
         print(f"error: no song {song_id} ({SONGS_DIR / path.name})", file=sys.stderr)

@@ -8,7 +8,7 @@ import unittest
 from paths import REPO_ROOT
 from songbook import read_song
 from songbook.model import Score, plain
-from songbook.text import printed_text
+from songbook.inline import printed_text
 from songs import parse_song, song_paths
 from tex_text import plain_text
 
