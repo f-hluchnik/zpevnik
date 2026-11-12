@@ -66,8 +66,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | W4 | done | `/zpivej/hledat/` and `static/search-index.json` (title, other titles, artists, lyrics; 262 kB gzipped), loaded when the field is first used, case and diacritics ignored, all words must occur, ranked title / artist / lyrics, the query in `?q=` (D-170): zpevnik-web PR #8 |
 | W4a | done | search matches from the start of words; style sheets, scripts and the search index get a content hash in their URL, so a browser never combines new pages with an old style sheet (D-171): zpevnik-web PR #9 |
 | W3b | done | a muted link up above the title of a song and an artist; those pages mark no item of the songbook's row (D-172): zpevnik-web PR #10 |
-| W4b | in review | search results in two groups (title or artist, lyrics), the matched words bold, the lyrics group cut to 10 with a button for all (D-173): zpevnik-web PR #11 |
-| W5 | todo | |
+| W4b | done | search results in two groups (title or artist, lyrics), the matched words bold, the lyrics group cut to 10 with a button for all (D-173): zpevnik-web PR #11 |
+| W5 | in review | the button "Nezhasínat displej" on a song, Screen Wake Lock API, hidden where unsupported, asked for again when the page is shown, the choice kept for the tab (D-174): zpevnik-web PR #12 |
 | W6 | todo | |
 | W6a | todo | segments of a line wrap freely (D-123 on the web), after W6 |
 | W7 | todo | |
@@ -260,7 +260,7 @@ The owner tried the live search. (1) A word of the query must begin a word of th
 The owner found it odd that songs matching only in some line of the lyrics stand among those matching in the title. The results are now in two headed groups, **V názvu nebo u interpreta (N)** and **V textu (N)**; a song is in its best group only; the matched words of the lyrics line are bold; the group of the lyrics shows 10 songs and a button **Zobrazit všech N**. The cut at 60 results is gone. See D-173.
 
 ### W5 · Wake lock — [agent] · S · needs W2
-A toggle on the song page using the Screen Wake Lock API; hidden where unsupported.
+A toggle on the song page using the Screen Wake Lock API; hidden where unsupported. Done as the button "Nezhasínat displej" (`static/wake-lock.js`); see D-174. The lock itself could not be tried on a real phone, so the owner should try it once on his.
 
 ### W6 · Robots and notice — [agent] · S · needs W2, L1
 `robots.txt` disallowing everything, no sitemap. The notice is already in the footer of every page (L1, D-141); no separate notice page. Hidden songs are absent because they are absent from the JSON.
