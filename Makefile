@@ -19,12 +19,13 @@ EDITION ?= full
 FORMAT ?= screen
 PYTHON ?= python3
 REQUIRED_PYTHON := 3.11
+REQUIREMENTS_DEV := requirements-dev.txt
 
 # make check prints a heading per step; make and make check end with the path of the PDF.
 step = @printf '\n==> %s\n' '$(1)'
 finish = @printf '\n==> %s\n    %s/%s\n\n' '$(1)' "$(CURDIR)" "$$($(PYTHON) tools/build_edition.py --edition $(EDITION) --format $(FORMAT) --path)"
 
-.PHONY: all generate scores compile pdf print song json check check-python clean
+.PHONY: all generate scores compile pdf print song json check check-python check-dev clean
 
 all: pdf
 
@@ -32,6 +33,15 @@ check-python:
 	@if ! $(PYTHON) -c 'import sys; sys.exit(sys.version_info[:2] < tuple(map(int, "$(REQUIRED_PYTHON)".split("."))))' 2>/dev/null; then \
 		echo "error: the tools need Python $(REQUIRED_PYTHON) or newer, but '$(PYTHON)' is: $$($(PYTHON) --version 2>&1)" >&2; \
 		echo "       Activate the virtual environment (source .venv/bin/activate) or run make PYTHON=python3.12" >&2; \
+		echo "       (README, Nastavení lokální kopie)" >&2; \
+		exit 1; \
+	fi
+
+# The tests need jsonschema (D-165); the tools themselves only the standard library.
+check-dev: check-python
+	@if ! $(PYTHON) -c 'import jsonschema' 2>/dev/null; then \
+		echo "error: the tests need the packages of $(REQUIREMENTS_DEV) (jsonschema)" >&2; \
+		echo "       Install them into the virtual environment: pip install -r $(REQUIREMENTS_DEV)" >&2; \
 		echo "       (README, Nastavení lokální kopie)" >&2; \
 		exit 1; \
 	fi
@@ -61,7 +71,7 @@ json: override FORMAT = screen
 json: compile
 	@$(PYTHON) tools/songs_json.py
 
-check: check-python
+check: check-dev
 	$(call step,Unit tests)
 	@$(PYTHON) -m unittest discover -s tools -q
 	$(call step,Lint)

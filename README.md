@@ -22,11 +22,12 @@ Zpěvník (celý i jednotlivá vydání) se dá sestavit na vlastním počítač
    git clone git@github.com:f-hluchnik/zpevnik.git
    cd zpevnik
    ```
-2. Python 3.11 nebo novější. Nástroje v `tools/` potřebují `tomllib`, který je ve standardní knihovně od verze 3.11; na starší verzi skončí `make` chybou `No module named 'tomllib'`. Jiné balíčky se neinstalují, nástroje používají jen standardní knihovnu. Na macOS stačí `brew install python`, na Linuxu balík `python3` v dost nové verzi. Aby `make` nespouštěl starší Python, který je v systému dřív v `PATH`, vytvořím si virtuální prostředí (složka `.venv` se necommituje) a aktivuji ho:
+2. Python 3.11 nebo novější. Nástroje v `tools/` potřebují `tomllib`, který je ve standardní knihovně od verze 3.11; na starší verzi skončí `make` chybou `No module named 'tomllib'`. Nástroje používají jen standardní knihovnu; jediný další balík, `jsonschema`, potřebují testy (kontrola `songs.json` pro web) a instaluje se do virtuálního prostředí z `requirements-dev.txt`. Na macOS stačí `brew install python`, na Linuxu balík `python3` v dost nové verzi. Aby `make` nespouštěl starší Python, který je v systému dřív v `PATH`, vytvořím si virtuální prostředí (složka `.venv` se necommituje) a aktivuji ho:
    ```
    python3.12 -m venv .venv      # příkaz Pythonu 3.11 nebo novějšího
    source .venv/bin/activate
    python3 --version             # musí být 3.11 nebo novější
+   pip install -r requirements-dev.txt
    ```
    Aktivaci (`source .venv/bin/activate`) opakuji v každém novém terminálu, ve kterém spouštím `make`. `make` si verzi Pythonu zkontroluje a u starší skončí srozumitelnou chybou; jiný Python mu mohu zadat i napřímo: `make PYTHON=python3.12`.
 3. TeX Live s češtinou, `latexmk` a několik balíků (`csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `cm-super`, `musixtex-fonts` pro křížky a béčka v akordech). GitHub Actions kompiluje s TeX Live 2023; novější verze funguje také, výsledek se jen může mírně lišit, rozhodující je vždy GitHub Actions.
@@ -40,6 +41,7 @@ Zpěvník (celý i jednotlivá vydání) se dá sestavit na vlastním počítač
 
 Nejčastější chyby:
 - `the tools need Python 3.11 or newer` (nebo při přímém spuštění nástroje `No module named 'tomllib'`): Python je starší než 3.11, nebo není aktivní `.venv`.
+- `the tests need the packages of requirements-dev.txt`: ve virtuálním prostředí chybí `jsonschema`; nainstaluji ho příkazem `pip install -r requirements-dev.txt` (s aktivním `.venv`).
 - `MuseScore 4 not found`: MuseScore je jinde, než ho `make` hledá; nastavím `MSCORE`.
 - `rsvg-convert not found`: nainstaluji `librsvg` (krok 4).
 
