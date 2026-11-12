@@ -39,7 +39,9 @@ What changed in the songbook refactoring and why, phase by phase (DECISIONS D-12
 
 **Lessons (one paragraph at most).** Build the safety net before touching anything. Make the diff cheap, then large changes become safe. Write what a song *means*, never how far apart things are. Write decisions down; the agent never guesses about content. Delete what nobody uses.
 
-**What comes next.** Editions (a "lite" songbook of favourites), the printed edition, then the converter (`songs.json`) and the online songbook.
+**What came next.** The editions, the converter (`songs.json`) and the online songbook at `/zpivej/` (phases 10, 7 and 9 below). Still to come: the printed edition and a "lite" songbook of favourites.
+
+**The online songbook, for the article.** The owner looked at each step on the live site and sent back what felt wrong; four of the eleven website pull requests (W3a, W4a, W3b, W4b) are his observations: a download-style button for the songbook, a search box that looked unstyled on his desktop only (a cached style sheet, now fixed with content-hashed URLs), no obvious way back to the index, and lyrics matches mixed in with title matches. A good story for people who like small web details.
 
 ---
 
@@ -105,6 +107,41 @@ The owner wanted the README, the tests and the build reviewed before the convert
 - L1 (D-141): the notice (non-commercial, rights holders write and the song goes) in the colophon of every book and later in the web footer; the Apache licence covers only the owner's own work, not the songs, scores, front matter or cover.
 - L2 (#121, D-161): `data/hidden.txt` hides a song from every book within one pull request, without deleting it: `songs.published()` applies the list before an edition selects its songs, so the contents, the artist index and every `\seealso` follow. The converter will use the same function (J2); the version still counts every song file.
 - Helper files: archive/phase-8-legal/ (the two ticket texts).
+
+## Phase 10 · Editions (E0–E3, E7, E8, R15, R16, S4) · 9–11 Nov 2026 · PRs #93, #95–#99, #102, #103
+
+E4, the songs of `zpevnik-lite`, is open: the owner picks them after the printed edition (D-147).
+- E1 (D-138, then D-139): the owner decided the design: an edition is a filter over the song list (by song id or artist) with its own front matter; the full book is one of them.
+- E0 (#93, D-133): the build version is `8.33.N`, counting commits, so a release is a build and not only a song count; first release `v8.33.68`. S4 (#99): the PDF diff ignores the imprint's version line.
+- R15 (#95, D-143): English names for the folders and the front-matter files. E2 (#96, D-144): every book is an edition (`data/book.toml`, `editions/<name>/edition.toml`) built under `build/editions/<name>/` by `make [EDITION=<name>]`. E3 (#97, D-145): `\seealso` to a song outside an edition prints nothing, a missing link target fails the build, `make check`. E8 (#98): the front matter in Czech book order, the songs from page 9. R16 (#102): the traces of the old layout removed.
+- E7 (#103, D-146): `editions/lidovky/` with its own cover; the repository `zpevnik-lidovky` can be archived.
+- Helper files: archive/phase-10-editions/ (the ticket texts).
+
+## Phase 3 · Print, so far (P0, P2, P3) · 11–12 Nov 2026 · PRs #113–#116
+
+P1 (the owner's and the printer's answers) and P4 (the proof, on the final content) are open.
+- P0 (#113): the print feasibility report with the printer checklist (`docs/p0-print-report.md`); the geometry trial stays a one-off branch (D-154). P2 (licensing for selling) was cancelled: the book is never sold (D-140).
+- P3 (#114–#116, D-154–D-157): the print formats `print` and `print-black`, page numbers in the contents and `\seealso` on paper, the A5 PDF with the spine shift and `make print`.
+- Helper files: archive/phase-3-print/ (the ticket texts).
+
+## Phase 7 · Converter and `songs.json` (J0–J5) · 8–12 Nov 2026 · PRs #88, #89, #123, #124, #126–#129
+
+- J0 (#88, D-135) and J0a (#123, D-163): every song quirk and structure the converter would reject was decided by the owner and fixed (22 songs for J0a, 20 more for J1); scores became a `\score{name}` command (#89, D-136), J5 done with them: MuseScore exports the images, the PDF and the web use the same SVG.
+- J1 (#124, D-164): the strict converter `tools/songbook/` with `tools/convert.py`, a whole-book parse in `make check`; J1a (#126): bass notes as `\bas{}`.
+- J2 and J3 (#127, #128, D-165): `songs.json` (`make json`) and its JSON Schema, the contract with the website; the owner reviewed its shape on two songs next to their PDF pages.
+- J4 (#129, D-166): CI validates the whole file and releases `songs.json` and `scores.zip` (the score SVGs) beside the PDFs.
+- Helper files: archive/phase-7-converter/ (the ticket texts).
+
+## Phase 9 · The online songbook (W1–W7) · 11–12 Nov 2026 · PRs zpevnik-web#4–#14
+
+The songbook is online at `/zpivej/`, separate from the download page, from the same LaTeX files: 738 song pages built in about 3 s.
+- W1 (#4) and W2 (#5, D-167): the build downloads `songs.json` and `scores.zip` of the release named in `version.txt`; one page per song, the chord rule of the book (D-123) in CSS, readable without JavaScript, `noindex`, a font size control.
+- W3 (#6, D-168) and W3a (#7, D-169): the index in book order, artists and collections, previous and next song, "open in PDF" at the song's page; two levels of navigation, **Stáhnout** and **Zobrazit online**, then the songbook's own row. W3b (#10, D-172): a muted link up from a song or an artist.
+- W4 (#8, D-170), W4a (#9, D-171) and W4b (#11, D-173): the search over titles, artists and lyrics (a 262 kB gzipped index loaded on first use, no library), matching from the start of words, results in two groups with the matched words in bold; style sheets, scripts and the index are asked for with a hash of their content, so a browser never mixes new pages with an old style sheet.
+- W5 (#12, D-174): a "keep the screen on" button on a song (Screen Wake Lock API). W6 (#13): `robots.txt` disallows everything, no sitemap. W7 (#14): `check_site.py`, run in CI after the build, fails when a song has no page or a link or anchor of the site leads nowhere; the whole workflow takes about 18 s.
+- Left open on purpose: W6a, chord segments that wrap like the book's. At the default size on a 390 px phone `folsomprisonblues` still wraps with "I" alone on a line; the owner made it optional.
+- Not verified on any real phone: the screen staying on (W5), the keyboard and autofocus of the search, `#page=N` in a phone's PDF viewer.
+- Helper files: archive/phase-9-website/ (the ticket texts).
 
 ## Closing the refactoring · 6 Nov 2026
 

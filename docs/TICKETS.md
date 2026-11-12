@@ -1,8 +1,8 @@
 # Zpěvník – tickets
 
-Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. What is already done: [HISTORY.md](HISTORY.md). The full text of the finished tickets, as they were on 6 Nov 2026: [archive/snapshot-2026-11-06/TICKETS.md](archive/snapshot-2026-11-06/TICKETS.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
+Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. This file lists only what is left. What is done: [HISTORY.md](HISTORY.md), and the full text of every finished ticket in [archive/](archive/README.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
 
-Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring is done (HISTORY.md); what is left is the delivery of the editions, print and the audits, then the converter, legal and the website (D-132, amended by D-147).
+Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene and the online songbook are done (HISTORY.md). What is left is the printed edition (P1, P4), the choice of songs for `zpevnik-lite` (E4) and, optionally, the chord wrapping on the web (W6a).
 
 Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or review · **⚠** touches many song files, so never run two ⚠ tickets in parallel and merge each before the next · **[strong model]** needs design judgement beyond following the steps: run it with the strongest available model, or have one review the result before merge · size S/M/L.
 
@@ -14,7 +14,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 4. **Tools** (`tools/`) use Python ≥ 3.11 and the standard library only. The tests and `tools/validate_songs_json.py` (the check of the whole `songs.json`, D-166) may also use the pinned packages of `requirements-dev.txt` (only `jsonschema`, D-165).
 5. Commit messages, PR descriptions and code comments in English (D-131); the README is Czech.
 6. **Git.** One branch and one PR per ticket, in the repository the ticket names (`zpevnik` unless it says `zpevnik-web`). Commit, push the ticket branch and open the PR without asking; never merge, force-push or push to the default branch without the owner's explicit OK.
-7. **Status and docs.** The ticket's PR also updates the docs: its row in the *Status* table goes to `done` (the merge makes it true), HISTORY.md at the end of a phase, DECISIONS.md if a decision was made. A change of plan without a ticket gets its own docs-only PR.
+7. **Status and docs.** The ticket's PR also updates the docs: the ticket leaves this file when it is done: its row and text go to `archive/<phase>/TICKETS.md`, marked `done` (the merge makes it true), HISTORY.md at the end of a phase, DECISIONS.md if a decision was made. A change of plan without a ticket gets its own docs-only PR.
 
 ## Working environment (verified 3–6 Nov 2026)
 
@@ -28,245 +28,56 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 ## Status
 
-`todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes).
+`todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes) · `optional` (the owner decided it need not be done).
 
-**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8); of phase 7 so far J0, J0a, J1, J1a, J2, J3, J4 and J5.
+Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
-| K1 | done | the five songs with only a `\chords` row got chords over the lyrics: PR #109; the three scores need none (K2). The owner's new songs (about ten) before the print are content work, not a ticket (D-147) |
-| K2 | done | `tools/no-chords-allowlist.txt` (since D-162 `data/no-chords-allowlist.txt`) read by the lint (answers K1's question): PR #111 |
-| E0 | done | build version `8.33.N` (D-133): PR #93, first release v8.33.68 |
-| R15 | done | English names (D-143): PR #95; the transitional old-folder handling is listed in R16 |
-| E1 | done | D-138, superseded by D-139 |
-| E2 | done | editions in the generator and the build (D-144): PR #96 |
-| E3 | done | `\seealso` per edition, link check, lints on every edition, `make check` (D-145): PR #97 |
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
-| E7 | done | `editions/lidovky/` with its own cover (D-146): PR #103; `zpevnik-lidovky` is archived (owner, after E5) |
-| E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
-| R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
-| S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
-| P0 | done | print feasibility report with the printer checklist: `docs/p0-print-report.md` (PR #113); the geometry trial stays a one-off branch (D-154) |
 | P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
-| P2 | cancelled | the book is never sold (D-140) |
-| P3 | done | the scaled print: output formats `print`, `print-black` (D-154, PR #114), page numbers in the contents and `\seealso` (D-155, PR #115), the A5 PDF with the spine shift and `make print` (D-156, PR #116); the geometry trial stays a one-off branch, only if the scaled text is too small on paper. P4 comes on the final content |
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
-| J0 | done | song quirks: PR #88 (D-135); scores: PR #89 (D-136) |
-| J0a | done | structure the converter's grammar needs: cues, scores in a part, no `\\` at the end of a part and no empty line in one: PR #123 (D-163) |
-| J1 | done | the converter `tools/songbook/` and `tools/convert.py`, a `make check` and CI step; 20 songs fixed for it: PR #124 (D-164) |
-| J1a | done | bass notes written as plain text (`C/G`, 14 chords of `pianoman`) are `\bas{}`, and the converter rejects them (D-164): PR #126 |
-| J2 | done | `tools/songs_json.py` and `songbook/export.py` write `build/songs.json` (`make json`), shape agreed with the owner (D-165): PR #127 |
-| J3 | done | `tools/songs.schema.json` (JSON Schema 2020-12) and its tests with `jsonschema` pinned in `requirements-dev.txt`; CI installs it: PR #128 (D-165) |
-| J4 | done | CI builds `songs.json` and validates the whole file against the schema on every run; a push to `master` releases `songs.json` and `scores.zip` (the score SVGs) with the PDFs (D-166): PR #129 |
-| J5 | done | done with J0's scores (D-136): PR #89 |
-| W1 | done | `build.py` of `zpevnik-web` downloads `songs.json` from the release into `build/` and checks `schemaVersion` (`--songs-json FILE` for a local one): zpevnik-web PR #4 |
-| W2 | done | one page per song at `/zpivej/<id>/` from `songs.json` and `scores.zip`, the chord rule of D-123 in CSS, noindex, font-size control, 404 for unknown songs (D-167); the hyphen inside a split word is shown only where the gap is wide enough (README of `zpevnik-web`): zpevnik-web PR #5 |
-| W3 | done | the index at `/zpivej/` (the contents of `songs.json`, never re-sorted), the artists and collections at `/zpivej/interpret/`, the navigation, links between songs and artists, previous/next in book order, "open in PDF" at the song's page, the link from the download page and from `404.html` (D-168): zpevnik-web PR #6 |
-| W3a | done | two levels of navigation: the tabs "Stáhnout" and "Zobrazit online" on every page, the songbook's own row under `/zpivej/` (D-169), smaller font buttons: zpevnik-web PR #7 |
-| W4 | done | `/zpivej/hledat/` and `static/search-index.json` (title, other titles, artists, lyrics; 262 kB gzipped), loaded when the field is first used, case and diacritics ignored, all words must occur, ranked title / artist / lyrics, the query in `?q=` (D-170): zpevnik-web PR #8 |
-| W4a | done | search matches from the start of words; style sheets, scripts and the search index get a content hash in their URL, so a browser never combines new pages with an old style sheet (D-171): zpevnik-web PR #9 |
-| W3b | done | a muted link up above the title of a song and an artist; those pages mark no item of the songbook's row (D-172): zpevnik-web PR #10 |
-| W4b | done | search results in two groups (title or artist, lyrics), the matched words bold, the lyrics group cut to 10 with a button for all (D-173): zpevnik-web PR #11 |
-| W5 | done | the button "Nezhasínat displej" on a song, Screen Wake Lock API, hidden where unsupported, asked for again when the page is shown, the choice kept for the tab (D-174): zpevnik-web PR #12 |
-| W6 | in review | `robots.txt` that disallows everything, no sitemap, tested with the standard robots parser: zpevnik-web PR #13 |
 | W6a | optional | segments of a line wrap freely (D-123 on the web); the owner decided on 12 Nov 2026 that the release does not wait for it |
-| W7 | todo | |
 
 ## Overview, in the order of work (D-132)
 
 | Phase | Tickets | After it you have |
 |---|---|---|
-| 1, 2, 4, 5, 6, 11 | done | Safety net, generated lists, clean sources, automatic chord and vertical spacing, code quality and the final command names (HISTORY.md) |
-| 10 Editions | E0–E4, E7, E8, R15, R16 | Song subsets such as `zpevnik-lite` and `lidovky` built from the same files, with their own pages; the full book is one of them (D-121, D-139, D-143). E4 (`zpevnik-lite`) waits until after the printed edition (D-147) |
-| 9a Delivery | E5, E6 (done) | CI builds and releases every edition, the download page shows them, `zpevnik-lidovky` can be archived (D-147, D-149, D-150) |
-| 3 Print | P0, P1, P3, then P4 | The A5 facts and the printer's requirements, a print build, and a checked proof on the final content (D-122, D-147) |
-| 12 Audits | A1–A3 (done) | The README, the unit tests and the build speed reviewed before the converter (D-147, D-158–D-160) |
-| 7 Converter | J0, J0a, J1–J5 | `songs.json` and score SVGs on every release |
-| 8 Legal | L1–L2 (done) | Notice, hide switch (D-141, D-161) |
-| 9 Website | W1–W7 | Online songbook |
+| 10 Editions | E4 | The songs of `zpevnik-lite`, a book of favourites, picked by the owner after the printed edition (D-147) |
+| 3 Print | P1, P4 | The printer's requirements and the owner's decisions, then a checked proof on the final content (D-122, D-147) |
+| 9 Website | W6a (optional) | Lines of the online songbook that wrap like the book's (D-123 on the web) |
 
-The converter is written once, against the final command names of phase 11 (D-108, D-131). Phase 8 must be done before the songs go online (W6). Print needs phase 10 only if the printed book is a subset (P1). The owner's new songs and K1 are content work that runs beside the converter and the website; P4 comes after them (D-147).
+The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147).
 
----
-
-# Content
-
-### K1 · Songs without chords — [you] · S · needs nothing
-8 songs have no chords over the lyrics: 5 have only a `\chords` row (gronskapisnicka, marieklus, noe, panubohudooken, vranabuty), 3 only a score image (ladovskazima, scarboroughfaircarthy, triandele). The owner decides per song whether to add chords (content work). The lint warns about songs without `\chord`. - ladovskazima, scarboroughfaircarthy, triandele are correct without chords. I wonder what would adding an empty `\chord` command with a comment saying it's for linters do? The other songs should be adjusted (read, chords should be added properly, not as list, at least where possible). The question about an empty `\chord` for the linters is answered by K2. About ten new songs before the print are content work too (owner, 11 Nov 2026): not a ticket, every new song passes `make check`.
-
-
-### K2 · Songs that are right without chords — [agent] · S · needs nothing
-D-147. The lint warns about a song that has no `\chord` or `\chords` (`tools/lint.py`): today `ladovskazima`, `scarboroughfaircarthy` and `triandele`, which are a score and are correct (K1). An empty `\chord` in the song just to silence the warning would put a marker inside the content that the converter (J1) would have to know and `songs.json` would carry; the repository already has the other answer, an allow-list read by a tool (`tools/multipage-allowlist.txt`). So: `tools/no-chords-allowlist.txt`, one song id per line with a `#` comment saying why, read by the lint like the multipage allow-list; the warning stays for every other song; a unit test that an allow-listed song passes, an unlisted one warns, and an id that is not a song fails. **Expected differences:** none (no song and no PDF changes).
 ---
 
 # Phase 10 – Editions (song subsets, D-121)
 
-Use cases: **`zpevnik-lite`**, a book of selected favourites (manual selection), the main download on the website; **`lidovky`**; possibly the printed book (P1). The generator already works from one song list, so an edition is a filter over it, with its own front matter (D-138). Everything below keeps the full book byte-identical (zero diff).
-
-### E0 · Build version `8.33.N` — [agent] · S · needs nothing
-D-133. Today every push to master replaces the PDF of release `v8.33`, whose tag still points at the source of 21 Aug 2026, and commits another PDF to `zpevnik-web`; the version names a song count, not a build.
-1. `tools/generate.py` computes `major.minor.patch`: `major.minor` = song count + 100 as today; `patch` = the number of first-parent commits on the current branch since the last commit that changed the song count (Git, standard library `subprocess`). Without Git history the patch is `?` (`8.33.?`), visibly incomplete like today's `?.??` placeholder. Unit tests with a temporary Git repository.
-2. The colophon prints the full version; `--version` prints it; CI validates `^[0-9]+\.[0-9]{2}\.[0-9]+$`.
-3. Release step: tag `v<version>`, name `Zpěvník v<version>`; fail if the tag already exists (never overwrite or move a tag). `version.txt` in `zpevnik-web` gets the full version. The old tag `v8.33` stays.
-4. README (Czech): what the three numbers mean.
-**Expected differences:** the colophon page only (version line).
-
-### E1 · Decide the editions design — [you] · S — **done**
-Decided by the owner on 9 Nov 2026: **D-138**, superseded by the review **D-139** the same day (selection by song id or artist, front matter per edition, one colophon core, no edition version, the download page configured in `zpevnik-web`, the rules for links and artist sections). The owner's original answers are in the snapshot of this file in the Git history (before the PR of D-138).
-
-### R15 · English names — [agent] · S · ⚠ · needs E0
-D-143. A mechanical rename with `git mv`, nothing else: `pisnicky/`→`songs/`, `obrazky/`→`images/`, `sablona.tex`→`song-template.tex`, `preamble/`→`shared-pages/` (`obalka`→`cover`, `patitul`→`halftitle`, `titulnilist`→`titlepage`, `vydavatelskyzaznam`→`imprint`, `upozorneni`→`notice`, `dedikace`→`dedication`, `uvod`→`introduction`), `obsah.tex`→`shared-pages/contents.tex`. Update every reference (`tools/paths.py`, `zpevnik.tex`, `zpevnik.sty`, the tests, CI, the Makefile, the README, `.gitignore`, the current text of the docs; not the archive and not past DECISIONS entries). `tools/build_version.py` counts both the old and the new song folder, with a test that a renamed folder keeps the patch counting. Output paths do not change yet (E2). The owner's branch `new_songs` stays; he re-adds its songs by hand after the merge.
-**Expected differences:** none; `generate.py --version` on the rename gives the previous patch + 1, not 0.
-
-### E2 · Generator and build: editions — [agent] · M · needs R15, E1
-D-139 and D-143. Zero diff for the full book (the song-by-song diff and identical rendered front-matter pages, D-143 on `/ID`); its generated `.tex` files identical to today's at their new path, except new files.
-1. `data/book.toml` and `editions/<name>/edition.toml` (keys and errors as in D-143), read and validated by a small module; a unit test for each error.
-2. One `Edition` type for every book; the full book is `editions/full/`. `tools/generate.py --edition <name>` (default `full`) filters the song list once (after an exclusion list, empty until L2) and writes into `build/editions/<name>/generated/`: the include list, the letter contents, the artist index and sections (the full book's rules, restricted to the artists with a song in the edition), the registry, the version, the macros and the resolved page list. The version is the build's (the full song count, D-133), never the edition's song count.
-3. Generated macros: the book's title, author, start year and source; the edition's title, subtitle, editors and song count; the version; the derivation sentence (empty for the base edition). The shared pages use them instead of hard-coded text.
-4. The skeleton in `zpevnik.tex`, in today's order (E8 changes it): the pages resolved by the generator from `[pages]`, `before_songs` and `after_contents`; the imprint with its core and its slot. Move the full book's dedication, introduction and credits into `editions/full/`. Remove `\setcounter{page}{8}`.
-5. Build: `make [pdf] [EDITION=<name>]` creates the output directory and the subfolders LaTeX writes the per-song `.aux` files into, runs latexmk with `-outdir` and the edition (`-usepretex`), and prints the PDF's path; `zpevnik.tex` stops with an error without an edition. `make song` writes `build/songs/<id>.pdf`, the score images go to `build/scores/`, `make clean` deletes `build/`. `check_pages.py` works on any edition's output; `chord_gaps.py` stays on the full book (chord spacing depends on the format, not on the selection). CI, the release and the website copy take the full book's PDF from its new path (the release asset keeps its name until E5); the CI PDF diff also handles a base with the old layout (needed in this PR only).
-Test with a throwaway edition that is not committed: songs by id, one artist, an own title page, a `before_songs` page and an imprint fragment.
-**Expected differences:** none for the full book.
-
-### E3 · Edition integrity — [agent] · S · needs E2
-1. `\seealso` to a song outside the edition prints nothing and takes no space (D-139); a generated list of the songs present lets `zpevnik.sty` decide without a second pass (84 uses in 76 songs on 6 Nov 2026).
-2. A link to a missing target fails the edition build: pdfTeX's warning in the log (`… has been referenced but does not exist`). Verify with the throwaway edition that it catches the contents links, `\seealso` and the artist links.
-3. Run the one-page check and the lints on the edition.
-4. `make check [EDITION=<name>]` (D-143, D-144): the unit tests, the lints, the one-page check and the link check of the edition; the chord check on the edition too (D-145).
-**Expected differences:** none for the full book.
+The editions are built and released (HISTORY.md); one ticket is left.
 
 ### E4 · Choose the songs for `zpevnik-lite` — [you] + [agent] · S · needs E2 · **after the printed edition (D-147)**
 The agent adds a small helper that lists song ids with title and artist (filter by artist) to pick from. The owner picks the songs; the agent writes `editions/lite/edition.toml`. **Expected differences:** none for the full book. Owner, 11 Nov 2026: later, after the print edition is done; nothing waits for it (E5 finds editions by itself, E6 shows what exists).
 
-### E7 · `lidovky` as an edition — [you] + [agent] · S · **done** (PR #103, D-146)
-All songs of the `zpevnik-lidovky` repository are already in the full book (owner, 9 Nov 2026), and the 76 songs tagged `\artist{lidove}` match the 2020 book (D-139). The agent writes `editions/lidovky/edition.toml` with `artists = ["lidove"]`, compares the result with the song list of the old repository (by title, with E4's helper) and reports any difference, and, if the old book has its own title page or foreword, adds its front matter; the owner confirms the list and the front matter, and archives the old repository himself.
-
-### E8 · Front matter in book order — [agent] · S · needs E3
-D-143. The skeleton gets the Czech book order: cover, blank, halftitle, blank, title page (a right-hand page), the imprint on its back, then `before_songs`. The songs start on page 9 instead of 8. (The `\hspace{10mm}` before the first credit went in E2, D-144.)
-**Expected differences:** the front-matter pages (order, one new blank page); every page number one higher (the contents print no page numbers, only links). The song-by-song diff reports every song: check that each differs only in its page number.
-
-### R16 · Drop the old song folder from the version — [agent] · S · needs the first song-count change after R15
-D-143, D-144. Once a commit after R15 has changed the song count (the version is 8.34.0 or later), `tools/build_version.py` stops counting `pisnicky/` and its rename tests go. The other traces of the old folder and of the layout before editions, all removed here: `LEGACY_SONGS_DIR` in `tools/paths.py`, the `pisnicky/` pathspec of the *List newly added songs* step in the CI workflow, `book_output_dir`'s fallback to the root in `tools/pdfdiff.py` (a base built before E2) and the `else latexmk` branch of the *Compile base* step. (E2 already removed `songs_dir()` and the fallback of `tools/check_pages.py`.) **Expected differences:** none.
-
-
-### S4 · The PDF diff ignores the version line — [agent] · S · needs E0
-D-133. Since E0 the imprint prints the build's version, which counts the commits, so every PR's diff reported the imprint page as changed (base `8.33.N`, head the merge commit `8.33.N+1`). `tools/pdfdiff.py` leaves the version out like the build date: a word shaped like a version (`8.33.71`, or `8.33.?` without Git history) on the front-matter pages is masked with its line. **Expected differences:** none in the book; from this PR on, the imprint page is no longer reported unless something else on it changes.
 ---
 
 # Phase 3 – Print (D-122)
 
-The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff).
-
-### P0 · Print feasibility report — [agent] · M · needs the print edition (the owner prepares it by hand, D-148)
-D-147, D-142. The owner expects the facts for P1 to come out of this: does the book work at A5, and what has to be asked of the printer. Nothing is decided and nothing is merged; the output is a report with attachments.
-1. **Scaled sample:** the print edition's screen PDF scaled to A5 (1/√2), about ten pages (a dense song, a two-column song, a score, the contents), and the page counts at A4 and A5; the owner prints the A4 PDF "2 per sheet" to see the size on paper (D-142).
-2. **Geometry trial:** the print edition built once with an A5 page geometry (a first run on the full book gave the numbers in D-148; the trial needs only the songs of the print edition, which may not contain the problematic ones). No copy of `zpevnik.tex`: the geometry is a parameter like the edition, and how it reaches the document is proposed in the PR before coding. The one-page check on it; every song that spills listed with a proposed fix per song (a `\large` as D-129 allows, a two-page allow-list entry), never fixed silently; a few pages of both versions side by side.
-3. **Printer checklist**, ready to send as it is: page count and binding limits (the book is about 760 pages at A4), ring or glued binding and the gutter, paper weight and the thickness of that many pages, PDF version or PDF/X, fonts, colour or black and white, bleed and crop marks, cover in the file or separate, a proof copy, number of copies and price.
-**Expected differences:** none for the screen PDF. The report is cheap to repeat: run it again after the owner's new songs.
+The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff). The report, the cancelled licensing check and the print build are done (HISTORY.md, archive/phase-3-print/).
 
 ### P1 · Print requirements — [you] · S
 Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (answered in D-148: the print book is its own edition, selected by hand by the owner; the rest of P1 is open). Answered after reading P0's report. The owner's new songs do not block P1 or P3: content changes need only a rebuild. Status of the answers: D-157.
-
-### P2 · Licensing check — [you] · S — **cancelled**
-Was: check the licensing before selling printed copies. The book is never sold (D-140).
-
-### P3 · Print build — [agent] · M · needs P0, P1 (and E4 for a subset)
-D-142. The print format is a step after the build, separate from the edition (D-139): it combines with the full book or any edition and writes into an output directory of its own; no copy of song content.
-1. **Scaled print (the default):** scale the edition's screen PDF to the print page size from P1 (A4 to A5 is exactly 1/√2), with the offset of odd and even pages for the binding if P1 asks for it, blank pages where a spread needs them (songs starting on a right-hand page, an even page count), and the cover outside the numbered book block if P1 says so. Use what the pinned TeX Live has (`pdfpages` in a small wrapper document, or `pdfjam`); no new dependency. Check page size and page count; the contents links still work.
-2. **Geometry trial:** done in P0. If the owner picks it, P3 makes it an option of the print format (merged only if he picks it); the scaled print stays the default.
-**Expected differences:** none for the screen PDF.
 
 ### P4 · Print proof check — [agent] + [you] · S · needs P3 and the final content
 Done on the final content, after the owner's new songs (D-147; K1 is done); until then P3's output is a draft. Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, colour space against the printer's requirement (report, convert only if asked), crops of the first page, a middle page, a two-column song and the contents at 100%. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
 
 ---
 
-# Phase 7 – Converter and `songs.json`
+# Phase 9 – the online songbook (`zpevnik-web`)
 
-### J0 · Song quirks before the converter — [you] + [agent] · M · needs nothing
-The converter is strict (an unknown macro is an error), so every remaining special case in the songs needs a decision first: give it a semantic command, let the converter ignore it as PDF-only layout, or keep it and say how the converter treats it. The agent re-derives the list with grep at the start and the owner decides each item; then the agent implements the agreed commands (zero diff where possible).
-1. **Score images** (owner: agreed): 15 songs place a score by hand (`\vspace{-25…-58pt}`, `\hspace{20pt}`, `21pt` or `9mm`, `\includegraphics[width=…]`); only 2 have a `% KEEP` comment. A `\score[offset]{file}` command: the indent is one constant inside it, the per-song vertical offset an explicit optional argument (until J5's trimmed export makes it one constant), the converter reads one command. Zero diff.
-2. **Echo and backing vocals** as `\textsuperscript{\Large\emph{…}}` (`kratkypopisleta`) or `\textsuperscript{\emph{…}}` (`dvakrat`): a command such as `\echo{…}`, or leave them as formatting.
-3. Layout in a few songs: `multicols` and `\columnbreak` (cernymuz, lojzaaliza, milionar, promeny, zkratky), `\placetextbox` (vosa), the negative `\hspace` inside `\rep` (velicenstvokat), `center` (jedesohajzvidna, kolenasejchalupecky), `\note{\small …}` (jednourano): PDF-only layout the converter skips, or a semantic form (e.g. `columns` in `songs.json`).
-4. `zapomnetliva`: the repeat mark stands before the speaker name (nitpick left from Q5).
-5. Anything else the strict parser of J1 would reject; footnotes in `\song{}` stay (Q5).
-**Decided (owner, 8 Nov 2026):** items 2–5 and the rest of the list in D-135; item 1 together with J5 (a standard MuseScore export that places itself, no per-song offsets).
+The songbook is online at `/zpivej/` (HISTORY.md, phase 9). One optional ticket is left.
 
-### J0a · Song structure before the converter — [agent] + [you] · S · needs J0
-Found while designing J1 (session 23): J0 listed the macros, environments and math in the songs, but not their structure, which TeX accepts silently and only a parser sees. The owner decided each fix and reviewed the before/after pages; the rules are in D-163.
-1. A brace closing a part in the wrong place (`idzepostaridze`: verse 2 contained the next part); a pause inside a chord (`pepita`).
-2. A cue that refers to no part written before it with that label (13 cues in 11 songs).
-3. A score outside a part (`batalion`, `scarboroughfaircarthy`, `svazceskychbohemu`).
-4. `\\` at the end of a part (11 parts in 5 songs) and an empty line inside a part (`pohadka`, `waterlooabba`).
-**Expected differences:** the songs with a changed cue, score or line break; the markup-only fixes none.
-
-### J1 · Converter package — [agent] · **[strong model]** · L · needs Q4, Q5, J0, J0a
-1. Write the converter in `tools/songbook/` as a package: parser, model, command line. It starts from scratch (the earlier `tex2json.py` prototype is in neither repository). Strict: an unknown macro is an error; it understands only the command set after Q4 (D-108, D-131).
-2. Song metadata (`\artist`, `\alttitle`, `\toctitle`, `\collection`); the title and its footnote apart (Q5 item 4); `\cue` as a reference to another block; repeat marks rendered as the PDF does.
-   The structure rules of D-163 are errors of the converter, and the whole-book parse is a `make check` step.
-3. Tests: snapshot tests for 10 songs plus a whole-book parse that must succeed for all songs in under 5 s.
-
-### J1a · Bass notes as `\bas` — [agent] · S · needs J1
-Found in session 24: `pianoman` wrote 14 bass notes as plain text (`C/G`), printed on the base line unlike every `\bas{G}`; the JSON would have two forms of one thing. The songs use `\bas{}`, and a slash right before a note name on a chord's base line is a converter error (`\add{6/9}` and `1. E\7 / 2. C` stay text).
-
-### J2 · Assemble `songs.json` — [agent] · **[strong model]** · M · needs J1
-Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated include order), `artists[]` from the registry. Each song: `id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see` (from `\seealso`), `order`, `page` (from the page checkpoints), `footnotes`, `images`, `columns`, `blocks[]` (lines of chord/text segments). This list predates the converter: the shape comes from its model (D-164), whose body also has cue blocks, notes, rules and speaker blocks, and whose scores are marks in the lines. **Done:** the agreed shape is D-165. **Hidden songs (L2, D-161):** select the songs with `songs.published()`, like the generator, so a hidden song is not in `songs.json`.
-
-### J3 · JSON Schema — [agent] · **[strong model]** · S · needs J2
-`tools/songs.schema.json` (JSON Schema 2020-12) for the shape of D-165; validate the output in tests and in CI with `jsonschema`, pinned in `requirements-dev.txt` (D-165: an exception to rule 4 for tests and CI only; the README's setup installs it, `make check` stops with a clear message without it).
-
-### J4 · CI and release asset — [agent] · M · needs J3
-The converter already runs in CI (J1). J4 builds `songs.json` after the compile (`tools/songs_json.py`) and validates the whole file against `tools/songs.schema.json` with `jsonschema` (about 5 s; the unit tests validate only the snapshot songs, D-165); on pushes to master it adds `songs.json` and the score SVGs (`build/scores/*.svg`, one zip, D-136) to the `files:` of the release step. PRs only validate.
-
-### J5 · Scores from MuseScore — [agent] + [you] · M · needs J4
-**Done together with J0 item 1 (D-136), 8 Nov 2026:** the export is `tools/scores.py` with a shared style, the PDF uses the converted SVG, and every score places itself with `\score{name}`. J4 put the SVGs (`build/scores/*.svg` since E2, D-143) into the release as `scores.zip` (D-166); `songs.json` names each by its `score` items. The text below is the original plan.
-The `.mscz` files are the source; CI exports the images, so the PDF and the web use the same export (D-125). A score is a single page by principle.
-1. **Prototype first and report before building on it:** a pinned MuseScore 4 in CI with `-o file.svg -T 0` (trimmed SVG, documented for single-page scores only). pdfLaTeX cannot include SVG, so for the PDF either convert the SVG (e.g. `rsvg-convert`) or export a PDF and crop it with `pdfcrop`. Compare a few results with today's images.
-2. One `.mscz` per image. Missing (5 Nov 2026): `tickettoride` uses `ticket_to_ride_intro.png`, which has no source. These `.mscz` produce more than one image today: `morseovka.mscz` (`morseovka_1.png`, `morseovka_2.png`), `pohadka.mscz` (`pohadka.pdf` and `pohadkaref.pdf`), `reddwarftheme.mscz` (intro and outro), `slunecnyhrob.mscz` (intro and solo). Unused: `morseovkasolo1–3.pdf`. The owner provides the missing files.
-3. The exported images are build output (D-104), not committed; remove the committed PDFs and PNGs once the export works. The SVGs go into the release as one zip and are referenced from `songs.json`.
-4. The `\vspace` and `\hspace` next to scores stay (D-124), but check them against the new crop.
-**Expected differences:** small shifts of the score images; the owner reviews them.
-
----
-
-# Phase 9 – Delivery and the website (`zpevnik-web`)
-
-E5 and E6 came first (D-147) and are done: every edition is in the release and on the download page, which is also what lets the owner archive the repository `zpevnik-lidovky` (their texts: [archive/phase-9a-delivery/TICKETS.md](archive/phase-9a-delivery/TICKETS.md)). Then W1–W7, the online songbook.
-
-### W1 · Load the data — [agent] · M · needs J4
-`build.py` downloads `songs.json` from the release tagged `v<version.txt>` (the songbook CI already writes `version.txt` after creating the release) into an uncommitted folder, validates `schemaVersion`, and fails loudly if missing. Add a local option to point at a file.
-The PDFs already come from the release since E6 (D-110, D-138); W1 adds `songs.json` the same way.
-
-### W2 · Song pages — [agent] · L · needs W1
-The online songbook is separate from the download page (D-103): it lives under `/zpivej/` (D-167), with its own templates and navigation; the download page at `/` stays as it is (the link to the songbook comes with the index, W3). An unknown song gets `404.html` (D-167).
-Jinja template, one page per song at `/zpivej/<id>/`: chords above lyrics (each chord and its text in an inline-block that keeps spaces; chord width is respected, the rule of D-123), labels, footnotes, score SVGs, the existing dark mode, a font-size control. It must read well without JavaScript. Every page carries `<meta name="robots" content="noindex">`.
-
-### W3 · Index, artists, navigation — [agent] · M · needs W2
-Alphabetical index (same order as the PDF, taken from `songs.json`, never re-sorted), artist pages at `/zpivej/interpret/<slug>/`, collection pages, alternative titles listed, previous/next links in book order, "open in PDF" using `page`. The download page gets its link to the songbook here (D-167).
-
-### W3a · Two levels of navigation — [agent] · S · needs W3 · added after W3 (owner, 12 Nov 2026)
-The owner looked at the live W3 pages: the link to the songbook was a download-style button, and "Ke stažení" stood in the songbook's row as if it were one of its pages. Now: the tabs **Stáhnout** and **Zobrazit online** (the owner's labels) under the header of every page (`_site-nav.html`), the songbook's own row (Písničky · Interpreti, from W4 also the search) only under `/zpivej/`, and the download page without its extra button. The font size buttons get smaller. See D-169.
-
-### W3b · A way up from a song or an artist — [agent] · S · needs W3a · added after W4a (owner, 12 Nov 2026)
-The owner found it unclear that the way back to the index is the item "Písničky": on a song page it was marked as the current one, which reads as "you are here" and not as a link. Now a muted link above the title ("← Všechny písničky", on an artist "← Všichni interpreti") and no marked item in the row on the page of one song or artist. See D-172.
-
-### W4 · Search — [agent] · M · needs W2
-Build-time index over title, alternative titles, artist and lyrics (about 270 kB gzipped), loaded on first use, diacritics-insensitive, no libraries unless tiny.
-
-### W4a · Search from the start of words, versioned URLs — [agent] · S · needs W4 · added after W4 (owner, 12 Nov 2026)
-The owner tried the live search. (1) A word of the query must begin a word of the text (`jede` no longer finds `pojedeme`). (2) On his desktop the search page looked unstyled (a tiny box, a numbered list) while his phone showed it right: the browser had `songbook.css` from before W4 cached (GitHub Pages: ten minutes), so the new page met the old style sheet. Style sheets, scripts and the search index are now asked for as `<path>?v=<hash of the content>`. See D-171.
-
-### W4b · Search results in groups — [agent] · S · needs W4a · added after W3b (owner, 12 Nov 2026)
-The owner found it odd that songs matching only in some line of the lyrics stand among those matching in the title. The results are now in two headed groups, **V názvu nebo u interpreta (N)** and **V textu (N)**; a song is in its best group only; the matched words of the lyrics line are bold; the group of the lyrics shows 10 songs and a button **Zobrazit všech N**. The cut at 60 results is gone. See D-173.
-
-### W5 · Wake lock — [agent] · S · needs W2
-A toggle on the song page using the Screen Wake Lock API; hidden where unsupported. Done as the button "Nezhasínat displej" (`static/wake-lock.js`); see D-174. The lock itself could not be tried on a real phone, so the owner should try it once on his.
-
-### W6 · Robots and notice — [agent] · S · needs W2, L1
-`robots.txt` disallowing everything, no sitemap. The notice is already in the footer of every page (L1, D-141); no separate notice page. Hidden songs are absent because they are absent from the JSON.
-
-### W6a · Segments wrap freely — [strong model] · M · needs W2 · optional, does not block W7 (owner, 12 Nov 2026)
-**The problem.** On a narrow screen, or with a larger font, a line wraps strangely: in `folsomprisonblues`, "I" stands alone and "hear the train a-coming, …" starts the next line. Cause, measured on 12 Nov 2026: a chord and all its text up to the next chord are one `inline-block` (the W2 form of the chord rule, D-123), and a browser moves such a box whole to the next line when it does not fit beside what is before it; TeX would break at any space. The PDF is not affected.
+### W6a · Segments wrap freely — [strong model] · M · needs W2 · optional (owner, 12 Nov 2026)
+**The problem.** On a narrow screen, or with a larger font, a line wraps strangely (the release check of W7 saw it at the default font size on a 390 px phone too): in `folsomprisonblues`, "I" stands alone and "hear the train a-coming, …" starts the next line. Cause, measured on 12 Nov 2026: a chord and all its text up to the next chord are one `inline-block` (the W2 form of the chord rule, D-123), and a browser moves such a box whole to the next line when it does not fit beside what is before it; TeX would break at any space. The PDF is not affected.
 **Not the fix.** Letting only the first word be the chord's column and the text after it flow: it pads after a first word shorter than its chord, which the book does not (498 of 1,518 multi-word chord segments in 120 sampled songs).
 **To decide first (a note in this ticket's PR, an owner decision if the options differ visibly), then implement.** CSS cannot say "pad only where the next chord would collide" without measuring, so every approach is a compromise. The candidates:
 1. *A text clearly longer than its chord flows; a short one keeps today's unbreakable column.* The chord is zero-width over the first word, so the text is not padded; the collision guarantee stays for the short ones (11 of 1,518 sampled multi-word segments have a text narrower than the chord and its separator). A segment that ends inside a word (the hyphen) stays unbreakable. A threshold in one named constant.
@@ -274,24 +85,20 @@ A toggle on the song page using the Screen Wake Lock API; hidden where unsupport
 3. *Leave it:* the book's rule is exact, and the reader can make the text smaller.
 The first is the simplest that fixes the wrap without JavaScript; whether a threshold is acceptable is the question. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).
 
-### W7 · Release check — [agent] · S · needs W3–W6
-Build under 1 minute; every song page present (minus hidden); every internal link resolves; screenshots of 3 songs on a phone-sized viewport; update the web README.
-
 ---
 
 # Documentation
 
 ### Z1 · Project history and helper files — [agent] · S · at the end of every phase
-Done for every phase up to 11 (HISTORY.md, docs/archive/). At the end of each phase, in the PR of its last ticket: add the phase to HISTORY.md (what changed and why, numbers, PRs, decisions), move its finished ticket texts and status rows to `docs/archive/<phase>/TICKETS.md` and its text helper files next to them. Binary review files are not committed (attach them to the PRs). Exact duplicates may be deleted; everything else is moved.
+Done for every finished phase (HISTORY.md, docs/archive/); phases 10 and 3 have a few tickets open, whose finished ones are archived already. At the end of each phase, in the PR of its last ticket: add the phase to HISTORY.md (what changed and why, numbers, PRs, decisions), move its finished ticket texts and status rows to `docs/archive/<phase>/TICKETS.md` and its text helper files next to them. Binary review files are not committed (attach them to the PRs). Exact duplicates may be deleted; everything else is moved.
 
 ---
 
 ## Backlog (not ticketed)
 
 - Transposition (Czech B/H convention), setlists, offline use, fit-to-screen, ChordPro export.
-- **Capo note versus song remark** (owner, 6 Nov 2026): `\note` belongs to the next block (right for "capo 3"); a standalone remark is written as an unnumbered `\vers{\emph{…}}`. A separate remark command would give the web version a note type; decide in J1 if the converter needs it.
+- **Capo note versus song remark** (owner, 6 Nov 2026): `\note` belongs to the next block (right for "capo 3"); a standalone remark is written as an unnumbered `\vers{\emph{…}}`. A separate remark command would give the web version a note type; decide if the website needs it.
 - **Grouping verses, tight versus loose** (owner, `ejhorahora`): short one-line verses looked better tight; a way to group verses (tight inside, normal gap between groups). Not necessary.
 - **Bigger gap between groups of verses, and bilingual songs** (owner, `jednoubudemdal`): the Czech and the English version share one page; by the logic of the songbook they should be two songs. Not necessary.
-- **One reader of the songs** (D-164): after J2 the generator takes the song metadata from the converter, and the regexes of `songs.py` (and `tex_text.plain_text` for titles) go.
-- **Refactoring story on the website** (owner, 5 Nov 2026): notes are in HISTORY.md; write the article when the online songbook exists.
-- **CI speed:** measured and decided in A3 (D-160): most of a run is pulling the TeX Live image (about 80 s), and the options to avoid it were not adopted. Tried earlier and not adopted: Ubuntu's own TeX Live 2023 via apt (identical output, but a 15 min install; PR #37, closed).
+- **One reader of the songs** (D-164): now that J2 is done, the generator can take the song metadata from the converter, and the regexes of `songs.py` (and `tex_text.plain_text` for titles) go.
+- **Refactoring story on the website** (owner, 5 Nov 2026): notes are in HISTORY.md (*Notes for the website article*); the online songbook now exists, so the article can be written.
