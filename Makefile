@@ -10,6 +10,7 @@
 # make scores   only export the score images from MuseScore into build/scores/
 #               (tools/scores.py; skips scores that are up to date)
 # make song SONG=<id>  build only that song into build/songs/<id>.pdf (tools/build_song.py)
+# make json    build the full book, then write build/songs.json for the website (tools/songs_json.py)
 # make check [EDITION=<name>] [FORMAT=<name>]  the unit tests, the lints and the converter, then build the edition (which
 #               fails on a link to a missing target) and run the one-page and chord checks on it
 # make clean    delete build/
@@ -23,7 +24,7 @@ REQUIRED_PYTHON := 3.11
 step = @printf '\n==> %s\n' '$(1)'
 finish = @printf '\n==> %s\n    %s/%s\n\n' '$(1)' "$(CURDIR)" "$$($(PYTHON) tools/build_edition.py --edition $(EDITION) --format $(FORMAT) --path)"
 
-.PHONY: all generate scores compile pdf print song check check-python clean
+.PHONY: all generate scores compile pdf print song json check check-python clean
 
 all: pdf
 
@@ -53,6 +54,12 @@ print: compile
 
 song: scores
 	@$(PYTHON) tools/build_song.py $(SONG)
+
+# The website is built from the full book only (D-165): its pages are the screen PDF's.
+json: override EDITION = full
+json: override FORMAT = screen
+json: compile
+	@$(PYTHON) tools/songs_json.py
 
 check: check-python
 	$(call step,Unit tests)

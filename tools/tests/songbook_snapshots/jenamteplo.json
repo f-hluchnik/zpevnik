@@ -37,7 +37,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -51,7 +52,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -65,7 +67,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -79,7 +82,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -93,7 +97,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -107,7 +112,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -121,7 +127,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -135,7 +142,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -149,7 +157,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -163,7 +172,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -177,7 +187,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -191,7 +202,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -202,7 +214,8 @@
          "text": " Je nám teplo!",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -235,7 +248,8 @@
          "text": "Dnes prišlo ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -255,7 +269,8 @@
          "text": "také teplo, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -275,7 +290,8 @@
          "text": "že úplne ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -295,7 +311,8 @@
          "text": "všetkým preplo.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -321,7 +338,8 @@
          "text": "Čo vraví ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -341,7 +359,8 @@
          "text": "vnútorný hlas? ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -361,7 +380,8 @@
          "text": "Že zajtra ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -381,7 +401,8 @@
          "text": "je to tu zas.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -407,7 +428,8 @@
          "text": "Tak kričím ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -427,7 +449,8 @@
          "text": "do vankúša, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -447,7 +470,8 @@
          "text": "čo slnko ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -467,7 +491,8 @@
          "text": "zase skúša?",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -493,7 +518,8 @@
          "text": "Volaj lin",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -513,7 +539,8 @@
          "text": "ku dôvery, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -533,7 +560,8 @@
          "text": "no tam mi nikto neverí.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -561,7 +589,8 @@
          "text": "To teplo je fakt otras, od slnka hnusný podraz,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -578,7 +607,8 @@
          "text": "tak presne ako vravíš, prírodu nezastavíš.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -595,7 +625,8 @@
          "text": "Spodená MHDčka, spotená SADčka,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -612,7 +643,8 @@
          "text": "spotené sú aj vlaky, jó, přesně, vlaky taky.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -649,7 +681,8 @@
          "text": "Slunce nás ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -669,7 +702,8 @@
          "text": "všechny speče, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -689,7 +723,8 @@
          "text": "nikdo mu ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -709,7 +744,8 @@
          "text": "neuteče.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -735,7 +771,8 @@
          "text": "Podívej se, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -755,7 +792,8 @@
          "text": "pot z ní teče, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -775,7 +813,8 @@
          "text": "nevím, proč se nevysvleče?",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -802,7 +841,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -816,7 +856,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -830,7 +871,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -844,7 +886,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -858,7 +901,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -872,7 +916,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -886,7 +931,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -900,7 +946,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -914,7 +961,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -928,7 +976,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -942,7 +991,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -956,7 +1006,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -970,7 +1021,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -984,7 +1036,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -998,7 +1051,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1012,12 +1066,8 @@
          }
         ]
        },
-       "text": []
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
+       "text": [],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1054,7 +1104,8 @@
          "text": "Dnes mám tu ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1074,7 +1125,8 @@
          "text": "náladu si ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1094,7 +1146,8 @@
          "text": "tento song ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1114,7 +1167,8 @@
          "text": "spievať,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1131,7 +1185,8 @@
          "text": "spievaj si so mnou, kým sa nezačne stmievať.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1148,7 +1203,8 @@
          "text": "Ak radost a náladu chceš do duší vlievať,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1165,7 +1221,8 @@
          "text": "tak slnko sa bude na teba vždy usmievať.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1193,7 +1250,8 @@
          "text": "Zajtra, keď slnko vyjde, nikoho neobíde,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1210,7 +1268,8 @@
          "text": "lidi trefujou šlaky a stále žiadne mraky.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1227,7 +1286,8 @@
          "text": "Nám každý tieň sa zíde a s tienom nádej príde,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1244,7 +1304,8 @@
          "text": "nádej, že lepšie bude na našej rodnej hrude.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1272,7 +1333,8 @@
          "text": "So slnkom to tak býva, že v lete sa neskrýva,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1289,7 +1351,8 @@
          "text": "pozornosť si užíva, tak buď slečna trpezlivá.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1306,7 +1369,8 @@
          "text": "Ak chceš slnko prekabátiť, nesmieš hudbu v srdci stratiť.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1323,7 +1387,8 @@
          "text": "Veď v zime ti zase vadí, že o teba nezavadí.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1360,7 +1425,8 @@
          "text": "Otcovia ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1380,7 +1446,8 @@
          "text": "a aj mamy, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1400,7 +1467,8 @@
          "text": "nechoďte ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1420,7 +1488,8 @@
          "text": "von s deckami,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1446,7 +1515,8 @@
          "text": "dodržte ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1466,7 +1536,8 @@
          "text": "pitný režim, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -1486,7 +1557,8 @@
          "text": "ja som nepil a už ležím.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1514,7 +1586,8 @@
          "text": "Včera sa oblak mihol, no ja som ho pristihol,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1531,7 +1604,8 @@
          "text": "jak ušiel tamtok hore, až kdesi za obzore.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1548,7 +1622,8 @@
          "text": "My letíme ostošesť, ak nevieš to teplo zniesť,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1565,7 +1640,8 @@
          "text": "nejde ti spať ani jesť, nechaj sa našou hudbou zviesť. ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -1581,7 +1657,8 @@
          "text": " ×3",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false

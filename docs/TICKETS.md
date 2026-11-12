@@ -30,7 +30,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 `todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes).
 
-**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8); of phase 7 so far J0, J0a, J1, J1a and J5.
+**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8); of phase 7 so far J0, J0a, J1, J1a, J2 and J5.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
@@ -55,8 +55,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | J0a | done | structure the converter's grammar needs: cues, scores in a part, no `\\` at the end of a part and no empty line in one: PR #123 (D-163) |
 | J1 | done | the converter `tools/songbook/` and `tools/convert.py`, a `make check` and CI step; 20 songs fixed for it: PR #124 (D-164) |
 | J1a | done | bass notes written as plain text (`C/G`, 14 chords of `pianoman`) are `\bas{}`, and the converter rejects them (D-164): PR #126 |
-| J2 | todo | strong model (data model = contract between repos) |
-| J3 | todo | strong model (schema = contract between repos) |
+| J2 | done | `tools/songs_json.py` and `songbook/export.py` write `build/songs.json` (`make json`), shape agreed with the owner (D-165): PR #127 |
+| J3 | todo | strong model (schema = contract between repos); validator `jsonschema`, pinned, CI and tests only (D-165) |
 | J4 | todo | |
 | J5 | done | done with J0's scores (D-136): PR #89 |
 | W1 | todo | |
@@ -205,10 +205,10 @@ Found while designing J1 (session 23): J0 listed the macros, environments and ma
 Found in session 24: `pianoman` wrote 14 bass notes as plain text (`C/G`), printed on the base line unlike every `\bas{G}`; the JSON would have two forms of one thing. The songs use `\bas{}`, and a slash right before a note name on a chord's base line is a converter error (`\add{6/9}` and `1. E\7 / 2. C` stay text).
 
 ### J2 · Assemble `songs.json` — [agent] · **[strong model]** · M · needs J1
-Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated include order), `artists[]` from the registry. Each song: `id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see` (from `\seealso`), `order`, `page` (from the page checkpoints), `footnotes`, `images`, `columns`, `blocks[]` (lines of chord/text segments). This list predates the converter: the shape comes from its model (D-164), whose body also has cue blocks, notes, rules and speaker blocks, and whose scores are marks in the lines. **Hidden songs (L2, D-161):** select the songs with `songs.published()`, like the generator, so a hidden song is not in `songs.json`.
+Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated include order), `artists[]` from the registry. Each song: `id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see` (from `\seealso`), `order`, `page` (from the page checkpoints), `footnotes`, `images`, `columns`, `blocks[]` (lines of chord/text segments). This list predates the converter: the shape comes from its model (D-164), whose body also has cue blocks, notes, rules and speaker blocks, and whose scores are marks in the lines. **Done:** the agreed shape is D-165. **Hidden songs (L2, D-161):** select the songs with `songs.published()`, like the generator, so a hidden song is not in `songs.json`.
 
 ### J3 · JSON Schema — [agent] · **[strong model]** · S · needs J2
-`tools/songs.schema.json`; validate the output in tests and in CI.
+`tools/songs.schema.json` (JSON Schema 2020-12) for the shape of D-165; validate the output in tests and in CI with `jsonschema`, pinned in `requirements-dev.txt` (D-165: an exception to rule 4 for tests and CI only; the README's setup installs it, `make check` stops with a clear message without it).
 
 ### J4 · CI and release asset — [agent] · M · needs J3
 The converter already runs in CI (J1). J4 builds `songs.json` after the compile and validates it against the schema; on pushes to master it adds `songs.json` and the score SVGs (`build/scores/*.svg`, one zip, D-136) to the `files:` of the release step. PRs only validate.

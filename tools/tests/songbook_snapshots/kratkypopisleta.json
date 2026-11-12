@@ -43,7 +43,8 @@
          "text": "Požáry ze čtyř stran hoří léto.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -76,7 +77,8 @@
          "text": "Požáry ze čtyř ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -96,7 +98,8 @@
          "text": "stran ho",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -116,7 +119,8 @@
          "text": "ří ",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -136,7 +140,8 @@
          "text": "léto, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -150,7 +155,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -164,7 +170,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -181,7 +188,8 @@
          "text": "omamně kvetou akátové háje,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -198,7 +206,8 @@
          "text": "zelená duše vína doutná na vinicích,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -224,7 +233,8 @@
          "text": "krvácí vlčí ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -244,7 +254,8 @@
          "text": "máky v obi",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -264,7 +275,8 @@
          "text": "lí.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -297,7 +309,8 @@
          "text": "Požáry ze čtyř ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -317,7 +330,8 @@
          "text": "stran ho",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -337,7 +351,8 @@
          "text": "ří ",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -357,7 +372,8 @@
          "text": "léto, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -371,7 +387,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -385,7 +402,8 @@
          }
         ]
        },
-       "text": []
+       "text": [],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -402,7 +420,8 @@
          "text": "omamně kvetou akátové háje,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -419,7 +438,8 @@
          "text": "zelená duše vína doutná na vinicích,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -436,7 +456,8 @@
          "text": "krvácí vlčí máky v obilí.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -469,7 +490,8 @@
          "text": "Přichází tma a ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -489,7 +511,8 @@
          "text": "po stříbrném ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -509,7 +532,8 @@
          "text": "mostě kráčí ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -529,7 +553,8 @@
          "text": "Luna.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -555,7 +580,8 @@
          "text": "Svět je jak ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -575,7 +601,8 @@
          "text": "chleba vytažený z ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -595,7 +622,8 @@
          "text": "pece",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -621,7 +649,8 @@
          "text": "a noc ují",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -641,7 +670,8 @@
          "text": "dá, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -661,7 +691,8 @@
          "text": "a noc ují",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -681,7 +712,8 @@
          "text": "dá.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -737,7 +769,8 @@
           "ECHO"
          ]
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -773,7 +806,8 @@
           "ECHO"
          ]
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -809,7 +843,8 @@
           "ECHO"
          ]
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -833,7 +868,8 @@
           "ECHO"
          ]
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -857,7 +893,8 @@
          "text": "Požáry ze čtyř stran hoří léto!",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false

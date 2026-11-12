@@ -49,7 +49,8 @@
          "text": "Darmo sa ty trápíš, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -69,7 +70,8 @@
          "text": "můj milý sy",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -89,7 +91,8 @@
          "text": "nečku,",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -106,7 +109,8 @@
          "text": "nenosím já tebe, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -126,7 +130,8 @@
          "text": "nenosím v sr",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -146,7 +151,8 @@
          "text": "déčku.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -163,7 +169,8 @@
          "text": "A já tvo",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -183,7 +190,8 @@
          "text": "ja ",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -203,7 +211,8 @@
          "text": "ne",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -223,7 +232,8 @@
          "text": "bu",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -243,7 +253,8 @@
          "text": "du",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -269,7 +280,8 @@
          "text": "ani jednu ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -289,7 +301,8 @@
          "text": "hodi",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -309,7 +322,8 @@
          "text": "nu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -333,7 +347,8 @@
          "text": "Copak sobě myslíš má milá panenko?",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -350,7 +365,8 @@
          "text": "Vždyť ty si to moje rozmilé srdénko.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -367,7 +383,8 @@
          "text": "A ty musíš býti má,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -384,7 +401,8 @@
          "text": "lebo mi tě Pán Bůh dá.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -408,7 +426,8 @@
          "text": "A já se udělám malú veverečkú",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -425,7 +444,8 @@
          "text": "a uskočím tobě z dubu na jedličku.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -442,7 +462,8 @@
          "text": "Přece tvoja nebudu",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -459,7 +480,8 @@
          "text": "ani jednu hodinu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -483,7 +505,8 @@
          "text": "A já chovám doma, takú sekérečku,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -500,7 +523,8 @@
          "text": "ona mi podetne dúbek i jedličku.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -517,7 +541,8 @@
          "text": "A ty musíš býti má,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -534,7 +559,8 @@
          "text": "lebo mi tě Pán Bůh dá.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -558,7 +584,8 @@
          "text": "A já sa udělám tú malú rybičkú",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -575,7 +602,8 @@
          "text": "a já ti uplynu preč po Dunajíčku.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -592,7 +620,8 @@
          "text": "Přece tvoja nebudu",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -609,7 +638,8 @@
          "text": "ani jednu hodinu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -633,7 +663,8 @@
          "text": "A já chovám doma takovú udičku,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -650,7 +681,8 @@
          "text": "co na ni ulovím kdejakú rybičku.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -667,7 +699,8 @@
          "text": "A ty přece budeš má,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -684,7 +717,8 @@
          "text": "lebo mi tě Pán Bůh dá.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -708,7 +742,8 @@
          "text": "A já sa udělám tú velikú vranú",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -725,7 +760,8 @@
          "text": "a já ti uletím na uherskú stranu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -742,7 +778,8 @@
          "text": "Přece tvoja nebudu",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -759,7 +796,8 @@
          "text": "ani jednu hodinu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -783,7 +821,8 @@
          "text": "A já chodám doma starodávnú kušu,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -800,7 +839,8 @@
          "text": "co ona vystřelí všeckým vranám dušu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -817,7 +857,8 @@
          "text": "A ty musíš býti má,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -834,7 +875,8 @@
          "text": "lebo mi tě Pán Bůh dá.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -858,7 +900,8 @@
          "text": "A já se udělám hvězdičkú na nebi",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -875,7 +918,8 @@
          "text": "a já budu lidem svítiti na nebi.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -892,7 +936,8 @@
          "text": "Přece tvoja nebudu",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -909,7 +954,8 @@
          "text": "ani jednu hodinu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -933,7 +979,8 @@
          "text": "A sú u nás doma takoví hvězdáři,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -950,7 +997,8 @@
          "text": "co vypočítajú hvězdičky na nebi.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -967,7 +1015,8 @@
          "text": "A ty musíš býti má,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -984,7 +1033,8 @@
          "text": "lebo mi tě Pán Bůh dá.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false

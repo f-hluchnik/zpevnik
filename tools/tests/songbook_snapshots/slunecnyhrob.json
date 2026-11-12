@@ -28,11 +28,6 @@
       {
        "type": "Score",
        "name": "slunecnyhrob_intro"
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       }
      ],
      "group_start": false
@@ -63,7 +58,8 @@
          "text": " Usínám a chtěl bych se vrátit o nějakej ten rok zpátky,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -80,7 +76,8 @@
          "text": "bejt zase klukem, kterej si rád hraje a který je s tebou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -113,7 +110,8 @@
          "text": "Zdá se ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -143,7 +141,8 @@
          "text": "mi, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -173,7 +172,8 @@
          "text": "je to ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -203,7 +203,8 @@
          "text": "moc let,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -229,7 +230,8 @@
          "text": "já byl ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -259,7 +261,8 @@
          "text": "kluk, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -289,7 +292,8 @@
          "text": "kterej ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -319,7 +323,8 @@
          "text": "chtěl",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -345,7 +350,8 @@
          "text": "znáti ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -375,7 +381,8 @@
          "text": "svět, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -405,7 +412,8 @@
          "text": "s tebou ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -435,7 +443,8 @@
          "text": "jsem si ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -455,7 +464,8 @@
          "text": "hrál.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -473,11 +483,6 @@
       {
        "type": "Score",
        "name": "slunecnyhrob_solo"
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       }
      ],
      "group_start": false
@@ -501,7 +506,8 @@
          "text": "Vrátím se a chtěl bych rád",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -518,7 +524,8 @@
          "text": "být s tebou, zavzpomínat,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -535,7 +542,8 @@
          "text": "mám teď, ale zprávu zlou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -578,7 +586,8 @@
          "text": "Su",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -608,7 +617,8 @@
          "text": "chá ",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       },
       {
        "type": "Segment",
@@ -628,7 +638,8 @@
          "text": "hlína ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -662,7 +673,8 @@
          "text": "ta",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -692,7 +704,8 @@
          "text": "dy,",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -709,7 +722,8 @@
          "text": "bez kvítí, bez vody,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -745,7 +759,8 @@
          "text": "já na ni ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -775,7 +790,8 @@
          "text": "poklekám, ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -805,7 +821,8 @@
          "text": "vzpomínkou po",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Segment",
@@ -825,7 +842,8 @@
          "text": "cta se vzdává.",
          "style": []
         }
-       ]
+       ],
+       "in_word": true
       }
      ],
      "group_start": false
@@ -849,7 +867,8 @@
          "text": "Loučím se a něco však tam zůstalo",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -866,7 +885,8 @@
          "text": "z těch našich dnů",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -883,7 +903,8 @@
          "text": "já teď vím, věrný zůstanu.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -914,7 +935,8 @@
           "ITALIC"
          ]
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
@@ -943,17 +965,13 @@
          "text": "= ",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       },
       {
        "type": "Cue",
        "label": "3",
        "target": 6
-      },
-      {
-       "type": "Segment",
-       "chord": null,
-       "text": []
       },
       {
        "type": "Cue",
@@ -989,7 +1007,8 @@
          "text": " Nemohu spát, probouzím se a zase se nemohu ubránit myšlence",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1006,7 +1025,8 @@
          "text": "vrátit se o nějakej ten rok zpátky, bejt zase malým klukem,",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false
@@ -1023,7 +1043,8 @@
          "text": "který si rád hraje a který je s tebou.",
          "style": []
         }
-       ]
+       ],
+       "in_word": false
       }
      ],
      "group_start": false

@@ -26,6 +26,7 @@ class Entry:
     song_id: str
     text: str        # TeX, as printed in the contents
     sort_text: str   # plain text the entry is ordered by
+    alt_index: int | None = None  # the entry of the song's alternative title with this index
 
 
 TitleOf = Callable[[Song], str]
@@ -41,8 +42,8 @@ def entries(songs: list[Song], title_of: TitleOf = contents_title) -> Iterator[E
     for song in songs:
         title = title_of(song)
         yield Entry(song.id, escape_tex(title), title)
-        for alttitle in map(plain_text, song.alttitles):
-            yield Entry(song.id, f"\\emph{{{escape_tex(alttitle)}}} ({escape_tex(title)})", alttitle)
+        for index, alttitle in enumerate(map(plain_text, song.alttitles)):
+            yield Entry(song.id, f"\\emph{{{escape_tex(alttitle)}}} ({escape_tex(title)})", alttitle, index)
 
 
 def anchor(letter: str) -> str:
