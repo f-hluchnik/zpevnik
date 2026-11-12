@@ -64,7 +64,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | W3 | done | the index at `/zpivej/` (the contents of `songs.json`, never re-sorted), the artists and collections at `/zpivej/interpret/`, the navigation, links between songs and artists, previous/next in book order, "open in PDF" at the song's page, the link from the download page and from `404.html` (D-168): zpevnik-web PR #6 |
 | W3a | done | two levels of navigation: the tabs "Stáhnout" and "Zobrazit online" on every page, the songbook's own row under `/zpivej/` (D-169), smaller font buttons: zpevnik-web PR #7 |
 | W4 | done | `/zpivej/hledat/` and `static/search-index.json` (title, other titles, artists, lyrics; 262 kB gzipped), loaded when the field is first used, case and diacritics ignored, all words must occur, ranked title / artist / lyrics, the query in `?q=` (D-170): zpevnik-web PR #8 |
-| W4a | in review | search matches from the start of words; style sheets, scripts and the search index get a content hash in their URL, so a browser never combines new pages with an old style sheet (D-171): zpevnik-web PR #9 |
+| W4a | done | search matches from the start of words; style sheets, scripts and the search index get a content hash in their URL, so a browser never combines new pages with an old style sheet (D-171): zpevnik-web PR #9 |
+| W3b | in review | a muted link up above the title of a song and an artist; those pages mark no item of the songbook's row (D-172): zpevnik-web PR #10 |
 | W5 | todo | |
 | W6 | todo | |
 | W6a | todo | segments of a line wrap freely (D-123 on the web), after W6 |
@@ -244,6 +245,9 @@ Alphabetical index (same order as the PDF, taken from `songs.json`, never re-sor
 
 ### W3a · Two levels of navigation — [agent] · S · needs W3 · added after W3 (owner, 12 Nov 2026)
 The owner looked at the live W3 pages: the link to the songbook was a download-style button, and "Ke stažení" stood in the songbook's row as if it were one of its pages. Now: the tabs **Stáhnout** and **Zobrazit online** (the owner's labels) under the header of every page (`_site-nav.html`), the songbook's own row (Písničky · Interpreti, from W4 also the search) only under `/zpivej/`, and the download page without its extra button. The font size buttons get smaller. See D-169.
+
+### W3b · A way up from a song or an artist — [agent] · S · needs W3a · added after W4a (owner, 12 Nov 2026)
+The owner found it unclear that the way back to the index is the item "Písničky": on a song page it was marked as the current one, which reads as "you are here" and not as a link. Now a muted link above the title ("← Všechny písničky", on an artist "← Všichni interpreti") and no marked item in the row on the page of one song or artist. See D-172.
 
 ### W4 · Search — [agent] · M · needs W2
 Build-time index over title, alternative titles, artist and lyrics (about 270 kB gzipped), loaded on first use, diacritics-insensitive, no libraries unless tiny.
