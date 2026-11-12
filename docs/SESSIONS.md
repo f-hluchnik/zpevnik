@@ -60,6 +60,9 @@ A2 merged (PR #118, D-159): 8 tests dropped (252 → 244), the rest kept on the 
 ### Session 22c · A3 — done (12 Nov 2026)
 A3 (PRs #119 and #120, D-160): the apt step hardened, the PDF diff compares every edition; the other speed-ups were measured and not adopted. Phase 12 closed (HISTORY.md, archive/phase-12-audits/).
 
+### L2 — done early (12 Nov 2026)
+L2 (PR #121, D-161): `data/hidden.txt` and `songs.published()`; every book leaves hidden songs out. J2 selects the songs of `songs.json` with the same function.
+
 ### Any session · P4 · Sonnet · `zpevnik`
 - **Needs:** P3, and the final content: the owner's new songs and K1 (D-147).
 - **Read:** TICKETS P4 · the P1 entry.
@@ -72,13 +75,13 @@ A3 (PRs #119 and #120, D-160): the apt step hardened, the PDF diff compares ever
 
 ### Session 24 · J2, J3 · **strong model** · `zpevnik`
 - **Needs:** J1.
-- **Read:** DECISIONS D-001, D-110 · PLAN WP5 (Design, Contents).
+- **Read:** DECISIONS D-001, D-110, D-161 (hidden songs) · PLAN WP5 (Design, Contents).
 - **Notes:** Propose the JSON shape for two representative songs (one with chord-only rows and `\cue`, one with footnotes and scores) and get the owner's OK before writing the schema.
 
-### Session 25 · J4, L2 · Sonnet · `zpevnik`
-- **Needs:** J3, E2 (L1 is done, D-141).
+### Session 25 · J4 · Sonnet · `zpevnik`
+- **Needs:** J3.
 - **Read:** DECISIONS D-006, D-008, D-110, D-125, D-136 · PLAN WP5 (Steps), WP7.
-- **Notes:** J4 attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J4 also attaches the score SVGs (`build/scores/*.svg`, one zip; J5 was done with J0, D-136). L2 reuses E2's song filter.
+- **Notes:** J4 attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J4 also attaches the score SVGs (`build/scores/*.svg`, one zip; J5 was done with J0, D-136).
 
 ### Session 26 · W1, W2 · Sonnet · `zpevnik-web`
 - **Needs:** J4 released at least once.

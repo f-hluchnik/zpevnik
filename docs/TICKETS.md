@@ -30,7 +30,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 `todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes).
 
-**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a and 12), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12).
+**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
@@ -57,8 +57,6 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | J3 | todo | strong model (schema = contract between repos) |
 | J4 | todo | |
 | J5 | done | done with J0's scores (D-136): PR #89 |
-| L1 | done | D-141 (notice in the PDF colophon and the web footer, licence scope) |
-| L2 | todo | |
 | W1 | todo | |
 | W2 | todo | |
 | W3 | todo | |
@@ -77,7 +75,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | 3 Print | P0, P1, P3, then P4 | The A5 facts and the printer's requirements, a print build, and a checked proof on the final content (D-122, D-147) |
 | 12 Audits | A1–A3 (done) | The README, the unit tests and the build speed reviewed before the converter (D-147, D-158–D-160) |
 | 7 Converter | J0–J5 | `songs.json` and score SVGs on every release |
-| 8 Legal | L1–L2 | Notice, hide switch |
+| 8 Legal | L1–L2 (done) | Notice, hide switch (D-141, D-161) |
 | 9 Website | W1–W7 | Online songbook |
 
 The converter is written once, against the final command names of phase 11 (D-108, D-131). Phase 8 must be done before the songs go online (W6). Print needs phase 10 only if the printed book is a subset (P1). The owner's new songs and K1 are content work that runs beside the converter and the website; P4 comes after them (D-147).
@@ -193,7 +191,7 @@ The converter is strict (an unknown macro is an error), so every remaining speci
 3. Tests: snapshot tests for 10 songs plus a whole-book parse that must succeed for all songs in under 5 s.
 
 ### J2 · Assemble `songs.json` — [agent] · **[strong model]** · M · needs J1
-Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated include order), `artists[]` from the registry. Each song: `id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see` (from `\seealso`), `order`, `page` (from the page checkpoints), `footnotes`, `images`, `columns`, `blocks[]` (lines of chord/text segments).
+Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated include order), `artists[]` from the registry. Each song: `id`, `title`, `altTitles`, `artists`, `collections`, `subtitle`, `see` (from `\seealso`), `order`, `page` (from the page checkpoints), `footnotes`, `images`, `columns`, `blocks[]` (lines of chord/text segments). **Hidden songs (L2, D-161):** select the songs with `songs.published()`, like the generator, so a hidden song is not in `songs.json`.
 
 ### J3 · JSON Schema — [agent] · **[strong model]** · S · needs J2
 `tools/songs.schema.json`; validate the output in tests and in CI.
@@ -209,16 +207,6 @@ The `.mscz` files are the source; CI exports the images, so the PDF and the web 
 3. The exported images are build output (D-104), not committed; remove the committed PDFs and PNGs once the export works. The SVGs go into the release as one zip and are referenced from `songs.json`.
 4. The `\vspace` and `\hspace` next to scores stay (D-124), but check them against the new crop.
 **Expected differences:** small shifts of the score images; the owner reviews them.
-
----
-
-# Phase 8 – Legal
-
-### L1 · Notice text — [you] · S — **done**
-A short text in Czech and English: non-commercial, contact address for removal requests. It goes into the website footer and the PDF colophon. Done on 9 Nov 2026 (D-141): `shared-pages/notice.tex` (then `preamble/upozorneni.tex`) in the colophon, the footer in `zpevnik-web/templates/base.html`, and the scope of the Apache licence in `LICENSE` and the README.
-
-### L2 · Hide switch — [agent] · S · needs E2, J2, L1
-`data/hidden.txt` with one song id per line. The generator leaves those songs out of every book, using E2's song filter (TOC, index and include list follow); the converter leaves them out of `songs.json`; a lint checks that each id exists. (This hides songs from the outputs; only deleting the file removes it from the repository.)
 
 ---
 

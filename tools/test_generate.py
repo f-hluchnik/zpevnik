@@ -2,13 +2,18 @@
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 
 from build_version import UNKNOWN_PATCH
 from generate import generated_files, include_tex, song_list_tex, version
-from paths import (ARTIST_PART_TEX, ARTISTS_TEX, INCLUDE_TEX, LETTERS_TEX, MACROS_TEX, PAGES_TEX,
-                   SONG_LIST_TEX, VERSION_TEX)
+from paths import (ARTIST_PART_TEX, ARTISTS_TEX, HIDDEN_SONGS, INCLUDE_TEX, LETTERS_TEX, MACROS_TEX, PAGES_TEX,
+                   REPO_ROOT, SONG_LIST_TEX, VERSION_TEX, generated_dir)
 from songs import Song
+from test_edition import Repository
 from test_edition_tex import BOOK, edition
 
 
@@ -63,6 +68,22 @@ class GeneratedFiles(unittest.TestCase):
 
     def test_the_registry_is_registered_whole(self):
         self.assertIn("\\zpregisterartist{abba}{ABBA}{1}\n", self.files()[ARTISTS_TEX])
+
+
+class HiddenSongs(unittest.TestCase):
+    def test_a_hidden_song_is_in_no_book_but_still_counts_for_the_version(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Repository(tmp)
+            repo.write("data/artists.toml", '[[entry]]\nslug = "abba"\nname = "ABBA"\n')
+            repo.write("songs/alfa.tex", "\\song{Alfa} \\artist{abba}\n")
+            repo.write("songs/beta.tex", "\\song{Beta} \\artist{abba}\n")
+            repo.write(str(HIDDEN_SONGS), "alfa  # the rights holder asked\n")
+            subprocess.run([sys.executable, str(REPO_ROOT / "tools" / "generate.py"), tmp],
+                           check=True, capture_output=True)
+            generated = Path(tmp) / generated_dir("full")
+            self.assertNotIn("alfa", (generated / INCLUDE_TEX).read_text(encoding="utf-8"))
+            self.assertNotIn("alfa", (generated / SONG_LIST_TEX).read_text(encoding="utf-8"))
+            self.assertIn("1.02.", (generated / VERSION_TEX).read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

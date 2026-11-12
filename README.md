@@ -228,4 +228,6 @@ Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clea
 ## Licence a autorská práva
 Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`songs/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`shared-pages/` kromě `contents.tex` a strany vydání v `editions/`, úvod celého zpěvníku cituje text Vlasty Redla) a obálku (`images/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Držitelé práv, kteří si nepřejí, aby zde jejich píseň byla, mi mohou napsat na frantahluchnik@gmail.com a píseň odstraním.
 
+Písničku skryji tak, že její `id` zapíšu do `data/hidden.txt` s komentářem proč. Zmizí ze všech vydání i s položkami v obsahu a v rejstříku interpretů a odkazy `\seealso` na ni se nevytisknou; soubor písničky ale v repozitáři zůstává (a verze ho dál počítá), natrvalo ji odstraní až smazání souboru. Skrytí se zveřejní jako každá jiná změna, přes pull request; `make check` ohlásí `id`, které není písnička.
+
 Stejné upozornění je v tiráži zpěvníku (`shared-pages/notice.tex`) a v patičce webu; když se mění, mění se na obou místech.

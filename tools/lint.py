@@ -18,7 +18,7 @@ Errors fail the build:
   - a song refers (`\\artist`, `\\collection`) to a slug that is not in the registry;
   - an entry with `section = true` has no songs;
   - a song sets `\\score{name}` and there is no `scores/<name>.mscz`;
-  - tools/no-chords-allowlist.txt lists an id that is not a song;
+  - tools/no-chords-allowlist.txt or data/hidden.txt lists an id that is not a song;
   - data/book.toml or an edition (editions/<name>/edition.toml) is invalid (see edition.py):
     every edition in the repository is published with the build, so a broken one fails it.
 Warnings are listed and do not fail:
@@ -41,7 +41,7 @@ from pathlib import Path
 
 from allowlist import read_allowlist
 from edition import edition_problems
-from paths import NO_CHORDS_ALLOWLIST, SCORES_DIR, add_root_argument
+from paths import HIDDEN_SONGS, NO_CHORDS_ALLOWLIST, SCORES_DIR, add_root_argument
 from registry import Artist, check_entries, normalise, read_entries
 from songs import ARTIST, Song, parse_song, song_paths
 
@@ -146,8 +146,9 @@ def chord_warnings(song_id: str, text: str) -> list[str]:
     return [] if CHORD_USE.search(text) else [f"{song_id}: no \\chord or \\chords"]
 
 
-def unknown_allowlisted(allowlisted: set[str], song_ids: set[str]) -> list[str]:
-    return [f"{NO_CHORDS_ALLOWLIST}: '{song_id}' is not a song" for song_id in sorted(allowlisted - song_ids)]
+def unknown_listed(list_file: Path, listed: set[str], song_ids: set[str]) -> list[str]:
+    """Ids of a song-id list (an allow-list, the hidden songs) that are not songs."""
+    return [f"{list_file}: '{song_id}' is not a song" for song_id in sorted(listed - song_ids)]
 
 
 def songs_by_group(songs: list[Song]) -> dict[str, list[Song]]:
@@ -237,7 +238,9 @@ def lint(root: Path) -> Findings:
     errors = check_entries(entries)
     without_chords_ok = read_allowlist(root / NO_CHORDS_ALLOWLIST)
     songs, problems, warnings = load_songs(root, without_chords_ok)
-    errors += problems + unknown_allowlisted(without_chords_ok, {path.stem for path in song_paths(root)})
+    song_ids = {path.stem for path in song_paths(root)}
+    errors += problems + unknown_listed(NO_CHORDS_ALLOWLIST, without_chords_ok, song_ids)
+    errors += unknown_listed(HIDDEN_SONGS, read_allowlist(root / HIDDEN_SONGS), song_ids)
     if not errors:  # the lints below need valid entries and readable songs
         registry = [normalise(entry) for entry in entries]
         errors += unknown_slugs(songs, registry) + empty_sections(songs, registry)

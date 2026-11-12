@@ -6,7 +6,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from songs import Song, find_arguments, parse_song, read_songs, read_title
+from paths import HIDDEN_SONGS
+from songs import Song, find_arguments, parse_song, published, read_songs, read_title
 
 
 class ReadTitle(unittest.TestCase):
@@ -80,6 +81,20 @@ class ReadSongs(unittest.TestCase):
             (songs_dir / "a.tex").write_text("no title here\n", encoding="utf-8")
             with self.assertRaises(ValueError):
                 read_songs(Path(tmp))
+
+
+class Published(unittest.TestCase):
+    SONGS = [Song("alfa", "Alfa", None), Song("beta", "Beta", None)]
+
+    def test_hidden_songs_are_left_out(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / HIDDEN_SONGS).parent.mkdir(parents=True)
+            (Path(tmp) / HIDDEN_SONGS).write_text("# why\nalfa  # the rights holder asked\n")
+            self.assertEqual([song.id for song in published(self.SONGS, Path(tmp))], ["beta"])
+
+    def test_without_the_list_every_song_is_published(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(published(self.SONGS, Path(tmp)), self.SONGS)
 
 
 if __name__ == "__main__":

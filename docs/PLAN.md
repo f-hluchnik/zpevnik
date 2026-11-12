@@ -30,7 +30,7 @@ Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or
 | 9 | Print | **next**; P4 after the owner's new songs | P0, P1, P3, P4 |
 | A | Audits: README, unit tests, build speed | done | A1–A3 |
 | 5 | Converter and `songs.json` | later | J1–J5 |
-| 7 | Legal hygiene | later, before WP6 goes online | L1–L2 |
+| 7 | Legal hygiene | done (`songs.json` part of L2 in J2) | L1–L2 |
 | 6 | Website | later | W1–W7 |
 
 WP0–WP4 are described in HISTORY.md (results) and in the archived plan (the original problem statements). The cleanup came before the converter so that the converter is written once, against semantic macros only, and `songs.json` carries no layout (D-108). Editions and print were pulled ahead of the converter in D-132; D-147 added the delivery of the editions and the audits before it, and moved `zpevnik-lite` behind the print edition.

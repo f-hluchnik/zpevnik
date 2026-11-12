@@ -5,14 +5,19 @@ any number of `\\alttitle{Other title}`, each at the start of a line. The song
 line carries its `\\artist{slug}` tags (up to two); `\\collection{slug}` is on
 a line of its own. `\\score{name}` sets the image of `scores/<name>.mscz`.
 
+A song listed in data/hidden.txt (L2) stays in the repository but is left out of
+everything that is published: `published()` is the one place that applies the list.
+
 Python >= 3.11, standard library only.
 """
 import re
 from dataclasses import dataclass
+from collections.abc import Iterable
 from functools import cached_property
 from pathlib import Path
 
-from paths import SONGS_DIR
+from allowlist import read_allowlist
+from paths import HIDDEN_SONGS, SONGS_DIR
 from tex_text import brace_group, plain_text
 
 
@@ -81,3 +86,9 @@ def parse_song(song_id: str, text: str) -> Song:
 def read_songs(root: Path) -> list[Song]:
     """All songs in songs/, in file-name order (not the songbook order)."""
     return [parse_song(path.stem, path.read_text(encoding="utf-8")) for path in song_paths(root)]
+
+
+def published(songs: Iterable[Song], root: Path) -> list[Song]:
+    """The songs that are not hidden (data/hidden.txt): every book and songs.json select from these."""
+    hidden = read_allowlist(root / HIDDEN_SONGS)
+    return [song for song in songs if song.id not in hidden]
