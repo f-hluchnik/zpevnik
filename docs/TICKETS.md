@@ -65,7 +65,8 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | W3a | done | two levels of navigation: the tabs "Stáhnout" and "Zobrazit online" on every page, the songbook's own row under `/zpivej/` (D-169), smaller font buttons: zpevnik-web PR #7 |
 | W4 | done | `/zpivej/hledat/` and `static/search-index.json` (title, other titles, artists, lyrics; 262 kB gzipped), loaded when the field is first used, case and diacritics ignored, all words must occur, ranked title / artist / lyrics, the query in `?q=` (D-170): zpevnik-web PR #8 |
 | W4a | done | search matches from the start of words; style sheets, scripts and the search index get a content hash in their URL, so a browser never combines new pages with an old style sheet (D-171): zpevnik-web PR #9 |
-| W3b | in review | a muted link up above the title of a song and an artist; those pages mark no item of the songbook's row (D-172): zpevnik-web PR #10 |
+| W3b | done | a muted link up above the title of a song and an artist; those pages mark no item of the songbook's row (D-172): zpevnik-web PR #10 |
+| W4b | in review | search results in two groups (title or artist, lyrics), the matched words bold, the lyrics group cut to 10 with a button for all (D-173): zpevnik-web PR #11 |
 | W5 | todo | |
 | W6 | todo | |
 | W6a | todo | segments of a line wrap freely (D-123 on the web), after W6 |
@@ -254,6 +255,9 @@ Build-time index over title, alternative titles, artist and lyrics (about 270 kB
 
 ### W4a · Search from the start of words, versioned URLs — [agent] · S · needs W4 · added after W4 (owner, 12 Nov 2026)
 The owner tried the live search. (1) A word of the query must begin a word of the text (`jede` no longer finds `pojedeme`). (2) On his desktop the search page looked unstyled (a tiny box, a numbered list) while his phone showed it right: the browser had `songbook.css` from before W4 cached (GitHub Pages: ten minutes), so the new page met the old style sheet. Style sheets, scripts and the search index are now asked for as `<path>?v=<hash of the content>`. See D-171.
+
+### W4b · Search results in groups — [agent] · S · needs W4a · added after W3b (owner, 12 Nov 2026)
+The owner found it odd that songs matching only in some line of the lyrics stand among those matching in the title. The results are now in two headed groups, **V názvu nebo u interpreta (N)** and **V textu (N)**; a song is in its best group only; the matched words of the lyrics line are bold; the group of the lyrics shows 10 songs and a button **Zobrazit všech N**. The cut at 60 results is gone. See D-173.
 
 ### W5 · Wake lock — [agent] · S · needs W2
 A toggle on the song page using the Screen Wake Lock API; hidden where unsupported.
