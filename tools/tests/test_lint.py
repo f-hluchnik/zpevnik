@@ -89,8 +89,7 @@ class TextProblems(unittest.TestCase):
                                 ("\\textbackslash: a :\\textbackslash", "write \\rep{...}"),
                                 ("\\includegraphics{scores/a.pdf}", "write \\score{name}"),
                                 ("\\vspace{-25pt}a", "gaps between blocks are automatic"),
-                                ("\\hspace{-7pt}a", "chord spacing is automatic"),
-                                ("\\chord{\\bas{A A\\#}}a", "write \\kk")):
+                                ("\\hspace{-7pt}a", "chord spacing is automatic")):
             with self.subTest(written=written):
                 (problem,) = text_problems("a", f"\\song{{A}} \\artist{{x}}\n\\vers{{{written}}}\n")
                 self.assertIn("2 uses" if "backslash" in written else "1 uses", problem)

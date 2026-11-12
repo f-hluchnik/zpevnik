@@ -49,7 +49,7 @@ Písnička je jediný soubor ve složce `songs`. Seznam písniček, obsah (podle
 1. Ve složce `songs` vytvořím soubor s názvem podle názvu písničky. Název souboru se tvoří odebráním diakritiky a mezer z názvu písničky a zapsáním tohoto názvu malými písmeny. Je-li potřeba odlišit dvě písničky se stejným názvem od různých interpretů, učiní se tak přidáním jména interpreta (pokud možno jednoslovně, tedy příjmení nebo název skupiny) za jméno písničky, opět bez mezer a diakritiky, malými písmeny. Název souboru bez `.tex` je `id` písničky. Je možné použít šablonu `song-template.tex` v kořenovém adresáři zpěvníku.
 2. Na řádek s příkazem `\song{}` doplním `\artist{<kotva>}`. Pokud interpret ještě v registru není, přidám ho do `data/artists.toml` (viz [Interpreti a registr interpretů](#interpreti-a-registr-interpretů)).
 3. Přepíšu písničku podle konvencí v části [Přepisování písniček](#přepisování-písniček). Průběžně si ji sestavuji samotnou: `make song SONG=<id>` (například `make song SONG=lonelystranger`) ji za pár sekund zkompiluje do `build/songs/<id>.pdf`, bez obsahu a bez jména interpreta.
-4. Spustím `make check`: unit testy, kontrola písniček a registru interpretů, sestavení celého zpěvníku (selže při odkazu, který vede nikam), jedna stránka na písničku a překryv akordů. Nezávažné nálezy (varování) jen vypíše. Celý zpěvník je pak v `build/editions/full/zpevnik.pdf`, kde písničku zkontroluji na jejím místě.
+4. Spustím `make check`: unit testy, kontrola písniček a registru interpretů, převod písniček pro web (hlásí, co nerozumí, s číslem řádku), sestavení celého zpěvníku (selže při odkazu, který vede nikam), jedna stránka na písničku a překryv akordů. Nezávažné nálezy (varování) jen vypíše. Celý zpěvník je pak v `build/editions/full/zpevnik.pdf`, kde písničku zkontroluji na jejím místě.
 5. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 6. Změnu zveřejním přes pull request (viz [Publikování](#publikování)).
 
@@ -150,6 +150,8 @@ V této sekci popíšu psaní akordů a příkazy potřebné k vysázení různ�
 - `\bb` - béčko
 - `\kk` - křížek
 - `\2-9` - 2-9 akord, patřičně podle čísla
+
+Mezeru za značkou se jménem z písmen (`\kk`, `\bb`, `\maj`, `\dm`, `\hdm`) TeX spolkne. Uvnitř názvu akordu je to správně: `F\kk m` je F♯m. Má-li se mezera vysázet, napíšu za značku `{}`: mezi tóny v basu `\bas{C\kk{} F\kk{} C\kk}`, mezi akordy `\chords{Dm\maj{} Dm}`, v textu `C\kk{} dur`. `make check` hlásí spolknutou mezeru jinde než před `m` nebo další značkou.
 
 Mezery mezi akordy a texty se nepíšou ručně, o rozestup se stará sazba: akord a jeho text zabírají aspoň šířku akordu plus půl em (mezi dvěma akordy bez textu je to šířka akordu plus 1 em), takže se akordy nikdy nepřekryjí a text se hýbe jen tam, kde by se akord srazil s dalším. Uvnitř slova se v takovém místě vysází vystředěný spojovník. Starší příkazy `\nc`, `\mm`, `\sm` a `\bc` už neexistují a `make check` je v písničce nahlásí jako chybu.
 - `\gap{n}` - záměrná pauza (akord zazní a zpívá se až za chvíli), `n` je počet znaků po půl em, například `\chord{G}\gap{4}text`. Uvnitř slova pauzu nepíšu.

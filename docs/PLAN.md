@@ -57,7 +57,7 @@ A print version of any edition: by default the screen PDF scaled to the print pa
 
 ## WP5 – Converter and `songs.json`
 
-**State.** Not started. The `tex2json.py` prototype mentioned in an early session is in neither repository, so the converter is written from scratch, against the command set after Q4 (D-108, D-131).
+**State.** J1 done (12 Nov 2026, D-164): the converter `tools/songbook/` reads every song into an in-memory model, strictly; `make check` and CI run it. Next: `songs.json` (J2), its schema (J3), the release (J4).
 
 **Design.** `songs.json` is a derived export: the LaTeX song files stay the only source (D-001), the converter parses them, the website renders the JSON. Conditions:
 1. Generated, never hand-edited.

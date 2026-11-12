@@ -1,0 +1,914 @@
+{
+ "type": "Song",
+ "id": "zapomnetliva",
+ "title": [
+  {
+   "type": "Run",
+   "text": "Zapomnětlivá",
+   "style": []
+  }
+ ],
+ "toc_title": null,
+ "alt_titles": [
+  "Takovej ten s takovou tou"
+ ],
+ "subtitle": null,
+ "artists": [
+  {
+   "type": "ArtistRef",
+   "slug": "uhlirsverak",
+   "label": null
+  }
+ ],
+ "collections": [],
+ "see": [],
+ "columns": 1,
+ "footnotes": [],
+ "body": [
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "1",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Kde to je? Teď před chvílí jsem ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "to tu ještě ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "měl.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "B"
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Co hledáš, švagře milý? Možná, že ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "bych vě",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "děl.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "RepeatStart"
+      },
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Takovej ten, s ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "takovou tou, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "jak to jen říci ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "jednou větou?",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Taková ta ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "s takovým tím.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "B"
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Bohužel, švagře ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "nerozu",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "mím.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "RepeatEnd"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "2",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "No tohle, to jsem blázen, to jsou mi problémy.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "B"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Možná to spadlo na zem a je to na zemi.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "RepeatStart"
+      },
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Na ze mi ne, to bych si všim’, proč já se trochu nesoustředím?",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Teď jsem to měl, a je to pryč.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "B"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Tak mi to, švagře, trochu vylič.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "RepeatEnd"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "B",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "A",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Nahoře to má, jako, takový ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Dm",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "čudlíky.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "B"
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Ach, švagře, ty jsi pako. ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Jak je to veliký?",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Podívej,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "3",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "RepeatStart"
+      },
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Bejt to velký, a ne malý, to bysme to tak nehledali.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "B"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "To jsou trable, takhle k stáru, třebas’ to zakop’ pod almaru.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "RepeatEnd"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "4",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Tam jsem byl, pod tou skříní, tam jsou jsou jen pavouci.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "B"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Řeknu ti, švagře, nyní tu pravdu pravdoucí.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Jak dobře víš, s tebou je kříž, ty tvoje věci maj’ někde skrýš.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Jelikož jsou ale němé, tak už je nikdy nenajdeme.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "5",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "RepeatStart"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Takovej ten, s takovou tou, jak to jen říci jednou větou?",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Taková ta, s takovým tím,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Speaker",
+       "name": "A"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Já tomu, švagře, nerozumím.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "RepeatEnd"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "C",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Kde to je, teď před chvílí jsem to tu ještě měl.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  }
+ ]
+}

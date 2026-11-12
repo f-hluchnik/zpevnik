@@ -53,7 +53,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
 | J0 | done | song quirks: PR #88 (D-135); scores: PR #89 (D-136) |
 | J0a | done | structure the converter's grammar needs: cues, scores in a part, no `\\` at the end of a part and no empty line in one (D-163) |
-| J1 | todo | strong model (parser design) |
+| J1 | done | the converter `tools/songbook/` and `tools/convert.py`, a `make check` and CI step; 20 songs fixed for it: PR #124 (D-164) |
 | J2 | todo | strong model (data model = contract between repos) |
 | J3 | todo | strong model (schema = contract between repos) |
 | J4 | todo | |

@@ -1,0 +1,1260 @@
+{
+ "type": "Song",
+ "id": "pianoman",
+ "title": [
+  {
+   "type": "Run",
+   "text": "Piano man",
+   "style": []
+  }
+ ],
+ "toc_title": null,
+ "alt_titles": [],
+ "subtitle": null,
+ "artists": [
+  {
+   "type": "ArtistRef",
+   "slug": "billyjoel",
+   "label": null
+  }
+ ],
+ "collections": [],
+ "see": [],
+ "columns": 1,
+ "footnotes": [],
+ "body": [
+  {
+   "type": "Block",
+   "kind": "I",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Dm",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "∘",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": ", akordy jako ve sloce",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "S",
+   "number": "1",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": " ×2",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "1",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "It’s ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "nine ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G/H",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "o’clock on a ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F/A",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Saturday,",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Gap",
+         "units": 4
+        },
+        {
+         "type": "Run",
+         "text": "the ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "regular ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "crowd shuffles ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "in. ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "There’s an ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "old man ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G/H",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "sittin’ ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F/A",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "next to me,",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Gap",
+         "units": 4
+        },
+        {
+         "type": "Run",
+         "text": "makin’ ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "love to his ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "tonic and ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "gin.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "2",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "He says, \"Son, can you play me a memory? I’m not really sure how it goes,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "but it’s sad and it’s sweet and I knew it complete",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "when I wore a younger man’s clothes.\"",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "S",
+   "number": "2",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "La, la-",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am/G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "la, di-di-",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D/F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "da, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Gap",
+         "units": 2
+        },
+        {
+         "type": "Run",
+         "text": "la-",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am/G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "la, di-di-",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D/F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "da, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Gap",
+         "units": 2
+        },
+        {
+         "type": "Run",
+         "text": "da-",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "dum.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G/F",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C/E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "7",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "/D",
+          "position": "base"
+         }
+        ]
+       },
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "R",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Sing us a song, you’re the piano man, sing us a song tonight.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Well, we’re all in the mood for a melody, and you’ve got us feelin’ alright.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "S1",
+       "target": 1
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "3",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Now John at the bar is a friend of mine, he gets me my drinks for free,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "and he’s quick with a joke or to light up your smoke,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "but there’s some place that he’d rather be.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "4",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "He says, \"Bill, I believe this is killing me,\" as the smile ran away from his face,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "\"Well, I’m sure that I could be a movie star if I could get out of this place\".",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "S2",
+       "target": 4
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "5",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Now Paul is a real estate novelist, who never had time for a wife.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "And he’s talkin’ with Davy, who’s still in the Navy and probably will be for life.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "6",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "And the waitress is practicing politics, as the businessmen slowly get stoned.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Yes, they’re sharing a drink they call loneliness,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "but it’s better than drinkin’ alone.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "R",
+       "target": 5
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": " ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "S1",
+       "target": 1
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "7",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "It’s a pretty good crowd for a Saturday, and the manager gives me a smile,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "’cause he knows that it’s me they’ve been comin’ to see,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "to forget about life for a while.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "8",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "And the piano, it sounds like a carnival, and the microphone smells like a beer,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "and they sit at the bar and put bread in my jar",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "and say, \"Man, what are you doin’ here?\"",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "S2",
+       "target": 4
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": " ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "R",
+       "target": 5
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": " ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "S1",
+       "target": 1
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  }
+ ]
+}

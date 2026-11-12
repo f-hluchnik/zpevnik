@@ -1,0 +1,995 @@
+{
+ "type": "Song",
+ "id": "promeny",
+ "title": [
+  {
+   "type": "Run",
+   "text": "Proměny",
+   "style": []
+  }
+ ],
+ "toc_title": null,
+ "alt_titles": [],
+ "subtitle": null,
+ "artists": [
+  {
+   "type": "ArtistRef",
+   "slug": "cechomor",
+   "label": null
+  }
+ ],
+ "collections": [],
+ "see": [],
+ "columns": 2,
+ "footnotes": [],
+ "body": [
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "1",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Darmo sa ty trápíš, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "můj milý sy",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "nečku,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "nenosím já tebe, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "nenosím v sr",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "déčku.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já tvo",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "ja ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "ne",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "bu",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "du",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Dm",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "ani jednu ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "hodi",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "Am",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "nu.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "2",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Copak sobě myslíš má milá panenko?",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Vždyť ty si to moje rozmilé srdénko.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A ty musíš býti má,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "lebo mi tě Pán Bůh dá.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "3",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já se udělám malú veverečkú",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "a uskočím tobě z dubu na jedličku.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Přece tvoja nebudu",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "ani jednu hodinu.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "4",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já chovám doma, takú sekérečku,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "ona mi podetne dúbek i jedličku.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A ty musíš býti má,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "lebo mi tě Pán Bůh dá.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "5",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já sa udělám tú malú rybičkú",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "a já ti uplynu preč po Dunajíčku.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Přece tvoja nebudu",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "ani jednu hodinu.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "6",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já chovám doma takovú udičku,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "co na ni ulovím kdejakú rybičku.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A ty přece budeš má,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "lebo mi tě Pán Bůh dá.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "7",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já sa udělám tú velikú vranú",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "a já ti uletím na uherskú stranu.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Přece tvoja nebudu",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "ani jednu hodinu.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "8",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já chodám doma starodávnú kušu,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "co ona vystřelí všeckým vranám dušu.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A ty musíš býti má,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "lebo mi tě Pán Bůh dá.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "9",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A já se udělám hvězdičkú na nebi",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "a já budu lidem svítiti na nebi.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Přece tvoja nebudu",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "ani jednu hodinu.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "10",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A sú u nás doma takoví hvězdáři,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "co vypočítajú hvězdičky na nebi.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "A ty musíš býti má,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "lebo mi tě Pán Bůh dá.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  }
+ ]
+}

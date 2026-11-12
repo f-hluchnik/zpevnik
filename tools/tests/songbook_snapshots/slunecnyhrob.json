@@ -1,0 +1,1034 @@
+{
+ "type": "Song",
+ "id": "slunecnyhrob",
+ "title": [
+  {
+   "type": "Run",
+   "text": "Slunečný hrob",
+   "style": []
+  }
+ ],
+ "toc_title": null,
+ "alt_titles": [],
+ "subtitle": null,
+ "artists": [],
+ "collections": [],
+ "see": [],
+ "columns": 1,
+ "footnotes": [],
+ "body": [
+  {
+   "type": "Block",
+   "kind": "I",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Score",
+       "name": "slunecnyhrob_intro"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "rec:",
+         "style": [
+          "ITALIC"
+         ]
+        },
+        {
+         "type": "Run",
+         "text": " Usínám a chtěl bych se vrátit o nějakej ten rok zpátky,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "bejt zase klukem, kterej si rád hraje a který je s tebou.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "1",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Zdá se ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "mi, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "je to ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "moc let,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "já byl ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "kluk, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "kterej ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "chtěl",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "znáti ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "svět, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "s tebou ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "jsem si ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "E",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "hrál.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "S",
+   "number": "1",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Score",
+       "name": "slunecnyhrob_solo"
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "2",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Vrátím se a chtěl bych rád",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "být s tebou, zavzpomínat,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "mám teď, ale zprávu zlou.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "R",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "C",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "Su",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "D",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "chá ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "A",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "hlína ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Gap",
+         "units": 2
+        },
+        {
+         "type": "Run",
+         "text": "ta",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "dy,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "bez kvítí, bez vody,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "já na ni ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "F",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "poklekám, ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "G",
+          "position": "base"
+         },
+         {
+          "type": "ChordPart",
+          "text": "♯",
+          "position": "superscript"
+         },
+         {
+          "type": "ChordPart",
+          "text": "m",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "vzpomínkou po",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Segment",
+       "chord": {
+        "type": "Chord",
+        "parts": [
+         {
+          "type": "ChordPart",
+          "text": "H",
+          "position": "base"
+         }
+        ]
+       },
+       "text": [
+        {
+         "type": "Run",
+         "text": "cta se vzdává.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "3",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "Loučím se a něco však tam zůstalo",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "z těch našich dnů",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "já teď vím, věrný zůstanu.",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "S1",
+       "target": 3
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "S",
+   "number": "2",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "akordy jako ve sloce",
+         "style": [
+          "ITALIC"
+         ]
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "R",
+       "target": 5
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": "4",
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "= ",
+         "style": []
+        }
+       ]
+      },
+      {
+       "type": "Cue",
+       "label": "3",
+       "target": 6
+      },
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": []
+      },
+      {
+       "type": "Cue",
+       "label": "R",
+       "target": 5
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  },
+  {
+   "type": "Block",
+   "kind": "",
+   "number": null,
+   "lines": [
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "rec:",
+         "style": [
+          "ITALIC"
+         ]
+        },
+        {
+         "type": "Run",
+         "text": " Nemohu spát, probouzím se a zase se nemohu ubránit myšlence",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "vrátit se o nějakej ten rok zpátky, bejt zase malým klukem,",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    },
+    {
+     "type": "Line",
+     "items": [
+      {
+       "type": "Segment",
+       "chord": null,
+       "text": [
+        {
+         "type": "Run",
+         "text": "který si rád hraje a který je s tebou.",
+         "style": []
+        }
+       ]
+      }
+     ],
+     "group_start": false
+    }
+   ]
+  }
+ ]
+}

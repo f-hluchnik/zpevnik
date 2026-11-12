@@ -42,6 +42,10 @@ jobs:
       - name: Lint songs and registry
         run: python3 tools/lint.py
 
+      # The converter reads every song; anything it does not accept fails with its line.
+      - name: Converter
+        run: python3 tools/convert.py
+
       # MuseScore runs headless under a virtual display (xvfb); it needs some X and
       # OpenGL libraries the runner may lack. rsvg-convert turns the SVGs into PDFs
       # for pdfLaTeX. CMU Serif is the font of the shared score style. Poppler is for
