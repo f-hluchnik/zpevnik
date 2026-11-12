@@ -1,6 +1,6 @@
 # Tools
 
-The Python tools that generate, build and check the songbook: Python 3.11 or newer, standard library only; the tests also need `jsonschema` from `requirements-dev.txt` (setup in the main README, *Nastavení lokální kopie*). They run from the repository root. This page says what each module is for and who runs it; how it works is in the module's docstring, and every command prints its options with `--help`.
+The Python tools that generate, build and check the songbook: Python 3.11 or newer, standard library only; the tests and `validate_songs_json.py` also need `jsonschema` from `requirements-dev.txt` (setup in the main README, *Nastavení lokální kopie*). They run from the repository root. This page says what each module is for and who runs it; how it works is in the module's docstring, and every command prints its options with `--help`.
 
 ## Commands, run through `make`
 
@@ -16,7 +16,8 @@ You normally run these through `make` (the main README, *Příkazy*); each also 
 | `lint.py` | `make check` | Checks the songs, the artists registry, the edition definitions and the lists in `data/`. Errors fail, warnings are only listed. |
 | `convert.py` | `make check` | Reads every song with the converter (`songbook/`) and fails on anything it does not accept, with the file and line. `--song <id>` prints the model of one song as JSON. |
 | `songs_json.py` | `make json` | Writes `build/songs.json` for the website (D-165): the full book's published songs in book order with their pages, the contents and the artists. Needs the built full book, which `make json` builds first. |
-| `songs.schema.json` | the tests, CI (J4) | The JSON Schema of `songs.json`, the contract with the website (D-165). A change of the shape changes it and `SCHEMA_VERSION` in `songs_json.py` in the same PR. |
+| `validate_songs_json.py` | `make json`, CI | Checks the whole `build/songs.json` against `songs.schema.json` and prints where it breaks the contract (D-166). The only tool that needs `jsonschema`. |
+| `songs.schema.json` | the tests, `validate_songs_json.py` | The JSON Schema of `songs.json`, the contract with the website (D-165). A change of the shape changes it and `SCHEMA_VERSION` in `songs_json.py` in the same PR. |
 | `check_pages.py` | `make check`, after the build | Fails if a song takes more than one page, unless `data/multipage-allowlist.txt` lists it. |
 | `chord_gaps.py` | `make check`, after the build | Fails if two chords on the same line overlap. |
 
@@ -27,7 +28,7 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 | Module | Run by | What it does |
 |---|---|---|
 | `pdfdiff.py` | CI, pull requests | Compares the PDF of every edition with the PDF before the change, song by song and page by page; the result goes to the run summary. Locally it needs two built checkouts (`--base`, `--head`). |
-| `release.py` | CI, push to `master` | Copies each edition's PDF under its release asset name into `build/release/` and prints the editions part of the release notes. |
+| `release.py` | CI, every build; the release only on push to `master` | Copies each edition's PDF under its release asset name into `build/release/`, adds `songs.json` and `scores.zip` (the score SVGs) for the website (D-166), and prints the editions part of the release notes. |
 
 ## Library modules, never run directly
 

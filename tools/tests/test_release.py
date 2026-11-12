@@ -6,11 +6,13 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 from edition import edition_names
-from paths import BOOK_PDF_NAME, REPO_ROOT, edition_output_dir
-from release import asset_name, edition_line, edition_notes, songs_phrase, stage_assets
+from paths import BOOK_PDF_NAME, REPO_ROOT, SCORE_OUTPUT_DIR, SONGS_JSON_FILE, edition_output_dir
+from release import (SCORES_ASSET, SONGS_JSON_ASSET, asset_name, edition_line, edition_notes, songs_phrase,
+                     stage_assets, stage_web_assets, zip_scores)
 
 VERSION = "8.38.2"
 BUILD_EDITION = REPO_ROOT / "tools" / "build_edition.py"
@@ -56,6 +58,61 @@ class Staging(unittest.TestCase):
         self.build("alfa", b"a")
         with self.assertRaisesRegex(FileNotFoundError, "beta"):
             stage_assets(self.root, VERSION)
+
+
+class WebAssets(unittest.TestCase):
+    """songs.json and the score images, which the website reads from the release (J4)."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        self.scores = self.root / SCORE_OUTPUT_DIR
+        self.scores.mkdir(parents=True)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def build_songs_json(self):
+        (self.root / SONGS_JSON_FILE).write_bytes(b'{"songs":[]}\n')
+
+    def build_score(self, stem: str):
+        for suffix in (".svg", ".pdf", ".tex"):
+            (self.scores / f"{stem}{suffix}").write_bytes(suffix.encode())
+
+    def names_in(self, archive: Path) -> list[str]:
+        with zipfile.ZipFile(archive) as opened:
+            return opened.namelist()
+
+    def test_songs_json_and_the_zip_of_scores_are_staged_under_fixed_names(self):
+        self.build_songs_json()
+        self.build_score("one")
+        json_asset, scores_asset = stage_web_assets(self.root)
+        self.assertEqual((json_asset.name, scores_asset.name), (SONGS_JSON_ASSET, SCORES_ASSET))
+        self.assertEqual(json_asset.read_bytes(), (self.root / SONGS_JSON_FILE).read_bytes())
+
+    def test_the_zip_holds_only_the_svg_images_by_name_in_order(self):
+        for stem in ("b", "a"):
+            self.build_score(stem)
+        target = self.root / SCORES_ASSET
+        zip_scores(self.root, target)
+        self.assertEqual(self.names_in(target), ["a.svg", "b.svg"])
+
+    def test_the_same_scores_give_the_same_bytes(self):
+        self.build_score("one")
+        first, second = self.root / "first.zip", self.root / "second.zip"
+        zip_scores(self.root, first)
+        zip_scores(self.root, second)
+        self.assertEqual(first.read_bytes(), second.read_bytes())
+
+    def test_scores_that_were_not_exported_fail(self):
+        self.build_songs_json()
+        with self.assertRaisesRegex(FileNotFoundError, "make scores"):
+            stage_web_assets(self.root)
+
+    def test_songs_json_that_was_not_built_fails(self):
+        self.build_score("one")
+        with self.assertRaisesRegex(FileNotFoundError, "make json"):
+            stage_web_assets(self.root)
 
 
 class Repository(unittest.TestCase):
