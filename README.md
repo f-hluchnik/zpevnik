@@ -210,7 +210,7 @@ Verze zpěvníku má tři čísla `major.minor.patch` a vypíše ji `python3 too
 Existující tag se nikdy nepřepisuje: pokud tag už existuje (jen když se po smazání písniček vrátí počet na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Podrobnosti jsou v komentářích workflow a v `docs/DECISIONS.md` (D-133, D-150).
 
 ## Příkazy
-Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clean` ji smaže). Cíle `make` vypisují jen výsledek a končí cestou k PDF; když kompilace selže, vypíšou první chybu TeXu a cestu k úplnému logu (`build/editions/<vydání>/zpevnik.log`, u jedné písničky `build/songs/<id>.log`).
+Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clean` ji smaže). Cíle `make` vypisují jen výsledek a končí cestou k PDF; když kompilace selže, vypíšou první chybu TeXu a cestu k úplnému logu (`build/editions/<vydání>/zpevnik.log`, u jedné písničky `build/songs/<id>.log`). Co který nástroj ve složce `tools/` dělá a kdo ho spouští (`make`, nebo jen GitHub Actions), popisuje [tools/README.md](tools/README.md).
 
 - `make` - vygeneruje seznam písniček, obsah a verzi (do `build/editions/full/generated/`), vyexportuje noty a zkompiluje celý zpěvník do `build/editions/full/zpevnik.pdf`
 - `make check` - všechny kontroly najednou: unit testy, kontrola písniček, registru interpretů a definic vydání, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů
