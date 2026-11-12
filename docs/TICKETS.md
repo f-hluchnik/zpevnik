@@ -62,9 +62,11 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | W1 | done | `build.py` of `zpevnik-web` downloads `songs.json` from the release into `build/` and checks `schemaVersion` (`--songs-json FILE` for a local one): zpevnik-web PR #4 |
 | W2 | done | one page per song at `/zpivej/<id>/` from `songs.json` and `scores.zip`, the chord rule of D-123 in CSS, noindex, font-size control, 404 for unknown songs (D-167); the hyphen inside a split word is shown only where the gap is wide enough (README of `zpevnik-web`): zpevnik-web PR #5 |
 | W3 | done | the index at `/zpivej/` (the contents of `songs.json`, never re-sorted), the artists and collections at `/zpivej/interpret/`, the navigation, links between songs and artists, previous/next in book order, "open in PDF" at the song's page, the link from the download page and from `404.html` (D-168): zpevnik-web PR #6 |
+| W3a | in review | two levels of navigation: the tabs "Stáhnout" and "Zobrazit online" on every page, the songbook's own row under `/zpivej/` (D-169), smaller font buttons: zpevnik-web PR #7 |
 | W4 | todo | |
 | W5 | todo | |
 | W6 | todo | |
+| W6a | todo | segments of a line wrap freely (D-123 on the web), after W6 |
 | W7 | todo | |
 
 ## Overview, in the order of work (D-132)
@@ -239,6 +241,9 @@ Jinja template, one page per song at `/zpivej/<id>/`: chords above lyrics (each 
 ### W3 · Index, artists, navigation — [agent] · M · needs W2
 Alphabetical index (same order as the PDF, taken from `songs.json`, never re-sorted), artist pages at `/zpivej/interpret/<slug>/`, collection pages, alternative titles listed, previous/next links in book order, "open in PDF" using `page`. The download page gets its link to the songbook here (D-167).
 
+### W3a · Two levels of navigation — [agent] · S · needs W3 · added after W3 (owner, 12 Nov 2026)
+The owner looked at the live W3 pages: the link to the songbook was a download-style button, and "Ke stažení" stood in the songbook's row as if it were one of its pages. Now: the tabs **Stáhnout** and **Zobrazit online** (the owner's labels) under the header of every page (`_site-nav.html`), the songbook's own row (Písničky · Interpreti, from W4 also the search) only under `/zpivej/`, and the download page without its extra button. The font size buttons get smaller. See D-169.
+
 ### W4 · Search — [agent] · M · needs W2
 Build-time index over title, alternative titles, artist and lyrics (about 270 kB gzipped), loaded on first use, diacritics-insensitive, no libraries unless tiny.
 
@@ -248,7 +253,16 @@ A toggle on the song page using the Screen Wake Lock API; hidden where unsupport
 ### W6 · Robots and notice — [agent] · S · needs W2, L1
 `robots.txt` disallowing everything, no sitemap. The notice is already in the footer of every page (L1, D-141); no separate notice page. Hidden songs are absent because they are absent from the JSON.
 
-### W7 · Release check — [agent] · S · needs W3–W6
+### W6a · Segments wrap freely — [strong model] · M · needs W2 · added after W3 (owner, 12 Nov 2026)
+**The problem.** On a narrow screen, or with a larger font, a line wraps strangely: in `folsomprisonblues`, "I" stands alone and "hear the train a-coming, …" starts the next line. Cause, measured on 12 Nov 2026: a chord and all its text up to the next chord are one `inline-block` (the W2 form of the chord rule, D-123), and a browser moves such a box whole to the next line when it does not fit beside what is before it; TeX would break at any space. The PDF is not affected.
+**Not the fix.** Letting only the first word be the chord's column and the text after it flow: it pads after a first word shorter than its chord, which the book does not (498 of 1,518 multi-word chord segments in 120 sampled songs).
+**To decide first (a note in this ticket's PR, an owner decision if the options differ visibly), then implement.** CSS cannot say "pad only where the next chord would collide" without measuring, so every approach is a compromise. The candidates:
+1. *A text clearly longer than its chord flows; a short one keeps today's unbreakable column.* The chord is zero-width over the first word, so the text is not padded; the collision guarantee stays for the short ones (11 of 1,518 sampled multi-word segments have a text narrower than the chord and its separator). A segment that ends inside a word (the hyphen) stays unbreakable. A threshold in one named constant.
+2. *Measure in JavaScript* and pad where a chord would collide. The page must still read without JavaScript, so the unbreakable columns stay as the base: the wrap is not fixed without it.
+3. *Leave it:* the book's rule is exact, and the reader can make the text smaller.
+The first is the simplest that fixes the wrap without JavaScript; whether a threshold is acceptable is the question. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).
+
+### W7 · Release check — [agent] · S · needs W3–W6, W6a
 Build under 1 minute; every song page present (minus hidden); every internal link resolves; screenshots of 3 songs on a phone-sized viewport; update the web README.
 
 ---
