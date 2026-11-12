@@ -34,14 +34,17 @@ jobs:
             python3 tools/generate.py --edition "$edition"
           done
 
-      # Unit tests: the Czech collation (song order), the generator, the lints, the converter
-      # and songs.json against its schema, which needs jsonschema (requirements-dev.txt, D-165).
+      # The unit tests and the check of songs.json need jsonschema (requirements-dev.txt, D-165).
       # The runner's Python is externally managed, so the packages go into a virtual environment.
-      - name: Unit tests
+      - name: Install the test packages
         run: |
           python3 -m venv "$RUNNER_TEMP/venv"
           "$RUNNER_TEMP/venv/bin/pip" install --quiet -r requirements-dev.txt
-          "$RUNNER_TEMP/venv/bin/python" -m unittest discover -s tools
+
+      # The Czech collation (song order), the generator, the lints, the converter and
+      # songs.json against its schema (on the songs of the snapshot tests).
+      - name: Unit tests
+        run: '"$RUNNER_TEMP/venv/bin/python" -m unittest discover -s tools'
 
       # Songs against the artists registry: errors fail, warnings are listed.
       - name: Lint songs and registry
@@ -118,6 +121,15 @@ jobs:
           for edition in ${{ steps.editions.outputs.names }}; do
             python3 tools/chord_gaps.py --edition "$edition"
           done
+
+      # The website's data (J4, D-165): songs.json is written from the full book just compiled
+      # and checked as a whole against the schema, the contract with the website. A change
+      # that breaks the contract fails its pull request, not the website's next build.
+      - name: Build songs.json
+        run: python3 tools/songs_json.py
+
+      - name: Validate songs.json against its schema
+        run: '"$RUNNER_TEMP/venv/bin/python" tools/validate_songs_json.py'
 
       # Overleaf setup: zpevnik.sty and one song, nothing else. The script builds
       # the five test documents (single song, \artist, metadata, chords, spacing)
@@ -242,9 +254,11 @@ jobs:
             echo "SONGSEOF"
           } >> "$GITHUB_OUTPUT"
 
-      # One PDF per edition under its asset name (zpevnik-<edition>-<version>.pdf) and the
-      # editions part of the release notes. Pull requests run it too, so a missing PDF or
-      # a broken edition shows before the merge; only the release below is push-only.
+      # Everything the release holds, in build/release/: one PDF per edition under its asset
+      # name (zpevnik-<edition>-<version>.pdf), and songs.json and scores.zip (the score SVGs)
+      # for the website; and the editions part of the release notes. Pull requests run it too,
+      # so a missing file or a broken edition shows before the merge; only the release below
+      # is push-only.
       - name: Prepare release assets
         id: assets
         run: |
@@ -278,7 +292,7 @@ jobs:
                 ${{ steps.new_songs.outputs.block }}
 
                 ${{ steps.assets.outputs.editions }}
-            files: build/release/*.pdf
+            files: build/release/*
             make_latest: true
 
       - name: Commit and push

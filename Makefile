@@ -10,7 +10,8 @@
 # make scores   only export the score images from MuseScore into build/scores/
 #               (tools/scores.py; skips scores that are up to date)
 # make song SONG=<id>  build only that song into build/songs/<id>.pdf (tools/build_song.py)
-# make json    build the full book, then write build/songs.json for the website (tools/songs_json.py)
+# make json    build the full book, write build/songs.json for the website (tools/songs_json.py) and
+#              check it against tools/songs.schema.json (tools/validate_songs_json.py)
 # make check [EDITION=<name>] [FORMAT=<name>]  the unit tests, the lints and the converter, then build the edition (which
 #               fails on a link to a missing target) and run the one-page and chord checks on it
 # make clean    delete build/
@@ -37,10 +38,10 @@ check-python:
 		exit 1; \
 	fi
 
-# The tests need jsonschema (D-165); the tools themselves only the standard library.
+# The tests and the check of songs.json need jsonschema (D-165, D-166); the other tools only the standard library.
 check-dev: check-python
 	@if ! $(PYTHON) -c 'import jsonschema' 2>/dev/null; then \
-		echo "error: the tests need the packages of $(REQUIREMENTS_DEV) (jsonschema)" >&2; \
+		echo "error: the tests and the check of songs.json need the packages of $(REQUIREMENTS_DEV) (jsonschema)" >&2; \
 		echo "       Install them into the virtual environment: pip install -r $(REQUIREMENTS_DEV)" >&2; \
 		echo "       (README, Nastavení lokální kopie)" >&2; \
 		exit 1; \
@@ -68,8 +69,9 @@ song: scores
 # The website is built from the full book only (D-165): its pages are the screen PDF's.
 json: override EDITION = full
 json: override FORMAT = screen
-json: compile
+json: check-dev compile
 	@$(PYTHON) tools/songs_json.py
+	@$(PYTHON) tools/validate_songs_json.py
 
 check: check-dev
 	$(call step,Unit tests)

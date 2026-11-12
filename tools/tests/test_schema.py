@@ -6,13 +6,15 @@ Run from the repository root: python3 -m unittest discover -s tools
 import copy
 import json
 import unittest
+from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
-from paths import REPO_ROOT, SONGS_SCHEMA_FILE
+from paths import REPO_ROOT
 from songbook import parse_song, read_song
 from songbook.export import song_json
 from songs_json import SCHEMA_VERSION, songs_document
+from validate_songs_json import MAX_MESSAGE_CHARS, file_problems, make_validator, problems, read_schema
 from .test_songbook import SNAPSHOT_DIR
 from .test_songs_json import SongsRepository
 
@@ -20,19 +22,11 @@ PAGE = 1
 
 
 def schema() -> dict:
-    return json.loads((REPO_ROOT / SONGS_SCHEMA_FILE).read_text(encoding="utf-8"))
+    return read_schema(REPO_ROOT)
 
 
 def validator(definition: str | None = None) -> Draft202012Validator:
-    """The validator of the whole document, or of one definition of $defs (a song, ...)."""
-    whole = schema()
-    if definition is None:
-        return Draft202012Validator(whole)
-    return Draft202012Validator({"$defs": whole["$defs"], "$ref": f"#/$defs/{definition}"})
-
-
-def problems(checker: Draft202012Validator, value: object) -> list[str]:
-    return [f"{'/'.join(map(str, error.absolute_path))}: {error.message}" for error in checker.iter_errors(value)]
+    return make_validator(schema(), definition)
 
 
 def rest_of_the_kinds() -> dict:
@@ -121,6 +115,41 @@ class Document(SongsRepository):
                 broken = copy.deepcopy(valid)
                 breakage(broken)
                 self.assertNotEqual(problems(validator(), broken), [])
+
+
+class ValidatedFile(SongsRepository):
+    """The tool CI runs on the real build/songs.json (J4)."""
+
+    def setUp(self):
+        super().setUp()
+        self.build("alfa", "gama")
+        self.path = Path(self.tmp.name) / "songs.json"
+
+    def write(self, document: dict):
+        self.path.write_text(json.dumps(document), encoding="utf-8")
+
+    def test_a_valid_file_has_no_problems(self):
+        self.write(songs_document(self.repo.root))
+        self.assertEqual(file_problems(REPO_ROOT, self.path), [])
+
+    def test_a_file_that_breaks_the_contract_is_reported_with_its_place(self):
+        document = songs_document(self.repo.root)
+        document["songs"][0]["page"] = "9"
+        self.write(document)
+        (problem,) = file_problems(REPO_ROOT, self.path)
+        self.assertTrue(problem.startswith("songs/0/page: "), problem)
+
+    def test_a_long_message_is_shortened(self):
+        document = songs_document(self.repo.root)
+        document["songs"][0]["body"][0]["type"] = "x" * 1000
+        self.write(document)
+        for problem in file_problems(REPO_ROOT, self.path):
+            self.assertLessEqual(len(problem.split(": ", 1)[1]), MAX_MESSAGE_CHARS + len("..."))
+
+    def test_a_missing_file_and_a_file_that_is_not_json_are_reported(self):
+        self.assertIn("does not exist", file_problems(REPO_ROOT, self.path)[0])
+        self.path.write_text("{", encoding="utf-8")
+        self.assertIn("is not JSON", file_problems(REPO_ROOT, self.path)[0])
 
 
 if __name__ == "__main__":

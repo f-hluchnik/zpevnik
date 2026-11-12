@@ -74,13 +74,11 @@ J0a (PR #123, D-163): the song structure the converter reads, fixed in 22 songs.
 ### Session 24 · J1a, J2, J3 — done (12 Nov 2026)
 The owner reviewed the shape of `songs.json` on two songs next to their PDF pages and the awkward cases (D-165). J1a (PR #126): `pianoman`'s bass notes as `\bas`, plain ones are a converter error. J2 (PR #127): `make json` writes `build/songs.json` from the full book; `endsInWord` verified against TeX on every chord. J3 (PR #128): `tools/songs.schema.json`, tested with `jsonschema` pinned in `requirements-dev.txt` (an exception to TICKETS rule 4 for tests and CI). Next: session 25 (J4).
 
-### Session 25 · J4 · Sonnet · `zpevnik`
-- **Needs:** J3.
-- **Read:** DECISIONS D-006, D-008, D-110, D-125, D-136, D-165 · PLAN WP5 (Steps), WP7.
-- **Notes:** J4 builds `songs.json` in CI with `tools/songs_json.py` after the full book is compiled, validates the whole file against `tools/songs.schema.json` (the unit tests validate only the snapshot songs; `jsonschema` is in the CI's virtual environment of the unit tests, D-165), and attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J4 also attaches the score SVGs (`build/scores/*.svg`, one zip; J5 was done with J0, D-136).
+### Session 25 · J4 — done (12 Nov 2026)
+J4 (PR #129, D-166): CI builds `songs.json` after the compile and validates the whole file with `tools/validate_songs_json.py` (`make json` does too); `release.py` stages `songs.json` and `scores.zip` (the 22 score SVGs) beside the PDFs and the release takes `build/release/*`. Pull requests build and validate; only a push to `master` releases. Next: session 26 (W1, W2), once the merge of this PR has made the first release with the new assets.
 
 ### Session 26 · W1, W2 · Sonnet · `zpevnik-web`
-- **Needs:** J4 released at least once.
+- **Needs:** J4 released at least once: the release after the merge of PR #129 holds `songs.json` and `scores.zip`; check the release page before starting.
 - **Read:** DECISIONS D-103, D-110, D-123, D-165 (the shape of `songs.json`; `tools/songs.schema.json` is the contract) · PLAN WP6 · zpevnik-web README.
 - **Notes:** The PDFs already come from the release (E6); W1 adds `songs.json`. The download page at `/` must look and work as before. The songbook lives under `/zpevnik/`. W2 implements the chord rule in CSS and must read well without JavaScript.
 

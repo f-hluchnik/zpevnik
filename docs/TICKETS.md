@@ -11,7 +11,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 1. **Scope.** Change only what the ticket says. If counts, names or files do not match the description, stop and report; do not improvise. Counts in tickets are snapshots: re-derive them with grep or the tools.
 2. **Verification.** Every PR gets the song-by-song PDF diff against its base commit (CI, D-105, D-106). The PR description contains *Expected differences* (default: none) and *Actual differences*. A mismatch means the ticket is not done.
 3. **Content is untouchable.** Lyrics, chords and Czech text stay as they are unless a ticket says otherwise.
-4. **Tools** (`tools/`) use Python ≥ 3.11 and the standard library only. The tests may also use the pinned packages of `requirements-dev.txt` (only `jsonschema`, D-165).
+4. **Tools** (`tools/`) use Python ≥ 3.11 and the standard library only. The tests and `tools/validate_songs_json.py` (the check of the whole `songs.json`, D-166) may also use the pinned packages of `requirements-dev.txt` (only `jsonschema`, D-165).
 5. Commit messages, PR descriptions and code comments in English (D-131); the README is Czech.
 6. **Git.** One branch and one PR per ticket, in the repository the ticket names (`zpevnik` unless it says `zpevnik-web`). Commit, push the ticket branch and open the PR without asking; never merge, force-push or push to the default branch without the owner's explicit OK.
 7. **Status and docs.** The ticket's PR also updates the docs: its row in the *Status* table goes to `done` (the merge makes it true), HISTORY.md at the end of a phase, DECISIONS.md if a decision was made. A change of plan without a ticket gets its own docs-only PR.
@@ -30,7 +30,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 
 `todo` · `in progress` · `in review` (PR open) · `done` · `blocked` (reason in notes) · `cancelled` (reason in notes).
 
-**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8); of phase 7 so far J0, J0a, J1, J1a, J2, J3 and J5.
+**Done** (details in HISTORY.md and archive/): S1–S3, R1–R14, H1–H6, C1–C5, V1–V6, V8, V9 (V7 merged into V5), Q1–Q6 (with Q5a, Q5b), Z1 (phases up to 11, 9a, 12 and 8), E5 and E6 (phase 9a), K1 and K2, A1–A3 (phase 12), L1–L2 (phase 8); of phase 7 so far J0, J0a, J1, J1a, J2, J3, J4 and J5.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
@@ -57,7 +57,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | J1a | done | bass notes written as plain text (`C/G`, 14 chords of `pianoman`) are `\bas{}`, and the converter rejects them (D-164): PR #126 |
 | J2 | done | `tools/songs_json.py` and `songbook/export.py` write `build/songs.json` (`make json`), shape agreed with the owner (D-165): PR #127 |
 | J3 | done | `tools/songs.schema.json` (JSON Schema 2020-12) and its tests with `jsonschema` pinned in `requirements-dev.txt`; CI installs it: PR #128 (D-165) |
-| J4 | todo | |
+| J4 | done | CI builds `songs.json` and validates the whole file against the schema on every run; a push to `master` releases `songs.json` and `scores.zip` (the score SVGs) with the PDFs (D-166): PR #129 |
 | J5 | done | done with J0's scores (D-136): PR #89 |
 | W1 | todo | |
 | W2 | todo | |
@@ -214,7 +214,7 @@ Top level: `schemaVersion`, `version`, `songs[]` in book order (the generated in
 The converter already runs in CI (J1). J4 builds `songs.json` after the compile (`tools/songs_json.py`) and validates the whole file against `tools/songs.schema.json` with `jsonschema` (about 5 s; the unit tests validate only the snapshot songs, D-165); on pushes to master it adds `songs.json` and the score SVGs (`build/scores/*.svg`, one zip, D-136) to the `files:` of the release step. PRs only validate.
 
 ### J5 · Scores from MuseScore — [agent] + [you] · M · needs J4
-**Done together with J0 item 1 (D-136), 8 Nov 2026:** the export is `tools/scores.py` with a shared style, the PDF uses the converted SVG, and every score places itself with `\score{name}`. Left for J4: put the SVGs (`build/scores/*.svg` since E2, D-143) into the release and reference them from `songs.json`. The text below is the original plan.
+**Done together with J0 item 1 (D-136), 8 Nov 2026:** the export is `tools/scores.py` with a shared style, the PDF uses the converted SVG, and every score places itself with `\score{name}`. J4 put the SVGs (`build/scores/*.svg` since E2, D-143) into the release as `scores.zip` (D-166); `songs.json` names each by its `score` items. The text below is the original plan.
 The `.mscz` files are the source; CI exports the images, so the PDF and the web use the same export (D-125). A score is a single page by principle.
 1. **Prototype first and report before building on it:** a pinned MuseScore 4 in CI with `-o file.svg -T 0` (trimmed SVG, documented for single-page scores only). pdfLaTeX cannot include SVG, so for the PDF either convert the SVG (e.g. `rsvg-convert`) or export a PDF and crop it with `pdfcrop`. Compare a few results with today's images.
 2. One `.mscz` per image. Missing (5 Nov 2026): `tickettoride` uses `ticket_to_ride_intro.png`, which has no source. These `.mscz` produce more than one image today: `morseovka.mscz` (`morseovka_1.png`, `morseovka_2.png`), `pohadka.mscz` (`pohadka.pdf` and `pohadkaref.pdf`), `reddwarftheme.mscz` (intro and outro), `slunecnyhrob.mscz` (intro and solo). Unused: `morseovkasolo1–3.pdf`. The owner provides the missing files.
