@@ -67,9 +67,9 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 | W4a | done | search matches from the start of words; style sheets, scripts and the search index get a content hash in their URL, so a browser never combines new pages with an old style sheet (D-171): zpevnik-web PR #9 |
 | W3b | done | a muted link up above the title of a song and an artist; those pages mark no item of the songbook's row (D-172): zpevnik-web PR #10 |
 | W4b | done | search results in two groups (title or artist, lyrics), the matched words bold, the lyrics group cut to 10 with a button for all (D-173): zpevnik-web PR #11 |
-| W5 | in review | the button "Nezhasínat displej" on a song, Screen Wake Lock API, hidden where unsupported, asked for again when the page is shown, the choice kept for the tab (D-174): zpevnik-web PR #12 |
-| W6 | todo | |
-| W6a | todo | segments of a line wrap freely (D-123 on the web), after W6 |
+| W5 | done | the button "Nezhasínat displej" on a song, Screen Wake Lock API, hidden where unsupported, asked for again when the page is shown, the choice kept for the tab (D-174): zpevnik-web PR #12 |
+| W6 | in review | `robots.txt` that disallows everything, no sitemap, tested with the standard robots parser: zpevnik-web PR #13 |
+| W6a | optional | segments of a line wrap freely (D-123 on the web); the owner decided on 12 Nov 2026 that the release does not wait for it |
 | W7 | todo | |
 
 ## Overview, in the order of work (D-132)
@@ -265,7 +265,7 @@ A toggle on the song page using the Screen Wake Lock API; hidden where unsupport
 ### W6 · Robots and notice — [agent] · S · needs W2, L1
 `robots.txt` disallowing everything, no sitemap. The notice is already in the footer of every page (L1, D-141); no separate notice page. Hidden songs are absent because they are absent from the JSON.
 
-### W6a · Segments wrap freely — [strong model] · M · needs W2 · added after W3 (owner, 12 Nov 2026)
+### W6a · Segments wrap freely — [strong model] · M · needs W2 · optional, does not block W7 (owner, 12 Nov 2026)
 **The problem.** On a narrow screen, or with a larger font, a line wraps strangely: in `folsomprisonblues`, "I" stands alone and "hear the train a-coming, …" starts the next line. Cause, measured on 12 Nov 2026: a chord and all its text up to the next chord are one `inline-block` (the W2 form of the chord rule, D-123), and a browser moves such a box whole to the next line when it does not fit beside what is before it; TeX would break at any space. The PDF is not affected.
 **Not the fix.** Letting only the first word be the chord's column and the text after it flow: it pads after a first word shorter than its chord, which the book does not (498 of 1,518 multi-word chord segments in 120 sampled songs).
 **To decide first (a note in this ticket's PR, an owner decision if the options differ visibly), then implement.** CSS cannot say "pad only where the next chord would collide" without measuring, so every approach is a compromise. The candidates:
@@ -274,7 +274,7 @@ A toggle on the song page using the Screen Wake Lock API; hidden where unsupport
 3. *Leave it:* the book's rule is exact, and the reader can make the text smaller.
 The first is the simplest that fixes the wrap without JavaScript; whether a threshold is acceptable is the question. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).
 
-### W7 · Release check — [agent] · S · needs W3–W6, W6a
+### W7 · Release check — [agent] · S · needs W3–W6
 Build under 1 minute; every song page present (minus hidden); every internal link resolves; screenshots of 3 songs on a phone-sized viewport; update the web README.
 
 ---
