@@ -92,6 +92,8 @@ Složka vydání, kterou necommituji, je soukromé vydání: sestaví se jen lok
 ### Formát pro tisk
 Vydání se dá sestavit i pro papír: `make EDITION=<název> FORMAT=print` (akordy barevně) nebo `FORMAT=print-black` (akordy černě, pro tisk jednou barvou). PDF je v `build/editions/<název>/<formát>/zpevnik.pdf`, vedle PDF pro obrazovku, které se nemění. Na papíře nejdou odkazy kliknout, proto zmizí „→ obsah" za názvem písničky a šipka před jménem interpreta (jméno zůstává, šedě). Obsah, rejstřík interpretů a řádky „→ viz také“ mají na papíře čísla stran (na obrazovce jsou to odkazy); zmizí řádek písmen nad obsahem, odkaz „řazení podle interpretů“ a věta o hypertextových odkazech. Položky obsahu začínají na okraji sloupce ve všech formátech (na obrazovce i na papíře), dlouhý název se zalomí uvnitř sloupce. Rozložení stránek písniček je stejné jako na obrazovce, takže se písničky vejdou na jednu stranu; ověří to `make check EDITION=<název> FORMAT=print`. Formáty jsou v `tools/formats.py`.
 
+PDF pro tiskárnu v A5: `make print EDITION=<název>` (formát `print`, nebo `FORMAT=print-black`) sestaví vydání pro papír a zmenší ho na A5 do `build/editions/<název>/<formát>/zpevnik-a5.pdf`. A4 na A5 je přesně 1/√2, takže se každá písnička pořád vejde na jednu stranu. Volby se předávají přes `PRINT_ARGS`, například `make print EDITION=<název> PRINT_ARGS="--spine-shift-mm 3 --skip-first 2"`: `--spine-shift-mm` odsune obsah každé strany od hřbetu (u kroužkové vazby je u hřbetu potřeba místo; inkoust je na A5 7,1 mm od obou okrajů, takže 3 mm dá 10,1 mm u hřbetu a 4,1 mm na vnější straně), `--skip-first` vynechá první strany, sudý počet (obálku, která se odevzdává zvlášť). Lichý počet stran se doplní prázdnou stranou na konec.
+
 ## Automatické publikování
 
 Zpěvník se po každém pushi do větve `master` automaticky zkompiluje a nová verze PDF se zveřejní na webu (https://zpevnik.hluchnikovi.cz), aniž by bylo potřeba cokoliv dělat ručně. Zajišťuje to GitHub Actions workflow (`.github/workflows/build-and-publish.yml`), který provede tyto kroky:
@@ -226,7 +228,7 @@ Kompilace celého zpěvníku v běžných IDE pro LaTeX probíhá kvůli počtu 
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`
 - kontrola počtu písniček `ls songs/*.tex | wc -l`
 - vygenerování obsahu a kompilace zpěvníku `make` (jen generování: `make generate`)
-- kompilace pro papír `make EDITION=<název> FORMAT=print` (nebo `print-black`, černé akordy)
+- kompilace pro papír `make EDITION=<název> FORMAT=print` (nebo `print-black`, černé akordy), PDF zmenšené na A5 pro tiskárnu `make print EDITION=<název>`
 - kompilace jiného vydání `make EDITION=<název>` (vydání je složka `editions/<název>/`, výsledek `build/editions/<název>/zpevnik.pdf`)
 - kompilace jedné písničky `make song SONG=<id>` (výsledek `build/songs/<id>.pdf`)
 - všechny kontroly najednou `make check` (unit testy, kontrola písniček, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů; pro jiné vydání `make check EDITION=<název>`)
