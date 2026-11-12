@@ -68,10 +68,11 @@ L2 (PR #121, D-161): `data/hidden.txt` and `songs.published()`; every book leave
 - **Read:** TICKETS P4 · the P1 entry.
 - **Notes:** P4 ends with the owner's sign-off, not with the agent's.
 
-### Session 23 · J1 · **strong model** · `zpevnik`
+### Session 23 · J0a, J1 · **strong model** · `zpevnik`
 - **Needs:** Q4, Q5, J0 (done, D-135, D-136).
-- **Read:** DECISIONS D-001, D-007, D-108, D-131, D-135, D-136 · PLAN WP5.
-- **Notes:** J1: there is no prototype; this starts from scratch. Before coding, propose the parser structure and the in-memory model and wait for the owner's OK: J2/J3 turn that model into the contract with the website. D-135 lists how the converter treats every special case (math symbols, `multicols`, `\echo`, `\ntimes`, ...); D-136 the scores (`\score{name}`, SVGs in `generated/scores/`).
+- **J0a** (added in this session, 12 Nov 2026): the parser design found structure problems in the songs; they are fixed before J1 (D-163).
+- **Read:** DECISIONS D-001, D-007, D-108, D-131, D-135, D-136, D-163, D-164 · PLAN WP5.
+- **Notes:** J1: there is no prototype; this starts from scratch. The parser structure and the in-memory model were agreed with the owner (D-164): J2/J3 turn that model into the contract with the website. D-135 lists how the converter treats every special case (math symbols, `multicols`, `\echo`, `\ntimes`, ...); D-136 the scores (`\score{name}`, SVGs in `generated/scores/`).
 
 ### Session 24 · J2, J3 · **strong model** · `zpevnik`
 - **Needs:** J1.
