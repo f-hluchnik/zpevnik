@@ -19,7 +19,9 @@ SONGS = {
 FRONT_MATTER = ("editions/full/introduction", 9)  # a checkpoint: the page the next file starts on
 
 
-class SongsDocument(unittest.TestCase):
+class SongsRepository(unittest.TestCase):
+    """A temporary repository with three songs, one of them hidden; `build` fakes the full book."""
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.repo = Repository(self.tmp.name)
@@ -39,6 +41,8 @@ class SongsDocument(unittest.TestCase):
         write_compiled_book(output, [FRONT_MATTER, *((f"songs/{song_id}", after_first + n)
                                                      for n, song_id in enumerate(song_ids))])
 
+
+class SongsDocument(SongsRepository):
     def test_the_published_songs_in_book_order_with_their_pages(self):
         self.build("alfa", "gama")
         document = songs_document(self.repo.root)

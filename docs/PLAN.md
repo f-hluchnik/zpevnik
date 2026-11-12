@@ -57,7 +57,7 @@ A print version of any edition: by default the screen PDF scaled to the print pa
 
 ## WP5 – Converter and `songs.json`
 
-**State.** J1 done (12 Nov 2026, D-164): the converter `tools/songbook/` reads every song into an in-memory model, strictly; `make check` and CI run it. J2 done (12 Nov 2026, D-165): `make json` writes `build/songs.json` from the full book. Next: its schema (J3), the release (J4).
+**State.** J1 done (12 Nov 2026, D-164): the converter `tools/songbook/` reads every song into an in-memory model, strictly; `make check` and CI run it. J2 and J3 done (12 Nov 2026, D-165): `make json` writes `build/songs.json` from the full book, `tools/songs.schema.json` is its contract. Next: the release (J4).
 
 **Design.** `songs.json` is a derived export: the LaTeX song files stay the only source (D-001), the converter parses them, the website renders the JSON. Conditions:
 1. Generated, never hand-edited.
@@ -68,7 +68,7 @@ A print version of any edition: by default the screen PDF scaled to the print pa
 
 **Contents.** `schemaVersion`, `version`, `songs[]` (body → lines → segments and marks), `contents` and `artists[]` in book order: the shape is D-165.
 
-**Steps.** First the owner decides the remaining song quirks (score images get a `\score` command, echo lines, layout-only places; J0). Then the converter in `tools/`, strict (an unknown macro is an error), with snapshot tests and a whole-book parse (J1); `songs.json` with registry, metadata and `page` (J2); JSON Schema (J3); CI and release asset (J4); score images exported from the `.mscz` files with a pinned MuseScore, for the PDF and the web (J5, D-125; done with J0, D-136). Done so far: J0, J0a, J1, J1a, J2, J5.
+**Steps.** First the owner decides the remaining song quirks (score images get a `\score` command, echo lines, layout-only places; J0). Then the converter in `tools/`, strict (an unknown macro is an error), with snapshot tests and a whole-book parse (J1); `songs.json` with registry, metadata and `page` (J2); JSON Schema (J3); CI and release asset (J4); score images exported from the `.mscz` files with a pinned MuseScore, for the PDF and the web (J5, D-125; done with J0, D-136). Done so far: J0, J0a, J1, J1a, J2, J3, J5.
 
 ## WP7 – Legal hygiene (reasonable effort, not legal advice)
 

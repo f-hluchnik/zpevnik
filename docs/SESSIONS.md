@@ -71,19 +71,17 @@ L2 (PR #121, D-161): `data/hidden.txt` and `songs.published()`; every book leave
 ### Session 23 · J0a, J1 — done (12 Nov 2026)
 J0a (PR #123, D-163): the song structure the converter reads, fixed in 22 songs. J1 (PR #124, D-164): the converter `tools/songbook/` with `tools/convert.py`, a `make check` and CI step; 20 more songs fixed for it. Next: session 24 (J2, J3).
 
-### Session 24 · J2, J3 · **strong model** · `zpevnik`
-- **Needs:** J1.
-- **Read:** DECISIONS D-001, D-110, D-161 (hidden songs), D-164 (the model to turn into JSON) · PLAN WP5 (Design, Contents).
-- **Notes:** Propose the JSON shape for two representative songs (one with chord-only rows and `\cue`, one with footnotes and scores) and get the owner's OK before writing the schema. Start from the model (D-164), not from the field list in TICKETS J2, which predates it: the body has cue blocks, notes, rules and speaker blocks besides the parts, and scores are marks in the lines. Two questions for the proposal: `page` is the page in which edition (the full book?), and how J3 validates the schema with the standard library only (TICKETS rule 4: a small validator for the part of JSON Schema the schema uses, or a dependency for CI only).
+### Session 24 · J1a, J2, J3 — done (12 Nov 2026)
+The owner reviewed the shape of `songs.json` on two songs next to their PDF pages and the awkward cases (D-165). J1a (PR #126): `pianoman`'s bass notes as `\bas`, plain ones are a converter error. J2 (PR #127): `make json` writes `build/songs.json` from the full book; `endsInWord` verified against TeX on every chord. J3 (PR #128): `tools/songs.schema.json`, tested with `jsonschema` pinned in `requirements-dev.txt` (an exception to TICKETS rule 4 for tests and CI). Next: session 25 (J4).
 
 ### Session 25 · J4 · Sonnet · `zpevnik`
 - **Needs:** J3.
-- **Read:** DECISIONS D-006, D-008, D-110, D-125, D-136 · PLAN WP5 (Steps), WP7.
-- **Notes:** J4 attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J4 also attaches the score SVGs (`build/scores/*.svg`, one zip; J5 was done with J0, D-136).
+- **Read:** DECISIONS D-006, D-008, D-110, D-125, D-136, D-165 · PLAN WP5 (Steps), WP7.
+- **Notes:** J4 builds `songs.json` in CI with `tools/songs_json.py` after the full book is compiled, validates the whole file against `tools/songs.schema.json` (the unit tests validate only the snapshot songs; `jsonschema` is in the CI's virtual environment of the unit tests, D-165), and attaches `songs.json` (and keeps the PDF) as release assets on pushes to master only. J4 also attaches the score SVGs (`build/scores/*.svg`, one zip; J5 was done with J0, D-136).
 
 ### Session 26 · W1, W2 · Sonnet · `zpevnik-web`
 - **Needs:** J4 released at least once.
-- **Read:** DECISIONS D-103, D-110, D-123 · PLAN WP6 · zpevnik-web README.
+- **Read:** DECISIONS D-103, D-110, D-123, D-165 (the shape of `songs.json`; `tools/songs.schema.json` is the contract) · PLAN WP6 · zpevnik-web README.
 - **Notes:** The PDFs already come from the release (E6); W1 adds `songs.json`. The download page at `/` must look and work as before. The songbook lives under `/zpevnik/`. W2 implements the chord rule in CSS and must read well without JavaScript.
 
 ### Session 27 · W3, W4, W5, W6 · Sonnet · `zpevnik-web`

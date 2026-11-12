@@ -34,9 +34,14 @@ jobs:
             python3 tools/generate.py --edition "$edition"
           done
 
-      # Unit tests: the Czech collation (song order), the generator and the lints.
+      # Unit tests: the Czech collation (song order), the generator, the lints, the converter
+      # and songs.json against its schema, which needs jsonschema (requirements-dev.txt, D-165).
+      # The runner's Python is externally managed, so the packages go into a virtual environment.
       - name: Unit tests
-        run: python3 -m unittest discover -s tools
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet -r requirements-dev.txt
+          "$RUNNER_TEMP/venv/bin/python" -m unittest discover -s tools
 
       # Songs against the artists registry: errors fail, warnings are listed.
       - name: Lint songs and registry
