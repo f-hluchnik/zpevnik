@@ -38,6 +38,7 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 | P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after J6, H7 and V10 if they are to be in the printed book; K1 is done) |
 | W6a | in review | zpevnik-web PR #15; owner chose "head + tail" and the font size stays (13 Nov 2026, D-176) |
+| W5a | in review | zpevnik-web PR #16; owner asked for it on 13 Nov 2026 (D-174) |
 | Q7 | todo | agent; no owner decision needed |
 | J6 | todo | owner first decides which of the 6 places are remarks |
 | H7 | todo | owner decides which songs are split and their names |
@@ -50,7 +51,7 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 |---|---|---|
 | 10 Editions | E4 | The songs of `zpevnik-lite`, a book of favourites, picked by the owner after the printed edition (D-147) |
 | 3 Print | P1, P4 | The printer's requirements and the owner's decisions, then a checked proof on the final content (D-122, D-147) |
-| 9 Website | W6a | Lines of the online songbook that wrap like the book's (D-123 on the web, D-176) |
+| 9 Website | W6a, W5a | Lines of the online songbook that wrap like the book's (D-123 on the web, D-176); the screen toggle as a small icon (D-174) |
 | 13 Finishing | Q7, J6, H7, V10, Z2 | One reader of the songs, remarks the website can tell from lyrics, bilingual songs as two songs, songs in parts set consistently, and an overview of the refactoring for the article (D-175) |
 
 The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147). J6, H7 and V10 change the PDF: they go before P4 if the printed book is to have them; the owner decides by the print deadline (P1).
@@ -80,7 +81,10 @@ Done on the final content, after the owner's new songs (D-147; K1 is done); unti
 
 # Phase 9 – the online songbook (`zpevnik-web`)
 
-The songbook is online at `/zpivej/` (HISTORY.md, phase 9). One ticket is left.
+The songbook is online at `/zpivej/` (HISTORY.md, phase 9). Two tickets are left.
+
+### W5a · Keep-the-screen-on as a small icon — [agent] · S · `zpevnik-web`
+The button "Nezhasínat displej" (W5, D-174) becomes a small icon button beside A− and A+, as tall as they are; the words stay as its label and tooltip; `wake-lock.js` unchanged (owner, 13 Nov 2026).
 
 ### W6a · Segments wrap freely — [strong model] · M · needs W2 · **option chosen: head + tail (owner, 13 Nov 2026, D-176)**
 **The problem.** On a narrow screen, or with a larger font, a line wraps strangely (the release check of W7 saw it at the default font size on a 390 px phone too): in `folsomprisonblues`, "I" stands alone and "hear the train a-coming, …" starts the next line. Cause, measured on 12 Nov 2026: a chord and all its text up to the next chord are one `inline-block` (the W2 form of the chord rule, D-123), and a browser moves such a box whole to the next line when it does not fit beside what is before it; TeX would break at any space. The PDF is not affected.
