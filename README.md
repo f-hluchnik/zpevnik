@@ -125,7 +125,7 @@ Svislé mezery se v písničce nepíšou ručně, stará se o ně sazba:
 - Mezi bloky (sloka, refrain, intro, ...) je jedna mezera `\blocksep` (20 pt), která se smrští až na nulu, když by se písnička jinak nevešla na stranu. Blok bez štítku je `\vers{...}`.
 - Střídání zpěváků (`On:`, `Ona:`) je `\speaker{On}{text}`: kurzívní jméno ve sloupci štítků (zarovnané doprava jako štítky; delší jméno přečnívá doleva) a normální mezera nad blokem. Jméno se nepíše přes `\vers`, protože je kurzívou a s dvojtečkou. Uvnitř bloku (v sloce s číslem, kde je sloupec štítků obsazený) se jméno vysází kurzívou před řádek, bez mezery nad ním: `\vers[1]{\speaker{A}{Text}\\ \speaker{B}{Text}}`.
 - Skupiny řádků uvnitř sloky odděluje `\groupbreak`.
-- Čárkovaná čára mezi těsnými slokami je `\blockrule{délka v cm}`, plná čára mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem.
+- Čárkovaná čára mezi těsnými slokami je `\blockrule{délka v cm}`, plná čára mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem. Písnička z více částí (číslování slok začíná znovu) má mezi částmi vždy `\partrule` (D-178).
 - `\note{}` (capo apod.) patří k následujícímu bloku: mezeru pod sebou nemá, nad sebou ji má (kromě začátku písničky a místa za `\subtitle`/`\seealso`). Samostatná poznámka k písničce má normální mezery `\vspace{\blocksep}` na obou stranách (s komentářem).
 - Celý zpěvník je v `\Large`. Když se písnička nevejde na stranu ani s mezerami smrštěnými na nulu, přidá se za hlavičku `\large` a komentář proč. Velikost písma se do dalších písniček nepřenáší (každá písnička běží ve skupině).
 - Ruční `\vspace` do písniček nepiš: mezery mezi bloky jsou automatické a noty se zarovnají samy (viz [Noty](#noty)).

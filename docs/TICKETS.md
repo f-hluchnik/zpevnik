@@ -2,7 +2,7 @@
 
 Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. This file lists only what is left. What is done: [HISTORY.md](HISTORY.md), and the full text of every finished ticket in [archive/](archive/README.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
 
-Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene and the online songbook are done (HISTORY.md). What is left is the printed edition (P1, P4), the choice of songs for `zpevnik-lite` (E4) and the finishing tickets (H7, V10, Z2). Then the songbook is done: the features that are not planned, and why, are in D-175 (correct and simple, not every feature).
+Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene and the online songbook are done (HISTORY.md). What is left is the printed edition (P1, P4), the choice of songs for `zpevnik-lite` (E4) and the finishing tickets (H7, Z2). Then the songbook is done: the features that are not planned, and why, are in D-175 (correct and simple, not every feature).
 
 Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or review · **⚠** touches many song files, so never run two ⚠ tickets in parallel and merge each before the next · **[strong model]** needs design judgement beyond following the steps: run it with the strongest available model, or have one review the result before merge · size S/M/L.
 
@@ -36,9 +36,8 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 |---|---|---|
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
 | P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
-| P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after H7 and V10 if they are to be in the printed book; K1 is done) |
+| P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after H7 if it is to be in the printed book; K1 is done) |
 | H7 | todo | owner decides which songs are split and their names |
-| V10 | todo | owner decides the form (pages of the candidates first); after H7 |
 | Z2 | todo | agent; the owner writes the article himself (D-175) |
 
 ## Overview, in the order of work (D-132)
@@ -47,9 +46,9 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 |---|---|---|
 | 10 Editions | E4 | The songs of `zpevnik-lite`, a book of favourites, picked by the owner after the printed edition (D-147) |
 | 3 Print | P1, P4 | The printer's requirements and the owner's decisions, then a checked proof on the final content (D-122, D-147) |
-| 13 Finishing | H7, V10, Z2 | Bilingual songs as two songs, songs in parts set consistently, and an overview of the refactoring for the article (D-175) |
+| 13 Finishing | H7, Z2 | Bilingual songs as two songs, and an overview of the refactoring for the article (D-175) |
 
-The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147). H7 and V10 change the PDF: they go before P4 if the printed book is to have them; the owner decides by the print deadline (P1).
+The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147). H7 changes the PDF: it goes before P4 if the printed book is to have them; the owner decides by the print deadline (P1).
 
 ---
 
@@ -76,18 +75,12 @@ Done on the final content, after the owner's new songs (D-147; K1 is done); unti
 
 # Phase 13 – Finishing (D-175)
 
-Q7 (one reader of the songs) and J6 (remarks, D-177) are done (archive/phase-13-finishing/). The last tickets before the songbook is done. What is not planned, and why: D-175. H7 and V10 are ⚠ (song files): one at a time, each merged before the next.
+Q7 (one reader of the songs), J6 (remarks, D-177) and V10 (parts, D-178) are done (archive/phase-13-finishing/). The last tickets before the songbook is done. What is not planned, and why: D-175. H7 is ⚠ (song files).
 
 ### H7 · Bilingual songs as two songs — [you] + [agent] · S · ⚠
 **The problem** (owner, `jednoubudemdal`). The Czech version and the English original ("We shall overcome") share one song, and the verse numbers start again; by the logic of the songbook they are two songs, each with its own title, its line in the contents and in the search, linked by `\seealso`.
-**To decide first (owner):** which songs (look at the other songs whose numbering starts again, listed in V10) and the new ids and titles. **Already decided in J6 (owner, 13 Nov 2026, D-177):** `cernymuz` "verze Waldemara Matušky" is one of them: the second version becomes `cernymuzmatuska`, linked with `\seealso`, and its `\vers{\emph{verze …}}` line goes (the title says it).
+**To decide first (owner):** which songs (the songs whose numbering starts again are `cernymuz`, `ejhorahora`, `idzepostaridze`, `jedesohajzvidna`, `jednoubudemdal`, `kolenasejchalupecky`, `rezrezrez` and `vodavodenka`; V10 gave the parts of the others their `\partrule`, D-178) and the new ids and titles. **Already decided in J6 (owner, 13 Nov 2026, D-177):** `cernymuz` "verze Waldemara Matušky" is one of them: the second version becomes `cernymuzmatuska`, linked with `\seealso`, and its `\vers{\emph{verze …}}` line goes (the title says it).
 **Expected differences:** the songs split, one more entry in the contents and the artist index per song; the pages after them shift.
-
-### V10 · Songs in parts and tight verses — [you] + [agent] · M · ⚠ · `zpevnik` and `zpevnik-web` · after H7 · [strong model] for the design
-**The problem** (owner). (a) `ejhorahora`: short one-line verses looked better tight; a group of verses could be tight inside, with the normal gap between groups. (b) A song in parts has no consistent separator: 8 songs start their verse numbers again (`cernymuz`, `ejhorahora` (3 parts), `idzepostaridze` (3), `jedesohajzvidna`, `jednoubudemdal`, `kolenasejchalupecky`, `rezrezrez`, `vodavodenka`); 4 of them separate the parts with `\partrule`, the others only with the normal block gap.
-**What exists:** one shrinkable block gap `\blocksep` (D-124); `\groupbreak` (a smaller gap between groups of lines inside one verse); `\blockrule` (dashed); `\partrule` (solid).
-**To decide first (owner, from pages of the candidates):** whether a song in parts always gets `\partrule` (or a larger gap instead), and whether tight verses are a new semantic form (a group of blocks) or stay one verse with `\groupbreak`. Whatever is chosen is semantic, so it reaches `songs.json` and the website (D-108). One song per page (CI) must still hold.
-**Expected differences:** the songs decided, nothing else.
 
 ---
 
