@@ -2,7 +2,7 @@
 
 **Goal:** the songbook as a downloadable PDF *and* an online HTML songbook on the website, both built from the same LaTeX song files, with the technical debt paid off first ([DECISIONS.md](DECISIONS.md) D-100). Editions (song subsets) and a print edition are in scope too (D-121, D-122); the koledy songbook is not.
 
-Companion files: [TICKETS.md](TICKETS.md) (ordered, self-contained tickets and their status), [SESSIONS.md](SESSIONS.md) (tickets grouped into working sessions), [DECISIONS.md](DECISIONS.md) (agreed decisions and rationale), [HISTORY.md](HISTORY.md) (what was done, and notes for the article on the website), [WALKTHROUGH.md](WALKTHROUGH.md) (how the parts fit together: one song traced from file to screen). Helper files of finished phases and the original inventory are in [archive/](archive/); this plan as it was before the 6 Nov 2026 cleanup is in archive/snapshot-2026-11-06/.
+Companion files: [TICKETS.md](TICKETS.md) (ordered, self-contained tickets and their status), [SESSIONS.md](SESSIONS.md) (tickets grouped into working sessions), [DECISIONS.md](DECISIONS.md) (agreed decisions and rationale), [HISTORY.md](HISTORY.md) (what was done, phase by phase), [OVERVIEW.md](OVERVIEW.md) (the whole refactoring in ten minutes, and the notes for the article on the website), [WALKTHROUGH.md](WALKTHROUGH.md) (how the parts fit together: one song traced from file to screen). Helper files of finished phases and the original inventory are in [archive/](archive/); this plan as it was before the 6 Nov 2026 cleanup is in archive/snapshot-2026-11-06/.
 
 Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or visual review.
 
