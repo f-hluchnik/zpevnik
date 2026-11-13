@@ -66,6 +66,11 @@ class Body(unittest.TestCase):
         self.assertEqual(body[1]["type"], "cueBlock")
         self.assertEqual((body[1]["label"], body[1]["line"]["items"][0]["lyrics"][0]["text"]), ("R.", "×2"))
 
+    def test_a_remark_is_its_lines_of_text(self):
+        (remark,) = exported("\\remark{a\\\\\\emph{b}}")["body"]
+        self.assertEqual(remark, {"type": "remark", "lines": [[{"type": "run", "text": "a", "style": []}],
+                                                              [{"type": "run", "text": "b", "style": ["italic"]}]]})
+
     def test_notes_speakers_rules_and_scores(self):
         body = exported("\\note{capo 2}\n\n\\speaker{A}{la}\n\n\\partrule\n\n\\vers{\\score{s}}")["body"]
         self.assertEqual(body[0], {"type": "note", "content": [{"type": "run", "text": "capo 2", "style": []}]})

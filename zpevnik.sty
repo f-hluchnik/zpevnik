@@ -197,6 +197,10 @@
 % and its text is aligned like the others.
 \NewDocumentCommand{\vers}{o +m}{%
   \zp@block{\IfNoValueTF{#1}{}{\if\relax\detokenize{#1}\relax\else#1.\fi}}{#2}}
+% A remark stands alone between the parts and is not sung: italic text in the text column
+% without a label (the structure of a verse, a tuning). It prints as an unnumbered verse
+% of italic text did; the difference is meaning, which the website uses (J6).
+\NewDocumentCommand{\remark}{+m}{\zp@block{}{\emph{#1}}}
 % A cue marks where a part that is written out elsewhere starts again ("R.",
 % "B.", "1."). After an empty line it is a block of its own with the block gap;
 % after a block or inside one it is appended to the line.

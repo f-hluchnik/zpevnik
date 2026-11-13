@@ -35,9 +35,9 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 - **Notes:** screenshots at 390 px and with the largest font; measure again what D-176 lists; run `python check_site.py` and compare with the base build. The ticket leaves TICKETS.md in a docs PR in `zpevnik` after the web PR is merged.
 
 ### Session 30 · J6 · Sonnet · `zpevnik`, then `zpevnik-web`
-- **Needs:** the owner's answer on the 6 places (TICKETS J6); show him the 6 places first if he has not answered.
+- **Needs:** the owner's answer on the 6 places (TICKETS J6; given on 13 Nov 2026, D-177); show him the 6 places first if he has not answered.
 - **Read:** TICKETS J6 · D-128, D-165 (the schema rules), D-170 (the search).
-- **Notes:** two PRs: `zpevnik` (command, converter, schema, release) first; `zpevnik-web` after a release carries it.
+- **Notes:** two PRs: `zpevnik` (command, converter, schema, release) first; `zpevnik-web` after a release carries it. **State, 13 Nov 2026:** the owner chose the places (D-177) and part 1 is in review; part 2 (the website) waits for the merge of part 1 and its release, and is listed in TICKETS J6. Run it as `Run part 2 of session 30 from docs/SESSIONS.md` (it needs the `zpevnik-web` repository attached with push access).
 
 ### Session 31 · H7, then V10 · strongest model · `zpevnik`, then `zpevnik-web` for V10
 - **Needs:** the owner's answers for H7, then for V10 (TICKETS); start by showing him pages of the candidate songs.

@@ -33,7 +33,7 @@ def rest_of_the_kinds() -> dict:
     """A song with every kind of item the snapshot songs do not have."""
     source = ("\\song{T\\footnote{n}} \\artist{a}\n\\subtitle{S}\n\\toctitle{T (a)}\n\\alttitle{U}\n"
               "\\seealso{other}{O}\n\n\\prechorus{H\\textsubscript{2}O in C\\kk{} dur}\n\n\\partrule\n\n"
-              "\\speaker{A}{la}\n")
+              "\\speaker{A}{la}\n\n\\remark{a\\\\b}\n")
     return song_json(parse_song("test", source), PAGE, frozenset({"other"}))
 
 

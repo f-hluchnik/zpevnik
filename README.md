@@ -82,7 +82,7 @@ Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Tex
 
 | Příkaz | Štítek | Příklad |
 |---|---|---|
-| `\vers{}` | bez štítku (sloka bez čísla, poznámka) | `\vers{\emph{Mluvené.}}` |
+| `\vers{}` | bez štítku (sloka bez čísla) | `\vers{\chord{C}Text}` |
 | `\vers[n]{}` | `n.` | `\vers[2]{\chord{C}Text}` |
 | `\chorus{}` | `R.` | `\chorus{\chord{G}Text}` |
 | `\chorus[n]{}` | `Rn.` | `\chorus[2]{\chord{G}Text}` |
@@ -91,6 +91,7 @@ Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Tex
 | `\solo{}`, `\solo[n]{}` | `S.`, `Sn.` | `\solo[1]{\chords{C G Am F}}` |
 | `\intro{}` | `I.` | `\intro{\chords{Am F G}}` |
 | `\coda{}` | `C.` | `\coda{\chords{C G C}}` |
+| `\remark{}` | bez štítku, kurzívou: text, který se nezpívá (ladění, stavba sloky); stojí sám mezi bloky, řádky se oddělují `\\`; web ho nehledá | `\remark{Ladění D-E-d-g-h-d.}` |
 | `\speaker{jméno}{}` | kurzívní jméno s dvojtečkou ve sloupci štítků, zarovnané doprava | `\speaker{On}{Text}` |
 
 Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnané doprava, takže tečky jsou pod sebou (`9.` nad `10.`) a krátký štítek jako `R.` stojí těsně u textu. Štítek má pevnou šířku `\labelw` (25 pt) a za ním pevnou mezeru, takže text bloku vždy začíná na levém okraji, stejně jako řádky pod ním; na tom, jestli text ve složených závorkách začíná na novém řádku, nezáleží. Řádky bez štítku, které nejsou blok (`\seealso`, čárkovaná čára `\blockrule`), se odsadí o šířku štítku i s mezerou, takže jejich text začíná tam, kde text označeného bloku.
@@ -100,7 +101,7 @@ Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnan�
 | Příkaz | Co dělá | Příklad |
 |---|---|---|
 | `\cue{}` | tučné označení místa, kde se znovu zpívá část napsaná dříve; vysází štítek a tečku | `\cue{R}` → **R.**, `\cue{R2}`, `\cue{B}`, `\cue{S1}`, `\cue{1}` |
-| `\note{}` | poznámka (capo, tempo) patřící k následujícímu bloku | `\note{capo 2}` |
+| `\note{}` | krátká poznámka (capo, tempo) patřící k následujícímu bloku; samostatný nezpívaný text je `\remark{}` | `\note{capo 2}` |
 | `\rep{}` | označení repetice v textu (znaky `\:` a `:\` nepiš ručně) | `\rep{\chord{C}Text}` |
 | `\ntimes{}` | kolikrát se část hraje nebo zpívá | `\cue{R} \ntimes{2}` → **R.** ×2 |
 | `\echo{}` | ozvěna nebo vokály v pozadí: kurzívou, zvednuté, ve velikosti okolního textu | `srdce \echo{(že na)} svírá` |

@@ -11,9 +11,9 @@ from dataclasses import dataclass, field, replace
 
 from songbook import grammar
 from songbook.errors import SongSyntaxError
-from songbook.inline import IN_LABEL, IN_PART, IN_TITLE, SongState, read_lines, read_text
+from songbook.inline import IN_LABEL, IN_PART, IN_TEXT_LINES, IN_TITLE, SongState, line_text, read_lines, read_text
 from songbook.lexer import DEPTH_CHANGE, Kind, Token, tokenize
-from songbook.model import (ArtistRef, Block, BodyItem, CueBlock, Line, Note, Rule, RuleKind, SeeAlso, Song,
+from songbook.model import (ArtistRef, Block, BodyItem, CueBlock, Line, Note, Remark, Rule, RuleKind, SeeAlso, Song,
                             SpeakerBlock, Text, plain)
 from songbook.stream import Argument, TokenStream, group_number, group_text
 
@@ -124,6 +124,11 @@ class SongParser:
         self.song.state.blocks[block.key] = len(self.song.body)
         self.add(block, carries_line=True)
 
+    def remark(self, token: Token) -> None:
+        [content] = self.stream.arguments(token, grammar.REMARKS[token.text])
+        lines = read_lines(content, self.song.state, IN_TEXT_LINES, token)
+        self.add(Remark(tuple(line_text(line) for line in lines)), carries_line=False)
+
     def rule(self, token: Token) -> None:
         signature, kind = grammar.RULES[token.text]
         self.stream.arguments(token, signature)  # the length of a dashed rule is layout
@@ -229,6 +234,7 @@ SONG_LEVEL = {
     "alttitle": SongParser.alt_title, "toctitle": SongParser.toc_title,
     "collection": SongParser.collection, "seealso": SongParser.see_also,
     **{name: SongParser.block for name in grammar.BLOCKS},
+    **{name: SongParser.remark for name in grammar.REMARKS},
     **{name: SongParser.rule for name in grammar.RULES},
     **{name: SongParser.environment for name in grammar.ENVIRONMENT_COMMANDS},
     **{name: SongParser.layout for name in grammar.LAYOUT_COMMANDS},
