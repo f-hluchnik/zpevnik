@@ -153,6 +153,24 @@ class Structure(unittest.TestCase):
         self.assertEqual((parsed.see[0].song_id, parsed.columns, len(parsed.body)), ("other", 2, 2))
 
 
+class SongFacts(unittest.TestCase):
+    """What the tools ask of a song that its fields do not say directly."""
+
+    def test_groups_are_artists_then_collections_without_repeats(self):
+        parsed = parse_song("x", "\\song{T} \\artist{a}\\artist{b}\\artist{}\n\\collection{c}\n\\collection{a}\n")
+        self.assertEqual(parsed.groups, ("a", "b", "c"))
+
+    def test_a_song_without_tags_has_no_group(self):
+        self.assertEqual(song("\\vers{a}").groups, ())
+
+    def test_score_names_are_in_the_order_of_the_song(self):
+        parsed = song("\\intro{\n\\score{a_intro}\n}\n\\vers[a]{x\n\\score{a_riff}\n}")
+        self.assertEqual(parsed.score_names, ("a_intro", "a_riff"))
+
+    def test_a_song_without_scores_has_none(self):
+        self.assertEqual(song("\\vers{a}\n\n\\note{b}").score_names, ())
+
+
 class Errors(unittest.TestCase):
     """What the converter rejects: each was in the songs once (D-135, D-163) or would print wrong."""
     CASES = {

@@ -17,6 +17,7 @@ Reference material of finished phases, kept for the record and for the article o
 | `phase-3-print/` | Tickets of the print phase (P0, P2, P3); P1 and P4 are still open |
 | `phase-7-converter/` | Tickets of the converter phase (J0–J5) |
 | `phase-9-website/` | Tickets of the online songbook (W1–W7); W6a is optional and stays in TICKETS.md |
+| `phase-13-finishing/` | Tickets of the finishing phase that are done (Q7); J6, H7, V10, Z2 are still open |
 | `content-k1-k2/` | Content tickets K1 and K2 |
 | `sessions-20-27/` | Blocks of sessions 20–27 |
 

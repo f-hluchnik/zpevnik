@@ -14,8 +14,8 @@ from dataclasses import dataclass
 from itertools import groupby
 
 from collation import section, sort_key
-from songs import Song
-from tex_text import escape_tex, plain_text
+from songbook import Song
+from tex_text import escape_tex
 
 ARTIST_INDEX_ANCHOR = "podleinterpreta"
 ARTIST_INDEX_LINK = "řazení podle interpretů"
@@ -34,7 +34,7 @@ TitleOf = Callable[[Song], str]
 
 def contents_title(song: Song) -> str:
     """The title the letter sections list: the TOC title, if the song has one."""
-    return song.sort_title
+    return song.contents_title
 
 
 def entries(songs: list[Song], title_of: TitleOf = contents_title) -> Iterator[Entry]:
@@ -42,7 +42,7 @@ def entries(songs: list[Song], title_of: TitleOf = contents_title) -> Iterator[E
     for song in songs:
         title = title_of(song)
         yield Entry(song.id, escape_tex(title), title)
-        for index, alttitle in enumerate(map(plain_text, song.alttitles)):
+        for index, alttitle in enumerate(song.alt_titles):
             yield Entry(song.id, f"\\emph{{{escape_tex(alttitle)}}} ({escape_tex(title)})", alttitle, index)
 
 

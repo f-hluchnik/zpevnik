@@ -5,11 +5,13 @@ Run from the repository root: python3 -m unittest discover -s tools
 import unittest
 
 from letter_toc import anchor, entries, letters_tex
-from songs import Song
+from songbook import Song
+
+from .songs_builder import make_song
 
 
 def song(song_id: str, title: str, toctitle: str | None = None, *alttitles: str) -> Song:
-    return Song(song_id, title, toctitle, alttitles)
+    return make_song(song_id, title, toctitle, alt_titles=alttitles)
 
 
 class Anchor(unittest.TestCase):
@@ -32,8 +34,8 @@ class Entries(unittest.TestCase):
         (entry,) = entries([song("a", "Marie", "Marie (Klus)")])
         self.assertEqual((entry.text, entry.sort_text), ("Marie (Klus)", "Marie (Klus)"))
 
-    def test_footnote_is_dropped_and_special_characters_are_escaped(self):
-        (entry,) = entries([song("a", r"Rock \& Roll\footnote{about it}")])
+    def test_special_characters_are_escaped(self):
+        (entry,) = entries([song("a", "Rock & Roll")])
         self.assertEqual(entry.text, r"Rock \& Roll")
 
 

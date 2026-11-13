@@ -9,9 +9,10 @@ from pathlib import Path
 from paths import HIDDEN_SONGS, NO_CHORDS_ALLOWLIST
 from registry import Artist
 from lint import (Findings, artists_ready_for_section, duplicate_titles, empty_artist_info, empty_sections,
-                  chord_warnings, format_report, lint, text_problems, unknown_scores, unknown_slugs,
+                  chord_warnings, format_report, lint, song_problems, text_problems, unknown_scores, unknown_slugs,
                   unused_scores)
-from songs import Song
+from songbook import Song
+from .songs_builder import make_song
 from .test_edition import Repository
 
 
@@ -23,7 +24,16 @@ def artist(slug: str, section: bool = True) -> Artist:
 def song(song_id: str, title: str = "T", toctitle: str | None = None,
          artists: tuple[str, ...] = (), collections: tuple[str, ...] = (),
          scores: tuple[str, ...] = ()) -> Song:
-    return Song(song_id, title, toctitle, (), artists, collections, scores)
+    return make_song(song_id, title, toctitle, artists=artists, collections=collections, scores=scores)
+
+
+class SongProblems(unittest.TestCase):
+    def test_two_artists_are_printed(self):
+        self.assertEqual(song_problems(make_song("a", artists=("x", "y"))), [])
+
+    def test_three_artists_are_too_many(self):
+        (problem,) = song_problems(make_song("a", artists=("x", "y", "z")))
+        self.assertIn("3 artists", problem)
 
 
 class Report(unittest.TestCase):
@@ -130,10 +140,6 @@ class TextProblems(unittest.TestCase):
     def test_two_artist_lines(self):
         self.assertEqual(len(text_problems("a", "\\song{A} \\artist{x}\n\\artist{y}\n")), 1)
 
-    def test_three_artists(self):
-        (problem,) = text_problems("a", "\\song{A} \\artist{x}\\artist{y}\\artist{z}\n")
-        self.assertIn("3 artists", problem)
-
     def test_old_macro(self):
         (problem,) = text_problems("a", "\\song{A} \\artist{x}\n\\interpret{X}\n")
         self.assertIn("interpret", problem)
@@ -214,7 +220,7 @@ class LintTree(unittest.TestCase):
         return tmp
 
     def test_clean_tree(self):
-        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\chord{C}a\n")
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\vers{\\chord{C}a}\n")
         findings = lint(root)
         self.assertEqual((findings.errors, findings.warnings), ([], []))
 
@@ -234,25 +240,25 @@ class LintTree(unittest.TestCase):
         self.assertEqual(findings.warnings, ["b: no \\chord or \\chords"])
 
     def test_allowlisted_id_that_is_not_a_song_is_an_error(self):
-        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\chord{C}a\n")
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\vers{\\chord{C}a}\n")
         (root / NO_CHORDS_ALLOWLIST).parent.mkdir(parents=True, exist_ok=True)
         (root / NO_CHORDS_ALLOWLIST).write_text("a\nnosuchsong\n")
         self.assertEqual(lint(root).errors, [f"{NO_CHORDS_ALLOWLIST}: 'nosuchsong' is not a song"])
 
     def test_hidden_id_that_is_not_a_song_is_an_error(self):
-        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\chord{C}a\n")
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\vers{\\chord{C}a}\n")
         (root / HIDDEN_SONGS).write_text("a  # hidden\nnosuchsong\n")
         self.assertEqual(lint(root).errors, [f"{HIDDEN_SONGS}: 'nosuchsong' is not a song"])
 
     def test_song_without_song_command_is_an_error_and_does_not_stop_the_others(self):
         root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n',
-                         a="no title\n\\artist{abba}\n", b="\\song{B} \\artist{}\n\\artist{x}\n")
+                         a="\\artist{abba}\n\\vers{a}\n", b="\\song{B} \\artist{}\n\\artist{x}\n")
         errors = lint(root).errors
-        self.assertTrue(any("a.tex: no \\song" in e for e in errors))
+        self.assertTrue(any("songs/a.tex:1: no \\song" in e for e in errors))
         self.assertTrue(any("b: 2 lines with \\artist" in e for e in errors))
 
     def test_an_invalid_edition_fails(self):
-        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\chord{C}a\n")
+        root = self.make('[[entry]]\nslug = "abba"\nname = "ABBA"\n', a="\\song{A} \\artist{abba}\n\\vers{\\chord{C}a}\n")
         (root / "editions" / "full" / "stray.tex").write_text("")
         self.assertEqual(lint(root).errors, ["editions/full/edition.toml: stray.tex is not referenced by edition.toml"])
 

@@ -24,7 +24,7 @@ from edition import EditionError, edition_names, read_book, read_edition
 from paths import (BOOK_PDF_NAME, RELEASE_DIR, SCORE_OUTPUT_DIR, SONGS_JSON_FILE, add_root_argument,
                    edition_output_dir)
 from registry import read_entries
-from songs import published, read_songs
+from songs import SongReadError, published, read_songs
 
 FEW_SONGS_MAX = 4  # Czech: 1 píseň, 2-4 písně, 5 and more písní
 SONGS_JSON_ASSET = SONGS_JSON_FILE.name
@@ -118,7 +118,7 @@ def main() -> int:
         stage_assets(args.root, args.version)
         stage_web_assets(args.root)
         print(edition_notes(args.root, args.version))
-    except (FileNotFoundError, EditionError) as error:
+    except (FileNotFoundError, EditionError, SongReadError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
     return 0

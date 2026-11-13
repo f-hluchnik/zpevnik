@@ -12,7 +12,7 @@ Python >= 3.11, standard library only.
 from collation import sort_key
 from letter_toc import ARTIST_INDEX_ANCHOR, entry_tex, link_target, sorted_entries
 from registry import Artist
-from songs import Song
+from songbook import Song
 from tex_text import escape_tex
 
 COLLECTION = "collection"
@@ -23,7 +23,7 @@ INDEX_TO_SECTIONS_RULE = "\\begin{center}\\zprule{\\textwidth}\\end{center}\n"
 
 def page_title(song: Song) -> str:
     """The title the artist sections list: the one printed on the song's page."""
-    return song.plain_title
+    return song.page_title
 
 
 def heading_tex(artist: Artist) -> str:

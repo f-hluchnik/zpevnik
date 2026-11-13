@@ -48,7 +48,7 @@ The file name (`folsomprisonblues`) is the song's id everywhere: in the include 
 
 ### 1. `tools/generate.py`: from files to lists
 
-`make` first runs the generator (`python3 tools/generate.py --edition full`). It reads every song's header (`songs.py`, a few regexes), the registry (`registry.py`) and the edition (`edition.py`), drops songs listed in `data/hidden.txt` (`songs.published()`), and writes TeX into `build/editions/full/generated/`:
+`make` first runs the generator (`python3 tools/generate.py --edition full`). It reads every song with the converter (`songs.py`, D-164), the registry (`registry.py`) and the edition (`edition.py`), drops songs listed in `data/hidden.txt` (`songs.published()`), and writes TeX into `build/editions/full/generated/`:
 
 - `include.tex`: one `\songinclude{id}` per song, in **Czech collation order** (`collation.py`: CH after H, a space before any letter). Our song lands in section F. The order is never typed by hand.
 - `song-list.tex`: the songs of the edition, so a `\seealso` to a song *outside* an edition prints nothing instead of a dead link.
@@ -107,7 +107,6 @@ That push to `zpevnik-web` starts its workflow (`deploy.yml`). `build.py` reads 
 
 Already tracked:
 
-- **The converter is a second reader of the song files**: `songs.py` still reads the same files with regexes (TICKETS.md, backlog *One reader of the songs*, D-164).
 - **Not verified on real devices**: the wake lock, the search keyboard, `#page=N` in a phone's PDF viewer (HISTORY.md, phase 9).
 - **Chords wrap oddly on a narrow screen**: the chord rule is implemented twice, in TeX (`zpevnik.sty`) and in CSS, by design (D-123 on the web). A browser moves a chord-and-text `inline-block` to the next line whole, where TeX breaks at any space. This is W6a, optional (TICKETS.md).
 
