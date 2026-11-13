@@ -2,7 +2,7 @@
 
 Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. This file lists only what is left. What is done: [HISTORY.md](HISTORY.md), and the full text of every finished ticket in [archive/](archive/README.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
 
-Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene and the online songbook are done (HISTORY.md). What is left is the printed edition (P1, P4), the choice of songs for `zpevnik-lite` (E4) and, optionally, the chord wrapping on the web (W6a).
+Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene and the online songbook are done (HISTORY.md). What is left is the printed edition (P1, P4), the choice of songs for `zpevnik-lite` (E4), the chord wrapping on the web (W6a) and the finishing tickets (Q7, J6, H7, V10, Z2). Then the songbook is done: the features that are not planned, and why, are in D-175 (correct and simple, not every feature).
 
 Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or review · **⚠** touches many song files, so never run two ⚠ tickets in parallel and merge each before the next · **[strong model]** needs design judgement beyond following the steps: run it with the strongest available model, or have one review the result before merge · size S/M/L.
 
@@ -36,8 +36,14 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 |---|---|---|
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
 | P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
-| P4 | todo | owner signs off the proof, on the final content (after the owner's new songs; K1 is done) |
-| W6a | optional | segments of a line wrap freely (D-123 on the web); the owner decided on 12 Nov 2026 that the release does not wait for it |
+| P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after J6, H7 and V10 if they are to be in the printed book; K1 is done) |
+| W6a | in review | zpevnik-web PR #15; owner chose "head + tail" and the font size stays (13 Nov 2026, D-176) |
+| W5a | in review | zpevnik-web PR #16; owner asked for it on 13 Nov 2026 (D-174) |
+| Q7 | todo | agent; no owner decision needed |
+| J6 | todo | owner first decides which of the 6 places are remarks |
+| H7 | todo | owner decides which songs are split and their names |
+| V10 | todo | owner decides the form (pages of the candidates first); after H7 |
+| Z2 | todo | agent; the owner writes the article himself (D-175) |
 
 ## Overview, in the order of work (D-132)
 
@@ -45,9 +51,10 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 |---|---|---|
 | 10 Editions | E4 | The songs of `zpevnik-lite`, a book of favourites, picked by the owner after the printed edition (D-147) |
 | 3 Print | P1, P4 | The printer's requirements and the owner's decisions, then a checked proof on the final content (D-122, D-147) |
-| 9 Website | W6a (optional) | Lines of the online songbook that wrap like the book's (D-123 on the web) |
+| 9 Website | W6a, W5a | Lines of the online songbook that wrap like the book's (D-123 on the web, D-176); the screen toggle as a small icon (D-174) |
+| 13 Finishing | Q7, J6, H7, V10, Z2 | One reader of the songs, remarks the website can tell from lyrics, bilingual songs as two songs, songs in parts set consistently, and an overview of the refactoring for the article (D-175) |
 
-The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147).
+The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147). J6, H7 and V10 change the PDF: they go before P4 if the printed book is to have them; the owner decides by the print deadline (P1).
 
 ---
 
@@ -74,16 +81,48 @@ Done on the final content, after the owner's new songs (D-147; K1 is done); unti
 
 # Phase 9 – the online songbook (`zpevnik-web`)
 
-The songbook is online at `/zpivej/` (HISTORY.md, phase 9). One optional ticket is left.
+The songbook is online at `/zpivej/` (HISTORY.md, phase 9). Two tickets are left.
 
-### W6a · Segments wrap freely — [strong model] · M · needs W2 · optional (owner, 12 Nov 2026)
+### W5a · Keep-the-screen-on as a small icon — [agent] · S · `zpevnik-web`
+The button "Nezhasínat displej" (W5, D-174) becomes a small icon button beside A− and A+, as tall as they are; the words stay as its label and tooltip; `wake-lock.js` unchanged (owner, 13 Nov 2026).
+
+### W6a · Segments wrap freely — [strong model] · M · needs W2 · **option chosen: head + tail (owner, 13 Nov 2026, D-176)**
 **The problem.** On a narrow screen, or with a larger font, a line wraps strangely (the release check of W7 saw it at the default font size on a 390 px phone too): in `folsomprisonblues`, "I" stands alone and "hear the train a-coming, …" starts the next line. Cause, measured on 12 Nov 2026: a chord and all its text up to the next chord are one `inline-block` (the W2 form of the chord rule, D-123), and a browser moves such a box whole to the next line when it does not fit beside what is before it; TeX would break at any space. The PDF is not affected.
 **Not the fix.** Letting only the first word be the chord's column and the text after it flow: it pads after a first word shorter than its chord, which the book does not (498 of 1,518 multi-word chord segments in 120 sampled songs).
 **To decide first (a note in this ticket's PR, an owner decision if the options differ visibly), then implement.** CSS cannot say "pad only where the next chord would collide" without measuring, so every approach is a compromise. The candidates:
 1. *A text clearly longer than its chord flows; a short one keeps today's unbreakable column.* The chord is zero-width over the first word, so the text is not padded; the collision guarantee stays for the short ones (11 of 1,518 sampled multi-word segments have a text narrower than the chord and its separator). A segment that ends inside a word (the hyphen) stays unbreakable. A threshold in one named constant.
 2. *Measure in JavaScript* and pad where a chord would collide. The page must still read without JavaScript, so the unbreakable columns stay as the base: the wrap is not fixed without it.
 3. *Leave it:* the book's rule is exact, and the reader can make the text smaller.
-The first is the simplest that fixes the wrap without JavaScript; whether a threshold is acceptable is the question. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).
+The first is the simplest that fixes the wrap without JavaScript; whether a threshold is acceptable is the question.
+**Chosen (13 Nov 2026, D-176):** a fourth option found in the consultation, *head + tail*: the chord's column holds only the shortest run of whole words that is at least as long as the chord, the rest of the text flows; text without a chord flows; a line breaks inside a word only with a hyphen, as in the book. The default font size stays. The measurements and the reasons are in D-176. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).
+
+---
+
+# Phase 13 – Finishing (D-175)
+
+The last tickets before the songbook is done. What is not planned, and why: D-175. J6, H7 and V10 are ⚠ (song files): one at a time, each merged before the next.
+
+### Q7 · One reader of the songs — [agent] · M · `zpevnik`
+**The problem.** Two programs read the song files: the converter (`tools/songbook/`, strict, D-164) and the regexes of `tools/songs.py` (title, toc title, alternative titles, artists, collections, `\score`), with `tex_text.plain_text` for the titles. A test (J1) keeps them in agreement. Two readers of one grammar is the duplication D-164 left as a follow-up.
+**The change.** The generator and every other user of `songs.py` take the song metadata from the converter's model; the regexes of `songs.py` go, and `tex_text.plain_text` if nothing else needs it; the agreement test goes with them. First list what `songs.py` gives that the model does not (the file path, hidden songs, D-161) and keep that in one place. Watch the titles: `songs.py` keeps them as TeX for the generated contents and sorts by their plain text, while the model holds printed text; the generated TeX must not change. The generator runs on every `make`: measure that the build is not noticeably slower (the whole-book parse is under 5 s, D-164).
+**Expected differences:** none: the PDF and `songs.json` of every edition byte-identical.
+
+### J6 · Remarks as their own command — [you] + [agent] · S · ⚠ · `zpevnik` and `zpevnik-web`
+**The problem** (owner, 6 Nov 2026). `\note` belongs to the next block (D-128): right for "capo 3". A remark that stands alone is written as an unnumbered verse `\vers{\emph{…}}`: 6 places in 5 songs (`hledamdevcenanedeli` "rec. A nebudu.", `allyouneedislove` ×2 (the structure of the verse; "interludium (sloka)"), `bellaciao`, `cernymuz` "verze Waldemara Matušky", `ahorsewithnoname` (the tuning)). In `songs.json` they are italic lyrics, so the website shows and searches them as lyrics.
+**To decide first (owner):** which of the 6 are remarks (a spoken line is lyrics; "verze …" may be the heading of a part, V10).
+**The change.** A command `\remark{…}` that prints as these places print today; the converter gives a body item `remark` (a change of `songs.json`: `schemaVersion` as D-165 says); the website sets it like a note and the search leaves it out (D-170).
+**Expected differences:** none in the PDF.
+
+### H7 · Bilingual songs as two songs — [you] + [agent] · S · ⚠
+**The problem** (owner, `jednoubudemdal`). The Czech version and the English original ("We shall overcome") share one song, and the verse numbers start again; by the logic of the songbook they are two songs, each with its own title, its line in the contents and in the search, linked by `\seealso`.
+**To decide first (owner):** which songs (look at the other songs whose numbering starts again, listed in V10) and the new ids and titles.
+**Expected differences:** the songs split, one more entry in the contents and the artist index per song; the pages after them shift.
+
+### V10 · Songs in parts and tight verses — [you] + [agent] · M · ⚠ · `zpevnik` and `zpevnik-web` · after H7 · [strong model] for the design
+**The problem** (owner). (a) `ejhorahora`: short one-line verses looked better tight; a group of verses could be tight inside, with the normal gap between groups. (b) A song in parts has no consistent separator: 8 songs start their verse numbers again (`cernymuz`, `ejhorahora` (3 parts), `idzepostaridze` (3), `jedesohajzvidna`, `jednoubudemdal`, `kolenasejchalupecky`, `rezrezrez`, `vodavodenka`); 4 of them separate the parts with `\partrule`, the others only with the normal block gap.
+**What exists:** one shrinkable block gap `\blocksep` (D-124); `\groupbreak` (a smaller gap between groups of lines inside one verse); `\blockrule` (dashed); `\partrule` (solid).
+**To decide first (owner, from pages of the candidates):** whether a song in parts always gets `\partrule` (or a larger gap instead), and whether tight verses are a new semantic form (a group of blocks) or stay one verse with `\groupbreak`. Whatever is chosen is semantic, so it reaches `songs.json` and the website (D-108). One song per page (CI) must still hold.
+**Expected differences:** the songs decided, nothing else.
 
 ---
 
@@ -92,13 +131,5 @@ The first is the simplest that fixes the wrap without JavaScript; whether a thre
 ### Z1 · Project history and helper files — [agent] · S · at the end of every phase
 Done for every finished phase (HISTORY.md, docs/archive/); phases 10 and 3 have a few tickets open, whose finished ones are archived already. At the end of each phase, in the PR of its last ticket: add the phase to HISTORY.md (what changed and why, numbers, PRs, decisions), move its finished ticket texts and status rows to `docs/archive/<phase>/TICKETS.md` and its text helper files next to them. Binary review files are not committed (attach them to the PRs). Exact duplicates may be deleted; everything else is moved.
 
----
-
-## Backlog (not ticketed)
-
-- Transposition (Czech B/H convention), setlists, offline use, fit-to-screen, ChordPro export.
-- **Capo note versus song remark** (owner, 6 Nov 2026): `\note` belongs to the next block (right for "capo 3"); a standalone remark is written as an unnumbered `\vers{\emph{…}}`. A separate remark command would give the web version a note type; decide if the website needs it.
-- **Grouping verses, tight versus loose** (owner, `ejhorahora`): short one-line verses looked better tight; a way to group verses (tight inside, normal gap between groups). Not necessary.
-- **Bigger gap between groups of verses, and bilingual songs** (owner, `jednoubudemdal`): the Czech and the English version share one page; by the logic of the songbook they should be two songs. Not necessary.
-- **One reader of the songs** (D-164): now that J2 is done, the generator can take the song metadata from the converter, and the regexes of `songs.py` (and `tex_text.plain_text` for titles) go.
-- **Refactoring story on the website** (owner, 5 Nov 2026): notes are in HISTORY.md (*Notes for the website article*); the online songbook now exists, so the article can be written.
+### Z2 · An overview of the refactoring — [agent] · S · `zpevnik` (docs only)
+For the owner, who writes the article on the website himself (D-175), and as a reference later: `docs/OVERVIEW.md`, facts only, readable in ten minutes. The starting point (v8.33) and the goal; for each area (safety net, registry and generated files, source hygiene, chord spacing, vertical spacing, code quality, editions, print, converter and `songs.json`, legal, website) the problem, what was done and how (the mechanism in a sentence or two), the numbers, and the decisions and PRs as links; the end state as one diagram (song files → `zpevnik.sty` → PDF; song files → converter → `songs.json` → website); what is not planned and why (D-175). It links to HISTORY.md, DECISIONS.md and WALKTHROUGH.md instead of repeating them. The *Notes for the website article* of HISTORY.md move into it, so the article has one place. A later phase adds its line in its last PR (Z1).
