@@ -4,7 +4,7 @@ The ticket texts and status rows of the finishing phase that are done, as they w
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
-| Q7 | done | the converter is the one reader of the songs; `songs.py` has no regexes (D-164): the PR of session 29 |
+| Q7 | done | the converter is the one reader of the songs; `songs.py` has no regexes (D-164): PR #142 |
 
 ### Q7 · One reader of the songs — [agent] · M · `zpevnik`
 **The problem.** Two programs read the song files: the converter (`tools/songbook/`, strict, D-164) and the regexes of `tools/songs.py` (title, toc title, alternative titles, artists, collections, `\score`), with `tex_text.plain_text` for the titles. A test (J1) keeps them in agreement. Two readers of one grammar is the duplication D-164 left as a follow-up.
