@@ -29,10 +29,10 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 - **Read:** TICKETS P4 · the P1 entry.
 - **Notes:** P4 ends with the owner's sign-off, not with the agent's.
 
-### Session 31 · H7, then V10 · strongest model · `zpevnik`, then `zpevnik-web` for V10
-- **Needs:** the owner's answers for H7, then for V10 (TICKETS); start by showing him pages of the candidate songs.
-- **Read:** TICKETS H7, V10 · D-108, D-124, D-128.
-- **Notes:** ⚠ both: H7 merged before V10 starts.
+### Session 31 · H7 · the owner writes the songs · `zpevnik`
+- **Needs:** the owner's choice of the songs to split and their ids and titles (TICKETS H7); `cernymuz` is decided (D-177).
+- **Read:** TICKETS H7 · D-108, D-124, D-128, D-177, D-178.
+- **Notes:** ⚠ one at a time. V10 is done (D-178): `cernymuz` and `jednoubudemdal` are the songs in parts it left to H7, so H7 ends with no song that restarts its numbers without a `\partrule`; a lint for that is a small addition afterwards.
 
 ### Any session · Z2 · Sonnet · `zpevnik`
 - **Needs:** nothing; best after the other phase-13 tickets, so the overview is complete (otherwise the later PRs add their lines).
@@ -47,7 +47,6 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 |---|---|---|
 | E4 songs for `zpevnik-lite` | TICKETS E4 | after the printed edition (D-147): nothing now |
 | H7 which songs are split, their ids and titles | TICKETS H7 | H7 |
-| V10 the form of songs in parts and of tight verses | TICKETS V10 | V10 |
-| H7, V10 in the printed book or after it | TICKETS overview | the order of H7, V10 and P4 |
+| H7 in the printed book or after it | TICKETS overview | the order of H7 and P4 |
 | P1 print requirements and deadline (the printer's answers, D-157) | TICKETS P1 | P4 |
 | The owner's new songs (about ten), content work | D-147 | P4 |
