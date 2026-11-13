@@ -15,9 +15,8 @@ import sys
 from pathlib import Path
 
 from paths import SONGS_DIR, add_root_argument
-from songbook import SongSyntaxError, read_song
 from songbook.dump import to_json
-from songs import song_paths
+from songs import SongReadError, read_song_file, song_paths
 
 JSON_INDENT = 1
 
@@ -27,9 +26,9 @@ def check_all(root: Path) -> int:
     errors = []
     for path in paths:
         try:
-            read_song(path)
-        except SongSyntaxError as error:
-            errors.append(f"{SONGS_DIR / path.name}:{error.line}: {error.message}")
+            read_song_file(path)
+        except SongReadError as error:
+            errors.append(str(error))
     for error in errors:
         print(error, file=sys.stderr)
     print(f"Converter: {len(paths)} songs, {len(errors)} error(s)")
@@ -42,9 +41,9 @@ def print_song(root: Path, song_id: str) -> int:
         print(f"error: no song {song_id} ({SONGS_DIR / path.name})", file=sys.stderr)
         return 1
     try:
-        song = read_song(path)
-    except SongSyntaxError as error:
-        print(f"{SONGS_DIR / path.name}:{error.line}: {error.message}", file=sys.stderr)
+        song = read_song_file(path)
+    except SongReadError as error:
+        print(error, file=sys.stderr)
         return 1
     print(json.dumps(to_json(song), ensure_ascii=False, indent=JSON_INDENT))
     return 0

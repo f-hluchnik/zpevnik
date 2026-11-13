@@ -31,7 +31,8 @@ from paths import (ARTIST_PART_TEX, ARTISTS_TEX, BOOK_FILE, EDITION_FILE_NAME, I
                    LETTERS_TEX, MACROS_TEX, PAGES_TEX, REGISTRY_FILE, SONG_LIST_TEX, SONGS_DIR, VERSION_TEX,
                    add_edition_argument, add_root_argument, generated_dir)
 from registry import check_entries, normalise, read_entries
-from songs import Song, published, read_songs, song_paths
+from songbook import Song
+from songs import SongReadError, published, read_songs, song_paths
 from tex_text import escape_tex
 
 SONGS_SOURCE = f"{SONGS_DIR}/*.tex"
@@ -53,7 +54,7 @@ def artists_tex(entries: list[dict]) -> str:
 
 def ordered(songs: list[Song]) -> list[Song]:
     """Songs in songbook order: by title, the file name only breaks a tie."""
-    return sorted(songs, key=lambda s: (sort_key(s.sort_title), s.id))
+    return sorted(songs, key=lambda s: (sort_key(s.contents_title), s.id))
 
 
 def song_list_tex(songs: list[Song]) -> str:
@@ -66,7 +67,7 @@ def include_tex(songs: list[Song]) -> str:
     lines = [header(SONGS_SOURCE)]
     current = None
     for song in ordered(songs):
-        letter = section(song.sort_title)
+        letter = section(song.contents_title)
         if letter != current:
             lines.append(("" if current is None else "\n") + "%" + letter + "\n")
             current = letter
@@ -118,11 +119,11 @@ def read_inputs(root: Path, edition_name: str) -> EditionInputs:
     errors = check_entries(entries)
     if errors:
         raise InputError("\n  ".join([f"{REGISTRY_FILE} is invalid:", *errors]))
-    all_songs = read_songs(root)
     try:
+        all_songs = read_songs(root)
         book = read_book(root)
         edition = read_edition(root, edition_name, book, all_songs, {e["slug"] for e in entries})
-    except EditionError as error:
+    except (SongReadError, EditionError) as error:
         raise InputError(str(error)) from error
     return EditionInputs(entries, all_songs, book, edition, edition.select(published(all_songs, root)))
 

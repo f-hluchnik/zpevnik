@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from paths import BOOK_FILE, EDITION_FILE_NAME, EDITIONS_DIR, SHARED_PAGES_DIR
-from songs import Song
+from songbook import Song
 
 SHARED, OWN = "shared", "own"
 COVER, HALFTITLE, TITLEPAGE = "cover", "halftitle", "titlepage"

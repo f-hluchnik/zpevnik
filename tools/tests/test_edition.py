@@ -8,7 +8,7 @@ from pathlib import Path
 
 from edition import Book, EditionError, read_book, read_edition
 from paths import BOOK_FILE
-from songs import Song
+from .songs_builder import make_song
 
 BOOK_TOML = '''title = "Kniha"
 author = "Autor"
@@ -26,8 +26,8 @@ halftitle = "shared"
 titlepage = "shared"
 '''
 BOOK = Book("Kniha", "Autor", 2019, "https://example.org/kniha", "full")
-SONGS = [Song("alfa", "Alfa", None, artists=("kryl",)), Song("beta", "Beta", None),
-         Song("gama", "Gama", None, collections=("filmy",))]
+SONGS = [make_song("alfa", "Alfa", artists=("kryl",)), make_song("beta", "Beta"),
+         make_song("gama", "Gama", collections=("filmy",))]
 SLUGS = {"kryl", "filmy", "abba"}
 PAGES_SHARED = '[pages]\ncover = "shared"\nhalftitle = "shared"\ntitlepage = "shared"\n'
 

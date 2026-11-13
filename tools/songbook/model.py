@@ -211,6 +211,17 @@ class Song:
     body: tuple[BodyItem, ...] = ()
 
     @property
+    def groups(self) -> tuple[str, ...]:
+        """Registry slugs of the artist sections the song is listed under."""
+        return tuple(dict.fromkeys([artist.slug for artist in self.artists] + list(self.collections)))
+
+    @property
+    def score_names(self) -> tuple[str, ...]:
+        """The names of the scores (scores/<name>.mscz) the song shows, in its order."""
+        return tuple(item.name for block in self.body for line in block_lines(block)
+                     for item in line.items if isinstance(item, Score))
+
+    @property
     def contents_title(self) -> str:
         """The title the contents list: the TOC title, if the song has one."""
         return self.toc_title if self.toc_title is not None else plain(self.title)
@@ -219,6 +230,16 @@ class Song:
     def page_title(self) -> str:
         """The title printed on the song's page, as plain text (the artist sections list it)."""
         return plain(self.title)
+
+
+def block_lines(item: BodyItem) -> tuple[Line, ...]:
+    """The lines of a body item: none for a note and a rule."""
+    match item:
+        case Block(lines=lines) | SpeakerBlock(lines=lines):
+            return lines
+        case CueBlock(line=line):
+            return (line,)
+    return ()
 
 
 def plain(text: Text) -> str:

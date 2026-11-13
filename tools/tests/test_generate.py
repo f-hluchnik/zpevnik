@@ -12,13 +12,14 @@ from build_version import UNKNOWN_PATCH
 from generate import generated_files, include_tex, song_list_tex, version
 from paths import (ARTIST_PART_TEX, ARTISTS_TEX, HIDDEN_SONGS, INCLUDE_TEX, LETTERS_TEX, MACROS_TEX, PAGES_TEX,
                    REPO_ROOT, SONG_LIST_TEX, VERSION_TEX, generated_dir)
-from songs import Song
+from songbook import Song
+from .songs_builder import make_song
 from .test_edition import Repository
 from .test_edition_tex import BOOK, edition
 
 
 def song(song_id: str, title: str) -> Song:
-    return Song(song_id, title, None)
+    return make_song(song_id, title)
 
 
 class IncludeTex(unittest.TestCase):
@@ -84,3 +85,15 @@ class HiddenSongs(unittest.TestCase):
             self.assertNotIn("alfa", (generated / INCLUDE_TEX).read_text(encoding="utf-8"))
             self.assertNotIn("alfa", (generated / SONG_LIST_TEX).read_text(encoding="utf-8"))
             self.assertIn("1.02.", (generated / VERSION_TEX).read_text(encoding="utf-8"))
+
+
+class RejectedSong(unittest.TestCase):
+    def test_a_song_the_converter_rejects_stops_the_generator_with_its_file_and_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Repository(tmp)
+            repo.write("data/artists.toml", '[[entry]]\nslug = "abba"\nname = "ABBA"\n')
+            repo.write("songs/alfa.tex", "\\song{Alfa} \\artist{abba}\n\\vers{\\foo{a}}\n")
+            result = subprocess.run([sys.executable, str(REPO_ROOT / "tools" / "generate.py"), tmp],
+                                    capture_output=True, text=True)
+            self.assertEqual(result.returncode, 1)
+            self.assertRegex(result.stderr, r"songs/alfa\.tex:2: ")

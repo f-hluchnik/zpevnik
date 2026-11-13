@@ -44,7 +44,8 @@ from allowlist import read_allowlist
 from edition import edition_problems
 from paths import HIDDEN_SONGS, NO_CHORDS_ALLOWLIST, SCORES_DIR, add_root_argument
 from registry import Artist, check_entries, normalise, read_entries
-from songs import ARTIST, Song, parse_song, song_paths
+from songbook import Song
+from songs import SongReadError, read_song_file, song_paths
 
 MIN_SONGS_FOR_SECTION = 3  # an artist with this many songs or more gets a section
 MAX_ARTISTS = 2            # per song, see \artist in zpevnik.sty
@@ -107,6 +108,13 @@ def text_outside_blocks(code: str) -> list[str]:
     return stray
 
 
+def song_problems(song: Song) -> list[str]:
+    """Problems of a song that only its parsed form shows."""
+    if len(song.artists) > MAX_ARTISTS:
+        return [f"{song.id}: {len(song.artists)} artists, at most {MAX_ARTISTS} are printed"]
+    return []
+
+
 def text_problems(song_id: str, text: str) -> list[str]:
     """Problems of a song file that its parsed form does not show."""
     problems = []
@@ -115,9 +123,6 @@ def text_problems(song_id: str, text: str) -> list[str]:
         problems.append(f"{song_id}: {artist_lines} lines with \\artist, expected exactly 1")
     if OLD_MACRO.search(text):
         problems.append(f"{song_id}: still uses \\interpret / \\interpretdva")
-    artists = len(ARTIST.findall(text))
-    if artists > MAX_ARTISTS:
-        problems.append(f"{song_id}: {artists} artists, at most {MAX_ARTISTS} are printed")
     spacing = len(MANUAL_SPACING.findall(text))
     if spacing:
         problems.append(f"{song_id}: {spacing} manual chord spacings (\\nc \\mm \\sm \\bc); "
@@ -183,8 +188,8 @@ def artists_ready_for_section(songs: list[Song], registry: list[Artist],
 def duplicate_titles(songs: list[Song]) -> list[str]:
     by_title: dict[str, list[Song]] = defaultdict(list)
     for song in songs:
-        by_title[song.sort_title.casefold()].append(song)
-    return [f"{len(same)} songs are listed as '{same[0].sort_title}' ({', '.join(s.id for s in same)}): "
+        by_title[song.contents_title.casefold()].append(song)
+    return [f"{len(same)} songs are listed as '{same[0].contents_title}' ({', '.join(s.id for s in same)}): "
             "tell them apart with \\toctitle"
             for same in by_title.values() if len(same) > 1]
 
@@ -195,11 +200,11 @@ def score_names(root: Path) -> set[str]:
 
 def unknown_scores(songs: list[Song], available: set[str]) -> list[str]:
     return [f"{song.id}: \\score{{{name}}} has no {SCORES_DIR}/{name}.mscz"
-            for song in songs for name in song.scores if name not in available]
+            for song in songs for name in song.score_names if name not in available]
 
 
 def unused_scores(songs: list[Song], available: set[str]) -> list[str]:
-    used = {name for song in songs for name in song.scores}
+    used = {name for song in songs for name in song.score_names}
     return [f"{SCORES_DIR}/{name}.mscz is used by no song" for name in sorted(available - used)]
 
 
@@ -220,9 +225,12 @@ def load_songs(root: Path, without_chords_ok: set[str]) -> tuple[list[Song], lis
         if path.stem not in without_chords_ok:
             warnings += chord_warnings(path.stem, text)
         try:
-            songs.append(parse_song(path.stem, text))
-        except ValueError as error:
+            song = read_song_file(path)
+        except SongReadError as error:
             problems.append(str(error))
+            continue
+        problems += song_problems(song)
+        songs.append(song)
     return songs, problems, warnings
 
 

@@ -6,7 +6,8 @@ import unittest
 
 from artist_toc import artist_part_tex, heading_tex, index_tex, index_text, ordered_artists, sections_tex
 from registry import Artist
-from songs import Song
+from songbook import Song
+from .songs_builder import make_song
 
 
 def artist(slug: str, name: str, label: str | None = None, kind: str = "artist",
@@ -17,7 +18,7 @@ def artist(slug: str, name: str, label: str | None = None, kind: str = "artist",
 
 def song(song_id: str, title: str, *, toctitle: str | None = None, alttitles: tuple[str, ...] = (),
          artists: tuple[str, ...] = (), collections: tuple[str, ...] = ()) -> Song:
-    return Song(song_id, title, toctitle, alttitles, artists, collections)
+    return make_song(song_id, title, toctitle, alt_titles=alttitles, artists=artists, collections=collections)
 
 
 KRYL = artist("karelkryl", "Kryl, Karel", "Karel Kryl")
