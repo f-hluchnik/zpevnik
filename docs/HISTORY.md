@@ -132,14 +132,15 @@ P1 (the owner's and the printer's answers) and P4 (the proof, on the final conte
 - J4 (#129, D-166): CI validates the whole file and releases `songs.json` and `scores.zip` (the score SVGs) beside the PDFs.
 - Helper files: archive/phase-7-converter/ (the ticket texts).
 
-## Phase 9 · The online songbook (W1–W7) · 11–12 Nov 2026 · PRs zpevnik-web#4–#14
+## Phase 9 · The online songbook (W1–W7, W5a, W6a) · 11–13 Nov 2026 · PRs zpevnik-web#4–#16
 
 The songbook is online at `/zpivej/`, separate from the download page, from the same LaTeX files: 738 song pages built in about 3 s.
 - W1 (#4) and W2 (#5, D-167): the build downloads `songs.json` and `scores.zip` of the release named in `version.txt`; one page per song, the chord rule of the book (D-123) in CSS, readable without JavaScript, `noindex`, a font size control.
 - W3 (#6, D-168) and W3a (#7, D-169): the index in book order, artists and collections, previous and next song, "open in PDF" at the song's page; two levels of navigation, **Stáhnout** and **Zobrazit online**, then the songbook's own row. W3b (#10, D-172): a muted link up from a song or an artist.
 - W4 (#8, D-170), W4a (#9, D-171) and W4b (#11, D-173): the search over titles, artists and lyrics (a 262 kB gzipped index loaded on first use, no library), matching from the start of words, results in two groups with the matched words in bold; style sheets, scripts and the index are asked for with a hash of their content, so a browser never mixes new pages with an old style sheet.
 - W5 (#12, D-174): a "keep the screen on" button on a song (Screen Wake Lock API). W6 (#13): `robots.txt` disallows everything, no sitemap. W7 (#14): `check_site.py`, run in CI after the build, fails when a song has no page or a link or anchor of the site leads nowhere; the whole workflow takes about 18 s.
-- Left open on purpose: W6a, chord segments that wrap like the book's. At the default size on a 390 px phone `folsomprisonblues` still wraps with "I" alone on a line; the owner made it optional.
+- W6a (#15, D-176): chord segments wrap like the book's. At 390 px and the default size 40 % of the 4,536 lines with chords wrapped, and a browser moved a chord-and-text box whole to the next line (`folsomprisonblues`: "I" alone). Now the chord's column holds only the head, the shortest run of whole words as long as the chord, and the rest of the text flows; a split inside a word ends in a soft hyphen. Measured on all songs: no chord closer than 0.5 em to the next, no break inside a word without a hyphen, lines with chords 2.5 % shorter (7.6 % at the largest font size); `songs.json` is unchanged, the split is made by the web build. The default font size stays.
+- W5a (#16, D-174): the wake-lock button is a small coffee-cup icon beside A− and A+.
 - Not verified on any real phone: the screen staying on (W5), the keyboard and autofocus of the search, `#page=N` in a phone's PDF viewer.
 - Helper files: archive/phase-9-website/ (the ticket texts).
 

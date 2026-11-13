@@ -1,6 +1,6 @@
-# Phase 9 tickets: the online songbook (done 12 Nov 2026)
+# Phase 9 tickets: the online songbook (done 13 Nov 2026)
 
-The ticket texts and status rows as they were when the work ended: the data from the release, song pages, index, artists, navigation, search, wake lock, robots.txt and the release check, in `zpevnik-web`. **W6a** (chord wrapping) is optional and stays in [TICKETS.md](../../TICKETS.md). Summary: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows as they were when the work ended: the data from the release, song pages, index, artists, navigation, search, wake lock, robots.txt and the release check, in `zpevnik-web`. W5a (the wake-lock button as an icon) and W6a (chord wrapping, head + tail) were added on 13 Nov 2026 and are done. Summary: [HISTORY.md](../../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
@@ -15,6 +15,8 @@ The ticket texts and status rows as they were when the work ended: the data from
 | W5 | done | the button "Nezhasínat displej" on a song, Screen Wake Lock API, hidden where unsupported, asked for again when the page is shown, the choice kept for the tab (D-174): zpevnik-web PR #12 |
 | W6 | done | `robots.txt` that disallows everything, no sitemap, tested with the standard robots parser: zpevnik-web PR #13 |
 | W7 | done | the release check: `check_site.py` (every song has a page, every link and anchor of the built site resolves) run in CI; the build takes 3 s, the whole workflow 18 s: zpevnik-web PR #14 |
+| W5a | done | the wake-lock button is a small coffee-cup icon beside A− and A+, the words are its label and tooltip (D-174): zpevnik-web PR #16 |
+| W6a | done | chord segments wrap like the book's: the chord's column holds the head (the shortest run of whole words as long as the chord), the rest flows; option chosen by the owner on 13 Nov 2026 (D-176): zpevnik-web PR #15 |
 
 ### W1 · Load the data — [agent] · M · needs J4
 `build.py` downloads `songs.json` from the release tagged `v<version.txt>` (the songbook CI already writes `version.txt` after creating the release) into an uncommitted folder, validates `schemaVersion`, and fails loudly if missing. Add a local option to point at a file.
@@ -50,3 +52,16 @@ A toggle on the song page using the Screen Wake Lock API; hidden where unsupport
 
 ### W7 · Release check — [agent] · S · needs W3–W6
 Build under 1 minute; every song page present (minus hidden); every internal link resolves; screenshots of 3 songs on a phone-sized viewport; update the web README.
+
+### W5a · Keep-the-screen-on as a small icon — [agent] · S · `zpevnik-web`
+The button "Nezhasínat displej" (W5, D-174) becomes a small icon button beside A− and A+, as tall as they are; the words stay as its label and tooltip; `wake-lock.js` unchanged (owner, 13 Nov 2026).
+
+### W6a · Segments wrap freely — [strong model] · M · needs W2 · **option chosen: head + tail (owner, 13 Nov 2026, D-176)**
+**The problem.** On a narrow screen, or with a larger font, a line wraps strangely (the release check of W7 saw it at the default font size on a 390 px phone too): in `folsomprisonblues`, "I" stands alone and "hear the train a-coming, …" starts the next line. Cause, measured on 12 Nov 2026: a chord and all its text up to the next chord are one `inline-block` (the W2 form of the chord rule, D-123), and a browser moves such a box whole to the next line when it does not fit beside what is before it; TeX would break at any space. The PDF is not affected.
+**Not the fix.** Letting only the first word be the chord's column and the text after it flow: it pads after a first word shorter than its chord, which the book does not (498 of 1,518 multi-word chord segments in 120 sampled songs).
+**To decide first (a note in this ticket's PR, an owner decision if the options differ visibly), then implement.** CSS cannot say "pad only where the next chord would collide" without measuring, so every approach is a compromise. The candidates:
+1. *A text clearly longer than its chord flows; a short one keeps today's unbreakable column.* The chord is zero-width over the first word, so the text is not padded; the collision guarantee stays for the short ones (11 of 1,518 sampled multi-word segments have a text narrower than the chord and its separator). A segment that ends inside a word (the hyphen) stays unbreakable. A threshold in one named constant.
+2. *Measure in JavaScript* and pad where a chord would collide. The page must still read without JavaScript, so the unbreakable columns stay as the base: the wrap is not fixed without it.
+3. *Leave it:* the book's rule is exact, and the reader can make the text smaller.
+The first is the simplest that fixes the wrap without JavaScript; whether a threshold is acceptable is the question.
+**Chosen (13 Nov 2026, D-176):** a fourth option found in the consultation, *head + tail*: the chord's column holds only the shortest run of whole words that is at least as long as the chord, the rest of the text flows; text without a chord flows; a line breaks inside a word only with a hyphen, as in the book. The default font size stays. The measurements and the reasons are in D-176. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).

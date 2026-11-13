@@ -1,6 +1,6 @@
 # Implementation sessions
 
-How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working sessions, and the prompt for each. This file lists only the sessions still to run. Sessions 1–27 and 29 are done (HISTORY.md; their blocks are in archive/snapshot-2026-11-06/SESSIONS.md, archive/phase-11-code-quality/SESSIONS.md and archive/sessions-20-27/SESSIONS.md, which also holds session 29). The next free number is 32; a letter after a number means "in this slot, after it".
+How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working sessions, and the prompt for each. This file lists only the sessions still to run. Sessions 1–29 are done (HISTORY.md; their blocks are in archive/snapshot-2026-11-06/SESSIONS.md, archive/phase-11-code-quality/SESSIONS.md and archive/sessions-20-27/SESSIONS.md, which also holds sessions 28 and 29). The next free number is 32; a letter after a number means "in this slot, after it".
 
 **To start a session**, open a Claude Code session with the `f-hluchnik/zpevnik` repository (from any device; the desktop app with the `songbook-project` folder linked works too, but is needed only for the owner's local files), choose the model listed for it, and paste the one-line prompt, e.g. `Run session 20 from docs/SESSIONS.md.`
 
@@ -28,11 +28,6 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 - **Needs:** P3, and the final content: the owner's new songs (D-147; K1 is done).
 - **Read:** TICKETS P4 · the P1 entry.
 - **Notes:** P4 ends with the owner's sign-off, not with the agent's.
-
-### Session 28 · W6a · strongest model · `zpevnik-web` (+ a docs PR in `zpevnik`)
-- **Needs:** nothing; the option is chosen (D-176). Running on 13 Nov 2026 in the session that made the choice.
-- **Read:** TICKETS W6a · D-123 (the chord rule) · D-176 · zpevnik-web README (*The check of the built site*).
-- **Notes:** screenshots at 390 px and with the largest font; measure again what D-176 lists; run `python check_site.py` and compare with the base build. The ticket leaves TICKETS.md in a docs PR in `zpevnik` after the web PR is merged.
 
 ### Session 30 · J6 · Sonnet · `zpevnik`, then `zpevnik-web`
 - **Needs:** the owner's answer on the 6 places (TICKETS J6); show him the 6 places first if he has not answered.

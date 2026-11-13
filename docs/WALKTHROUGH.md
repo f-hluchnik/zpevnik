@@ -108,9 +108,8 @@ That push to `zpevnik-web` starts its workflow (`deploy.yml`). `build.py` reads 
 Already tracked:
 
 - **Not verified on real devices**: the wake lock, the search keyboard, `#page=N` in a phone's PDF viewer (HISTORY.md, phase 9).
-- **Chords wrap oddly on a narrow screen**: the chord rule is implemented twice, in TeX (`zpevnik.sty`) and in CSS, by design (D-123 on the web). A browser moves a chord-and-text `inline-block` to the next line whole, where TeX breaks at any space. This is W6a, optional (TICKETS.md).
 
-Not tracked anywhere: **nothing automated compares the web layout with the PDF.** The PDF is protected by the PDF diff and the overlap check; `check_site.py` checks that pages exist and links resolve, not how a line looks. W6a's own verification is by hand (screenshots, measuring in a browser), so a change to `songbook.css` or `_song.html` could break the rule on the web unnoticed. Whether that is worth a ticket is the owner's call.
+Not tracked anywhere: **nothing automated compares the web layout with the PDF.** The PDF is protected by the PDF diff and the overlap check; `check_site.py` checks that pages exist and links resolve, not how a line looks. The chord rule is implemented twice, in TeX (`zpevnik.sty`) and in CSS, by design (D-123 on the web, and D-176 for how a line wraps); W6a was verified by hand (screenshots, measuring in a browser), so a change to `songbook.css` or `_song.html` could break the rule on the web unnoticed. Whether that is worth a ticket is the owner's call.
 
 ## Where to look when…
 
