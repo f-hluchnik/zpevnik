@@ -29,9 +29,10 @@ Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or
 | 6a | Delivery of the editions: CI release, download page | done | E5–E6 |
 | 9 | Print | **next**; P4 after the owner's new songs | P0, P1, P3, P4 |
 | A | Audits: README, unit tests, build speed | done | A1–A3 |
-| 5 | Converter and `songs.json` | later | J1–J5 |
+| 5 | Converter and `songs.json` | done | J0–J5 |
 | 7 | Legal hygiene | done (`songs.json` part of L2 in J2) | L1–L2 |
-| 6 | Website | later | W1–W7 |
+| 6 | Website | done except W6a (D-176) | W1–W7, W6a |
+| 13 | Finishing: one reader of the songs, remarks, songs in parts, the overview for the article | next, beside print | Q7, J6, H7, V10, Z2 (D-175) |
 
 WP0–WP4 are described in HISTORY.md (results) and in the archived plan (the original problem statements). The cleanup came before the converter so that the converter is written once, against semantic macros only, and `songs.json` carries no layout (D-108). Editions and print were pulled ahead of the converter in D-132; D-147 added the delivery of the editions and the audits before it, and moved `zpevnik-lite` behind the print edition.
 
@@ -86,7 +87,7 @@ The online songbook lives in the web repo but is clearly separate from the downl
 2. Chord CSS (inline-block, the rule of D-123), font-size control, existing dark mode.
 3. Build-time search index over title, alternative titles, artist and lyrics (diacritics-insensitive), lazy-loaded.
 4. Screen wake-lock toggle.
-5. Later: transposition (with the Czech B/H convention), setlists, offline.
+5. Not planned: transposition, setlists, offline use, fit to screen, ChordPro export (D-175: correct and simple, not every feature).
 
 ## Open owner decisions
 

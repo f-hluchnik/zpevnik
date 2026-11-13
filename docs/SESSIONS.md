@@ -1,6 +1,6 @@
 # Implementation sessions
 
-How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working sessions, and the prompt for each. This file lists only the sessions still to run. Sessions 1–27 are done (HISTORY.md; their blocks are in archive/snapshot-2026-11-06/SESSIONS.md, archive/phase-11-code-quality/SESSIONS.md and archive/sessions-20-27/SESSIONS.md). The next free number is 28; a letter after a number means "in this slot, after it".
+How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working sessions, and the prompt for each. This file lists only the sessions still to run. Sessions 1–27 are done (HISTORY.md; their blocks are in archive/snapshot-2026-11-06/SESSIONS.md, archive/phase-11-code-quality/SESSIONS.md and archive/sessions-20-27/SESSIONS.md). The next free number is 32; a letter after a number means "in this slot, after it".
 
 **To start a session**, open a Claude Code session with the `f-hluchnik/zpevnik` repository (from any device; the desktop app with the `songbook-project` folder linked works too, but is needed only for the owner's local files), choose the model listed for it, and paste the one-line prompt, e.g. `Run session 20 from docs/SESSIONS.md.`
 
@@ -29,10 +29,30 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 - **Read:** TICKETS P4 · the P1 entry.
 - **Notes:** P4 ends with the owner's sign-off, not with the agent's.
 
-### Optional session · W6a · strongest model · `zpevnik-web`
-- **Needs:** nothing; the owner decides whether it is worth doing (TICKETS W6a, optional). Model: it needs design judgement (TICKETS tag), so run it with the strongest available model, or have one review it before the merge.
-- **Read:** TICKETS W6a · D-123 (the chord rule) · zpevnik-web README (*The check of the built site*).
-- **Notes:** Write the options and a recommendation in the PR before coding; screenshots at 390 px and with the largest font; run `python check_site.py` and compare with the base build.
+### Session 28 · W6a · strongest model · `zpevnik-web` (+ a docs PR in `zpevnik`)
+- **Needs:** nothing; the option is chosen (D-176). Running on 13 Nov 2026 in the session that made the choice.
+- **Read:** TICKETS W6a · D-123 (the chord rule) · D-176 · zpevnik-web README (*The check of the built site*).
+- **Notes:** screenshots at 390 px and with the largest font; measure again what D-176 lists; run `python check_site.py` and compare with the base build. The ticket leaves TICKETS.md in a docs PR in `zpevnik` after the web PR is merged.
+
+### Session 29 · Q7 · Sonnet · `zpevnik`
+- **Needs:** nothing.
+- **Read:** TICKETS Q7 · D-161, D-164.
+- **Notes:** byte-identical PDF and `songs.json` for every edition is the whole verification; build every edition locally on base and head before the PR.
+
+### Session 30 · J6 · Sonnet · `zpevnik`, then `zpevnik-web`
+- **Needs:** the owner's answer on the 6 places (TICKETS J6); show him the 6 places first if he has not answered.
+- **Read:** TICKETS J6 · D-128, D-165 (the schema rules), D-170 (the search).
+- **Notes:** two PRs: `zpevnik` (command, converter, schema, release) first; `zpevnik-web` after a release carries it.
+
+### Session 31 · H7, then V10 · strongest model · `zpevnik`, then `zpevnik-web` for V10
+- **Needs:** the owner's answers for H7, then for V10 (TICKETS); start by showing him pages of the candidate songs.
+- **Read:** TICKETS H7, V10 · D-108, D-124, D-128.
+- **Notes:** ⚠ both: H7 merged before V10 starts.
+
+### Any session · Z2 · Sonnet · `zpevnik`
+- **Needs:** nothing; best after the other phase-13 tickets, so the overview is complete (otherwise the later PRs add their lines).
+- **Read:** TICKETS Z2 · HISTORY.md · DECISIONS.md headings · WALKTHROUGH.md.
+- **Notes:** docs only, no diff of the book.
 
 ---
 
@@ -41,6 +61,9 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 | Decision | Where | Blocks |
 |---|---|---|
 | E4 songs for `zpevnik-lite` | TICKETS E4 | after the printed edition (D-147): nothing now |
-| W6a, whether to do it | TICKETS W6a | nothing (optional) |
+| J6 which of the 6 places are remarks | TICKETS J6 | J6 |
+| H7 which songs are split, their ids and titles | TICKETS H7 | H7 |
+| V10 the form of songs in parts and of tight verses | TICKETS V10 | V10 |
+| J6, H7, V10 in the printed book or after it | TICKETS overview | the order of J6, H7, V10 and P4 |
 | P1 print requirements and deadline (the printer's answers, D-157) | TICKETS P1 | P4 |
 | The owner's new songs (about ten), content work | D-147 | P4 |
