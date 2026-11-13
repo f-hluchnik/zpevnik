@@ -39,7 +39,7 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after J6, H7 and V10 if they are to be in the printed book; K1 is done) |
 | W6a | in review | zpevnik-web PR #15; owner chose "head + tail" and the font size stays (13 Nov 2026, D-176) |
 | W5a | in review | zpevnik-web PR #16; owner asked for it on 13 Nov 2026 (D-174) |
-| J6 | in review | `zpevnik` part: PR in the ticket text (owner chose the places, D-177); the `zpevnik-web` part is left, after the release that carries `schemaVersion` 2 |
+| J6 | in review | `zpevnik` part: PR #143 (owner chose the places, D-177); the `zpevnik-web` part is left, after the release that carries `schemaVersion` 2 |
 | H7 | todo | owner decides which songs are split and their names |
 | V10 | todo | owner decides the form (pages of the candidates first); after H7 |
 | Z2 | todo | agent; the owner writes the article himself (D-175) |
@@ -106,7 +106,7 @@ Q7 (one reader of the songs) is done (archive/phase-13-finishing/). The last tic
 **Decided (owner, 13 Nov 2026, D-177):** `allyouneedislove` ×2, `ahorsewithnoname` and `bellaciao` are remarks; `hledamdevcenanedeli` "rec. A nebudu." is a speaker line (`\speaker{rec}{A nebudu.}`); `cernymuz` "verze Waldemara Matušky" is a second song and goes to H7.
 **The change.** A command `\remark{…}` that prints as these places print today; the converter gives a body item `remark` (a change of `songs.json`: `schemaVersion` 2, D-165); the website sets it like a note and the search leaves it out (D-170).
 **Expected differences:** none in the PDF except `hledamdevcenanedeli` ("rec:" in the label column, D-177).
-**Part 1, `zpevnik`:** the command, the converter, the schema, the lint, the README, the tests and the five songs. In review (the PR number is in its description).
+**Part 1, `zpevnik`:** the command, the converter, the schema, the lint, the README, the tests and the five songs. In review: PR #143.
 **Part 2, `zpevnik-web`, after the release that carries `schemaVersion` 2 (until then the website's build stops on it, D-177):** `SUPPORTED_SCHEMA_VERSION` to 2 in `build.py`; `_song.html` renders a `remark` as a block of italic lines like a note (`song-note`, one line per element of `lines`); a test that the search index holds no remark text (`allyouneedislove`: "interludium"); the test that rejects another version must use a version other than 2; check the four songs at 390 px and `python check_site.py`. Then this ticket leaves TICKETS.md in a docs PR in `zpevnik`.
 
 ### H7 · Bilingual songs as two songs — [you] + [agent] · S · ⚠
