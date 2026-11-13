@@ -10,8 +10,9 @@ Python >= 3.11, standard library only.
 from collections.abc import Set
 
 from songbook.grammar import GAP_UNIT_EM
-from songbook.model import (Block, BodyItem, Chord, Cue, CueBlock, FootnoteRef, Gap, Line, Mark, Note, RepeatEnd,
-                            RepeatStart, Rule, Run, Score, Segment, Song, Speaker, SpeakerBlock, Style, Text)
+from songbook.model import (Block, BodyItem, Chord, Cue, CueBlock, FootnoteRef, Gap, Line, Mark, Note, Remark,
+                            RepeatEnd, RepeatStart, Rule, Run, Score, Segment, Song, Speaker, SpeakerBlock, Style,
+                            Text)
 
 JsonValue = None | bool | int | float | str | list["JsonValue"] | dict[str, "JsonValue"]
 JsonObject = dict[str, JsonValue]
@@ -73,6 +74,8 @@ def body_item_json(item: BodyItem) -> JsonObject:
             return {"type": "cueBlock", "label": cue.printed_label, "line": line_json(line)}
         case Note(text):
             return note_json(text)
+        case Remark(lines):
+            return {"type": "remark", "lines": [text_json(text) for text in lines]}
         case Rule(kind):
             return {"type": "rule", "kind": kind.value}
     raise TypeError(item)

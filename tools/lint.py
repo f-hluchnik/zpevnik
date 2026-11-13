@@ -88,7 +88,7 @@ COMMENT = re.compile(r"(?<!\\)%.*")
 # environment such as multicols.
 PARAGRAPH_START = re.compile(r"\\([A-Za-z@]+)|[^\\\s]")
 ALLOWED_PARAGRAPH_STARTS = frozenset(
-    "song artist alttitle subtitle toctitle collection note cue speaker vers chorus prechorus bridge solo "
+    "song artist alttitle subtitle toctitle collection note cue speaker vers remark chorus prechorus bridge solo "
     "intro coda blockrule partrule groupbreak seealso large begin end columnbreak score "
     "hypertarget".split())
 PARAGRAPH_BREAK = re.compile(r"\n[ \t]*\n")

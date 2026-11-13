@@ -20,6 +20,9 @@ UNNUMBERED_BLOCKS = {"intro", "coda"}
 BLOCK_SIGNATURE = "om"            # \vers[2]{...}
 UNNUMBERED_BLOCK_SIGNATURE = "m"  # \intro{...}
 
+# A remark: italic text that is not sung, between the parts; its lines are separated by `\\`.
+REMARKS = {"remark": "m"}
+
 # Song level, outside the parts.
 METADATA = {"song": "m", "subtitle": "m", "artist": "om", "alttitle": "m", "toctitle": "m",
             "collection": "m", "seealso": "mm"}

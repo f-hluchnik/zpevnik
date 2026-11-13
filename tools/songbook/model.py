@@ -107,6 +107,13 @@ class Note:
 
 
 @dataclass(frozen=True)
+class Remark:
+    """`\\remark{...}` between the parts: text that is not sung (a tuning, the structure of a verse),
+    printed in italics like an unnumbered verse. Each element of `lines` is a line of text."""
+    lines: tuple[Text, ...]
+
+
+@dataclass(frozen=True)
 class Speaker:
     """`\\speaker{name}{...}` inside a part: the name before the line."""
     name: str
@@ -180,7 +187,7 @@ class Rule:
     kind: RuleKind
 
 
-BodyItem = Block | SpeakerBlock | CueBlock | Note | Rule
+BodyItem = Block | SpeakerBlock | CueBlock | Note | Remark | Rule
 
 
 @dataclass(frozen=True)
@@ -233,7 +240,7 @@ class Song:
 
 
 def block_lines(item: BodyItem) -> tuple[Line, ...]:
-    """The lines of a body item: none for a note and a rule."""
+    """The lines of a body item: none for a note, a remark and a rule."""
     match item:
         case Block(lines=lines) | SpeakerBlock(lines=lines):
             return lines

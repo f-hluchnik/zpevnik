@@ -28,7 +28,7 @@ class Allowed:
 
 
 IN_PART = Allowed(line_breaks=True, music=True, footnotes=True)
-IN_FOOTNOTE = Allowed(line_breaks=True, music=False, footnotes=False)
+IN_TEXT_LINES = Allowed(line_breaks=True, music=False, footnotes=False)  # a footnote, a remark
 IN_TITLE = Allowed(line_breaks=False, music=False, footnotes=True)
 IN_LABEL = Allowed(line_breaks=False, music=False, footnotes=False)  # a note, a link text, a name
 
@@ -155,7 +155,7 @@ class InlineParser:
     def footnote(self, stream: TokenStream, token: Token) -> None:
         self.require(self.allowed.footnotes, token, "not allowed here")
         [content] = stream.arguments(token, grammar.TEXT_COMMANDS[token.text])
-        lines = read_lines(content, self.state, IN_FOOTNOTE, token)
+        lines = read_lines(content, self.state, IN_TEXT_LINES, token)
         self.add_inline(FootnoteRef(self.state.add_footnote(tuple(line_text(line) for line in lines))))
 
     def line_break(self, token: Token) -> None:
