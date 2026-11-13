@@ -82,7 +82,8 @@ Never claim that something works without having verified it.
 The planning documents are the primary reference for project requirements and progress.
 
 - `docs/PLAN.md` — overall goals and architectural direction.
-- `docs/HISTORY.md` — what each finished phase changed, and notes for the article on the website.
+- `docs/HISTORY.md` — what each finished phase changed.
+- `docs/OVERVIEW.md` — the refactoring in ten minutes, area by area, and the notes for the article on the website.
 - `docs/archive/` — helper files of finished phases and the original inventory (reference only; binary review files are on the owner's computer, see `docs/archive/README.md`).
 - `docs/TICKETS.md` — actionable work and ticket status.
 - `docs/DECISIONS.md` — agreed architectural decisions and rationale.

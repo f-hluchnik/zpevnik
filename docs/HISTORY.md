@@ -1,47 +1,6 @@
 # Project history
 
-What changed in the songbook refactoring and why, phase by phase (DECISIONS D-126). Facts only; the reasoning behind each choice is in [DECISIONS.md](DECISIONS.md), the helper files of finished phases are in [archive/](archive/). The first part collects notes for the short story of the refactoring on the website.
-
----
-
-## Notes for the website article
-
-**Working title ideas:** "733 písniček, nula ručních mezer" · "Jak jsem uklidil zpěvník" · "Zpěvník pod kapotou". Write it in Czech, short (one screen or two), for people who use the songbook, not for TeX experts. One or two before/after images of a song page (archive/phase-5-chords/C1-chord-spacing/ has ready ones, e.g. `ringoffire-before-after.png`).
-
-**Starting point (v8.33, August 2026).**
-- 733 songs in LaTeX, one PDF, a website that only offered the PDF for download.
-- Adding a song meant six manual steps in three places: the song file, a hand-written `\include` line in the 908-line main file, one or two entries in the 2,962-line hand-written contents, and a version bump.
-- The copies had drifted: 35 songs had a different title in the contents than on their page ("Brigh Side"), artists were spelled several ways.
-- The layout was tuned by hand: 1,285 horizontal nudges between chords (`\nc`, `\mm`, `\sm`) and 618 vertical ones (`\ns`, `\vinv`, `\lsp`, `\vnv`, `\cns`, `\vspace`). Chords still overlapped in 157 places.
-
-**The goal.** The songbook should also be readable online, as web pages built from the same song files as the PDF. Before writing the converter, the debt was paid off, so that the converter reads clean, meaningful markup ("this is a chorus", "a pause here") and never millimetres.
-
-**How.** Four days (3–6 November 2026), 61 merged pull requests, done in working sessions with an AI coding agent; the owner decided every content question and reviewed every changed page. Every pull request was built twice in CI (before and after) and compared song by song, so a change to 733 pages became reviewable.
-
-**Stories worth telling (pick two or three).**
-1. *The safety net found a bug first.* The published PDF had one song spilling onto a second page, only because CI had silently moved to a newer TeX Live. Pinning the TeX Live version made the build reproducible; a song-by-song image diff and a "one song, one page" check came next. Nothing else was touched before that.
-2. *One file per song.* A registry of 50 artists and a generator replaced the hand-written lists: the main file went from 908 to 26 lines, the contents from 2,962 to 16. Adding a song is now one new file (plus a registry line for a new artist) and `make`.
-3. *Czech alphabetical order is not trivial.* The contents follow the Czech standard: CH is a letter after H (also in "Change the World"), a space sorts before any letter ("A Horse With No Name" before "Abych tu žil"), Ď sorts with D. Implemented and unit-tested in the generator; 67 songs moved to their correct place once.
-4. *Chords that make room for themselves.* The chord macro now looks ahead at the text up to the next chord, measures it and adds space only where two chords would collide. The first prototype (measuring positions over several compile runs) never converged and was dropped for this one-pass version. Result: zero overlapping chords, checked in CI; intentional pauses are written as `\gap{n}`. The rule "never join two words on a guess" meant every unclear case went to the owner; 449 songs were migrated in 12 batches, each reviewed as a real PDF.
-5. *An old hack with side effects.* The style redefined a TeX primitive (`\everypar`) to get the hanging labels. It only worked by accident, and the layout depended on its side effects in over 4,000 places. It was replaced by two explicit settings with pixel-identical output.
-6. *One gap instead of 618 nudges.* Without the hand-made squeezing, 74 of 88 songs would no longer fit on one page. One gap between blocks that TeX may shrink when a page is full brought that down to 2; those (and the few dashed-line songs) use a slightly smaller font, by an explicit, commented choice. Dashed lines between tight verses stayed: they help while playing.
-
-**Before / after.**
-
-| | v8.33 (Aug 2026) | 6 Nov 2026 |
-|---|---|---|
-| Places to edit when adding a song | 3 files, 6 steps | 1 file |
-| Main file / contents | 908 / 2,962 lines, by hand | 26 / 16 lines, generated |
-| Manual chord spacing | 1,285 | 0 (automatic, 0 overlaps) |
-| Manual vertical spacing | 618 | 21 `\vspace`, all next to score images or commented |
-| Contents ↔ song title mismatches | 35 | 0 (one source) |
-| Automated checks | none | pinned TeX Live, song-by-song PDF diff, one page per song, chord overlaps, lint, 103 unit tests |
-
-**Lessons (one paragraph at most).** Build the safety net before touching anything. Make the diff cheap, then large changes become safe. Write what a song *means*, never how far apart things are. Write decisions down; the agent never guesses about content. Delete what nobody uses.
-
-**What came next.** The editions, the converter (`songs.json`) and the online songbook at `/zpivej/` (phases 10, 7 and 9 below). Still to come: the printed edition and a "lite" songbook of favourites.
-
-**The online songbook, for the article.** The owner looked at each step on the live site and sent back what felt wrong; four of the eleven website pull requests (W3a, W4a, W3b, W4b) are his observations: a download-style button for the songbook, a search box that looked unstyled on his desktop only (a cached style sheet, now fixed with content-hashed URLs), no obvious way back to the index, and lyrics matches mixed in with title matches. A good story for people who like small web details.
+What changed in the songbook refactoring and why, phase by phase (DECISIONS D-126). Facts only; the reasoning behind each choice is in [DECISIONS.md](DECISIONS.md), the helper files of finished phases are in [archive/](archive/). A short overview of the whole refactoring, with the notes for the article on the website, is in [OVERVIEW.md](OVERVIEW.md).
 
 ---
 
