@@ -39,7 +39,7 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after J6, H7 and V10 if they are to be in the printed book; K1 is done) |
 | W6a | in review | zpevnik-web PR #15; owner chose "head + tail" and the font size stays (13 Nov 2026, D-176) |
 | W5a | in review | zpevnik-web PR #16; owner asked for it on 13 Nov 2026 (D-174) |
-| J6 | todo | owner first decides which of the 6 places are remarks |
+| J6 | in review | `zpevnik` part: PR in the ticket text (owner chose the places, D-177); the `zpevnik-web` part is left, after the release that carries `schemaVersion` 2 |
 | H7 | todo | owner decides which songs are split and their names |
 | V10 | todo | owner decides the form (pages of the candidates first); after H7 |
 | Z2 | todo | agent; the owner writes the article himself (D-175) |
@@ -103,13 +103,15 @@ Q7 (one reader of the songs) is done (archive/phase-13-finishing/). The last tic
 
 ### J6 · Remarks as their own command — [you] + [agent] · S · ⚠ · `zpevnik` and `zpevnik-web`
 **The problem** (owner, 6 Nov 2026). `\note` belongs to the next block (D-128): right for "capo 3". A remark that stands alone is written as an unnumbered verse `\vers{\emph{…}}`: 6 places in 5 songs (`hledamdevcenanedeli` "rec. A nebudu.", `allyouneedislove` ×2 (the structure of the verse; "interludium (sloka)"), `bellaciao`, `cernymuz` "verze Waldemara Matušky", `ahorsewithnoname` (the tuning)). In `songs.json` they are italic lyrics, so the website shows and searches them as lyrics.
-**To decide first (owner):** which of the 6 are remarks (a spoken line is lyrics; "verze …" may be the heading of a part, V10).
-**The change.** A command `\remark{…}` that prints as these places print today; the converter gives a body item `remark` (a change of `songs.json`: `schemaVersion` as D-165 says); the website sets it like a note and the search leaves it out (D-170).
-**Expected differences:** none in the PDF.
+**Decided (owner, 13 Nov 2026, D-177):** `allyouneedislove` ×2, `ahorsewithnoname` and `bellaciao` are remarks; `hledamdevcenanedeli` "rec. A nebudu." is a speaker line (`\speaker{rec}{A nebudu.}`); `cernymuz` "verze Waldemara Matušky" is a second song and goes to H7.
+**The change.** A command `\remark{…}` that prints as these places print today; the converter gives a body item `remark` (a change of `songs.json`: `schemaVersion` 2, D-165); the website sets it like a note and the search leaves it out (D-170).
+**Expected differences:** none in the PDF except `hledamdevcenanedeli` ("rec:" in the label column, D-177).
+**Part 1, `zpevnik`:** the command, the converter, the schema, the lint, the README, the tests and the five songs. In review (the PR number is in its description).
+**Part 2, `zpevnik-web`, after the release that carries `schemaVersion` 2 (until then the website's build stops on it, D-177):** `SUPPORTED_SCHEMA_VERSION` to 2 in `build.py`; `_song.html` renders a `remark` as a block of italic lines like a note (`song-note`, one line per element of `lines`); a test that the search index holds no remark text (`allyouneedislove`: "interludium"); the test that rejects another version must use a version other than 2; check the four songs at 390 px and `python check_site.py`. Then this ticket leaves TICKETS.md in a docs PR in `zpevnik`.
 
 ### H7 · Bilingual songs as two songs — [you] + [agent] · S · ⚠
 **The problem** (owner, `jednoubudemdal`). The Czech version and the English original ("We shall overcome") share one song, and the verse numbers start again; by the logic of the songbook they are two songs, each with its own title, its line in the contents and in the search, linked by `\seealso`.
-**To decide first (owner):** which songs (look at the other songs whose numbering starts again, listed in V10) and the new ids and titles.
+**To decide first (owner):** which songs (look at the other songs whose numbering starts again, listed in V10) and the new ids and titles. **Already decided in J6 (owner, 13 Nov 2026, D-177):** `cernymuz` "verze Waldemara Matušky" is one of them: the second version becomes `cernymuzmatuska`, linked with `\seealso`, and its `\vers{\emph{verze …}}` line goes (the title says it).
 **Expected differences:** the songs split, one more entry in the contents and the artist index per song; the pages after them shift.
 
 ### V10 · Songs in parts and tight verses — [you] + [agent] · M · ⚠ · `zpevnik` and `zpevnik-web` · after H7 · [strong model] for the design

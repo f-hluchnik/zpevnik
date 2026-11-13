@@ -7,7 +7,7 @@
   "required": ["schemaVersion", "version", "songs", "contents", "artists"],
   "additionalProperties": false,
   "properties": {
-    "schemaVersion": {"const": 1},
+    "schemaVersion": {"const": 2},
     "version": {
       "description": "The version of the build, as the PDF prints it; the patch is '?' in a build without the Git history (never in a release).",
       "type": "string",
@@ -87,6 +87,7 @@
         {"$ref": "#/$defs/speakerBlock"},
         {"$ref": "#/$defs/cueBlock"},
         {"$ref": "#/$defs/note"},
+        {"$ref": "#/$defs/remark"},
         {"$ref": "#/$defs/rule"}
       ]
     },
@@ -123,6 +124,16 @@
         "type": {"const": "cueBlock"},
         "label": {"$ref": "#/$defs/nonEmptyString"},
         "line": {"$ref": "#/$defs/line"}
+      }
+    },
+    "remark": {
+      "description": "Text that is not sung (a tuning, the structure of a verse), between the parts, printed in italics. Each element of lines is a line of text.",
+      "type": "object",
+      "required": ["type", "lines"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"const": "remark"},
+        "lines": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}}
       }
     },
     "rule": {

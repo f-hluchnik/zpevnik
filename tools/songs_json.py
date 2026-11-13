@@ -30,7 +30,7 @@ from registry import Artist, normalise
 from songbook import Song
 from songbook.export import JsonObject, song_json
 
-SCHEMA_VERSION = 1  # raise it with every change a reader of songs.json has to follow
+SCHEMA_VERSION = 2  # raise it with every change a reader of songs.json has to follow
 WEBSITE_EDITION = DEFAULT_EDITION  # the full book: the website is built from no other edition
 SongsById = dict[str, Song]
 

@@ -14,7 +14,7 @@ from songbook import SongSyntaxError, grammar, parse_song, read_song
 from songbook.inline import MUSIC
 from songbook.parser import SONG_LEVEL, STANDALONE
 from songbook.dump import to_json
-from songbook.model import (Block, ChordPart, ChordPosition, CueBlock, FootnoteRef, Note, RepeatEnd,
+from songbook.model import (Block, ChordPart, ChordPosition, CueBlock, FootnoteRef, Note, Remark, RepeatEnd,
                             RepeatStart, Rule, RuleKind, Run, Segment, Speaker, SpeakerBlock, Style, plain)
 
 SNAPSHOT_DIR = Path(__file__).parent / "songbook_snapshots"
@@ -123,6 +123,19 @@ class Structure(unittest.TestCase):
         self.assertEqual(body[0], SpeakerBlock("A", body[0].lines))
         self.assertEqual(body[1].lines[0].items[0], Speaker("B"))
 
+    def test_a_remark_is_lines_of_text_between_the_parts(self):
+        body = song("\\chorus{a}\n\n\\remark{Tuning \\emph{D}\\\\\nthe second line}\n\n\\vers[1]{b}").body
+        self.assertEqual([type(item) for item in body], [Block, Remark, Block])
+        self.assertEqual([plain(line) for line in body[1].lines], ["Tuning D", "the second line"])
+
+    def test_a_remark_takes_no_text_after_it_in_its_paragraph(self):
+        with self.assertRaisesRegex(SongSyntaxError, "follows no part"):
+            song("\\remark{a} b")
+
+    def test_a_remark_holds_no_music(self):
+        with self.assertRaisesRegex(SongSyntaxError, "only in a part"):
+            song("\\remark{\\chord{A}a}")
+
     def test_a_repeat_may_span_lines(self):
         items = [item for line in first_block("\\vers{\\rep{a\\\\b}}").lines for item in line.items]
         self.assertIsInstance(items[0], RepeatStart)
@@ -204,8 +217,8 @@ class Errors(unittest.TestCase):
 
 class Grammar(unittest.TestCase):
     def test_every_command_of_the_grammar_has_exactly_one_handler(self):
-        song_level = (grammar.METADATA | grammar.BLOCKS | grammar.RULES | grammar.ENVIRONMENT_COMMANDS
-                      | grammar.LAYOUT_COMMANDS)
+        song_level = (grammar.METADATA | grammar.BLOCKS | grammar.REMARKS | grammar.RULES
+                      | grammar.ENVIRONMENT_COMMANDS | grammar.LAYOUT_COMMANDS)
         self.assertEqual(set(SONG_LEVEL), set(song_level))
         self.assertEqual(set(MUSIC), set(grammar.PART_COMMANDS))
         self.assertEqual(set(STANDALONE), set(grammar.MODE_DEPENDENT))
