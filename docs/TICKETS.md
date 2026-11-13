@@ -2,7 +2,7 @@
 
 Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. This file lists only what is left. What is done: [HISTORY.md](HISTORY.md), and the full text of every finished ticket in [archive/](archive/README.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
 
-Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene and the online songbook are done (HISTORY.md). What is left is the printed edition (P1, P4), the choice of songs for `zpevnik-lite` (E4) and the finishing tickets (J6, H7, V10, Z2). Then the songbook is done: the features that are not planned, and why, are in D-175 (correct and simple, not every feature).
+Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene and the online songbook are done (HISTORY.md). What is left is the printed edition (P1, P4), the choice of songs for `zpevnik-lite` (E4) and the finishing tickets (H7, V10, Z2). Then the songbook is done: the features that are not planned, and why, are in D-175 (correct and simple, not every feature).
 
 Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or review · **⚠** touches many song files, so never run two ⚠ tickets in parallel and merge each before the next · **[strong model]** needs design judgement beyond following the steps: run it with the strongest available model, or have one review the result before merge · size S/M/L.
 
@@ -36,8 +36,7 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 |---|---|---|
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
 | P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
-| P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after J6, H7 and V10 if they are to be in the printed book; K1 is done) |
-| J6 | in progress | `zpevnik` part merged (PR #143, D-177); the `zpevnik-web` part is left: it reads `schemaVersion` 2 and renders `remark` (until then the website's build stops on the new release) |
+| P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after H7 and V10 if they are to be in the printed book; K1 is done) |
 | H7 | todo | owner decides which songs are split and their names |
 | V10 | todo | owner decides the form (pages of the candidates first); after H7 |
 | Z2 | todo | agent; the owner writes the article himself (D-175) |
@@ -48,9 +47,9 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 |---|---|---|
 | 10 Editions | E4 | The songs of `zpevnik-lite`, a book of favourites, picked by the owner after the printed edition (D-147) |
 | 3 Print | P1, P4 | The printer's requirements and the owner's decisions, then a checked proof on the final content (D-122, D-147) |
-| 13 Finishing | J6, H7, V10, Z2 | Remarks the website can tell from lyrics, bilingual songs as two songs, songs in parts set consistently, and an overview of the refactoring for the article (D-175) |
+| 13 Finishing | H7, V10, Z2 | Bilingual songs as two songs, songs in parts set consistently, and an overview of the refactoring for the article (D-175) |
 
-The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147). J6, H7 and V10 change the PDF: they go before P4 if the printed book is to have them; the owner decides by the print deadline (P1).
+The owner's new songs (about ten) are content work that runs beside these; P4 comes after them (D-147). H7 and V10 change the PDF: they go before P4 if the printed book is to have them; the owner decides by the print deadline (P1).
 
 ---
 
@@ -77,15 +76,7 @@ Done on the final content, after the owner's new songs (D-147; K1 is done); unti
 
 # Phase 13 – Finishing (D-175)
 
-Q7 (one reader of the songs) is done (archive/phase-13-finishing/). The last tickets before the songbook is done. What is not planned, and why: D-175. J6, H7 and V10 are ⚠ (song files): one at a time, each merged before the next.
-
-### J6 · Remarks as their own command — [you] + [agent] · S · ⚠ · `zpevnik` and `zpevnik-web`
-**The problem** (owner, 6 Nov 2026). `\note` belongs to the next block (D-128): right for "capo 3". A remark that stands alone is written as an unnumbered verse `\vers{\emph{…}}`: 6 places in 5 songs (`hledamdevcenanedeli` "rec. A nebudu.", `allyouneedislove` ×2 (the structure of the verse; "interludium (sloka)"), `bellaciao`, `cernymuz` "verze Waldemara Matušky", `ahorsewithnoname` (the tuning)). In `songs.json` they are italic lyrics, so the website shows and searches them as lyrics.
-**Decided (owner, 13 Nov 2026, D-177):** `allyouneedislove` ×2, `ahorsewithnoname` and `bellaciao` are remarks; `hledamdevcenanedeli` "rec. A nebudu." is a speaker line (`\speaker{rec}{A nebudu.}`); `cernymuz` "verze Waldemara Matušky" is a second song and goes to H7.
-**The change.** A command `\remark{…}` that prints as these places print today; the converter gives a body item `remark` (a change of `songs.json`: `schemaVersion` 2, D-165); the website sets it like a note and the search leaves it out (D-170).
-**Expected differences:** none in the PDF except `hledamdevcenanedeli` ("rec:" in the label column, D-177).
-**Part 1, `zpevnik`:** the command, the converter, the schema, the lint, the README, the tests and the five songs. Merged: PR #143 (13 Nov 2026).
-**Part 2, `zpevnik-web`, after the release that carries `schemaVersion` 2 (until then the website's build stops on it, D-177):** `SUPPORTED_SCHEMA_VERSION` to 2 in `build.py`; `_song.html` renders a `remark` as a block of italic lines like a note (`song-note`, one line per element of `lines`); a test that the search index holds no remark text (`allyouneedislove`: "interludium"); the test that rejects another version must use a version other than 2; check the four songs at 390 px and `python check_site.py`. Then this ticket leaves TICKETS.md in a docs PR in `zpevnik`.
+Q7 (one reader of the songs) and J6 (remarks, D-177) are done (archive/phase-13-finishing/). The last tickets before the songbook is done. What is not planned, and why: D-175. H7 and V10 are ⚠ (song files): one at a time, each merged before the next.
 
 ### H7 · Bilingual songs as two songs — [you] + [agent] · S · ⚠
 **The problem** (owner, `jednoubudemdal`). The Czech version and the English original ("We shall overcome") share one song, and the verse numbers start again; by the logic of the songbook they are two songs, each with its own title, its line in the contents and in the search, linked by `\seealso`.

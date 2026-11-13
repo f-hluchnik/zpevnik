@@ -66,3 +66,6 @@ Chord segments wrap like the book's (W6a, D-176, zpevnik-web PR #15): the owner 
 
 ### Session 29 · Q7 — done (13 Nov 2026)
 One reader of the songs (D-164): `songs.py` reads the song files with the converter, the generator, the contents, the editions, the lint, the release and `songs.json` take the metadata from its model, and the regexes, `tex_text.plain_text` and the agreement test are gone. The PDF of every edition and `songs.json` are byte-identical to the base build (built with a fixed `SOURCE_DATE_EPOCH`); the generated contents print ’ and – where they had `'` and `--` (17 titles).
+
+### Session 30 · J6 — done (13 Nov 2026)
+Remarks (D-177): `\remark{…}` for text that is not sung, a body item `remark` in `songs.json` (`schemaVersion` 2), the website sets it like a note and the search leaves it out. The owner chose the places on the spot: three songs use `\remark`, `hledamdevcenanedeli` has a `\speaker`, and `cernymuz` went to H7. Two PRs: `zpevnik` #143 and `zpevnik-web` #17; between the release and the second merge the website's `main` did not build (the version it reads was 1), as planned in D-177. The same session closed phase 9 (#144).
