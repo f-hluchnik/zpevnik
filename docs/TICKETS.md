@@ -37,7 +37,7 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/).
 | E4 | todo | owner picks the songs, after the printed edition (D-147) |
 | P1 | in progress | owner and printer: what is left is listed in `docs/p0-print-report.md`, section 4 and D-157 (deadline, the printer's answers, colour, spine shift, copies); does not block the audits |
 | P4 | todo | owner signs off the proof, on the final content (after the owner's new songs, and after J6, H7 and V10 if they are to be in the printed book; K1 is done) |
-| W6a | in progress | owner chose "head + tail" and the font size stays (13 Nov 2026, D-176) |
+| W6a | in review | zpevnik-web PR #15; owner chose "head + tail" and the font size stays (13 Nov 2026, D-176) |
 | Q7 | todo | agent; no owner decision needed |
 | J6 | todo | owner first decides which of the 6 places are remarks |
 | H7 | todo | owner decides which songs are split and their names |
@@ -90,7 +90,7 @@ The songbook is online at `/zpivej/` (HISTORY.md, phase 9). One ticket is left.
 2. *Measure in JavaScript* and pad where a chord would collide. The page must still read without JavaScript, so the unbreakable columns stay as the base: the wrap is not fixed without it.
 3. *Leave it:* the book's rule is exact, and the reader can make the text smaller.
 The first is the simplest that fixes the wrap without JavaScript; whether a threshold is acceptable is the question.
-**Chosen (13 Nov 2026, D-176):** a fourth option found in the consultation, *head + tail*: the chord's column holds only the shortest run of whole words that is at least as long as the chord, the rest of the text flows; text without a chord flows; a line never breaks between two segments inside one word. The default font size stays. The measurements and the reasons are in D-176. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).
+**Chosen (13 Nov 2026, D-176):** a fourth option found in the consultation, *head + tail*: the chord's column holds only the shortest run of whole words that is at least as long as the chord, the rest of the text flows; text without a chord flows; a line breaks inside a word only with a hyphen, as in the book. The default font size stays. The measurements and the reasons are in D-176. Check with screenshots of `folsomprisonblues` and a few dense songs at 390 px and with the font at the largest size, and that the number of songs where a chord is closer to the next than 0.5 em does not grow (measure it in the browser, as for the sample above).
 
 ---
 
