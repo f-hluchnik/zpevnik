@@ -270,12 +270,14 @@ jobs:
       # The website holds no PDFs (E6, D-150): its build downloads them from the release
       # named in version.txt. So the release is created first and the version is pushed
       # after it, and the website never points at a release that does not exist yet.
+      # The web's main branch takes changes only through pull requests; the push uses a
+      # deploy key of zpevnik-web (write access), which its ruleset lets bypass (D-150).
       - name: Checkout website repo
         if: github.event_name == 'push'
         uses: actions/checkout@v4
         with:
           repository: f-hluchnik/zpevnik-web
-          token: ${{ secrets.WEBSITE_REPO_TOKEN }}
+          ssh-key: ${{ secrets.WEBSITE_DEPLOY_KEY }}
           path: website
 
       - name: Write version file
