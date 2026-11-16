@@ -1,0 +1,22 @@
+% The last page: the whole songbook online, its address as a QR code for a reader of the
+% printed book (black, not a link: hyperref would colour it grey) and as a link on the screen.
+% The online songbook is the full book (D-165).
+\begin{otherlanguage}{czech}
+\newcommand*{\onlineurl}{https://zpevnik.hluchnikovi.cz/zpivej/}
+\newcommand*{\onlinetext}{zpevnik.hluchnikovi.cz/zpivej}
+\vspace*{\fill}
+\begin{center}
+{\LARGE Celý zpěvník online}
+
+\vspace{8mm}
+{\large Všechny písně zpěvníku \textit{\zpbooktitle}, i~ty, které v~tomto výběru nejsou,\\
+s~hledáním v~názvech, interpretech i~textech.}
+
+\vspace{10mm}
+\qrcode[height=45mm, nolink]{\onlineurl}
+
+\vspace{6mm}
+{\large\href{\onlineurl}{\onlinetext}}
+\end{center}
+\vspace*{\fill}
+\end{otherlanguage}
