@@ -1,6 +1,8 @@
 # Zpěvník pro kravařské skauty.
 title = "Skautský zpěvník"
 subtitle = "oddíl Kravaře"
+# The last page leads to the whole songbook online.
+after_contents = ["online.tex"]
 songs = [
     "zavolejtestraze",
     "laskajetusvami",
