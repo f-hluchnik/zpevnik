@@ -212,7 +212,9 @@
 % the right edge of the text. The block is one paragraph (\par first); the lines of its source
 % are counted as \\ is executed (\groupbreak too), \prevgraf is compared with them when the
 % paragraph is finished (\zp@songparagraphend), and every line end records its position. A
-% block with a recitative (\rec) is prose: its lines may wrap.
+% block with a recitative (\rec) is prose: its lines may wrap. The line penalty and the font
+% expansion are set only when the paragraph is broken into lines (\zp@songparagraphbreak):
+% a footnote's text is typeset inside the paragraph, earlier, and keeps the usual settings.
 \newcommand*{\zp@songlinepenalty}{1000}
 % \zp@beforeendspace{material}: puts the material before a space that ends the text so far and
 % puts the space back after it: \\ and the end of the paragraph still remove the space, and a
@@ -231,8 +233,6 @@
 \newcommand{\zp@songblock}[2]{\par
   \global\zp@songparagraphtrue \global\zp@prosefalse \global\zp@sourcelines\@ne
   \zp@songgroup\currentgrouplevel
-  \zp@savedlinepenalty\linepenalty \zp@savedadjustspacing\pdfadjustspacing
-  \linepenalty\zp@songlinepenalty\relax \pdfadjustspacing\tw@
   \zp@block[\let\\\zp@songcr \let\zp@blockend\zp@songblockend]{#1}{#2}}
 \def\zp@songcr{\zp@traceline \global\advance\zp@sourcelines\@ne \@normalcr}
 \def\zp@songblockend{\zp@traceline}
@@ -246,14 +246,20 @@
   \edef\zp@tmp{\write\zp@linetrace{end \noexpand\thepage\space\noexpand\the\noexpand\pdflastxpos
     \space\number\zp@textedge}}%
   \zp@tmp}}
-\def\zp@songparagraphend{%
-  \ifzp@songparagraph\ifnum\currentgrouplevel=\zp@songgroup
-    \global\zp@songparagraphfalse
-    \edef\zp@tmp{\write\zp@linetrace{block \noexpand\thepage\space\the\zp@sourcelines\space
-      \the\prevgraf\space\ifzp@prose 1\else 0\fi}}%
-    \zp@tmp
-    \linepenalty\zp@savedlinepenalty \pdfadjustspacing\zp@savedadjustspacing
-  \fi\fi}
+% \zp@ifsongparagraph{code}: the code when the paragraph that ends is a song block's own (not
+% a footnote's, which is deeper).
+\newcommand{\zp@ifsongparagraph}[1]{%
+  \ifzp@songparagraph\ifnum\currentgrouplevel=\zp@songgroup #1\fi\fi}
+\def\zp@songparagraphbreak{\zp@ifsongparagraph{%
+  \zp@savedlinepenalty\linepenalty \zp@savedadjustspacing\pdfadjustspacing
+  \linepenalty\zp@songlinepenalty\relax \pdfadjustspacing\tw@}}
+\AddToHook{para/end}{\zp@songparagraphbreak}
+\def\zp@songparagraphend{\zp@ifsongparagraph{%
+  \global\zp@songparagraphfalse
+  \edef\zp@tmp{\write\zp@linetrace{block \noexpand\thepage\space\the\zp@sourcelines\space
+    \the\prevgraf\space\ifzp@prose 1\else 0\fi}}%
+  \zp@tmp
+  \linepenalty\zp@savedlinepenalty \pdfadjustspacing\zp@savedadjustspacing}}
 \AddToHook{para/after}{\zp@songparagraphend}
 % The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
 % a number, only the letter is printed. Every label ends with a dot.

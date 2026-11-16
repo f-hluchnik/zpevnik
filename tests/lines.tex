@@ -12,11 +12,18 @@
 \newcommand{\squeezedline}{%
   \settowidth{\wordswidth}{\words}\rule{\dimexpr\linewidth-\wordswidth+2pt\relax}{0pt} \words}
 
+% A footnote's text is prose, typeset with the usual line penalty and without font expansion.
+\makeatletter
+\newcommand{\checkfootnote}{%
+  \ifnum\linepenalty=\zp@songlinepenalty\relax \PackageError{lines}{footnote text set with the song line penalty}{}\fi
+  \ifnum\pdfadjustspacing>\z@ \PackageError{lines}{footnote text set with font expansion}{}\fi}
+\makeatother
+
 \begin{document}
 \pagestyle{plain}
 \begin{Large}
 \song{Lines}
-\vers[1]{Fits\\
+\vers[1]{Fits\footnote{\checkfootnote\words}\\
 \squeezedline}
 
 \vers[2]{\words\ \words\ \words}
