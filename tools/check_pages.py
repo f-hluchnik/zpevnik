@@ -72,6 +72,16 @@ def song_pages(output_dir: Path) -> tuple[list[tuple[str, int, int]], list[str]]
     return songs, errors
 
 
+def song_of_page(output_dir: Path) -> dict[int, str]:
+    """The song on each page of the songs (for the checks that report by page)."""
+    songs, _errors = song_pages(output_dir)
+    return {page: song for song, first, count in songs for page in range(first, first + count)}
+
+
+def song_name(song_at: dict[int, str], page: int) -> str:
+    return song_at.get(page) or "outside the songs"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_edition_argument(parser)

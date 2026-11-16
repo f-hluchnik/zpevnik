@@ -1,0 +1,26 @@
+% Every line of a song is one printed line (D-184): a line a little too long is squeezed, one
+% far too long wraps and is reported, and a recitative is prose that may wrap.
+% Run through tests/single-song.sh --build: tools/song_lines.py --trace reports the second
+% verse only, as one source line printed as two.
+\documentclass[a4paper, 10pt]{article}
+\usepackage{zpevnik}
+
+% Words, and a strut that makes the line 2 pt wider than the text: the spaces and letters can
+% take that in.
+\newcommand{\words}{alfa beta gama delta epsilon zeta eta theta}
+\newlength{\wordswidth}
+\newcommand{\squeezedline}{%
+  \settowidth{\wordswidth}{\words}\rule{\dimexpr\linewidth-\wordswidth+2pt\relax}{0pt} \words}
+
+\begin{document}
+\pagestyle{plain}
+\begin{Large}
+\song{Lines}
+\vers[1]{Fits\\
+\squeezedline}
+
+\vers[2]{\words\ \words\ \words}
+
+\vers{\rec{\words\ \words\ \words\ \words}}
+\end{Large}
+\end{document}
