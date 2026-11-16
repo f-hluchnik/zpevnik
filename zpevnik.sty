@@ -41,12 +41,13 @@
 % \zpscreenorprint{screen}{print}: the first on the screen, the second on paper.
 \newcommand{\zpscreenorprint}[2]{\ifzp@print#2\else#1\fi}
 % The contents (generated/obsah-*.tex, shared-pages/contents.tex). \zpcontentsentry{target}{text}:
-% a link, and on paper also a dotted leader and the page of the target. \noindent: the style's
+% a link, and on paper also a dotted leader and the page of the target; \zpcontentsentry* is the
+% link alone, also on paper (the artist index, D-182). \noindent: the style's
 % negative \parindent would start the line left of its column, and a long title would run into
 % the neighbouring column instead of wrapping inside its own.
-\newcommand{\zpcontentsentry}[2]{%
-  \noindent\hyperlink{#1}{#2}%
-  \zpscreenorprint{}{\nobreak\dotfill\nobreak\makebox[2em][r]{\pageref{zp:#1}}}}
+\NewDocumentCommand{\zpcontentsentry}{s m m}{%
+  \noindent\hyperlink{#2}{#3}%
+  \IfBooleanF{#1}{\zpscreenorprint{}{\nobreak\dotfill\nobreak\makebox[2em][r]{\pageref{zp:#2}}}}}
 
 %PAGE LAYOUT AND NAMED LENGTHS
 % The label (R., 1., I., ...) hangs in the left margin by this much: the first
