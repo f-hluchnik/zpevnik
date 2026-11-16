@@ -212,7 +212,9 @@
 % the right edge of the text. The block is one paragraph (\par first); the lines of its source
 % are counted as \\ is executed (\groupbreak too), \prevgraf is compared with them when the
 % paragraph is finished (\zp@songparagraphend), and every line end records its position. A
-% block with a recitative (\rec) is prose: its lines may wrap. The line penalty and the font
+% block with a recitative (\rec) is prose: its lines may wrap. A block that follows another
+% block in its paragraph (no empty line between them: "\intro{...} \solo{...}") runs in: it
+% goes on with that paragraph and its line. The line penalty and the font
 % expansion are set only when the paragraph is broken into lines (\zp@songparagraphbreak):
 % a footnote's text is typeset inside the paragraph, earlier, and keeps the usual settings.
 \newcommand*{\zp@songlinepenalty}{1000}
@@ -230,9 +232,14 @@
 \newcount\zp@songgroup % the group level of the song paragraph (a footnote's paragraph is deeper)
 \newcount\zp@savedlinepenalty
 \newcount\zp@savedadjustspacing
-\newcommand{\zp@songblock}[2]{\par
+\newif\ifzp@runin
+\newcommand{\zp@startsongparagraph}{\par
   \global\zp@songparagraphtrue \global\zp@prosefalse \global\zp@sourcelines\@ne
-  \zp@songgroup\currentgrouplevel
+  \zp@songgroup\currentgrouplevel}
+\newcommand{\zp@songblock}[2]{%
+  \zp@runinfalse
+  \ifhmode\zp@ifsongparagraph{\zp@runintrue}\fi
+  \ifzp@runin\else\zp@startsongparagraph\fi
   \zp@block[\let\\\zp@songcr \let\zp@blockend\zp@songblockend]{#1}{#2}}
 \def\zp@songcr{\zp@traceline \global\advance\zp@sourcelines\@ne \@normalcr}
 \def\zp@songblockend{\zp@traceline}

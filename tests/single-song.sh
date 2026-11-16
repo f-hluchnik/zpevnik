@@ -107,10 +107,12 @@ text=$(pdftotext -f 1 -l 1 spacing.pdf -)
 ! grep -qx '\.' <<<"$text" || { echo "spacing.tex: unnumbered verse prints a stray label" >&2; exit 1; }
 [ -n "$(word 2 Verse y)" ] && [ "$(word 2 Verse y)" = "$(word 3 Verse y)" ] \
   || { echo "spacing.tex: a separator at the end of a song changed the next song" >&2; exit 1; }
-# A cue after a block stays on its line; after an empty line it is a block of its own with the block gap
+# A cue after a block stays on its line, and so does a block after it; after an empty line it is a block of its own with the block gap
 # (a line pitch is about 22 pt, the gap 20 pt).
 awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 R. y)" 'BEGIN {d = cue - verse; exit !(cue != "" && d > -2 && d < 2)}' \
   || { echo "spacing.tex: a cue after a block is not on the line of the block" >&2; exit 1; }
+[ "$(word 5 Runin y)" = "$(word 5 Verse y)" ] \
+  || { echo "spacing.tex: a block after a block in the same paragraph does not run in" >&2; exit 1; }
 awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 B. y)" 'BEGIN {exit !(cue - verse > 35)}' \
   || { echo "spacing.tex: a cue after an empty line has no block gap" >&2; exit 1; }
 # Labels, standalone cues and speaker names are right-aligned: the dots of "9." and "10." line up, and all texts start at the same place.
