@@ -53,9 +53,9 @@ def index_text(artist: Artist) -> str:
 
 
 def index_entry_tex(artist: Artist) -> str:
-    """An entry of the artist index: a link to the artist's section, without its page on paper
-    (the sections follow on the same pages)."""
-    return f"\\zpcontentslink{{{artist['slug']}}}{{{escape_tex(index_text(artist))}}}"
+    """An entry of the artist index: a link to the artist's section, on paper with its page but
+    without the dotted leader (`\\zpcontentsentry*`, D-182)."""
+    return f"\\zpcontentsentry*{{{artist['slug']}}}{{{escape_tex(index_text(artist))}}}"
 
 
 def index_tex(artists: list[Artist]) -> str:
