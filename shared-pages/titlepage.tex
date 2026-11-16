@@ -1,21 +1,17 @@
-% The shared title page. {} after a macro at the end of a line keeps the line-end
-% space that the centred title and author lines have always ended with.
-\vspace*{5cm}
+% The shared title page, a right-hand page (D-143): the title at the half-title's height, the
+% subtitle under it, and the author, the editors and the years at the foot of the page (D-181).
+\vspace*{\zptitletop}
 \begin{center}
-\begin{Huge}
-	\fontfamily{frc}
-	\selectfont
-	\zpeditiontitle{}
-\end{Huge}
-\ifx\zpeditionsubtitle\empty\else\par\vspace{5mm}{\LARGE\zpeditionsubtitle\par}\fi
-\vspace{1cm}
-
+{\Huge\fontfamily{frc}\selectfont\zpeditiontitle\par}
+\ifx\zpeditionsubtitle\empty\else\vspace{8mm}{\LARGE\zpeditionsubtitle\par}\fi
+\end{center}
+\vfill
+\begin{center}
 \begin{Large}
-\zpbookauthor{}
+\zpbookauthor\par
+\ifx\zpeditioneditors\empty\else\vspace{4mm}\zpeditioneditors\par\fi
 \vspace{4mm}
-
-\ifx\zpeditioneditors\empty\else\zpeditioneditors\par\vspace{4mm}\fi
-\zpbookstartyear--\the\year
+\zpbookstartyear--\the\year\par
 \end{Large}
 \end{center}
 \newpage
