@@ -9,11 +9,12 @@ import tempfile
 import textwrap
 import unittest
 import xml.etree.ElementTree as ElementTree
+import zipfile
 from pathlib import Path
 
-from scores import (ScoreError, StaffPosition, chord_colour, export_svg, is_up_to_date, outputs,
-                    paint_chord_names, placement_tex, remove_page_background, run, staff_position,
-                    system_width_pt)
+from scores import (MSCORE_SCORE_NOT_LOADED, ScoreError, StaffPosition, chord_colour, export_svg,
+                    is_up_to_date, outputs, paint_chord_names, placement_tex, remove_page_background,
+                    run, saved_by, staff_position, system_width_pt)
 
 # 100 SVG units are 10 mm wide, so one unit is 0.1 mm = 0.283465 pt.
 PT_PER_UNIT = 0.1 / 25.4 * 72
@@ -149,12 +150,16 @@ class UpToDateTest(unittest.TestCase):
 class ExportTest(unittest.TestCase):
     """export_svg against a stand-in for MuseScore that writes <name>-<page>.svg like it does."""
 
-    def fake_mscore(self, pages: int) -> str:
+    def fake_mscore(self, pages: int = 1, exit_status: int = 0) -> str:
+        """Writes the pages, or prints a start-up warning and exits with exit_status."""
         script = Path(self.work_dir) / "mscore"
         script.write_text(textwrap.dedent(f"""\
             #!{sys.executable}
             import sys
             from pathlib import Path
+            if {exit_status}:
+                print("AppRun: Using fallback for library 'libjack.so.0'", file=sys.stderr)
+                sys.exit({exit_status})
             out = Path(sys.argv[sys.argv.index("-o") + 1])
             for page in range(1, {pages} + 1):
                 out.with_name(f"{{out.stem}}-{{page}}.svg").write_text("<svg/>")
@@ -175,6 +180,46 @@ class ExportTest(unittest.TestCase):
     def test_more_pages_fail(self):
         with self.assertRaisesRegex(ScoreError, "2 pages"):
             export_svg(self.fake_mscore(2), Path("scores/a.mscz"), Path("style.mss"), self.out_dir)
+
+    def test_a_score_it_cannot_open_names_the_version_that_saved_it(self):
+        score = mscz(Path(self.work_dir) / "a.mscz", "4.7.6")
+        with self.assertRaises(ScoreError) as caught:
+            export_svg(self.fake_mscore(exit_status=MSCORE_SCORE_NOT_LOADED), score, Path("style.mss"),
+                       self.out_dir)
+        message = str(caught.exception)
+        self.assertIn(f"a.mscz failed ({MSCORE_SCORE_NOT_LOADED})", message)
+        self.assertIn("could not open the score, saved by MuseScore 4.7.6", message)
+        self.assertIn("MUSESCORE_URL", message)
+        self.assertNotIn("fallback", message)
+
+    def test_an_unknown_exit_status_keeps_the_output(self):
+        with self.assertRaisesRegex(ScoreError, r"failed \(1\) .*fallback"):
+            export_svg(self.fake_mscore(exit_status=1), Path("scores/a.mscz"), Path("style.mss"),
+                       self.out_dir)
+
+
+def mscz(path: Path, program_version: str) -> Path:
+    """A .mscz as MuseScore writes it: the score at the top level, a part under Excerpts/."""
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr(f"{path.stem}.mscx",
+                         f'<museScore version="4.70"><programVersion>{program_version}</programVersion>')
+        archive.writestr("Excerpts/part/part.mscx", "<programVersion>0.0.1</programVersion>")
+    return path
+
+
+class SavedByTest(unittest.TestCase):
+    def setUp(self):
+        self.work_dir = Path(tempfile.mkdtemp())
+        self.addCleanup(lambda: __import__("shutil").rmtree(self.work_dir))
+
+    def test_the_version_of_the_score_not_of_a_part(self):
+        self.assertEqual(saved_by(mscz(self.work_dir / "a.mscz", "4.6.5")), "4.6.5")
+
+    def test_a_missing_file_or_not_a_zip_has_no_version(self):
+        not_a_zip = self.work_dir / "b.mscz"
+        not_a_zip.write_text("not a zip")
+        self.assertIsNone(saved_by(not_a_zip))
+        self.assertIsNone(saved_by(self.work_dir / "missing.mscz"))
 
 
 class FailureTest(unittest.TestCase):

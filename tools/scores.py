@@ -31,6 +31,7 @@ import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ElementTree
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -64,6 +65,25 @@ SVG_METADATA_TAGS = frozenset(f"{{{SVG_NAMESPACE}}}{name}" for name in ("title",
 MSCORE_STARTUP_NOISE = "qt.qml.typeregistration"
 FAILURE_LINES = 5
 
+# MuseScore's converter exits with its error code (src/converter/convertercodes.h) modulo
+# 256, and for a score it cannot open it prints no reason (checked with 4.6.5). So the
+# message of a known code says what it means instead of quoting the output.
+EXIT_STATUS_RANGE = 256
+MSCORE_CONVERSION_FAILED = 1303 % EXIT_STATUS_RANGE
+MSCORE_SCORE_NOT_LOADED = 1320 % EXIT_STATUS_RANGE
+MSCORE_OUTPUT_NOT_OPENED = 1330 % EXIT_STATUS_RANGE
+MSCORE_OUTPUT_NOT_WRITTEN = 1331 % EXIT_STATUS_RANGE
+MSCORE_EXIT_REASONS = {
+    MSCORE_CONVERSION_FAILED: "the conversion failed",
+    MSCORE_SCORE_NOT_LOADED: "MuseScore could not open the score",
+    MSCORE_OUTPUT_NOT_OPENED: "the output file could not be opened",
+    MSCORE_OUTPUT_NOT_WRITTEN: "the output file could not be written",
+}
+NEWER_VERSION_HINT = ("MuseScore cannot open a score saved by a newer version than itself "
+                      "(the CI's version: MUSESCORE_URL in the workflow)")
+SCORE_FILE_SUFFIX = ".mscx"
+PROGRAM_VERSION = re.compile(r"<programVersion>([^<]+)</programVersion>")
+
 MSCORE_ENVIRONMENT_VARIABLE = "MSCORE"
 MSCORE_COMMANDS = ("mscore4portable", "mscore", "mscore4", "musescore")
 MSCORE_MACOS_APPS = (Path("/Applications/MuseScore 4.app/Contents/MacOS/mscore"),
@@ -81,6 +101,14 @@ ElementTree.register_namespace("xlink", XLINK_NAMESPACE)
 
 class ScoreError(Exception):
     """A score cannot be exported or placed; the message says which and why."""
+
+
+class CommandError(ScoreError):
+    """A program the export runs failed; returncode is its exit status."""
+
+    def __init__(self, message: str, returncode: int):
+        super().__init__(message)
+        self.returncode = returncode
 
 
 @dataclass(frozen=True)
@@ -236,13 +264,41 @@ def run(command: list[str], what: str, extra_environment: dict[str, str] | None 
         raise ScoreError(f"{what}: {command[0]} not found (README, Nastavení lokální kopie)") from error
     if result.returncode != 0:
         details = failure_details(result.stderr + result.stdout)
-        raise ScoreError(f"{what} failed ({result.returncode}) with {command[0]}: {details}")
+        raise CommandError(f"{what} failed ({result.returncode}) with {command[0]}: {details}",
+                           result.returncode)
+
+
+def saved_by(score: Path) -> str | None:
+    """The MuseScore version that saved a .mscz (a zip with the score's .mscx at its top level)."""
+    try:
+        with zipfile.ZipFile(score) as archive:
+            name = next(name for name in archive.namelist()
+                        if name.endswith(SCORE_FILE_SUFFIX) and "/" not in name)
+            match = PROGRAM_VERSION.search(archive.read(name).decode("utf-8", errors="replace"))
+    except (OSError, zipfile.BadZipFile, StopIteration):
+        return None
+    return match.group(1) if match else None
+
+
+def mscore_reason(score: Path, returncode: int) -> str | None:
+    """What MuseScore's exit status means for this score, or None for an unknown status."""
+    reason = MSCORE_EXIT_REASONS.get(returncode)
+    if returncode == MSCORE_SCORE_NOT_LOADED and (version := saved_by(score)):
+        return f"{reason}, saved by MuseScore {version}; {NEWER_VERSION_HINT}"
+    return reason
 
 
 def export_svg(mscore: str, score: Path, style: Path, work_dir: Path) -> Path:
     """Trimmed SVG of a one-page score; MuseScore names the pages <name>-<page>.svg."""
-    run([mscore, "-S", str(style), "-T", "0", "-o", str(work_dir / f"{score.stem}.svg"), str(score)],
-        f"MuseScore export of {score.name}")
+    what = f"MuseScore export of {score.name}"
+    try:
+        run([mscore, "-S", str(style), "-T", "0", "-o", str(work_dir / f"{score.stem}.svg"), str(score)],
+            what)
+    except CommandError as error:
+        reason = mscore_reason(score, error.returncode)
+        if reason is None:
+            raise
+        raise ScoreError(f"{what} failed ({error.returncode}): {reason}") from error
     pages = sorted(work_dir.glob(f"{score.stem}-*.svg"))
     if len(pages) != 1:
         raise ScoreError(f"{score.name}: {len(pages)} pages; a score must be a single page")
