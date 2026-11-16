@@ -147,7 +147,8 @@ jobs:
       # Pull requests only: build the base (the first parent of the merge
       # commit) in the same job with the same TeX Live and report which songs
       # and pages differ, for every edition the base has too (an edition's own
-      # pages are only in its PDF). The report never fails the build.
+      # pages are only in its PDF). The report never fails the build: a base that
+      # cannot be built (a broken master) gives no diff, and the summary says so.
       - name: Check out base for the PDF diff
         id: base
         if: github.event_name == 'pull_request'
@@ -162,7 +163,9 @@ jobs:
           echo "editions=$shared" >> "$GITHUB_OUTPUT"
 
       - name: Generate derived files for base
+        id: base_generate
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         run: |
           for edition in ${{ steps.base.outputs.editions }}; do
             python3 base/tools/generate.py --edition "$edition" base
@@ -171,12 +174,16 @@ jobs:
       # A base with tools/scores.py exports its scores like the head; an older base
       # has the images committed.
       - name: Export scores for base
-        if: github.event_name == 'pull_request'
+        id: base_scores
+        if: github.event_name == 'pull_request' && steps.base_generate.outcome == 'success'
+        continue-on-error: true
         run: if [ -f base/tools/scores.py ]; then xvfb-run -a python3 base/tools/scores.py base; fi
 
       # In the same TeX Live as the head, so the image never shows in the diff.
       - name: Compile base
-        if: github.event_name == 'pull_request'
+        id: base_compile
+        if: github.event_name == 'pull_request' && steps.base_scores.outcome == 'success'
+        continue-on-error: true
         uses: xu-cheng/texlive-action@v2
         with:
           texlive_version: 2023
@@ -192,7 +199,14 @@ jobs:
       # that cannot run is named in the summary, and the other editions are still compared.
       - name: Song-by-song PDF diff
         if: github.event_name == 'pull_request'
+        env:
+          BASE_BUILT: ${{ steps.base_compile.outcome == 'success' }}
         run: |
+          if [ "$BASE_BUILT" != true ]; then
+            printf '## Song-by-song PDF diff\n\nNo diff: the base could not be built (see its steps in the log).\n\n' \
+              | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           for edition in ${{ steps.editions.outputs.names }}; do
             case " ${{ steps.base.outputs.editions }} " in
               *" $edition "*) python3 tools/pdfdiff.py --base base --head . --edition "$edition" \
@@ -270,12 +284,14 @@ jobs:
       # The website holds no PDFs (E6, D-150): its build downloads them from the release
       # named in version.txt. So the release is created first and the version is pushed
       # after it, and the website never points at a release that does not exist yet.
+      # The web's main branch takes changes only through pull requests; the push uses a
+      # deploy key of zpevnik-web (write access), which its ruleset lets bypass (D-150).
       - name: Checkout website repo
         if: github.event_name == 'push'
         uses: actions/checkout@v4
         with:
           repository: f-hluchnik/zpevnik-web
-          token: ${{ secrets.WEBSITE_REPO_TOKEN }}
+          ssh-key: ${{ secrets.WEBSITE_DEPLOY_KEY }}
           path: website
 
       - name: Write version file
