@@ -66,7 +66,7 @@ Smallest text after scaling: footnote text 8 pt → about 5.7 pt and its number 
 ### What the owner decides (P1, recorded as a DECISIONS entry)
 - The **deadline** (17 Nov 2026 was a target for the review rounds, D-148).
 - **Is the scaled text readable on paper?** Print the A4 PDF "2 per sheet" (D-142). No: the geometry trial, on a feature branch.
-- **Colour or black** by the price: `make print FORMAT=print` or `FORMAT=print-black`.
+- **Colour or black** by the price: `make FORMAT=print SIZE=A5` or the same with `COLOR=false` (D-185).
 - **The spine shift** (`--spine-shift-mm`), after the printer's answer to question 1; **the cover** (`--skip-first`, an even number); **the number of copies**.
 - **The proof** (P4), on the final content (the owner's new songs), signed off by the owner.
 

@@ -1,32 +1,71 @@
 # The build targets print the path of what they built; everything goes under build/.
-# make [pdf] [EDITION=<name>] [FORMAT=<name>]  generate the edition's .tex files and the score images, then
-#                              compile build/editions/<name>/zpevnik.pdf (default edition: full);
-#                              FORMAT=print|print-black builds it for paper into build/editions/<name>/<format>/
-#                              (tools/formats.py; default: screen)
-# make print [EDITION=<name>] [FORMAT=<name>] [PRINT_ARGS=...]  build the edition for paper (FORMAT default:
-#               print) and scale it to A5 for a printer: build/editions/<name>/<format>/zpevnik-a5.pdf
-#               (tools/print_pdf.py; PRINT_ARGS="--spine-shift-mm 3 --skip-first 2" are its options)
+# make [pdf] [EDITION=<name>] [FORMAT=screen|print] [COLOR=true|false] [SIZE=A4|A5] [PRINT_ARGS=...]
+#              generate the edition's .tex files and the score images, then compile
+#              build/editions/<name>/zpevnik.pdf (default edition: full). The paper options (D-185):
+#              FORMAT=print   for paper, into build/editions/<name>/print/ (tools/formats.py; default: screen)
+#              COLOR=false    with FORMAT=print: black chords, into .../print-black/ (default: true, red)
+#              SIZE=A5        with FORMAT=print: also scale it to A5 for a printer, zpevnik-a5.pdf next to
+#                             it (tools/print_pdf.py; default: A4). PRINT_ARGS="--spine-shift-mm 3
+#                             --skip-first 2" are its options and need SIZE=A5
+#              Any other value, or a paper option without FORMAT=print, stops make with an error.
 # make generate [EDITION=<name>]  only run the generator (tools/generate.py)
 # make scores   only export the score images from MuseScore into build/scores/
 #               (tools/scores.py; skips scores that are up to date)
 # make song SONG=<id>  build only that song into build/songs/<id>.pdf (tools/build_song.py)
 # make json    build the full book, write build/songs.json for the website (tools/songs_json.py) and
 #              check it against tools/songs.schema.json (tools/validate_songs_json.py)
-# make check [EDITION=<name>] [FORMAT=<name>]  the unit tests, the lints and the converter, then build the edition (which
-#               fails on a link to a missing target) and run the one-page and chord checks on it
+# make check [EDITION=<name>] [paper options]  the unit tests, the lints and the converter, then build the
+#               edition (which fails on a link to a missing target; with SIZE=A5 also the A5 PDF and its
+#               check) and run the one-page and chord checks on it
 # make clean    delete build/
 # PYTHON=<command>  the Python the tools run with (default python3); it must be 3.11 or newer
 EDITION ?= full
 FORMAT ?= screen
+COLOR ?= true
+SIZE ?= A4
 PYTHON ?= python3
 REQUIRED_PYTHON := 3.11
 REQUIREMENTS_DEV := requirements-dev.txt
 
+# The paper options (D-185). The tools know a build by one format name (tools/formats.py):
+# make's FORMAT and COLOR choose it, SIZE only adds the A5 step after it.
+SCREEN_FORMAT := screen
+PRINT_FORMAT := print
+BLACK_PRINT_FORMAT := print-black
+DEFAULT_COLOR := true
+NO_COLOR := false
+DEFAULT_SIZE := A4
+A5_SIZE := A5
+FORMATS := $(SCREEN_FORMAT) $(PRINT_FORMAT)
+COLORS := $(DEFAULT_COLOR) $(NO_COLOR)
+SIZES := $(DEFAULT_SIZE) $(A5_SIZE)
+
+# $(call require-one-of,VARIABLE,values): stop unless the variable is exactly one of the values.
+require-one-of = $(if $(and $(filter 1,$(words $($(1)))),$(filter $($(1)),$(2))),,\
+	$(error $(1)=$($(1)) is not one of: $(2)))
+# $(call require-paper,what): stop unless FORMAT is print.
+require-paper = $(if $(filter $(PRINT_FORMAT),$(FORMAT)),,$(error $(1) needs FORMAT=$(PRINT_FORMAT)))
+
+$(call require-one-of,FORMAT,$(FORMATS))
+$(call require-one-of,COLOR,$(COLORS))
+$(call require-one-of,SIZE,$(SIZES))
+$(if $(filter-out $(DEFAULT_COLOR),$(COLOR)),$(call require-paper,COLOR=$(COLOR)))
+$(if $(filter-out $(DEFAULT_SIZE),$(SIZE)),$(call require-paper,SIZE=$(SIZE)))
+$(if $(PRINT_ARGS),$(if $(filter $(A5_SIZE),$(SIZE)),,$(error PRINT_ARGS are options of the A5 step and need SIZE=$(A5_SIZE))))
+
+# Recursively expanded, so that a target's own FORMAT (json) chooses it too.
+BUILD_FORMAT = $(if $(filter $(NO_COLOR),$(COLOR)),$(BLACK_PRINT_FORMAT),$(FORMAT))
+A5_STEP = $(filter $(A5_SIZE),$(SIZE))
+BUILD_ARGS = --edition $(EDITION) --format $(BUILD_FORMAT)
+# The tool that makes the last file of the build says where it is (--path), so make does not repeat
+# the layout of build/.
+RESULT_TOOL = $(if $(A5_STEP),tools/print_pdf.py,tools/build_edition.py)
+
 # make check prints a heading per step; make and make check end with the path of the PDF.
 step = @printf '\n==> %s\n' '$(1)'
-finish = @printf '\n==> %s\n    %s/%s\n\n' '$(1)' "$(CURDIR)" "$$($(PYTHON) tools/build_edition.py --edition $(EDITION) --format $(FORMAT) --path)"
+finish = @printf '\n==> %s\n    %s/%s\n\n' '$(1)' "$(CURDIR)" "$$($(PYTHON) $(RESULT_TOOL) $(BUILD_ARGS) --path)"
 
-.PHONY: all generate scores compile pdf print song json check check-python check-dev clean
+.PHONY: all generate scores compile pdf song json check check-python check-dev clean
 
 all: pdf
 
@@ -54,21 +93,20 @@ scores: check-python
 	@$(PYTHON) tools/scores.py
 
 compile: generate scores
-	@$(PYTHON) tools/build_edition.py --edition $(EDITION) --format $(FORMAT) > /dev/null
+	@$(PYTHON) tools/build_edition.py $(BUILD_ARGS) > /dev/null
+	$(if $(A5_STEP),@$(PYTHON) tools/print_pdf.py $(BUILD_ARGS) $(PRINT_ARGS) > /dev/null)
 
 pdf: compile
 	$(call finish,The PDF is ready:)
-
-print: FORMAT = print
-print: compile
-	@$(PYTHON) tools/print_pdf.py --edition $(EDITION) --format $(FORMAT) $(PRINT_ARGS)
 
 song: scores
 	@$(PYTHON) tools/build_song.py $(SONG)
 
 # The website is built from the full book only (D-165): its pages are the screen PDF's.
 json: override EDITION = full
-json: override FORMAT = screen
+json: override FORMAT = $(SCREEN_FORMAT)
+json: override COLOR = $(DEFAULT_COLOR)
+json: override SIZE = $(DEFAULT_SIZE)
 json: check-dev compile
 	@$(PYTHON) tools/songs_json.py
 	@$(PYTHON) tools/validate_songs_json.py
@@ -83,9 +121,9 @@ check: check-dev
 	$(call step,Build of the $(EDITION) edition)
 	@$(MAKE) --no-print-directory compile
 	$(call step,Checks of the built edition)
-	@$(PYTHON) tools/check_pages.py --edition $(EDITION) --format $(FORMAT)
-	@$(PYTHON) tools/chord_gaps.py --edition $(EDITION) --format $(FORMAT)
-	@$(PYTHON) tools/song_lines.py --edition $(EDITION) --format $(FORMAT)
+	@$(PYTHON) tools/check_pages.py $(BUILD_ARGS)
+	@$(PYTHON) tools/chord_gaps.py $(BUILD_ARGS)
+	@$(PYTHON) tools/song_lines.py $(BUILD_ARGS)
 	$(call finish,All checks passed. The PDF:)
 
 clean:

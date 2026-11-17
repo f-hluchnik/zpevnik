@@ -66,6 +66,11 @@ class Pdfinfo(unittest.TestCase):
         with self.assertRaises(PrintError):
             page_size("Title: x\n")
 
+    def test_a_missing_pdfinfo_says_what_to_install(self):
+        with mock.patch.object(print_pdf.subprocess, "run", side_effect=FileNotFoundError("pdfinfo")):
+            with self.assertRaisesRegex(PrintError, "pdfinfo not found: install poppler"):
+                print_pdf.pdfinfo(Path("x.pdf"))
+
 
 class Check(unittest.TestCase):
     def check(self, info: str) -> int:
