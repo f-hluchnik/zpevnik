@@ -1,9 +1,9 @@
 # The build targets print the path of what they built; everything goes under build/.
-# make [pdf] [EDITION=<name>] [FORMAT=screen|print] [COLOR=true|false] [SIZE=A4|A5] [PRINT_ARGS=...]
+# make [pdf] [EDITION=<name>] [FORMAT=screen|print] [CHORDS=red|black] [SIZE=A4|A5] [PRINT_ARGS=...]
 #              generate the edition's .tex files and the score images, then compile
 #              build/editions/<name>/zpevnik.pdf (default edition: full). The paper options (D-185):
 #              FORMAT=print   for paper, into build/editions/<name>/print/ (tools/formats.py; default: screen)
-#              COLOR=false    with FORMAT=print: black chords, into .../print-black/ (default: true, red)
+#              CHORDS=black   with FORMAT=print: black chords, into .../print-black/ (default: red)
 #              SIZE=A5        with FORMAT=print: also scale it to A5 for a printer, zpevnik-a5.pdf next to
 #                             it (tools/print_pdf.py; default: A4). PRINT_ARGS="--spine-shift-mm 3
 #                             --skip-first 2" are its options and need SIZE=A5
@@ -21,23 +21,23 @@
 # PYTHON=<command>  the Python the tools run with (default python3); it must be 3.11 or newer
 EDITION ?= full
 FORMAT ?= screen
-COLOR ?= true
+CHORDS ?= red
 SIZE ?= A4
 PYTHON ?= python3
 REQUIRED_PYTHON := 3.11
 REQUIREMENTS_DEV := requirements-dev.txt
 
 # The paper options (D-185). The tools know a build by one format name (tools/formats.py):
-# make's FORMAT and COLOR choose it, SIZE only adds the A5 step after it.
+# make's FORMAT and CHORDS choose it, SIZE only adds the A5 step after it.
 SCREEN_FORMAT := screen
 PRINT_FORMAT := print
 BLACK_PRINT_FORMAT := print-black
-DEFAULT_COLOR := true
-NO_COLOR := false
+DEFAULT_CHORDS := red
+BLACK_CHORDS := black
 DEFAULT_SIZE := A4
 A5_SIZE := A5
 FORMATS := $(SCREEN_FORMAT) $(PRINT_FORMAT)
-COLORS := $(DEFAULT_COLOR) $(NO_COLOR)
+CHORD_COLORS := $(DEFAULT_CHORDS) $(BLACK_CHORDS)
 SIZES := $(DEFAULT_SIZE) $(A5_SIZE)
 
 # $(call require-one-of,VARIABLE,values): stop unless the variable is exactly one of the values.
@@ -47,14 +47,14 @@ require-one-of = $(if $(and $(filter 1,$(words $($(1)))),$(filter $($(1)),$(2)))
 require-paper = $(if $(filter $(PRINT_FORMAT),$(FORMAT)),,$(error $(1) needs FORMAT=$(PRINT_FORMAT)))
 
 $(call require-one-of,FORMAT,$(FORMATS))
-$(call require-one-of,COLOR,$(COLORS))
+$(call require-one-of,CHORDS,$(CHORD_COLORS))
 $(call require-one-of,SIZE,$(SIZES))
-$(if $(filter-out $(DEFAULT_COLOR),$(COLOR)),$(call require-paper,COLOR=$(COLOR)))
+$(if $(filter-out $(DEFAULT_CHORDS),$(CHORDS)),$(call require-paper,CHORDS=$(CHORDS)))
 $(if $(filter-out $(DEFAULT_SIZE),$(SIZE)),$(call require-paper,SIZE=$(SIZE)))
 $(if $(PRINT_ARGS),$(if $(filter $(A5_SIZE),$(SIZE)),,$(error PRINT_ARGS are options of the A5 step and need SIZE=$(A5_SIZE))))
 
 # Recursively expanded, so that a target's own FORMAT (json) chooses it too.
-BUILD_FORMAT = $(if $(filter $(NO_COLOR),$(COLOR)),$(BLACK_PRINT_FORMAT),$(FORMAT))
+BUILD_FORMAT = $(if $(filter $(BLACK_CHORDS),$(CHORDS)),$(BLACK_PRINT_FORMAT),$(FORMAT))
 A5_STEP = $(filter $(A5_SIZE),$(SIZE))
 BUILD_ARGS = --edition $(EDITION) --format $(BUILD_FORMAT)
 # The tool that makes the last file of the build says where it is (--path), so make does not repeat
@@ -105,7 +105,7 @@ song: scores
 # The website is built from the full book only (D-165): its pages are the screen PDF's.
 json: override EDITION = full
 json: override FORMAT = $(SCREEN_FORMAT)
-json: override COLOR = $(DEFAULT_COLOR)
+json: override CHORDS = $(DEFAULT_CHORDS)
 json: override SIZE = $(DEFAULT_SIZE)
 json: check-dev compile
 	@$(PYTHON) tools/songs_json.py

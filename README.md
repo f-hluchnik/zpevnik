@@ -191,7 +191,7 @@ Všechno, co `make` vytvoří, ukládá do složky `build` (necommituje se, `mak
 - `make check` – všechny kontroly najednou: unit testy; kontrola písniček, registru interpretů a definic vydání; převod písniček pro web (hlásí, čemu nerozumí, i s číslem řádku); sestavení s kontrolou odkazů (selže na odkazu, který nikam nevede); jedna stránka na písničku; překrývání akordů; řádky v šířce textu. Chyby kontrolu zastaví, varování jen vypíše.
 - `make song SONG=<id>` – jen jedna písnička do `build/songs/<id>.pdf` (bez obsahu a bez jména interpreta, jako na Overleafu).
 - `make EDITION=<název>`, `make check EDITION=<název>` – jiné vydání (složka `editions/<název>/`, výsledek v `build/editions/<název>/zpevnik.pdf`, viz [Vydání zpěvníku](#vydání-zpěvníku)).
-- `make FORMAT=print` – zpěvník pro papír; `COLOR=false` – černé akordy; `SIZE=A5` – PDF zmenšené na A5 pro tiskárnu (viz [Tisk](#tisk)).
+- `make FORMAT=print` – zpěvník pro papír; `CHORDS=black` – černé akordy; `SIZE=A5` – PDF zmenšené na A5 pro tiskárnu (viz [Tisk](#tisk)).
 - `make generate` – jen generování, `make scores` – jen export not, `make clean` – smaže složku `build`.
 - `make PYTHON=python3.12` – jiný Python než `python3`.
 - Jednotlivé kroky `make check`: `python3 -m unittest discover -s tools` (unit testy nástrojů), `python3 tools/lint.py` (kontrola písniček, registru interpretů a definic vydání), a po `make` ještě `python3 tools/check_pages.py` (jedna stránka na písničku), `python3 tools/chord_gaps.py` (překrývání akordů a akordy v okraji) a `python3 tools/song_lines.py` (zalomené řádky a řádky v okraji). U jiného vydání přidej `--edition <název>`.
@@ -204,7 +204,7 @@ Všechno, co `make` vytvoří, ukládá do složky `build` (necommituje se, `mak
 Pro papír sestavíš zpěvník (i kterékoli vydání) příkazem `make FORMAT=print`. PDF najdeš v `build/editions/<vydání>/print/zpevnik.pdf`, vedle PDF pro obrazovku, které se tím nemění. Na papíře nejde na odkazy kliknout, proto z PDF zmizí odkazy „→ obsah“ za názvem písničky, šipky před jménem interpreta, řádek písmen nad obsahem, odkaz „řazení podle interpretů“ a věta o hypertextových odkazech. Obsah podle písmen, písničky v sekcích interpretů a řádky „→ viz také“ mají místo odkazů čísla stran. Rejstřík interpretů obsahuje jen jména, protože sekce interpretů následují hned za ním ve stejném pořadí. Stránky písniček vypadají stejně jako na obrazovce, takže se každá písnička vejde na jednu stránku; ověří to `make check FORMAT=print`. Formáty definuje `tools/formats.py`.
 
 K `FORMAT=print` patří dvě volby. Bez `FORMAT=print` nebo s jinou hodnotou skončí `make` chybou (D-185):
-- `COLOR=false` – černé akordy pro tisk jednou barvou (výchozí je `COLOR=true`, červené akordy). Mění jen akordy: obrázek na obálce zůstane barevný a šedá jména interpretů šedá. PDF je ve složce `print-black` místo `print`.
+- `CHORDS=black` – černé akordy pro tisk jednou barvou (výchozí je `CHORDS=red`, červené akordy). Mění jen akordy: obrázek na obálce zůstane barevný a šedá jména interpretů šedá. PDF je ve složce `print-black` místo `print`.
 - `SIZE=A5` – PDF zmenšené na A5 pro tiskárnu (výchozí je `SIZE=A4`). `make` sestaví zpěvník pro papír v A4 a zmenší ho do `zpevnik-a5.pdf` vedle něj. Strany A4 a A5 jsou v poměru přesně √2 : 1, takže se každá písnička pořád vejde na jednu stránku. Potřebuje poppler (krok 3 v [Nastavení lokální kopie](#nastavení-lokální-kopie)).
 
 Volby zmenšení na A5 předávej v `PRINT_ARGS` (jen se `SIZE=A5`), například:
