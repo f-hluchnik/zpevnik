@@ -335,4 +335,9 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add version.txt previous-version.txt
           git commit -m "Update songbook to v${{ steps.version.outputs.version }}" || echo "nothing to commit"
+          # The web's main can move while the release is uploaded (a pull request merged then
+          # rejected the push of v8.47.10 on 17 Nov 2026, and a rerun cannot redo a release
+          # whose tag exists). The bot's commit holds only the version files, so it is replayed
+          # on top; a pull request that changed those files too stops here with a conflict.
+          git pull --rebase --quiet
           git push
