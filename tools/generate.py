@@ -96,7 +96,7 @@ def generated_files(entries: list[dict], songs: list[Song], book: Book, edition:
         ARTIST_PART_TEX: (header(f"{REGISTRY_FILE} and {SONGS_SOURCE}")
                           + artist_part_tex([normalise(e) for e in entries], songs)),
         VERSION_TEX: header(SONGS_SOURCE) + f"\\renewcommand{{\\zpversion}}{{{book_version}}}\n",
-        MACROS_TEX: header(edition_source) + macros_tex(book, edition, len(songs)),
+        MACROS_TEX: header(edition_source) + macros_tex(book, edition),
         PAGES_TEX: header(edition_source) + pages_tex(edition),
     }
 
