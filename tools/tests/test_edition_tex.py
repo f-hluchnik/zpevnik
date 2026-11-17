@@ -22,18 +22,17 @@ def edition(name: str, **changes) -> Edition:
 
 class Macros(unittest.TestCase):
     def test_the_base_edition_is_not_derived(self):
-        tex = macros_tex(BOOK, edition("full"), 733)
+        tex = macros_tex(BOOK, edition("full"))
         self.assertIn("\\newif\\ifzpderived\n", tex)
         self.assertNotIn("\\zpderivedtrue", tex)
         self.assertIn("\\newcommand*{\\zpeditionsubtitle}{}\n", tex)
 
     def test_any_other_edition_is_derived_and_has_its_own_facts(self):
-        tex = macros_tex(BOOK, edition("lite", title="Lite & co", subtitle="výběr", editors=("A", "B")), 25)
+        tex = macros_tex(BOOK, edition("lite", title="Lite & co", subtitle="výběr", editors=("A", "B")))
         self.assertIn("\\zpderivedtrue\n", tex)
         self.assertIn("\\newcommand*{\\zpeditiontitle}{Lite \\& co}\n", tex)
         self.assertIn("\\newcommand*{\\zpeditionsubtitle}{výběr}\n", tex)
         self.assertIn("\\newcommand*{\\zpeditioneditors}{A, B}\n", tex)
-        self.assertIn("\\newcommand*{\\zpeditionsongcount}{25}\n", tex)
         self.assertIn("\\newcommand*{\\zpbooktitle}{Ještě mi chvilku zpívej}\n", tex)
 
     def test_the_source_is_printed_without_its_scheme(self):
