@@ -212,6 +212,8 @@ Verze zpěvníku má tři čísla `major.minor.patch` a vypíše ji `python3 too
 - `major.minor` je počet písniček ve složce `songs` + 100 (738 písniček dává 8.38),
 - `patch` je počet commitů v `master` (first-parent) od posledního commitu, který změnil počet písniček. Přidání písničky tedy začíná znovu od 0 a každá další změna číslo zvýší o 1. Počítá se z historie Gitu; bez ní (např. `git clone --depth 1`) vyjde `8.38.?`.
 
+Odkaz „Jaké písničky přibyly?“ na webu vede na porovnání aktuální verze s poslední verzí před poslední změnou počtu písniček (např. `v8.38.46...v8.47.8`); tu vypíše `python3 tools/generate.py --previous-version` a workflow ji zapíše do webu spolu s verzí (D-183).
+
 Existující tag se nikdy nepřepisuje: pokud tag už existuje (jen když se po smazání písniček vrátí počet na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Podrobnosti jsou v komentářích workflow a v `docs/DECISIONS.md` (D-133, D-150).
 
 ## Příkazy
