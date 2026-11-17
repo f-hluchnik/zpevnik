@@ -51,7 +51,7 @@ Písnička je jediný soubor ve složce `songs`. Seznam písniček, obsah (podle
 1. Ve složce `songs` vytvořím soubor s názvem podle názvu písničky. Název souboru se tvoří odebráním diakritiky a mezer z názvu písničky a zapsáním tohoto názvu malými písmeny. Je-li potřeba odlišit dvě písničky se stejným názvem od různých interpretů, učiní se tak přidáním jména interpreta (pokud možno jednoslovně, tedy příjmení nebo název skupiny) za jméno písničky, opět bez mezer a diakritiky, malými písmeny. Název souboru bez `.tex` je `id` písničky. Je možné použít šablonu `song-template.tex` v kořenovém adresáři zpěvníku.
 2. Na řádek s příkazem `\song{}` doplním `\artist{<kotva>}`. Pokud interpret ještě v registru není, přidám ho do `data/artists.toml` (viz [Interpreti a registr interpretů](#interpreti-a-registr-interpretů)).
 3. Přepíšu písničku podle konvencí v části [Přepisování písniček](#přepisování-písniček). Průběžně si ji sestavuji samotnou: `make song SONG=<id>` (například `make song SONG=lonelystranger`) ji za pár sekund zkompiluje do `build/songs/<id>.pdf`, bez obsahu a bez jména interpreta.
-4. Spustím `make check`: unit testy, kontrola písniček a registru interpretů, převod písniček pro web (hlásí, co nerozumí, s číslem řádku), sestavení celého zpěvníku (selže při odkazu, který vede nikam), jedna stránka na písničku a překryv akordů. Nezávažné nálezy (varování) jen vypíše. Celý zpěvník je pak v `build/editions/full/zpevnik.pdf`, kde písničku zkontroluji na jejím místě.
+4. Spustím `make check`: unit testy, kontrola písniček a registru interpretů, převod písniček pro web (hlásí, co nerozumí, s číslem řádku), sestavení celého zpěvníku (selže při odkazu, který vede nikam), jedna stránka na písničku, překryv akordů a řádky, které se nevejdou do šířky textu. Nezávažné nálezy (varování) jen vypíše. Celý zpěvník je pak v `build/editions/full/zpevnik.pdf`, kde písničku zkontroluji na jejím místě.
 5. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 6. Změnu zveřejním přes pull request (viz [Publikování](#publikování)).
 
@@ -80,6 +80,8 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky 
 
 Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Text bloku se píše do složených závorek; řádky odděluje `\\`, skupiny řádků `\groupbreak`. Uvnitř bloku není prázdný řádek a text nekončí `\\` (to by vysázelo prázdný řádek navíc). Číslo je volitelný parametr v hranatých závorkách; prázdný nebo vynechaný parametr znamená bez čísla.
 
+Každý řádek zdroje je v PDF právě jeden řádek, nic se nezalamuje. Řádek, který je o trochu delší než šířka textu, sazba stáhne zúžením mezer mezi slovy. Když ani to nestačí, `make check` selže hláškou `<id>: N line(s) of the source printed as M on p. P` a řádek rozdělím `\\` na místě, kde to dává smysl (u čárky, u rýmu). Totéž platí pro akord na konci řádku: celý se musí vejít do šířky textu, jinak `make check` hlásí `a chord runs X pt into the margin`. Výjimkou je recitativ `\rec{}`: je to próza a jeho řádky se smí zalomit. Bloky napsané za sebou bez prázdného řádku (`\intro{...} \solo{...}`) zůstávají na jednom řádku. Písmena se nezužují; kdyby to někdy bylo potřeba, je to popsané v `docs/DECISIONS.md` (D-183).
+
 | Příkaz | Štítek | Příklad |
 |---|---|---|
 | `\vers{}` | bez štítku (sloka bez čísla) | `\vers{\chord{C}Text}` |
@@ -105,7 +107,7 @@ Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnan�
 | `\rep{}` | označení repetice v textu (znaky `\:` a `:\` nepiš ručně) | `\rep{\chord{C}Text}` |
 | `\ntimes{}` | kolikrát se část hraje nebo zpívá | `\cue{R} \ntimes{2}` → **R.** ×2 |
 | `\echo{}` | ozvěna nebo vokály v pozadí: kurzívou, zvednuté, ve velikosti okolního textu | `srdce \echo{(že na)} svírá` |
-| `\rec{}` | označení recitativu v textu | `\rec{Text}` |
+| `\rec{}` | označení recitativu v textu; je to próza, jeho řádky se smí zalomit | `\rec{Text}` |
 
 `\cue` se chová podle místa: po prázdném řádku je to samostatný blok s mezerou nad sebou a se štítkem zarovnaným jako ostatní štítky, za blokem nebo uvnitř něj se připojí na konec řádku (`\vers[1]{...} \cue{R}`). Odkazuje na poslední část se stejným štítkem napsanou před ním: jsou-li refrény číslované (`\chorus[1]`, `\chorus[2]`), píše se `\cue{R1}`, ne `\cue{R}`.
 
@@ -218,13 +220,13 @@ Existující tag se nikdy nepřepisuje: pokud tag už existuje (jen když se po 
 Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clean` ji smaže). Cíle `make` vypisují jen výsledek a končí cestou k PDF; když kompilace selže, vypíšou první chybu TeXu a cestu k úplnému logu (`build/editions/<vydání>/zpevnik.log`, u jedné písničky `build/songs/<id>.log`). Co který nástroj ve složce `tools/` dělá a kdo ho spouští (`make`, nebo jen GitHub Actions), popisuje [tools/README.md](tools/README.md).
 
 - `make` - vygeneruje seznam písniček, obsah a verzi (do `build/editions/full/generated/`), vyexportuje noty a zkompiluje celý zpěvník do `build/editions/full/zpevnik.pdf`
-- `make check` - všechny kontroly najednou: unit testy, kontrola písniček, registru interpretů a definic vydání, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů
+- `make check` - všechny kontroly najednou: unit testy, kontrola písniček, registru interpretů a definic vydání, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů, řádky písniček v šířce textu
 - `make song SONG=<id>` - jen jedna písnička do `build/songs/<id>.pdf` (bez obsahu a bez jména interpreta, jako na Overleafu)
 - `make EDITION=<název>`, `make check EDITION=<název>` - jiné vydání (složka `editions/<název>/`, výsledek `build/editions/<název>/zpevnik.pdf`)
 - `make EDITION=<název> FORMAT=print` (nebo `print-black`, černé akordy) - vydání pro papír; `make print EDITION=<název>` - PDF zmenšené na A5 pro tiskárnu (viz [Formát pro tisk](#formát-pro-tisk))
 - `make generate` - jen generování, `make scores` - jen export not
 - `make PYTHON=python3.12` - jiný Python než `python3`
-- jednotlivé kroky `make check`: `python3 -m unittest discover -s tools` (unit testy nástrojů), `python3 tools/lint.py` (kontrola písniček, registru interpretů a definic vydání), `python3 tools/check_pages.py` (jedna stránka na písničku, po `make`) a `python3 tools/chord_gaps.py` (překryv akordů, po `make`); u jiného vydání s `--edition <název>`
+- jednotlivé kroky `make check`: `python3 -m unittest discover -s tools` (unit testy nástrojů), `python3 tools/lint.py` (kontrola písniček, registru interpretů a definic vydání), `python3 tools/check_pages.py` (jedna stránka na písničku, po `make`) `python3 tools/chord_gaps.py` (překryv akordů a akordy v okraji, po `make`) a `python3 tools/song_lines.py` (zalomené řádky a řádky v okraji, po `make`); u jiného vydání s `--edition <název>`
 - verze zpěvníku `python3 tools/generate.py --version`
 - vyhledání souboru písničky `ls songs | grep <nazevpisnicky>`
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`

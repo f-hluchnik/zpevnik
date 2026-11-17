@@ -20,7 +20,7 @@ You normally run these through `make` (the main README, *Příkazy*); each also 
 | `songs.schema.json` | the tests, `validate_songs_json.py` | The JSON Schema of `songs.json`, the contract with the website (D-165). A change of the shape changes it and `SCHEMA_VERSION` in `songs_json.py` in the same PR. |
 | `check_pages.py` | `make check`, after the build | Fails if a song takes more than one page, unless `data/multipage-allowlist.txt` lists it. |
 | `chord_gaps.py` | `make check`, after the build | Fails if two chords on the same line overlap or a chord runs into the margin. |
-| `song_lines.py` | `make check`, after the build | Fails if a line of a song wrapped (one line of the source printed as more) or runs into the margin (D-184). |
+| `song_lines.py` | `make check`, after the build | Fails if a line of a song wrapped (one line of the source printed as more) or runs into the margin (D-183). |
 
 ## Commands, run by CI
 

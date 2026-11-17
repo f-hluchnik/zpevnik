@@ -195,12 +195,12 @@
 \newcommand{\zp@block}[3][]{\zp@blockgap\zp@boldlabel{#2}{#1\ignorespaces#3\zp@blockend}}
 \newcommand*{\zp@blockend}{}
 % A song block (verse, chorus, ...; not a remark, which is prose): every line of the source is
-% one printed line (D-184). A line that is too long is squeezed (its spaces shrink) rather
-% than wrapped: a further line costs \zp@songlinepenalty, more than the
-% worst squeezed line (TeX's demerits: a wrap costs at least 2L^2, a squeezed line at most
-% (L+100)^2, so any L above 242 prefers squeezing). A line that still wraps is written to
-% \jobname.lines and tools/song_lines.py fails the build; so does a line whose end is past
-% the right edge of the text. The block is one paragraph (\par first); the lines of its source
+% one printed line (D-183). A line that is too long is squeezed (its spaces shrink) rather
+% than wrapped: a further line costs \zp@songlinepenalty, more than the worst squeezed line
+% (TeX's demerits: a wrap costs at least 2L^2, a squeezed line at most (L+100)^2, so any L
+% above 242 prefers squeezing). A line that still wraps is written to \jobname.lines and
+% tools/song_lines.py fails the build; so does a line whose end is past the right edge of
+% the text. The block starts a paragraph (\zp@startsongparagraph); the lines of its source
 % are counted as \\ is executed (\groupbreak too), \prevgraf is compared with them when the
 % paragraph is finished (\zp@songparagraphend), and every line end records its position. A
 % block with a recitative (\rec) is prose: its lines may wrap. A block that follows another
@@ -296,7 +296,7 @@
 \newcommand{\echo}[1]{%
   \edef\zp@echosize{\f@size}\edef\zp@echoskip{\f@baselineskip}%
   \textsuperscript{\fontsize{\zp@echosize}{\zp@echoskip}\selectfont\emph{#1}}}
-\newcommand{\rec}[1]{\global\zp@prosetrue\textit{rec: }{/#1/}}%recitative (prose: its lines may wrap, D-184)
+\newcommand{\rec}[1]{\global\zp@prosetrue\textit{rec: }{/#1/}}%recitative (prose: its lines may wrap, D-183)
 % A note belongs to the block that follows: that block gets no gap (as after a
 % separator). The note itself has the normal gap above it, except at the start
 % of a song.
@@ -367,7 +367,7 @@
 % The place where chords would overlap is widened; the text does not move
 % otherwise. At the end of a line (before \\, \par, \end or the end of a block) a chord keeps
 % the room by which it is wider than its text, so that it counts in the length of the line: a
-% song line that cannot hold it is squeezed, or fails the build (D-184); a cue after the block
+% song line that cannot hold it is squeezed, or fails the build (D-183); a cue after the block
 % (R., ×2) starts after the chord. \chord reads the text up to the next chord, measures it and
 % returns it unchanged (one pass, nothing is stored in the .aux). This holds in
 % all songs: spaces in the text are not typed by hand, a pause is \gap{n}, a
@@ -457,11 +457,11 @@
 \expandafter\def\expandafter\zp@grabspace\space{%
   \zp@segtoks\expandafter{\the\zp@segtoks\space}\advance\zp@spaces\@ne \zp@trailingspacetrue
   \zp@scan}
-% Inside a box that only measures text: no footnote, and a line break is not counted (D-184).
+% Inside a box that only measures text: no footnote, and a line break is not counted (D-183).
 \def\zp@measuring{\let\footnote\@gobble \let\\\@normalcr}
 % \zp@reach := how far the chord reaches past its text at the end of a line, the text measured
-% at its narrowest (spaces shrunk) and without a space at
-% its end (the end of the line removes it), 0 if the text is wider or is not plain:
+% at its narrowest (spaces shrunk) and without a space at its end (the end of the line
+% removes it), 0 if the text is wider or is not plain:
 % a group can hold chords of its own and a command can be the closing part of \enquote, and
 % measuring them in a box would run or break them; tools/chord_gaps.py fails the build if such
 % a chord runs into the margin.

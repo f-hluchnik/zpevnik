@@ -2,14 +2,14 @@
 """Check that every line of a song is one printed line and ends inside the text.
 
 Every build writes the song blocks (verse, chorus, ...) to <job>.lines (\\zp@songblock in
-zpevnik.sty, D-184), in sp:
+zpevnik.sty, D-183), in sp:
     "block page source printed prose"  per block: its lines in the source, as TeX printed
                                         them, and 1 if it holds a recitative (prose)
     "end page x edge"                   per line end: where the line ends, the right edge
                                         of the text
 A block printed in more lines than its source has a line that wrapped; a recitative may
 wrap. A line whose end is past the edge runs into the margin. A line that is too long is
-squeezed first (spaces and letters); one that still does not fit is a failure for the
+squeezed first (its spaces shrink); one that still does not fit is a failure for the
 person writing the song to solve in the source.
 
 Book mode (default, run after compiling an edition, the full book by default): any wrapped
