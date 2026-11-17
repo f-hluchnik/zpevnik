@@ -30,7 +30,8 @@
 % Font expansion for song lines (D-184): when a line of a song does not fit, the letters of
 % the upright roman text may narrow by up to \zp@lettershrink thousandths besides the spaces
 % shrinking. They never widen (stretch=0). It is switched off for the whole document here and
-% on only while a song block is set (\zp@songblock); no margin protrusion.
+% on, through microtype's own switch, only while a song paragraph is broken into lines
+% (\zp@songparagraphbreak); no margin protrusion.
 \newcommand*{\zp@lettershrink}{20}
 % The right edge of the text block, from the left edge of the page (for \pdflastxpos).
 \newcommand*{\zp@textedge}{\dimexpr1in+\hoffset+\oddsidemargin+\textwidth\relax}
@@ -231,7 +232,6 @@
 \newcount\zp@sourcelines
 \newcount\zp@songgroup % the group level of the song paragraph (a footnote's paragraph is deeper)
 \newcount\zp@savedlinepenalty
-\newcount\zp@savedadjustspacing
 \newif\ifzp@runin
 \newcommand{\zp@startsongparagraph}{\par
   \global\zp@songparagraphtrue \global\zp@prosefalse \global\zp@sourcelines\@ne
@@ -258,15 +258,15 @@
 \newcommand{\zp@ifsongparagraph}[1]{%
   \ifzp@songparagraph\ifnum\currentgrouplevel=\zp@songgroup #1\fi\fi}
 \def\zp@songparagraphbreak{\zp@ifsongparagraph{%
-  \zp@savedlinepenalty\linepenalty \zp@savedadjustspacing\pdfadjustspacing
-  \linepenalty\zp@songlinepenalty\relax \pdfadjustspacing\tw@}}
+  \zp@savedlinepenalty\linepenalty \linepenalty\zp@songlinepenalty\relax
+  \microtypesetup{expansion=true}}}
 \AddToHook{para/end}{\zp@songparagraphbreak}
 \def\zp@songparagraphend{\zp@ifsongparagraph{%
   \global\zp@songparagraphfalse
   \edef\zp@tmp{\write\zp@linetrace{block \noexpand\thepage\space\the\zp@sourcelines\space
     \the\prevgraf\space\ifzp@prose 1\else 0\fi}}%
   \zp@tmp
-  \linepenalty\zp@savedlinepenalty \pdfadjustspacing\zp@savedadjustspacing}}
+  \linepenalty\zp@savedlinepenalty \microtypesetup{expansion=false}}}
 \AddToHook{para/after}{\zp@songparagraphend}
 % The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
 % a number, only the letter is printed. Every label ends with a dot.
