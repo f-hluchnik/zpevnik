@@ -27,18 +27,8 @@
 \RequirePackage{indentfirst}
 % QR codes, drawn by TeX itself (an edition's page to the online songbook).
 \RequirePackage{qrcode}
-% Font expansion for song lines (D-184): when a line of a song does not fit, the letters of
-% the upright roman text may narrow by up to \zp@lettershrink thousandths besides the spaces
-% shrinking. They never widen (stretch=0). It is switched off for the whole document here and
-% on, through microtype's own switch, only while a song paragraph is broken into lines
-% (\zp@songparagraphbreak); no margin protrusion.
-\newcommand*{\zp@lettershrink}{20}
 % The right edge of the text block, from the left edge of the page (for \pdflastxpos).
 \newcommand*{\zp@textedge}{\dimexpr1in+\hoffset+\oddsidemargin+\textwidth\relax}
-\RequirePackage[protrusion=false, expansion=zpsongtext]{microtype}
-\DeclareMicrotypeSet{zpsongtext}{encoding=T1, family=rm*, series=m*, shape=n}
-\SetExpansion[stretch=0, shrink=\zp@lettershrink, step=1]{encoding=T1}{}
-\AtBeginDocument{\microtypesetup{expansion=false}}
 % hyperref goes last: it redefines commands of the packages above
 \RequirePackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true, linkcolor=gray, urlcolor=gray} % a web link looks like a link inside the book
@@ -205,8 +195,8 @@
 \newcommand{\zp@block}[3][]{\zp@blockgap\zp@boldlabel{#2}{#1\ignorespaces#3\zp@blockend}}
 \newcommand*{\zp@blockend}{}
 % A song block (verse, chorus, ...; not a remark, which is prose): every line of the source is
-% one printed line (D-184). A line that is too long is squeezed (spaces, and letters by font
-% expansion) rather than wrapped: a further line costs \zp@songlinepenalty, more than the
+% one printed line (D-184). A line that is too long is squeezed (its spaces shrink) rather
+% than wrapped: a further line costs \zp@songlinepenalty, more than the
 % worst squeezed line (TeX's demerits: a wrap costs at least 2L^2, a squeezed line at most
 % (L+100)^2, so any L above 242 prefers squeezing). A line that still wraps is written to
 % \jobname.lines and tools/song_lines.py fails the build; so does a line whose end is past
@@ -215,9 +205,9 @@
 % paragraph is finished (\zp@songparagraphend), and every line end records its position. A
 % block with a recitative (\rec) is prose: its lines may wrap. A block that follows another
 % block in its paragraph (no empty line between them: "\intro{...} \solo{...}") runs in: it
-% goes on with that paragraph and its line. The line penalty and the font
-% expansion are set only when the paragraph is broken into lines (\zp@songparagraphbreak):
-% a footnote's text is typeset inside the paragraph, earlier, and keeps the usual settings.
+% goes on with that paragraph and its line. The line penalty is set only when the paragraph
+% is broken into lines (\zp@songparagraphbreak): a footnote's text is typeset inside the
+% paragraph, earlier, and keeps the usual one.
 \newcommand*{\zp@songlinepenalty}{1000}
 % \zp@beforeendspace{material}: puts the material before a space that ends the text so far and
 % puts the space back after it: \\ and the end of the paragraph still remove the space, and a
@@ -258,15 +248,14 @@
 \newcommand{\zp@ifsongparagraph}[1]{%
   \ifzp@songparagraph\ifnum\currentgrouplevel=\zp@songgroup #1\fi\fi}
 \def\zp@songparagraphbreak{\zp@ifsongparagraph{%
-  \zp@savedlinepenalty\linepenalty \linepenalty\zp@songlinepenalty\relax
-  \microtypesetup{expansion=true}}}
+  \zp@savedlinepenalty\linepenalty \linepenalty\zp@songlinepenalty\relax}}
 \AddToHook{para/end}{\zp@songparagraphbreak}
 \def\zp@songparagraphend{\zp@ifsongparagraph{%
   \global\zp@songparagraphfalse
   \edef\zp@tmp{\write\zp@linetrace{block \noexpand\thepage\space\the\zp@sourcelines\space
     \the\prevgraf\space\ifzp@prose 1\else 0\fi}}%
   \zp@tmp
-  \linepenalty\zp@savedlinepenalty \microtypesetup{expansion=false}}}
+  \linepenalty\zp@savedlinepenalty}}
 \AddToHook{para/after}{\zp@songparagraphend}
 % The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
 % a number, only the letter is printed. Every label ends with a dot.
@@ -471,7 +460,7 @@
 % Inside a box that only measures text: no footnote, and a line break is not counted (D-184).
 \def\zp@measuring{\let\footnote\@gobble \let\\\@normalcr}
 % \zp@reach := how far the chord reaches past its text at the end of a line, the text measured
-% at its narrowest (spaces shrunk, letters narrowed by font expansion) and without a space at
+% at its narrowest (spaces shrunk) and without a space at
 % its end (the end of the line removes it), 0 if the text is wider or is not plain:
 % a group can hold chords of its own and a command can be the closing part of \enquote, and
 % measuring them in a box would run or break them; tools/chord_gaps.py fails the build if such
@@ -481,8 +470,7 @@
   \ifzp@plaintext
     \sbox\zp@segbox{\zp@measuring\the\zp@segtoks\unskip}%
     \ifzp@trailingspace \advance\zp@spaces\m@ne \fi
-    \zp@reach\dimexpr\wd\zp@chordbox-\wd\zp@segbox+\zp@spaces\fontdimen4\font
-      +\wd\zp@segbox*\zp@lettershrink/1000\relax
+    \zp@reach\dimexpr\wd\zp@chordbox-\wd\zp@segbox+\zp@spaces\fontdimen4\font\relax
     \ifdim\zp@reach<\z@ \zp@reach\z@\fi
   \fi}
 % #1 = 1 when the text ends with another chord on the same line, 2 when the line ends after

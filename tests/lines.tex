@@ -5,18 +5,16 @@
 \documentclass[a4paper, 10pt]{article}
 \usepackage{zpevnik}
 
-% Words, and a strut that makes the line 2 pt wider than the text: the spaces and letters can
-% take that in.
+% Words, and a strut that makes the line 2 pt wider than the text: the spaces can take that in.
 \newcommand{\words}{alfa beta gama delta epsilon zeta eta theta}
 \newlength{\wordswidth}
 \newcommand{\squeezedline}{%
   \settowidth{\wordswidth}{\words}\rule{\dimexpr\linewidth-\wordswidth+2pt\relax}{0pt} \words}
 
-% A footnote's text is prose, typeset with the usual line penalty and without font expansion.
+% A footnote's text is prose, typeset with the usual line penalty.
 \makeatletter
 \newcommand{\checkfootnote}{%
-  \ifnum\linepenalty=\zp@songlinepenalty\relax \PackageError{lines}{footnote text set with the song line penalty}{}\fi
-  \ifnum\pdfadjustspacing>\z@ \PackageError{lines}{footnote text set with font expansion}{}\fi}
+  \ifnum\linepenalty=\zp@songlinepenalty\relax \PackageError{lines}{footnote text set with the song line penalty}{}\fi}
 \makeatother
 
 \begin{document}
