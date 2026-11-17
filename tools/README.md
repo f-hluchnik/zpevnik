@@ -41,7 +41,7 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 | `registry.py` | The artists registry (`data/artists.toml`): loading, defaults and validation. |
 | `edition.py` | The book facts (`data/book.toml`) and the editions (`editions/<name>/edition.toml`): reading, validation and the song selection. |
 | `edition_tex.py` | The generated TeX of an edition's front matter. |
-| `formats.py` | The output formats (`screen`, `print`, `print-black`) and the `--format` argument. The Makefile chooses one from its `FORMAT` and `COLOR` (D-185). |
+| `formats.py` | The output formats (`screen`, `print`, `print-black`) and the `--format` argument. The Makefile chooses one from its `FORMAT` and `CHORDS` (D-185). |
 | `letter_toc.py` | The letter part of the contents. |
 | `artist_toc.py` | The artist part of the contents. |
 | `collation.py` | The Czech collation of song titles. |
