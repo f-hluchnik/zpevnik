@@ -71,7 +71,7 @@ def build_patch(root: Path) -> str:
 
 def previous_version(root: Path) -> str:
     """The version of the newest release before the last change of the song count: the
-    release the website compares the current one with to show the new songs (D-183).
+    release the website compares the current one with to show the new songs (D-184).
     UnknownHistory if Git can't tell (no full history, no release tag before that change)."""
     require_full_history(root)
     before_change = f"{last_count_change(root)}^"
