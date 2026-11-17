@@ -16,9 +16,12 @@ the edge it prints. The first page is a right-hand one. The cover may be handed 
 --skip-first drops that many pages from the start, an even number so that no page changes sides.
 An odd page count gets a blank page at the end.
 
+`--path` prints where the A5 PDF is (made or not), so the Makefile does not repeat the layout of build/.
+
 Usage: python3 tools/print_pdf.py [--edition NAME] [--format NAME] [--skip-first N]
-           [--spine-shift-mm MM] [repo-root]
-       (run after building the format: make EDITION=... FORMAT=...; `make print` does both)
+           [--spine-shift-mm MM | --path] [repo-root]
+       (run after building the format: make EDITION=... FORMAT=print; `make FORMAT=print SIZE=A5`
+       does both)
 Needs pdflatex with pdfpages and pdfinfo (poppler). Python >= 3.11, standard library only.
 """
 import argparse
@@ -41,6 +44,8 @@ DEFAULT_SPINE_SHIFT_MM = 0.0  # the book as it is scaled; the printer's binding 
 PAGES_LINE = re.compile(r"^Pages:\s+(\d+)$", re.M)
 PAGE_SIZE_LINE = re.compile(r"^Page size:\s+([\d.]+) x ([\d.]+) pts", re.M)
 PDFLATEX = ["pdflatex", "-interaction=nonstopmode", "-halt-on-error"]
+PDFINFO = "pdfinfo"
+SETUP_HINT = "(README, Nastavení lokální kopie)"
 
 WRAPPER_PREAMBLE = (r"\documentclass[" + PAPER_OPTION + r"]{article}" + "\n"
                     r"\usepackage{pdfpages}" + "\n"
@@ -94,9 +99,12 @@ def page_size(pdfinfo: str) -> tuple[float, float]:
 
 
 def pdfinfo(pdf: Path) -> str:
-    result = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True, errors="replace")
+    try:
+        result = subprocess.run([PDFINFO, str(pdf)], capture_output=True, text=True, errors="replace")
+    except FileNotFoundError as error:
+        raise PrintError(f"{PDFINFO} not found: install poppler {SETUP_HINT}") from error
     if result.returncode != 0:
-        raise PrintError(f"pdfinfo failed on {pdf}: {result.stderr.strip()}")
+        raise PrintError(f"{PDFINFO} failed on {pdf}: {result.stderr.strip()}")
     return result.stdout
 
 
@@ -112,13 +120,19 @@ def check_print_pdf(pdf: Path) -> int:
     return count
 
 
+def print_pdf_path(edition: str, format_name: str) -> Path:
+    """Where the A5 PDF of the edition's format is, relative to the root: next to the PDF it scales."""
+    return edition_output_dir(edition, format_name) / PRINT_PDF_NAME
+
+
 def make_print_pdf(root: Path, edition: str, format_name: str, skip_first: int,
                    spine_shift_mm: float) -> Path:
     """Scale the built format of the edition to A5; the path of the new PDF, relative to the root."""
     folder = edition_output_dir(edition, format_name)
     source = folder / BOOK_PDF_NAME
     if not (root / source).is_file():
-        raise PrintError(f"{source} is missing: build it first (make EDITION={edition} FORMAT={format_name})")
+        raise PrintError(f"{source} is missing: build it first (make EDITION={edition} FORMAT={PRINT} SIZE=A5 "
+                         "does both; the Makefile lists the options)")
     pages = kept_pages(page_count(pdfinfo(root / source)), skip_first)
     wrapper = folder / PRINT_WRAPPER_NAME
     (root / wrapper).write_text(wrapper_tex(source, pages, spine_shift_mm), encoding="utf-8")
@@ -127,7 +141,7 @@ def make_print_pdf(root: Path, edition: str, format_name: str, skip_first: int,
                     folder / wrapper.with_suffix(".log").name)
     except LatexError as error:
         raise PrintError(str(error)) from error
-    result = folder / PRINT_PDF_NAME
+    result = print_pdf_path(edition, format_name)
     check_print_pdf(root / result)
     return result
 
@@ -142,7 +156,11 @@ def main() -> int:
     parser.add_argument("--spine-shift-mm", type=float, default=DEFAULT_SPINE_SHIFT_MM, metavar="MM",
                         help="move every page this far away from the spine, to widen the margin the "
                              f"binding needs (default: {DEFAULT_SPINE_SHIFT_MM})")
+    parser.add_argument("--path", action="store_true", help="print the path of the A5 PDF and exit")
     args = parser.parse_args()
+    if args.path:
+        print(print_pdf_path(args.edition, args.format))
+        return 0
     try:
         print(make_print_pdf(args.root, args.edition, args.format, args.skip_first, args.spine_shift_mm))
     except PrintError as error:
