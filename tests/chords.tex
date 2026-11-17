@@ -1,7 +1,10 @@
 % Automatic chord spacing: the spacing of every song, \gap, \chords and the chord trace.
 % \chords[sep]{...} narrows one row (the two Ra Rb Rc rows differ in width).
 % A pad that splits a word gets a hyphen, also before an accented letter ("zába - čí").
-% Run through tests/single-song.sh --build: one page, no overlapping chords, the hyphens.
+% A chord at the end of a line keeps its room: \hfill puts the last syllable at the right edge,
+% and its chord, wider than the syllable, must not run into the margin.
+% Run through tests/single-song.sh --build: one page, no overlapping chords, none in the
+% margin, the hyphens.
 \documentclass[a4paper, 10pt]{article}
 \usepackage{zpevnik}
 
@@ -16,6 +19,7 @@
 zá\chord{F\kk m\7}ba\chord{Am\7}čí\\
 \chords{Am F\maj{} G\7}\\
 \chords{Ra Rb Rc}\\
-\chords[0.2em]{Ra Rb Rc}}
+\chords[0.2em]{Ra Rb Rc}\\
+\chord{C}Edge\hfill a\chord{F\kk m\7}}
 \end{Large}
 \end{document}

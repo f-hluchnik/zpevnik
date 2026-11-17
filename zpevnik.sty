@@ -27,6 +27,8 @@
 \RequirePackage{indentfirst}
 % QR codes, drawn by TeX itself (an edition's page to the online songbook).
 \RequirePackage{qrcode}
+% The right edge of the text block, from the left edge of the page (for \pdflastxpos).
+\newcommand*{\zp@textedge}{\dimexpr1in+\hoffset+\oddsidemargin+\textwidth\relax}
 % hyperref goes last: it redefines commands of the packages above
 \RequirePackage[pdftex]{hyperref}
 \hypersetup{colorlinks=true, linkcolor=gray, urlcolor=gray} % a web link looks like a link inside the book
@@ -188,21 +190,87 @@
 \newcommand{\zp@labelindent}{\hspace*{\zp@labelhang}}
 % A block is a labelled paragraph with the block gap above it.
 % \ignorespaces: whether the text starts on a new line of the source must not matter.
-\newcommand{\zp@block}[2]{\zp@blockgap\zp@boldlabel{#1}{\ignorespaces#2}}
+% \zp@blockend marks the end of the block's last line for \chord (a chord there keeps its room).
+% The optional argument is set up inside the block's group, before its text.
+\newcommand{\zp@block}[3][]{\zp@blockgap\zp@boldlabel{#2}{#1\ignorespaces#3\zp@blockend}}
+\newcommand*{\zp@blockend}{}
+% A song block (verse, chorus, ...; not a remark, which is prose): every line of the source is
+% one printed line (D-183). A line that is too long is squeezed (its spaces shrink) rather
+% than wrapped: a further line costs \zp@songlinepenalty, more than the worst squeezed line
+% (TeX's demerits: a wrap costs at least 2L^2, a squeezed line at most (L+100)^2, so any L
+% above 242 prefers squeezing). A line that still wraps is written to \jobname.lines and
+% tools/song_lines.py fails the build; so does a line whose end is past the right edge of
+% the text. The block starts a paragraph (\zp@startsongparagraph); the lines of its source
+% are counted as \\ is executed (\groupbreak too), \prevgraf is compared with them when the
+% paragraph is finished (\zp@songparagraphend), and every line end records its position. A
+% block with a recitative (\rec) is prose: its lines may wrap. A block that follows another
+% block in its paragraph (no empty line between them: "\intro{...} \solo{...}") runs in: it
+% goes on with that paragraph and its line. The line penalty is set only when the paragraph
+% is broken into lines (\zp@songparagraphbreak): a footnote's text is typeset inside the
+% paragraph, earlier, and keeps the usual one.
+\newcommand*{\zp@songlinepenalty}{1000}
+% \zp@beforeendspace{material}: puts the material before a space that ends the text so far and
+% puts the space back after it: \\ and the end of the paragraph still remove the space, and a
+% cue after the block keeps it.
+\newskip\zp@endspace
+\newcommand{\zp@beforeendspace}[1]{%
+  \ifhmode\zp@endspace\lastskip \unskip\else\zp@endspace\z@\fi
+  #1%
+  \ifdim\zp@endspace=\z@\else\hskip\zp@endspace\fi}
+\newif\ifzp@songparagraph
+\newif\ifzp@prose % the song block holds prose (\rec), whose lines may wrap
+\newcount\zp@sourcelines
+\newcount\zp@songgroup % the group level of the song paragraph (a footnote's paragraph is deeper)
+\newcount\zp@savedlinepenalty
+\newif\ifzp@runin
+\newcommand{\zp@startsongparagraph}{\par
+  \global\zp@songparagraphtrue \global\zp@prosefalse \global\zp@sourcelines\@ne
+  \zp@songgroup\currentgrouplevel}
+\newcommand{\zp@songblock}[2]{%
+  \zp@runinfalse
+  \ifhmode\zp@ifsongparagraph{\zp@runintrue}\fi
+  \ifzp@runin\else\zp@startsongparagraph\fi
+  \zp@block[\let\\\zp@songcr \let\zp@blockend\zp@songblockend]{#1}{#2}}
+\def\zp@songcr{\zp@traceline \global\advance\zp@sourcelines\@ne \@normalcr}
+\def\zp@songblockend{\zp@traceline}
+\newwrite\zp@linetrace
+\AtBeginDocument{\immediate\openout\zp@linetrace=\jobname.lines\relax}
+% \jobname.lines: "end page x edge" for the end of every line of a song block (in sp, x from
+% the left edge of the page), "block page source-lines printed-lines prose" for every block.
+% The position is taken before a space at the end of the line (\zp@beforeendspace).
+\def\zp@traceline{\zp@beforeendspace{%
+  \pdfsavepos
+  \edef\zp@tmp{\write\zp@linetrace{end \noexpand\thepage\space\noexpand\the\noexpand\pdflastxpos
+    \space\number\zp@textedge}}%
+  \zp@tmp}}
+% \zp@ifsongparagraph{code}: the code when the paragraph that ends is a song block's own (not
+% a footnote's, which is deeper).
+\newcommand{\zp@ifsongparagraph}[1]{%
+  \ifzp@songparagraph\ifnum\currentgrouplevel=\zp@songgroup #1\fi\fi}
+\def\zp@songparagraphbreak{\zp@ifsongparagraph{%
+  \zp@savedlinepenalty\linepenalty \linepenalty\zp@songlinepenalty\relax}}
+\AddToHook{para/end}{\zp@songparagraphbreak}
+\def\zp@songparagraphend{\zp@ifsongparagraph{%
+  \global\zp@songparagraphfalse
+  \edef\zp@tmp{\write\zp@linetrace{block \noexpand\thepage\space\the\zp@sourcelines\space
+    \the\prevgraf\space\ifzp@prose 1\else 0\fi}}%
+  \zp@tmp
+  \linepenalty\zp@savedlinepenalty}}
+\AddToHook{para/after}{\zp@songparagraphend}
 % The optional number of a part (\chorus[2]) follows its letter: "R2.". Without
 % a number, only the letter is printed. Every label ends with a dot.
 \newcommand*{\zp@number}[1]{\IfNoValueTF{#1}{}{#1}}
 % The text may contain empty lines (+m), as it did with \newcommand.
-\NewDocumentCommand{\chorus}{o +m}{\zp@block{R\zp@number{#1}.}{#2}}
-\NewDocumentCommand{\bridge}{o +m}{\zp@block{B\zp@number{#1}.}{#2}}
-\NewDocumentCommand{\prechorus}{o +m}{\zp@block{P\zp@number{#1}.}{#2}}
-\NewDocumentCommand{\solo}{o +m}{\zp@block{S\zp@number{#1}.}{#2}}
-\newcommand{\intro}[1]{\zp@block{I.}{#1}}
-\newcommand{\coda}[1]{\zp@block{C.}{#1}}
+\NewDocumentCommand{\chorus}{o +m}{\zp@songblock{R\zp@number{#1}.}{#2}}
+\NewDocumentCommand{\bridge}{o +m}{\zp@songblock{B\zp@number{#1}.}{#2}}
+\NewDocumentCommand{\prechorus}{o +m}{\zp@songblock{P\zp@number{#1}.}{#2}}
+\NewDocumentCommand{\solo}{o +m}{\zp@songblock{S\zp@number{#1}.}{#2}}
+\newcommand{\intro}[1]{\zp@songblock{I.}{#1}}
+\newcommand{\coda}[1]{\zp@songblock{C.}{#1}}
 % A verse is numbered "n." by its optional number; without one it has no label
 % and its text is aligned like the others.
 \NewDocumentCommand{\vers}{o +m}{%
-  \zp@block{\IfNoValueTF{#1}{}{\if\relax\detokenize{#1}\relax\else#1.\fi}}{#2}}
+  \zp@songblock{\IfNoValueTF{#1}{}{\if\relax\detokenize{#1}\relax\else#1.\fi}}{#2}}
 % A remark stands alone between the parts and is not sung: italic text in the text column
 % without a label (the structure of a verse, a tuning). It prints as an unnumbered verse
 % of italic text did; the difference is meaning, which the website uses (J6).
@@ -228,7 +296,7 @@
 \newcommand{\echo}[1]{%
   \edef\zp@echosize{\f@size}\edef\zp@echoskip{\f@baselineskip}%
   \textsuperscript{\fontsize{\zp@echosize}{\zp@echoskip}\selectfont\emph{#1}}}
-\newcommand{\rec}[1]{\textit{rec: }{/#1/}}%recitative
+\newcommand{\rec}[1]{\global\zp@prosetrue\textit{rec: }{/#1/}}%recitative (prose: its lines may wrap, D-183)
 % A note belongs to the block that follows: that block gets no gap (as after a
 % separator). The note itself has the normal gap above it, except at the start
 % of a song.
@@ -297,7 +365,10 @@
 % Rule: a chord and its text take max(text width, chord width + \chordsep);
 % between two chords without text the width is chord width + \chordrunsep.
 % The place where chords would overlap is widened; the text does not move
-% otherwise. \chord reads the text up to the next chord, measures it and
+% otherwise. At the end of a line (before \\, \par, \end or the end of a block) a chord keeps
+% the room by which it is wider than its text, so that it counts in the length of the line: a
+% song line that cannot hold it is squeezed, or fails the build (D-183); a cue after the block
+% (R., ×2) starts after the chord. \chord reads the text up to the next chord, measures it and
 % returns it unchanged (one pass, nothing is stored in the .aux). This holds in
 % all songs: spaces in the text are not typed by hand, a pause is \gap{n}, a
 % line of chords only is \chords{...}.
@@ -312,15 +383,20 @@
 \newtoks\zp@segtoks
 \newdimen\zp@pend % gap that the next chord inserts before itself (set by the previous one)
 \newdimen\zp@pad
+\newdimen\zp@reach % how far the chord reaches past the end of its text (at its narrowest)
+\newcount\zp@spaces % spaces in the text
 \newif\ifzp@afterletter
 \newif\ifzp@nextletter
 \newif\ifzp@split % the gap splits a word
-% The position of every chord is written to \jobname.chords for tools/chord_gaps.py.
+\newif\ifzp@plaintext % the text is only characters and spaces (no group, no command)
+\newif\ifzp@trailingspace % the text so far ends with a space
+% The position of every chord is written to \jobname.chords for tools/chord_gaps.py, with
+% the right edge of the text block, so that the check also finds a chord in the margin.
 \newwrite\zp@trace
 \AtBeginDocument{\immediate\openout\zp@trace=\jobname.chords\relax}
 \def\zp@tracechord{%
   \pdfsavepos
-  \edef\zp@tmp{\write\zp@trace{\noexpand\the\noexpand\pdflastxpos\space\noexpand\the\noexpand\pdflastypos\space\noexpand\thepage\space\number\wd\zp@chordbox}}%
+  \edef\zp@tmp{\write\zp@trace{\noexpand\the\noexpand\pdflastxpos\space\noexpand\the\noexpand\pdflastypos\space\noexpand\thepage\space\number\wd\zp@chordbox\space\number\zp@textedge}}%
   \zp@tmp}
 % Is the next token \zp@next a letter (ASCII, or a two-byte UTF-8 one like č, ž, é)?
 % With inputenc a UTF-8 letter is an active character whose meaning starts with the
@@ -351,10 +427,10 @@
   \sbox\zp@chordbox{\textbf{\begin{tabular}[b]{@{}l@{}}\textcolor{\zpchordcolor}{#1}\\
     \mbox{}\end{tabular}}}%
   \zp@pad\zp@pend \global\zp@pend\z@
-  \zp@segtoks{}%
+  \zp@segtoks{}\zp@plaintexttrue \zp@spaces\z@ \zp@trailingspacefalse
   \futurelet\zp@next\zp@chordfirst}
 \def\zp@chordfirst{\zp@testnextletter\zp@scan@}
-% Collects tokens up to the next \chord, \chords, \\, }, \par, \end or \begin.
+% Collects tokens up to the next \chord, \chords, \\, \groupbreak, }, \par, \end or \begin.
 % A group is taken whole, and the scan stops at the end of the group the chord is
 % in: a chord cannot see the next chord past a closing brace (e.g. a chord at the
 % end of \rep{...} and the next one after it). tools/chord_gaps.py fails the build
@@ -366,19 +442,45 @@
   \ifx\zp@next\bgroup \let\zp@do\zp@grabgroup\fi
   \ifx\zp@next\chord \def\zp@do{\zp@finish\@ne}\fi
   \ifx\zp@next\chords \def\zp@do{\zp@finish\z@}\fi
-  \ifx\zp@next\\\def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\\\def\zp@do{\zp@finish\tw@}\fi
+  \ifx\zp@next\groupbreak \def\zp@do{\zp@finish\tw@}\fi
   \ifx\zp@next\egroup \def\zp@do{\zp@finish\z@}\fi
-  \ifx\zp@next\par \def\zp@do{\zp@finish\z@}\fi
-  \ifx\zp@next\end \def\zp@do{\zp@finish\z@}\fi
+  \ifx\zp@next\zp@blockend \def\zp@do{\zp@finish\tw@}\fi
+  \ifx\zp@next\par \def\zp@do{\zp@finish\tw@}\fi
+  \ifx\zp@next\end \def\zp@do{\zp@finish\tw@}\fi
   \ifx\zp@next\begin \def\zp@do{\zp@finish\z@}\fi
   \zp@do}
-\def\zp@grabtok#1{\zp@segtoks\expandafter{\the\zp@segtoks#1}\zp@scan}
-\def\zp@grabgroup#1{\zp@segtoks\expandafter{\the\zp@segtoks{#1}}\zp@scan}
-\expandafter\def\expandafter\zp@grabspace\space{\zp@segtoks\expandafter{\the\zp@segtoks\space}\zp@scan}
-% #1 = 1 when the text ends with another chord on the same line
+\def\zp@grabtok#1{\ifcat\noexpand#1\relax\zp@plaintextfalse\fi \zp@trailingspacefalse
+  \zp@segtoks\expandafter{\the\zp@segtoks#1}\zp@scan}
+\def\zp@grabgroup#1{\zp@plaintextfalse \zp@trailingspacefalse
+  \zp@segtoks\expandafter{\the\zp@segtoks{#1}}\zp@scan}
+\expandafter\def\expandafter\zp@grabspace\space{%
+  \zp@segtoks\expandafter{\the\zp@segtoks\space}\advance\zp@spaces\@ne \zp@trailingspacetrue
+  \zp@scan}
+% Inside a box that only measures text: no footnote, and a line break is not counted (D-183).
+\def\zp@measuring{\let\footnote\@gobble \let\\\@normalcr}
+% \zp@reach := how far the chord reaches past its text at the end of a line, the text measured
+% at its narrowest (spaces shrunk) and without a space at its end (the end of the line
+% removes it), 0 if the text is wider or is not plain:
+% a group can hold chords of its own and a command can be the closing part of \enquote, and
+% measuring them in a box would run or break them; tools/chord_gaps.py fails the build if such
+% a chord runs into the margin.
+\def\zp@measurereach{%
+  \zp@reach\z@
+  \ifzp@plaintext
+    \sbox\zp@segbox{\zp@measuring\the\zp@segtoks\unskip}%
+    \ifzp@trailingspace \advance\zp@spaces\m@ne \fi
+    \zp@reach\dimexpr\wd\zp@chordbox-\wd\zp@segbox+\zp@spaces\fontdimen4\font\relax
+    \ifdim\zp@reach<\z@ \zp@reach\z@\fi
+  \fi}
+% #1 = 1 when the text ends with another chord on the same line, 2 when the line ends after
+% it (\\, \groupbreak, \par, \end, the end of a block), 0 otherwise (the end of a group such as \rep{...}
+% or \enquote{...}, \chords, \begin: more may follow on the line, and the chord stands over it
+% as before).
 \def\zp@finish#1{%
+  \ifnum#1=\tw@ \zp@measurereach \fi
   \ifnum#1=\@ne
-    \sbox\zp@segbox{\let\footnote\@gobble\the\zp@segtoks}% measure without side effects
+    \sbox\zp@segbox{\zp@measuring\the\zp@segtoks}%
     \ifdim\wd\zp@segbox<\zp@notext\relax
       \global\zp@pend\dimexpr\wd\zp@chordbox+\chordrunsep-\wd\zp@segbox\relax
     \else
@@ -393,7 +495,8 @@
   \fi
   \zp@tracechord
   \makebox[0pt][l]{\usebox\zp@chordbox}%
-  \the\zp@segtoks}
+  \the\zp@segtoks
+  \ifnum#1=\tw@ \ifdim\zp@reach>\z@ \zp@beforeendspace{\nobreak\kern\zp@reach}\fi\fi}
 % An intentional gap (pause), #1 characters of \gapunit.
 \newcommand{\gap}[1]{\hspace{\dimexpr\gapunit*#1\relax}}
 % Chords in a line of text without words (intro, end of a line), in red,

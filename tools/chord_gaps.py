@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""Check that no two chords on the same line overlap.
+"""Check that no two chords on the same line overlap and that no chord runs into the margin.
 
 Every build writes the position of each chord to <job>.chords (\\chord does it, see
-zpevnik.sty): one line "x y page width" in sp per chord, in document order. Two
-consecutive chords with the same y on the same page stand on one line; they overlap when
-the second starts before the first one ends.
+zpevnik.sty): one line "x y page width edge" in sp per chord, in document order, where edge
+is the right edge of the text block. Two consecutive chords with the same y on the same page
+stand on one line; they overlap when the second starts before the first one ends. A chord
+whose right end is past the edge runs into the margin, towards the edge of the paper.
 
 Book mode (default, run after compiling an edition, the full book by default): any
-overlap in the book is an error (exit 1).
+overlap or chord in the margin is an error (exit 1).
 
     python3 tools/chord_gaps.py [--edition NAME] [repo-root]
 
-Trace mode: print every overlapping pair of one trace file, exit 1 if there is any.
+Trace mode: print every overlapping pair and chord in the margin of one trace file, exit 1
+if there is any.
 
     python3 tools/chord_gaps.py --trace FILE.chords
 
@@ -22,11 +24,10 @@ import sys
 from pathlib import Path
 from typing import NamedTuple
 
-from check_pages import song_pages
+from check_pages import song_name, song_of_page
 from formats import SCREEN, add_format_argument
 from paths import CHORD_TRACE_NAME, add_edition_argument, add_root_argument, edition_output_dir
-
-SP_PER_PT = 65536
+from positions import SP_PER_PT, past
 
 
 class Chord(NamedTuple):
@@ -34,6 +35,17 @@ class Chord(NamedTuple):
     y: int
     page: int
     width: int
+    edge: int  # the right edge of the text block
+
+    def past_edge(self) -> float:
+        """How far the chord runs past the right edge of the text, in pt (negative: inside)."""
+        return (self.x + self.width - self.edge) / SP_PER_PT
+
+
+class Overhang(NamedTuple):
+    """A chord that runs past the right edge of the text by `amount` pt."""
+    page: int
+    amount: float
 
 
 class Pair(NamedTuple):
@@ -58,9 +70,8 @@ def overlapping(pairs: list[Pair]) -> list[Pair]:
     return sorted(pair for pair in pairs if pair.gap < 0)
 
 
-def song_of_page(output_dir: Path) -> dict[int, str]:
-    songs, _errors = song_pages(output_dir)
-    return {page: song for song, first, count in songs for page in range(first, first + count)}
+def in_margin(chords: list[Chord]) -> list[Overhang]:
+    return sorted(Overhang(c.page, c.past_edge()) for c in chords if past(c.x + c.width, c.edge))
 
 
 def check_book(root: Path, edition: str, format_name: str = SCREEN) -> int:
@@ -68,19 +79,28 @@ def check_book(root: Path, edition: str, format_name: str = SCREEN) -> int:
     chords = read_trace(output_dir / CHORD_TRACE_NAME)
     pairs = same_line_pairs(chords)
     overlaps = overlapping(pairs)
+    overhangs = in_margin(chords)
     song_at = song_of_page(output_dir)
-    print(f"{len(chords)} chords, {len(pairs)} pairs on the same line, {len(overlaps)} overlapping")
+    print(f"{len(chords)} chords, {len(pairs)} pairs on the same line, {len(overlaps)} overlapping, "
+          f"{len(overhangs)} in the margin")
     for pair in overlaps:
-        song = song_at.get(pair.page) or "outside the songs"
-        print(f"ERROR: {song}: chords overlap by {-pair.gap:.2f} pt on p. {pair.page}")
-    return 1 if overlaps else 0
+        print(f"ERROR: {song_name(song_at, pair.page)}: chords overlap by {-pair.gap:.2f} pt "
+              f"on p. {pair.page}")
+    for overhang in overhangs:
+        print(f"ERROR: {song_name(song_at, overhang.page)}: a chord runs {overhang.amount:.2f} pt "
+              f"into the margin on p. {overhang.page}")
+    return 1 if overlaps or overhangs else 0
 
 
 def check_trace(trace: Path) -> int:
-    overlaps = overlapping(same_line_pairs(read_trace(trace)))
+    chords = read_trace(trace)
+    overlaps = overlapping(same_line_pairs(chords))
+    overhangs = in_margin(chords)
     for pair in overlaps:
         print(f"p. {pair.page}: overlap {-pair.gap:.2f} pt")
-    return 1 if overlaps else 0
+    for overhang in overhangs:
+        print(f"p. {overhang.page}: a chord {overhang.amount:.2f} pt in the margin")
+    return 1 if overlaps or overhangs else 0
 
 
 def main() -> int:
