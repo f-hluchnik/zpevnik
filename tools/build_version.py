@@ -6,6 +6,9 @@ since the last commit that changed the song count, so it is the same in CI and i
 local build with the full history. Nothing is stored. Without the full history (no
 Git, no repository, a shallow clone) the patch is UNKNOWN_PATCH, visibly incomplete.
 
+The previous version is the release before that commit (previous_version): the website
+links to the comparison of the two releases, where the songs added since are listed.
+
 Python >= 3.11, standard library only.
 """
 import subprocess
@@ -17,6 +20,7 @@ UNKNOWN_PATCH = "?"
 SONG_PATHSPEC = f"{SONGS_DIR}/*.tex"
 COMMIT_START = "\0"  # starts every commit in the log output (git writes it for %x00)
 ADDED, DELETED = "A", "D"
+RELEASE_TAG_PREFIX = "v"  # a release is tagged v<version> (the CI's release step)
 
 
 class UnknownHistory(Exception):
@@ -49,12 +53,28 @@ def last_count_change(root: Path) -> str:
     raise UnknownHistory
 
 
+def require_full_history(root: Path) -> None:
+    """UnknownHistory unless root is a repository with its full history (not a shallow clone)."""
+    if git(root, "rev-parse", "--is-shallow-repository") != "false\n":
+        raise UnknownHistory
+
+
 def build_patch(root: Path) -> str:
     """Commits since the last change of the song count, or UNKNOWN_PATCH if Git can't tell."""
     try:
-        if git(root, "rev-parse", "--is-shallow-repository") != "false\n":
-            raise UnknownHistory
+        require_full_history(root)
         since = last_count_change(root)
         return git(root, "rev-list", "--first-parent", "--count", f"{since}..HEAD").strip()
     except UnknownHistory:
         return UNKNOWN_PATCH
+
+
+def previous_version(root: Path) -> str:
+    """The version of the newest release before the last change of the song count: the
+    release the website compares the current one with to show the new songs (D-184).
+    UnknownHistory if Git can't tell (no full history, no release tag before that change)."""
+    require_full_history(root)
+    before_change = f"{last_count_change(root)}^"
+    tag = git(root, "describe", "--tags", "--abbrev=0", "--first-parent",
+              f"--match={RELEASE_TAG_PREFIX}*", before_change).strip()
+    return tag.removeprefix(RELEASE_TAG_PREFIX)

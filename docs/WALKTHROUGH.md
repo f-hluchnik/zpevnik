@@ -91,7 +91,7 @@ It carries meaning and no layout: no millimetres, no pixel widths.
 
 ### 5. CI releases it
 
-`.github/workflows/build-and-publish.yml` runs on every pull request and on every push to `master`. In order: list editions, generate, unit tests (309), lint, converter on every song, export the scores with MuseScore, compile every edition (TeX Live 2023), one-page, chord-overlap and song-line checks, build and validate `songs.json`, the test documents, and on pull requests the **song-by-song PDF diff** against the base commit. Only on a push to `master`: compute the version, create the release `v8.38.38` with the PDFs, `songs.json` and `scores.zip`, and then write the version into `version.txt` of `zpevnik-web` and push it. The order matters: the web never points at a release that does not exist yet.
+`.github/workflows/build-and-publish.yml` runs on every pull request and on every push to `master`. In order: list editions, generate, unit tests (309), lint, converter on every song, export the scores with MuseScore, compile every edition (TeX Live 2023), one-page, chord-overlap and song-line checks, build and validate `songs.json`, the test documents, and on pull requests the **song-by-song PDF diff** against the base commit. Only on a push to `master`: compute the version, create the release `v8.38.38` with the PDFs, `songs.json` and `scores.zip`, and then write the version into `version.txt` of `zpevnik-web`, with the release before the song count last changed into `previous-version.txt` (the front page links to the comparison of the two, D-184), and push them. The order matters: the web never points at a release that does not exist yet.
 
 ### 6. `zpevnik-web`: from JSON to HTML
 

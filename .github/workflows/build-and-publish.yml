@@ -236,6 +236,12 @@ jobs:
 
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
+          # The release before the song count last changed: the website's "Jaké písničky
+          # přibyly?" compares it with this one (D-184). Fails here, before anything is
+          # published, if the history has no such release.
+          previous=$(python3 tools/generate.py --previous-version)
+          echo "previous=$previous" >> "$GITHUB_OUTPUT"
+
       # A tag is never overwritten or moved. It exists already only if songs were
       # removed and the song count returned to an earlier value. Checked before
       # anything is published.
@@ -302,9 +308,11 @@ jobs:
           ssh-key: ${{ secrets.WEBSITE_DEPLOY_KEY }}
           path: website
 
-      - name: Write version file
+      - name: Write version files
         if: github.event_name == 'push'
-        run: echo "${{ steps.version.outputs.version }}" > website/version.txt
+        run: |
+          echo "${{ steps.version.outputs.version }}" > website/version.txt
+          echo "${{ steps.version.outputs.previous }}" > website/previous-version.txt
 
       - name: Create GitHub Release
         if: github.event_name == 'push'
@@ -325,6 +333,6 @@ jobs:
         run: |
           git config user.name "songbook-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add version.txt
+          git add version.txt previous-version.txt
           git commit -m "Update songbook to v${{ steps.version.outputs.version }}" || echo "nothing to commit"
           git push
