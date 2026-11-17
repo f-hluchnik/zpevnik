@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from build_version import UNKNOWN_PATCH, build_patch, song_count_change
+from build_version import UNKNOWN_PATCH, UnknownHistory, build_patch, previous_version, song_count_change
 
 
 class SongCountChange(unittest.TestCase):
@@ -18,7 +18,9 @@ class SongCountChange(unittest.TestCase):
         self.assertEqual(song_count_change(["A", "D"]), 0)
 
 
-class BuildPatch(unittest.TestCase):
+class GitRepositoryTestCase(unittest.TestCase):
+    """A throwaway repository on branch main, with helpers to commit and tag."""
+
     def setUp(self):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
@@ -40,6 +42,9 @@ class BuildPatch(unittest.TestCase):
                 path.write_text(text)
         self.git("add", "-A")
         self.git("commit", "-q", "-m", message)
+
+
+class BuildPatch(GitRepositoryTestCase):
 
     def test_counts_commits_since_the_last_change_of_the_song_count(self):
         self.commit("first songs", {"songs/a.tex": "a", "songs/b.tex": "b"})
@@ -96,3 +101,40 @@ class BuildPatch(unittest.TestCase):
             subprocess.run(["git", "clone", "-q", "--depth", "1", f"file://{self.root}", str(clone)],
                            check=True, capture_output=True)
             self.assertEqual(build_patch(clone), UNKNOWN_PATCH)
+
+
+class PreviousVersion(GitRepositoryTestCase):
+    def release(self, message: str, files: dict[str, str | None], version: str) -> None:
+        """Commit files and tag the commit as the release of version."""
+        self.commit(message, files)
+        self.git("tag", f"v{version}")
+
+    def test_is_the_last_release_before_the_song_count_changed(self):
+        self.release("songs", {"songs/a.tex": "a"}, "1.01.0")
+        self.release("edit a song", {"songs/a.tex": "a2"}, "1.01.1")
+        self.release("new song", {"songs/b.tex": "b"}, "1.02.0")
+        self.release("tools", {"notes": "1"}, "1.02.1")
+        self.assertEqual(previous_version(self.root), "1.01.1")
+
+    def test_a_new_song_in_the_commit_being_released_moves_it_on(self):
+        self.release("songs", {"songs/a.tex": "a"}, "1.01.0")
+        self.release("new song", {"songs/b.tex": "b"}, "1.02.0")
+        self.commit("another new song, not released yet", {"songs/c.tex": "c"})
+        self.assertEqual(previous_version(self.root), "1.02.0")
+
+    def test_counts_a_removed_song_as_a_change(self):
+        self.release("songs", {"songs/a.tex": "a", "songs/b.tex": "b"}, "1.02.0")
+        self.release("remove one", {"songs/b.tex": None}, "1.01.0")
+        self.assertEqual(previous_version(self.root), "1.02.0")
+
+    def test_skips_tags_that_are_not_releases(self):
+        self.release("songs", {"songs/a.tex": "a"}, "1.01.0")
+        self.git("tag", "print-proof")
+        self.release("new song", {"songs/b.tex": "b"}, "1.02.0")
+        self.assertEqual(previous_version(self.root), "1.01.0")
+
+    def test_unknown_without_a_release_before_the_change(self):
+        self.commit("songs", {"songs/a.tex": "a"})
+        self.release("new song", {"songs/b.tex": "b"}, "1.02.0")
+        with self.assertRaises(UnknownHistory):
+            previous_version(self.root)

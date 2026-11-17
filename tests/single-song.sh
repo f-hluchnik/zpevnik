@@ -6,11 +6,13 @@
 # Fills DIR with exactly what an Overleaf project has: zpevnik.sty,
 # single-song.tex and the one song it includes, plus artist.tex (the edge
 # cases of \artist), metadata.tex (\alttitle, \toctitle, \collection) and
-# chords.tex (automatic chord spacing) and score.tex (a score without its image).
+# chords.tex (automatic chord spacing), lines.tex (one printed line per line of a song) and
+# score.tex (a score without its image).
 # With --build it also compiles them with pdflatex and checks them: the song
 # takes one page, each page of artist.tex prints the artist links it should,
 # metadata.tex prints none of its metadata, chords.tex has no overlapping
-# chords and a hyphen in each split word, and spacing.tex keeps its separators,
+# chords, no chord in the margin and a hyphen in each split word, lines.tex squeezes the line
+# that is a little too long and reports the one that is far too long, and spacing.tex keeps its separators,
 # unnumbered verses and cues in line, and score.tex shows the score's name.
 # CI runs this script with --build in the pinned TeX Live action; any failed check fails the job.
 set -euo pipefail
@@ -21,7 +23,7 @@ song=$(grep -oP '(?<=\\include\{songs/)[^}]+' "$root/tests/single-song.tex")
 
 rm -rf "$dir"
 mkdir -p "$dir/songs"
-cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$root/tests/chords.tex" "$root/tests/spacing.tex" "$root/tests/score.tex" "$dir/"
+cp "$root/zpevnik.sty" "$root/tests/single-song.tex" "$root/tests/artist.tex" "$root/tests/metadata.tex" "$root/tests/chords.tex" "$root/tests/lines.tex" "$root/tests/spacing.tex" "$root/tests/score.tex" "$dir/"
 cp "$root/songs/$song.tex" "$dir/songs/"
 
 [ "${2:-}" = "--build" ] || exit 0
@@ -67,11 +69,11 @@ for t in "other title" "Metadata test (TOC)" "filmy" "break"; do
 done
 echo "metadata OK"
 
-# Automatic chord spacing: no chords overlap on the page; \gap and \chords print their text.
+# Automatic chord spacing: no chords overlap or run into the margin; \gap and \chords print their text.
 pdflatex -interaction=nonstopmode -halt-on-error chords.tex >/dev/null
 [ "$(pdfinfo chords.pdf | awk '/^Pages:/ {print $2}')" = 1 ] || { echo "chords.tex: expected 1 page" >&2; exit 1; }
 python3 "$root/tools/chord_gaps.py" --trace chords.chords >/dev/null \
-  || { echo "chords.tex: chords overlap" >&2; exit 1; }
+  || { echo "chords.tex: chords overlap or run into the margin" >&2; exit 1; }
 text=$(pdftotext -f 1 -l 1 chords.pdf -)
 grep -qF "Pause" <<<"$text" && grep -qF "here" <<<"$text" || { echo "chords.tex: lyrics missing" >&2; exit 1; }
 # A pad inside a word holds a hyphen, also before an accented (two-byte UTF-8) letter.
@@ -84,6 +86,13 @@ ends=$(pdftotext -f 1 -l 1 -bbox chords.pdf - | awk -F'"' '/>Rc</ {print $6}')
 [ "$(wc -l <<<"$ends")" = 2 ] && awk -v a="$(head -1 <<<"$ends")" -v b="$(tail -1 <<<"$ends")" 'BEGIN {exit !(b+0 < a-5)}' \
   || { echo "chords.tex: \\chords[0.2em] should be narrower than \\chords" >&2; exit 1; }
 echo "chords OK"
+
+# One printed line per line of a song: only the second verse of lines.tex wraps.
+pdflatex -interaction=nonstopmode -halt-on-error lines.tex >/dev/null
+report=$(python3 "$root/tools/song_lines.py" --trace lines.lines || true)
+[ "$report" = "1 line(s) of the source printed as 2 on p. 1" ] \
+  || { echo "lines.tex: expected only the second verse to wrap, got: $report" >&2; exit 1; }
+echo "lines OK"
 
 # Vertical spacing: \vers{...} prints no label but the text starts where a labelled one does;
 # a separator at the end of a song does not swallow the first gap of the next song (\song resets it).
@@ -98,10 +107,12 @@ text=$(pdftotext -f 1 -l 1 spacing.pdf -)
 ! grep -qx '\.' <<<"$text" || { echo "spacing.tex: unnumbered verse prints a stray label" >&2; exit 1; }
 [ -n "$(word 2 Verse y)" ] && [ "$(word 2 Verse y)" = "$(word 3 Verse y)" ] \
   || { echo "spacing.tex: a separator at the end of a song changed the next song" >&2; exit 1; }
-# A cue after a block stays on its line; after an empty line it is a block of its own with the block gap
+# A cue after a block stays on its line, and so does a block after it; after an empty line it is a block of its own with the block gap
 # (a line pitch is about 22 pt, the gap 20 pt).
 awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 R. y)" 'BEGIN {d = cue - verse; exit !(cue != "" && d > -2 && d < 2)}' \
   || { echo "spacing.tex: a cue after a block is not on the line of the block" >&2; exit 1; }
+[ "$(word 5 Runin y)" = "$(word 5 Verse y)" ] \
+  || { echo "spacing.tex: a block after a block in the same paragraph does not run in" >&2; exit 1; }
 awk -v verse="$(word 5 Verse y)" -v cue="$(word 5 B. y)" 'BEGIN {exit !(cue - verse > 35)}' \
   || { echo "spacing.tex: a cue after an empty line has no block gap" >&2; exit 1; }
 # Labels, standalone cues and speaker names are right-aligned: the dots of "9." and "10." line up, and all texts start at the same place.

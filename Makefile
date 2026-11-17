@@ -85,6 +85,7 @@ check: check-dev
 	$(call step,Checks of the built edition)
 	@$(PYTHON) tools/check_pages.py --edition $(EDITION) --format $(FORMAT)
 	@$(PYTHON) tools/chord_gaps.py --edition $(EDITION) --format $(FORMAT)
+	@$(PYTHON) tools/song_lines.py --edition $(EDITION) --format $(FORMAT)
 	$(call finish,All checks passed. The PDF:)
 
 clean:

@@ -52,12 +52,18 @@ def index_text(artist: Artist) -> str:
     return artist["label"] if artist["kind"] == COLLECTION else artist["name"]
 
 
+def index_entry_tex(artist: Artist) -> str:
+    """An entry of the artist index: a link to the artist's section, without the dotted leader
+    and the page on paper (`\\zpcontentsentry*`, D-182)."""
+    return f"\\zpcontentsentry*{{{artist['slug']}}}{{{escape_tex(index_text(artist))}}}"
+
+
 def index_tex(artists: list[Artist]) -> str:
     """The artist index: the link target of the letter part and one line per artist."""
     lines = [link_target(ARTIST_INDEX_ANCHOR) + "\n",
              "\\begin{Large}\n",
              f"\\begin{{multicols}}{{{COLUMNS}}}\\raggedright\n"]
-    lines += [entry_tex(a["slug"], escape_tex(index_text(a))) + "\\par\n" for a in artists]
+    lines += [index_entry_tex(a) + "\\par\n" for a in artists]
     lines.append("\\end{multicols}\n\\end{Large}\n")
     return "".join(lines)
 

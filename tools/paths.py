@@ -28,6 +28,7 @@ PRINT_PDF_NAME = "zpevnik-a5.pdf"       # ... and the PDF it makes, next to the 
 BOOK_AUX_NAME = "zpevnik.aux"           # its main auxiliary file, which lists every \include
 BOOK_LOG_NAME = "zpevnik.log"           # the log of its last LaTeX run
 CHORD_TRACE_NAME = "zpevnik.chords"     # written by every build, see \chord in zpevnik.sty
+LINE_TRACE_NAME = "zpevnik.lines"       # written by every build, see \zp@songblock in zpevnik.sty
 SINGLE_SONG_TEMPLATE = Path("tests/single-song.tex")
 STYLE_FILE = Path("zpevnik.sty")
 SCORES_DIR = Path("scores")              # MuseScore sources, one .mscz per image

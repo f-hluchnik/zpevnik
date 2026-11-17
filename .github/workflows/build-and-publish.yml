@@ -115,11 +115,19 @@ jobs:
           done
 
       # Chord positions are written by every build (zpevnik.chords next to the PDF).
-      # Any overlap in any edition fails.
+      # Any overlap or chord in the margin in any edition fails.
       - name: Check chord overlaps
         run: |
           for edition in ${{ steps.editions.outputs.names }}; do
             python3 tools/chord_gaps.py --edition "$edition"
+          done
+
+      # Every line of a song is one printed line inside the text (D-183): the song blocks are
+      # written by every build (zpevnik.lines next to the PDF). A wrapped line fails.
+      - name: Check song lines
+        run: |
+          for edition in ${{ steps.editions.outputs.names }}; do
+            python3 tools/song_lines.py --edition "$edition"
           done
 
       # The website's data (J4, D-165): songs.json is written from the full book just compiled
@@ -132,11 +140,11 @@ jobs:
         run: '"$RUNNER_TEMP/venv/bin/python" tools/validate_songs_json.py'
 
       # Overleaf setup: zpevnik.sty and one song, nothing else. The script builds
-      # the five test documents (single song, \artist, metadata, chords, spacing)
+      # the test documents (single song, \artist, metadata, chords, lines, spacing, score)
       # and checks what they print; a failed check fails the job. It needs bash, a
       # GNU grep (-P), poppler (pdfinfo, pdftotext) and python3, which the
       # Alpine-based TeX Live image may lack, hence the apk line.
-      - name: Test documents (single song, artist, metadata, chords, spacing)
+      - name: Test documents (single song, artist, metadata, chords, lines, spacing, score)
         uses: xu-cheng/texlive-action@v2
         with:
           texlive_version: 2023
@@ -228,6 +236,12 @@ jobs:
 
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
+          # The release before the song count last changed: the website's "Jaké písničky
+          # přibyly?" compares it with this one (D-184). Fails here, before anything is
+          # published, if the history has no such release.
+          previous=$(python3 tools/generate.py --previous-version)
+          echo "previous=$previous" >> "$GITHUB_OUTPUT"
+
       # A tag is never overwritten or moved. It exists already only if songs were
       # removed and the song count returned to an earlier value. Checked before
       # anything is published.
@@ -294,9 +308,11 @@ jobs:
           ssh-key: ${{ secrets.WEBSITE_DEPLOY_KEY }}
           path: website
 
-      - name: Write version file
+      - name: Write version files
         if: github.event_name == 'push'
-        run: echo "${{ steps.version.outputs.version }}" > website/version.txt
+        run: |
+          echo "${{ steps.version.outputs.version }}" > website/version.txt
+          echo "${{ steps.version.outputs.previous }}" > website/previous-version.txt
 
       - name: Create GitHub Release
         if: github.event_name == 'push'
@@ -317,6 +333,11 @@ jobs:
         run: |
           git config user.name "songbook-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add version.txt
+          git add version.txt previous-version.txt
           git commit -m "Update songbook to v${{ steps.version.outputs.version }}" || echo "nothing to commit"
+          # The web's main can move while the release is uploaded (a pull request merged then
+          # rejected the push of v8.47.10 on 17 Nov 2026, and a rerun cannot redo a release
+          # whose tag exists). The bot's commit holds only the version files, so it is replayed
+          # on top; a pull request that changed those files too stops here with a conflict.
+          git pull --rebase --quiet
           git push

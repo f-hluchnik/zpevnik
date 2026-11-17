@@ -19,7 +19,8 @@ You normally run these through `make` (the main README, *Příkazy*); each also 
 | `validate_songs_json.py` | `make json`, CI | Checks the whole `build/songs.json` against `songs.schema.json` and prints where it breaks the contract (D-166). The only tool that needs `jsonschema`. |
 | `songs.schema.json` | the tests, `validate_songs_json.py` | The JSON Schema of `songs.json`, the contract with the website (D-165). A change of the shape changes it and `SCHEMA_VERSION` in `songs_json.py` in the same PR. |
 | `check_pages.py` | `make check`, after the build | Fails if a song takes more than one page, unless `data/multipage-allowlist.txt` lists it. |
-| `chord_gaps.py` | `make check`, after the build | Fails if two chords on the same line overlap. |
+| `chord_gaps.py` | `make check`, after the build | Fails if two chords on the same line overlap or a chord runs into the margin. |
+| `song_lines.py` | `make check`, after the build | Fails if a line of a song wrapped (one line of the source printed as more) or runs into the margin (D-183). |
 
 ## Commands, run by CI
 
@@ -35,6 +36,7 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 | Module | What it holds |
 |---|---|
 | `paths.py` | Where things live in the repository, and the `--edition` and `repo-root` arguments the commands share. |
+| `positions.py` | The positions TeX records for the checks (`chord_gaps.py`, `song_lines.py`): sp per pt and their rounding. |
 | `songs.py` | Reading `songs/*.tex` with the converter (`songbook/`, the one reader of the songs, D-164); `published()` leaves the hidden songs out. |
 | `registry.py` | The artists registry (`data/artists.toml`): loading, defaults and validation. |
 | `edition.py` | The book facts (`data/book.toml`) and the editions (`editions/<name>/edition.toml`): reading, validation and the song selection. |
@@ -46,7 +48,7 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 | `tex_text.py` | Escaping plain text as TeX. |
 | `songbook/` | The converter (D-164): reads a song into an in-memory model, strictly. A package: `lexer`, `stream`, `grammar` (every command a song may use), `parser` (the song level), `inline` (lines, chords, text), `chords`, `model`, `dump` (the model as JSON for reading and snapshots), `export` (a song in the shape of songs.json), `errors`. |
 | `allowlist.py` | Reading a list of song ids (`data/hidden.txt`, `data/multipage-allowlist.txt`, `data/no-chords-allowlist.txt`). |
-| `build_version.py` | The patch number of the version, counted from the Git history. |
+| `build_version.py` | The patch number of the version, and the release before the last change of the song count (the website's comparison), both from the Git history. |
 
 The data the tools read (the registry, the book facts, the hidden songs and the two allow-lists) lives in `data/`, not here.
 

@@ -32,7 +32,7 @@ Zpěvník (celý i jednotlivá vydání) se dá sestavit na vlastním počítač
    Aktivaci (`source .venv/bin/activate`) opakuji v každém novém terminálu, ve kterém spouštím `make`. `make` si verzi Pythonu zkontroluje a u starší skončí srozumitelnou chybou; jiný Python mu mohu zadat i napřímo: `make PYTHON=python3.12`.
 3. TeX Live s češtinou, `latexmk` a několik balíků (`csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `cm-super`, `musixtex-fonts` pro křížky a béčka v akordech). GitHub Actions kompiluje s TeX Live 2023; novější verze funguje také, výsledek se jen může mírně lišit, rozhodující je vždy GitHub Actions.
    - **Linux (Debian, Ubuntu):** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music latexmk poppler-utils`. `poppler-utils` je na kontrolu stran a porovnání PDF (`tools/check_pages.py`, `tools/pdfdiff.py`).
-   - **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref cm-super musixtex-fonts latexmk`.
+   - **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a po něm `sudo tlmgr update --self` a `sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref qrcode cm-super musixtex-fonts latexmk`.
 4. Noty se exportují z MuseScoru (viz [Noty](#noty)), takže `make` potřebuje ještě tři věci:
    - **MuseScore 4.6.5.** Stejnou verzi používá GitHub Actions; jiná verze může změnit rozvržení not, a tím i to, jestli se písnička vejde na jednu stranu. Stáhnu ji ze [stránky vydání 4.6.5](https://github.com/musescore/MuseScore/releases/tag/v4.6.5). Na macOS nainstalovanou aplikaci v `/Applications` najde `make` sám; leží-li jinde nebo je nainstalováno víc verzí, dám cestu k programu `mscore` do proměnné `MSCORE`, například `export MSCORE="/Applications/MuseScore 4.app/Contents/MacOS/mscore"`. Na Linuxu je to AppImage (cestu k němu dám do `MSCORE`; na stroji bez displeje se spouští přes `xvfb-run`).
    - **`rsvg-convert`** (převod SVG na PDF): `brew install librsvg` nebo `sudo apt-get install librsvg2-bin`.
@@ -51,7 +51,7 @@ Písnička je jediný soubor ve složce `songs`. Seznam písniček, obsah (podle
 1. Ve složce `songs` vytvořím soubor s názvem podle názvu písničky. Název souboru se tvoří odebráním diakritiky a mezer z názvu písničky a zapsáním tohoto názvu malými písmeny. Je-li potřeba odlišit dvě písničky se stejným názvem od různých interpretů, učiní se tak přidáním jména interpreta (pokud možno jednoslovně, tedy příjmení nebo název skupiny) za jméno písničky, opět bez mezer a diakritiky, malými písmeny. Název souboru bez `.tex` je `id` písničky. Je možné použít šablonu `song-template.tex` v kořenovém adresáři zpěvníku.
 2. Na řádek s příkazem `\song{}` doplním `\artist{<kotva>}`. Pokud interpret ještě v registru není, přidám ho do `data/artists.toml` (viz [Interpreti a registr interpretů](#interpreti-a-registr-interpretů)).
 3. Přepíšu písničku podle konvencí v části [Přepisování písniček](#přepisování-písniček). Průběžně si ji sestavuji samotnou: `make song SONG=<id>` (například `make song SONG=lonelystranger`) ji za pár sekund zkompiluje do `build/songs/<id>.pdf`, bez obsahu a bez jména interpreta.
-4. Spustím `make check`: unit testy, kontrola písniček a registru interpretů, převod písniček pro web (hlásí, co nerozumí, s číslem řádku), sestavení celého zpěvníku (selže při odkazu, který vede nikam), jedna stránka na písničku a překryv akordů. Nezávažné nálezy (varování) jen vypíše. Celý zpěvník je pak v `build/editions/full/zpevnik.pdf`, kde písničku zkontroluji na jejím místě.
+4. Spustím `make check`: unit testy, kontrola písniček a registru interpretů, převod písniček pro web (hlásí, co nerozumí, s číslem řádku), sestavení celého zpěvníku (selže při odkazu, který vede nikam), jedna stránka na písničku, překryv akordů a řádky, které se nevejdou do šířky textu. Nezávažné nálezy (varování) jen vypíše. Celý zpěvník je pak v `build/editions/full/zpevnik.pdf`, kde písničku zkontroluji na jejím místě.
 5. Zkontroluji přepsanou písničku nejlépe tím, že si ji přehraji.
 6. Změnu zveřejním přes pull request (viz [Publikování](#publikování)).
 
@@ -80,6 +80,8 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Tyto řádky 
 
 Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Text bloku se píše do složených závorek; řádky odděluje `\\`, skupiny řádků `\groupbreak`. Uvnitř bloku není prázdný řádek a text nekončí `\\` (to by vysázelo prázdný řádek navíc). Číslo je volitelný parametr v hranatých závorkách; prázdný nebo vynechaný parametr znamená bez čísla.
 
+Každý řádek zdroje je v PDF právě jeden řádek, nic se nezalamuje. Řádek, který je o trochu delší než šířka textu, sazba stáhne zúžením mezer mezi slovy. Když ani to nestačí, `make check` selže hláškou `<id>: N line(s) of the source printed as M on p. P` a řádek rozdělím `\\` na místě, kde to dává smysl (u čárky, u rýmu). Totéž platí pro akord na konci řádku: celý se musí vejít do šířky textu, jinak `make check` hlásí `a chord runs X pt into the margin`. Výjimkou je recitativ `\rec{}`: je to próza a jeho řádky se smí zalomit. Bloky napsané za sebou bez prázdného řádku (`\intro{...} \solo{...}`) zůstávají na jednom řádku. Písmena se nezužují; kdyby to někdy bylo potřeba, je to popsané v `docs/DECISIONS.md` (D-183).
+
 | Příkaz | Štítek | Příklad |
 |---|---|---|
 | `\vers{}` | bez štítku (sloka bez čísla) | `\vers{\chord{C}Text}` |
@@ -105,7 +107,7 @@ Všechny štítky (`1.`, `R.`, `I.`, `S.`, ...) končí tečkou a jsou zarovnan�
 | `\rep{}` | označení repetice v textu (znaky `\:` a `:\` nepiš ručně) | `\rep{\chord{C}Text}` |
 | `\ntimes{}` | kolikrát se část hraje nebo zpívá | `\cue{R} \ntimes{2}` → **R.** ×2 |
 | `\echo{}` | ozvěna nebo vokály v pozadí: kurzívou, zvednuté, ve velikosti okolního textu | `srdce \echo{(že na)} svírá` |
-| `\rec{}` | označení recitativu v textu | `\rec{Text}` |
+| `\rec{}` | označení recitativu v textu; je to próza, jeho řádky se smí zalomit | `\rec{Text}` |
 
 `\cue` se chová podle místa: po prázdném řádku je to samostatný blok s mezerou nad sebou a se štítkem zarovnaným jako ostatní štítky, za blokem nebo uvnitř něj se připojí na konec řádku (`\vers[1]{...} \cue{R}`). Odkazuje na poslední část se stejným štítkem napsanou před ním: jsou-li refrény číslované (`\chorus[1]`, `\chorus[2]`), píše se `\cue{R1}`, ne `\cue{R}`.
 
@@ -212,19 +214,21 @@ Verze zpěvníku má tři čísla `major.minor.patch` a vypíše ji `python3 too
 - `major.minor` je počet písniček ve složce `songs` + 100 (738 písniček dává 8.38),
 - `patch` je počet commitů v `master` (first-parent) od posledního commitu, který změnil počet písniček. Přidání písničky tedy začíná znovu od 0 a každá další změna číslo zvýší o 1. Počítá se z historie Gitu; bez ní (např. `git clone --depth 1`) vyjde `8.38.?`.
 
+Odkaz „Jaké písničky přibyly?“ na webu vede na porovnání aktuální verze s poslední verzí před poslední změnou počtu písniček (např. `v8.38.46...v8.47.8`); tu vypíše `python3 tools/generate.py --previous-version` a workflow ji zapíše do webu spolu s verzí (D-184).
+
 Existující tag se nikdy nepřepisuje: pokud tag už existuje (jen když se po smazání písniček vrátí počet na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Podrobnosti jsou v komentářích workflow a v `docs/DECISIONS.md` (D-133, D-150).
 
 ## Příkazy
 Všechno, co `make` vytvoří, je ve složce `build` (necommituje se, `make clean` ji smaže). Cíle `make` vypisují jen výsledek a končí cestou k PDF; když kompilace selže, vypíšou první chybu TeXu a cestu k úplnému logu (`build/editions/<vydání>/zpevnik.log`, u jedné písničky `build/songs/<id>.log`). Co který nástroj ve složce `tools/` dělá a kdo ho spouští (`make`, nebo jen GitHub Actions), popisuje [tools/README.md](tools/README.md).
 
 - `make` - vygeneruje seznam písniček, obsah a verzi (do `build/editions/full/generated/`), vyexportuje noty a zkompiluje celý zpěvník do `build/editions/full/zpevnik.pdf`
-- `make check` - všechny kontroly najednou: unit testy, kontrola písniček, registru interpretů a definic vydání, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů
+- `make check` - všechny kontroly najednou: unit testy, kontrola písniček, registru interpretů a definic vydání, sestavení s kontrolou odkazů, jedna stránka na písničku, překryv akordů, řádky písniček v šířce textu
 - `make song SONG=<id>` - jen jedna písnička do `build/songs/<id>.pdf` (bez obsahu a bez jména interpreta, jako na Overleafu)
 - `make EDITION=<název>`, `make check EDITION=<název>` - jiné vydání (složka `editions/<název>/`, výsledek `build/editions/<název>/zpevnik.pdf`)
 - `make EDITION=<název> FORMAT=print` (nebo `print-black`, černé akordy) - vydání pro papír; `make print EDITION=<název>` - PDF zmenšené na A5 pro tiskárnu (viz [Formát pro tisk](#formát-pro-tisk))
 - `make generate` - jen generování, `make scores` - jen export not
 - `make PYTHON=python3.12` - jiný Python než `python3`
-- jednotlivé kroky `make check`: `python3 -m unittest discover -s tools` (unit testy nástrojů), `python3 tools/lint.py` (kontrola písniček, registru interpretů a definic vydání), `python3 tools/check_pages.py` (jedna stránka na písničku, po `make`) a `python3 tools/chord_gaps.py` (překryv akordů, po `make`); u jiného vydání s `--edition <název>`
+- jednotlivé kroky `make check`: `python3 -m unittest discover -s tools` (unit testy nástrojů), `python3 tools/lint.py` (kontrola písniček, registru interpretů a definic vydání), `python3 tools/check_pages.py` (jedna stránka na písničku, po `make`) `python3 tools/chord_gaps.py` (překryv akordů a akordy v okraji, po `make`) a `python3 tools/song_lines.py` (zalomené řádky a řádky v okraji, po `make`); u jiného vydání s `--edition <název>`
 - verze zpěvníku `python3 tools/generate.py --version`
 - vyhledání souboru písničky `ls songs | grep <nazevpisnicky>`
 - vyhledání souboru obsahujícího daný text `grep -lr <text> ./ -s`

@@ -14,6 +14,8 @@ Generated files are build outputs (gitignored); `make` runs this before compilin
 
 Usage: python3 tools/generate.py [--edition NAME] [repo-root]   (default edition: full)
        python3 tools/generate.py --version [repo-root]          (print the version only)
+       python3 tools/generate.py --previous-version [repo-root] (print the release before
+                                                                the song count last changed)
 Python >= 3.11, standard library only.
 """
 import argparse
@@ -22,7 +24,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from artist_toc import artist_part_tex
-from build_version import build_patch
+from build_version import UnknownHistory, build_patch, previous_version
 from collation import section, sort_key
 from edition import Book, Edition, EditionError, edition_folder, read_book, read_edition
 from edition_tex import macros_tex, pages_tex
@@ -134,15 +136,30 @@ def write_files(directory: Path, files: dict[Path, str]) -> None:
         (directory / path).write_text(text, encoding="utf-8")
 
 
+def print_previous_version(root: Path) -> int:
+    """Print previous_version; 1, with the reason on stderr, if Git can't tell it."""
+    try:
+        print(previous_version(root))
+    except UnknownHistory:
+        print("error: no release before the last change of the song count "
+              "(the full Git history with its tags is needed)", file=sys.stderr)
+        return 1
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     add_edition_argument(parser)
     add_root_argument(parser)
     parser.add_argument("--version", action="store_true", help="print the songbook version and exit")
+    parser.add_argument("--previous-version", action="store_true",
+                        help="print the version of the release before the song count last changed and exit")
     args = parser.parse_args()
     if args.version:
         print(version(len(song_paths(args.root)), build_patch(args.root)))
         return 0
+    if args.previous_version:
+        return print_previous_version(args.root)
     try:
         inputs = read_inputs(args.root, args.edition)
     except InputError as error:

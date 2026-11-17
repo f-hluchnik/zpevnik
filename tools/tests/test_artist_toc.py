@@ -67,7 +67,7 @@ class IndexTex(unittest.TestCase):
         tex = index_tex([ABBA, artist("simongarfunkel", "Simon & Garfunkel")])
         self.assertIn("\\zptarget{podleinterpreta}\n", tex)
         self.assertIn("\\begin{multicols}{2}", tex)
-        self.assertIn("\\zpcontentsentry{abba}{ABBA}\\par\n\\zpcontentsentry{simongarfunkel}{Simon \\& Garfunkel}\\par\n", tex)
+        self.assertIn("\\zpcontentsentry*{abba}{ABBA}\\par\n\\zpcontentsentry*{simongarfunkel}{Simon \\& Garfunkel}\\par\n", tex)
 
 
 class HeadingTex(unittest.TestCase):
@@ -120,6 +120,6 @@ class ArtistPartTex(unittest.TestCase):
     def test_index_rule_sections_in_this_order(self):
         tex = artist_part_tex([KRYL, ABBA], [song("a", "Alfa", artists=("abba",)),
                                              song("k", "Kryl", artists=("karelkryl",))])
-        self.assertLess(tex.index("\\zpcontentsentry{abba}{ABBA}\\par"), tex.index("\\zprule{\\textwidth}"))
+        self.assertLess(tex.index("\\zpcontentsentry*{abba}{ABBA}\\par"), tex.index("\\zprule{\\textwidth}"))
         self.assertLess(tex.index("\\zprule{\\textwidth}"), tex.index("\\subsection*{ABBA}"))
         self.assertLess(tex.index("\\subsection*{ABBA}"), tex.index("\\subsection*{Kryl, Karel}"))
