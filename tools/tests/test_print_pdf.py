@@ -2,6 +2,7 @@
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
+import math
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,9 +10,10 @@ from unittest import mock
 
 import print_pdf
 from edition import PrintSettings
-from pdf_programs import InkCoverage, Span
-from print_layout import A5_HEIGHT_PT, A5_WIDTH_PT, Placement, points
-from print_pdf import CROP_MARK_ROOM_MM, PrintError, check_print_pdf, kept_pages, print_settings, wrapper_tex
+from pdf_programs import Greymap, InkCoverage
+from print_layout import A5_HEIGHT_PT, A5_WIDTH_PT, Placement, millimetres, points
+from print_pdf import (CROP_MARK_ROOM_MM, INK_CHECK_DPI, PrintError, check_print_pdf, kept_pages,
+                       print_settings, wrapper_tex)
 
 SOURCE = Path("build/editions/lite/print/zpevnik.pdf")
 PLACEMENT = Placement(scale=0.69, shift=points(4.0))
@@ -26,14 +28,21 @@ def pdfinfo_report(pages: int = 4, trim_width: float = A5_WIDTH_PT, room: float 
             f"TrimBox: {trim}\n")
 
 
-def letters(spine_mm: float, outer_mm: float, position: int) -> list[Span]:
-    """A page whose letters are that far from the spine and from the outer edge of the trimmed page."""
+PIXELS_PER_MM = INK_CHECK_DPI / 25.4
+TRIMMED_WIDTH_PIXELS = round(A5_WIDTH_PT * INK_CHECK_DPI / 72)
+
+
+def rendered(spine_mm: float, outer_mm: float, position: int) -> Greymap:
+    """A trimmed page rendered with its ink that far from the spine and from the outer edge (one row)."""
     left, right = (spine_mm, outer_mm) if position % 2 else (outer_mm, spine_mm)
-    return [Span(ROOM + points(left), ROOM + A5_WIDTH_PT - points(right))]
+    first = math.ceil(left * PIXELS_PER_MM)
+    after = TRIMMED_WIDTH_PIXELS - math.ceil(right * PIXELS_PER_MM)
+    row = b"\xff" * first + b"\x80" * (after - first) + b"\xff" * (TRIMMED_WIDTH_PIXELS - after)
+    return Greymap(TRIMMED_WIDTH_PIXELS, 1, row)
 
 
-GOOD_PAGES = [letters(13, 5, position) for position in range(1, 5)]  # inside 12.5 and 4.5 mm
-CROP_MARK_GLYPHS = [Span(-1.5, 8.4)]  # pdftotext reads the circles of the crop marks as letters
+BLANK = Greymap(TRIMMED_WIDTH_PIXELS, 1, b"\xff" * TRIMMED_WIDTH_PIXELS)
+GOOD_PAGES = tuple(rendered(13, 5, position) for position in range(1, 5))  # inside 12.5 and 4.5 mm
 BLACK = InkCoverage(0, 0, 0, 0.02)
 
 
@@ -80,18 +89,21 @@ class KeptPages(unittest.TestCase):
 
 
 class Check(unittest.TestCase):
-    def check(self, info: str = pdfinfo_report(), words: list[list[Span]] = GOOD_PAGES,
-              inks: tuple[InkCoverage, ...] = (BLACK,) * 4, black_ink: bool = True) -> int:
+    def check(self, info: str = pdfinfo_report(), pages: tuple[Greymap, ...] = GOOD_PAGES,
+              inks: tuple[InkCoverage, ...] = (BLACK,) * 4, black_ink: bool = True):
+        def render_page(pdf: Path, position: int, dpi: int, area, page_height: float) -> Greymap:
+            return pages[position - 1]
+
         with (mock.patch.object(print_pdf, "pdfinfo", return_value=info),
-              mock.patch.object(print_pdf, "page_words", return_value=words),
+              mock.patch.object(print_pdf, "render_page", side_effect=render_page),
               mock.patch.object(print_pdf, "ink_coverage", return_value=list(inks))):
             return check_print_pdf(Path("x.pdf"), SETTINGS, black_ink)
 
-    def test_an_a5_book_inside_the_margins_in_black_ink_passes(self):
-        self.assertEqual(self.check(), 4)
-
-    def test_the_crop_marks_are_not_letters_of_the_page(self):
-        self.assertEqual(self.check(words=[page + CROP_MARK_GLYPHS for page in GOOD_PAGES]), 4)
+    def test_an_a5_book_inside_the_margins_in_black_ink_passes_and_reports_its_narrowest_margins(self):
+        checked = self.check(pages=(rendered(13, 5, 1), rendered(14, 6, 2), rendered(13.2, 4.8, 3), BLANK))
+        self.assertEqual(checked.pages, 4)
+        self.assertAlmostEqual(millimetres(checked.narrowest.spine), 13, delta=0.1)
+        self.assertAlmostEqual(millimetres(checked.narrowest.outer), 4.8, delta=0.1)
 
     def test_another_trimmed_page_is_refused(self):
         with self.assertRaisesRegex(PrintError, "not A5"):
@@ -105,17 +117,31 @@ class Check(unittest.TestCase):
         with self.assertRaisesRegex(PrintError, "odd number"):
             self.check(info=pdfinfo_report(pages=3))
 
-    def test_a_letter_too_close_to_the_spine_names_its_page(self):
-        words = [letters(13, 5, 1), letters(12, 5, 2), letters(13, 5, 3), letters(13, 4, 4)]
-        with self.assertRaisesRegex(PrintError, "on pages 2, 4 of"):
-            self.check(words=words)
+    def test_ink_too_close_to_the_spine_or_the_edge_names_its_page_and_what_was_measured(self):
+        pages = (rendered(13, 5, 1), rendered(12.3, 5, 2), rendered(13, 5, 3), rendered(13, 4.2, 4))
+        with self.assertRaises(PrintError) as caught:
+            self.check(pages=pages)
+        message = str(caught.exception)
+        self.assertRegex(message, r"pages 2 \(12\.\d\d mm at the spine, 5\.\d\d mm outside\), "
+                                  r"4 \(13\.\d\d mm at the spine, 4\.\d\d mm outside\) of")
+
+    def test_the_spine_is_on_the_left_of_odd_pages_and_on_the_right_of_even_ones(self):
+        # 5 mm left and 13 mm right: inside the margins on an even page, not on an odd one.
+        mirrored = rendered(13, 5, 2)
+        self.check(pages=(GOOD_PAGES[0], mirrored, GOOD_PAGES[2], mirrored))
+        with self.assertRaisesRegex(PrintError, "on pages 1 "):
+            self.check(pages=(mirrored, GOOD_PAGES[1], GOOD_PAGES[2], GOOD_PAGES[3]))
+
+    def test_a_book_without_ink_is_refused(self):
+        with self.assertRaisesRegex(PrintError, "no ink"):
+            self.check(pages=(BLANK,) * 4)
 
     def test_a_page_in_colour_names_its_page(self):
         with self.assertRaisesRegex(PrintError, "pages 3 of .* colour inks"):
             self.check(inks=(BLACK, BLACK, InkCoverage(0.01, 0, 0, 0), BLACK))
 
     def test_a_format_in_colour_is_not_checked_for_one_ink(self):
-        self.assertEqual(self.check(inks=(InkCoverage(0.5, 0.5, 0, 0),) * 4, black_ink=False), 4)
+        self.assertEqual(self.check(inks=(InkCoverage(0.5, 0.5, 0, 0),) * 4, black_ink=False).pages, 4)
 
 
 class Settings(unittest.TestCase):

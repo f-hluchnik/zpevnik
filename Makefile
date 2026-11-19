@@ -6,7 +6,8 @@
 #              CHORDS=black   with FORMAT=print: everything in black ink, into .../print-black/ (default: red)
 #              SIZE=A5        with FORMAT=print: also place it on A5 for the edition's printer, as the
 #                             [print] table of its edition.toml asks, zpevnik-a5.pdf next to it
-#                             (tools/print_pdf.py, D-188; default: A4)
+#                             (tools/print_pdf.py, D-188; default: A4); it prints the margins it
+#                             measured on the finished PDF
 #              Any other value, or a paper option without FORMAT=print, stops make with an error.
 # make generate [EDITION=<name>]  only run the generator (tools/generate.py)
 # make scores   only export the score images from MuseScore into build/scores/
@@ -95,7 +96,7 @@ scores: check-python
 
 compile: generate scores
 	@$(PYTHON) tools/build_edition.py $(BUILD_ARGS) > /dev/null
-	$(if $(A5_STEP),@$(PYTHON) tools/print_pdf.py $(BUILD_ARGS) > /dev/null)
+	$(if $(A5_STEP),@$(PYTHON) tools/print_pdf.py $(BUILD_ARGS))
 
 pdf: compile
 	$(call finish,The PDF is ready:)

@@ -1,8 +1,10 @@
 """What the tools ask of a finished PDF, through poppler and Ghostscript.
 
 - pdfinfo (poppler): the page count and the page boxes of the first page;
-- pdftotext -bbox (poppler): where every word of every page is, to measure the margins
-  the printer asks for ("no letter closer to the edge than ...");
+- pdftotext -bbox (poppler): where every word of every page is, to place the pages so that
+  the letters keep the margins the printer asks for;
+- pdftoppm (poppler): a page rendered in shades of grey, to measure where its ink is,
+  independently of the words: the check of the finished PDF;
 - Ghostscript's inkcov device: how much of each ink (cyan, magenta, yellow, black) every page
   takes when printed, to check a print in one ink;
 - Ghostscript's pdfwrite device: a copy of a PDF in shades of grey only (DeviceGray), which
@@ -13,14 +15,16 @@ Python >= 3.11, standard library only.
 """
 import re
 import subprocess
+from collections.abc import Iterator
 from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
 
 PDFINFO = "pdfinfo"
 PDFTOTEXT = "pdftotext"
+PDFTOPPM = "pdftoppm"
 GHOSTSCRIPT = "gs"
-INSTALL_HINTS = {PDFINFO: "install poppler", PDFTOTEXT: "install poppler",
+INSTALL_HINTS = {PDFINFO: "install poppler", PDFTOTEXT: "install poppler", PDFTOPPM: "install poppler",
                  GHOSTSCRIPT: "install Ghostscript"}
 SETUP_HINT = "(README, Nastavení lokální kopie)"
 
@@ -28,6 +32,11 @@ PAGES_LINE = re.compile(r"^Pages:\s+(\d+)$", re.M)
 NUMBER = r"(-?[\d.]+)"
 BOX_LINE = re.compile(rf"^(MediaBox|TrimBox):\s+{NUMBER}\s+{NUMBER}\s+{NUMBER}\s+{NUMBER}$", re.M)
 MEDIA_BOX, TRIM_BOX = "MediaBox", "TrimBox"
+POINTS_PER_INCH = 72
+# A binary greymap as pdftoppm -gray writes it: "P5", width, height, the largest value, then a
+# byte per pixel, row after row.
+GREYMAP_HEADER = re.compile(rb"P5\s+(\d+)\s+(\d+)\s+(\d+)\s")
+WHITE = 255
 
 # inkcov prints one line per page: the share of the page each ink covers, "c m y k CMYK OK".
 # Ghostscript's own warnings about the PDF can come between the lines, so only these count.
@@ -67,6 +76,24 @@ class Span:
 
 
 @dataclass(frozen=True)
+class Greymap:
+    """A rendered page: one byte per pixel, 0 black to 255 white, row after row."""
+    width: int
+    height: int
+    pixels: bytes
+
+    def rows(self) -> Iterator[bytes]:
+        return (self.pixels[start:start + self.width] for start in range(0, len(self.pixels), self.width))
+
+
+@dataclass(frozen=True)
+class InkColumns:
+    """The first and the last column of pixels with any ink: any pixel that is not pure white."""
+    first: int
+    last: int
+
+
+@dataclass(frozen=True)
 class PageBoxes:
     media: Box
     trim: Box  # the page after the cut; the media box itself if the PDF names no trim box
@@ -85,16 +112,22 @@ class InkCoverage:
         return self.cyan == self.magenta == self.yellow == 0
 
 
-def run(command: list[str]) -> str:
+def run_binary(command: list[str]) -> bytes:
     """The standard output of a program; PdfProgramError if it is missing or fails."""
     try:
-        result = subprocess.run(command, capture_output=True, text=True, errors="replace")
+        result = subprocess.run(command, capture_output=True)
     except FileNotFoundError as error:
         raise PdfProgramError(f"{command[0]} not found: {INSTALL_HINTS[command[0]]} {SETUP_HINT}") from error
     if result.returncode != 0:
+        output = result.stderr.strip() or result.stdout.strip()[-500:]
         raise PdfProgramError(f"{command[0]} failed ({result.returncode}) on {command[-1]}: "
-                              f"{result.stderr.strip() or result.stdout.strip()[-500:]}")
+                              f"{output.decode(errors='replace')}")
     return result.stdout
+
+
+def run(command: list[str]) -> str:
+    """The standard output of a program that writes text."""
+    return run_binary(command).decode(errors="replace")
 
 
 def page_count(info: str) -> int:
@@ -146,6 +179,41 @@ def word_spans(bbox_html: str) -> list[list[Span]]:
 def page_words(pdf: Path) -> list[list[Span]]:
     """How far the words of each page reach across it."""
     return word_spans(run([PDFTOTEXT, "-bbox", str(pdf), "-"]))
+
+
+def greymap(data: bytes) -> Greymap:
+    """A page as pdftoppm -gray writes it (a binary PGM)."""
+    match = GREYMAP_HEADER.match(data)
+    if not match or int(match.group(3)) != WHITE:
+        raise PdfProgramError(f"{PDFTOPPM} did not write an 8-bit greymap")
+    width, height = int(match.group(1)), int(match.group(2))
+    pixels = data[match.end():]
+    if len(pixels) != width * height:
+        raise PdfProgramError(f"{PDFTOPPM} wrote {len(pixels)} pixels for a page of {width} x {height}")
+    return Greymap(width, height, pixels)
+
+
+def ink_columns(page: Greymap) -> InkColumns | None:
+    """Where the ink of a rendered page starts and ends across it; None for a blank page.
+    A pixel that the edge of a letter covers only in part is not pure white, so it counts as ink."""
+    white = bytes([WHITE])
+    first, last = page.width, -1
+    for row in page.rows():
+        blank_start = len(row) - len(row.lstrip(white))
+        if blank_start < len(row):
+            first, last = min(first, blank_start), max(last, len(row.rstrip(white)) - 1)
+    return InkColumns(first, last) if last >= 0 else None
+
+
+def render_page(pdf: Path, page: int, dpi: int, area: Box, page_height: float) -> Greymap:
+    """One page in shades of grey at `dpi`, only the area of it (a box of the page, in pt)."""
+    scale = dpi / POINTS_PER_INCH
+    crop = {"-x": area.left * scale, "-y": (page_height - area.top) * scale,
+            "-W": area.width * scale, "-H": area.height * scale}
+    options = [str(part) for option, pixels in crop.items() for part in (option, round(pixels))]
+    pages = ["-f", str(page), "-l", str(page)]
+    # Without an output name, pdftoppm writes the one page to its standard output.
+    return greymap(run_binary([PDFTOPPM, "-gray", "-r", str(dpi), *options, *pages, "-singlefile", str(pdf)]))
 
 
 def ink_coverages(inkcov_output: str) -> list[InkCoverage]:

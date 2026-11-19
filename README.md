@@ -225,7 +225,15 @@ PDF pro tiskárnu sestavíš jedním příkazem:
 ```
 make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5
 ```
-Lichý počet stránek se doplní prázdnou stránkou na konci. Hotové PDF `make` zkontroluje a skončí chybou s čísly stránek, když oříznutá stránka není A5, počet stránek je lichý, některé písmeno je blíž k okraji, než tabulka dovoluje, nebo když PDF s `CHORDS=black` na některé stránce potřebuje jinou barvu než černou.
+Lichý počet stránek se doplní prázdnou stránkou na konci. Hotové PDF `make` zkontroluje a skončí chybou s čísly stránek, když oříznutá stránka není A5, počet stránek je lichý, tisk na některé stránce sahá blíž k okraji, než tabulka dovoluje, nebo když PDF s `CHORDS=black` na některé stránce potřebuje jinou barvu než černou. Na konci vypíše, kolik stránek PDF má a jak nejblíž ke hřbetu a k vnějšímu okraji tisk na celé knize sahá, například `the ink is at least 12.53 mm from the spine and 4.49 mm from the outer edge`.
+
+#### Jak ověřit PDF pro tiskárnu
+Okraje se měří dvakrát a pokaždé jinak. Poprvé podle písmen v PDF v A4 (`pdftotext`), z toho se spočítá zmenšení a posun. Podruhé na hotovém PDF: každá stránka se vykreslí v rozlišení 300 dpi jen v oříznuté ploše a změří se, kde na ní je jakýkoli tisk, tedy i noty, čáry a QR kód. Za tisk se počítá každý bod, který není úplně bílý, takže změřený okraj může vyjít nanejvýš o bod (0,085 mm) užší, než doopravdy je, nikdy širší. Čísla, která `make` vypíše, jsou tedy změřená na souboru, který posíláš, ne spočítaná.
+
+Nezávisle na zpěvníku si to ověříš takhle:
+- **Pravítkem:** vytiskni jednu lichou a jednu sudou stránku z `zpevnik-a5.pdf` ve skutečné velikosti (v dialogu tisku „Skutečná velikost“ nebo „100 %“, ne „Přizpůsobit“) na A4 a změř vzdálenost od čáry ořezové značky k prvnímu písmenu: u hřbetu (vlevo na liché, vpravo na sudé) musí být aspoň 12 mm.
+- **Tiskárnou:** požádej tiskárnu, ať před tiskem PDF zkontroluje (preflight) a potvrdí okraje a jednu barvu. V Adobe Acrobat Pro to ukáže Output Preview: barevné výtažky (separace) musí mít tisk jen na černé (Black).
+- **Nátiskem:** jeden zkušební výtisk z tiskárny ukáže všechno najednou, včetně skutečného ořezu.
 
 Tiskárna chce PDF bez RGB, a proto pro ni je jen `CHORDS=black`. PDF s červenými akordy (`SIZE=A5` bez `CHORDS=black`) má barvy v RGB a převod do CMYK zpěvník nedělá (D-188). Pro jinou tiskárnu napiš do tabulky `[print]` její požadavky. Volby `PRINT_ARGS` už nejsou: `make` s nimi skončí chybou, která odkáže sem.
 

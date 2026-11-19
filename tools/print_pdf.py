@@ -17,21 +17,24 @@ The edition's `[print]` table (edition.toml, D-188) says what the printer needs:
   no bleed: the bleed box is the trim box.
 
 An odd page count gets a blank page at the end. The finished PDF is checked: the trimmed page is
-A5, the page count even, every letter inside the margins, and a format in one ink (formats.py)
-uses black ink alone on every page (Ghostscript's ink coverage). Anything else stops with a
-message.
+A5, the page count even, and a format in one ink (formats.py) uses black ink alone on every page
+(Ghostscript's ink coverage). The margins are measured again, and not the way the pages were
+placed: every page is rendered at 300 dpi inside its trim box, and its ink (letters, scores,
+lines; any pixel that is not pure white) must keep both margins. Anything else stops with a
+message that names the pages; the narrowest margins measured are printed with the result.
 
 `--path` prints where the A5 PDF is (made or not), so the Makefile does not repeat the layout of build/.
 
 Usage: python3 tools/print_pdf.py [--edition NAME] [--format NAME] [--path] [repo-root]
        (run after building the format: make EDITION=... FORMAT=print CHORDS=black; adding
        SIZE=A5 does both)
-Needs pdflatex with pdfpages and crop, poppler (pdfinfo, pdftotext) and, for a format in one
-ink, Ghostscript. Python >= 3.11, standard library only.
+Needs pdflatex with pdfpages and crop, poppler (pdfinfo, pdftotext, pdftoppm) and, for a format
+in one ink, Ghostscript. Python >= 3.11, standard library only.
 """
 import argparse
 import sys
-from collections.abc import Iterable
+from collections.abc import Sequence
+from dataclasses import dataclass
 from pathlib import Path
 
 from build_edition import LatexError, run_latexmk
@@ -39,14 +42,14 @@ from edition import EditionError, PrintSettings, edition_file, read_print_settin
 from formats import PRINT, add_format_argument, is_black_ink
 from paths import (BOOK_PDF_NAME, PRINT_PDF_NAME, PRINT_WRAPPER_NAME, add_edition_argument,
                    add_root_argument, edition_output_dir)
-from pdf_programs import (InkCoverage, PageBoxes, PdfProgramError, Span, ink_coverage, page_boxes,
-                          page_count, page_words, pdfinfo)
-from print_layout import (A5_HEIGHT_PT, A5_WIDTH_PT, LayoutError, Margins, Placement, fit, millimetres,
-                          page_margins, points, reach)
+from pdf_programs import (POINTS_PER_INCH, InkCoverage, PageBoxes, PdfProgramError, ink_columns,
+                          ink_coverage, page_boxes, page_count, page_words, pdfinfo, render_page)
+from print_layout import (A5_HEIGHT_PT, A5_WIDTH_PT, LayoutError, Margins, Placement, Reach, fit,
+                          millimetres, page_margins, points, reach)
 
 CROP_MARK_ROOM_MM = 10.0  # on every side of the A5 page, for the crop marks
 SIZE_TOLERANCE_PT = 1.0
-MARGIN_TOLERANCE_PT = 0.01  # pdfinfo prints the boxes to 0.01 pt
+INK_CHECK_DPI = 300  # a pixel is 0.085 mm: a margin is measured at most that much too narrow
 REPORTED_PAGES = 10  # an error names at most this many pages
 PDFLATEX = ["pdflatex", "-interaction=nonstopmode", "-halt-on-error"]
 SETUP_HINT = "(README, Tisk)"
@@ -58,6 +61,13 @@ WRAPPER_END = r"\end{document}" + "\n"
 
 class PrintError(Exception):
     """The print PDF cannot be made, or is not what the printer asked for."""
+
+
+@dataclass(frozen=True)
+class CheckedPdf:
+    """A print PDF that passed the checks: its page count and the narrowest margins of its ink."""
+    pages: int
+    narrowest: Margins
 
 
 def crop_marks_tex() -> str:
@@ -103,7 +113,7 @@ def placement_for(source: Path, source_width: float, pages: range, settings: Pri
                required_margins(settings))
 
 
-def listed(pages: list[int]) -> str:
+def listed(pages: Sequence[object]) -> str:
     more = f" and {len(pages) - REPORTED_PAGES} more" if len(pages) > REPORTED_PAGES else ""
     return ", ".join(map(str, pages[:REPORTED_PAGES])) + more
 
@@ -123,41 +133,50 @@ def check_boxes(boxes: PageBoxes, crop_marks: bool) -> None:
                          + ("with room for the crop marks" if crop_marks else "alone"))
 
 
-def words_on_page(words: Iterable[Span], trim_left: float, trim_right: float) -> list[Span]:
-    """The words that reach into the trimmed page: the crop marks around it are not text of the book."""
-    return [span for span in words if span.right > trim_left and span.left < trim_right]
-
-
-def pages_outside_margins(words: list[list[Span]], boxes: PageBoxes, required: Margins) -> list[int]:
-    """The printed pages with a letter closer to the spine or the outer edge than the margins."""
-    trim = boxes.trim
-    pages = []
-    for position, page_spans in enumerate(words, start=1):
-        page = reach(words_on_page(page_spans, trim.left, trim.right))
-        if page is None:
+def ink_margins(pdf: Path, count: int, boxes: PageBoxes) -> dict[int, Margins]:
+    """The margins of the ink of every printed page with any ink, measured on the page rendered
+    inside its trim box (so the crop marks around it do not count)."""
+    points_per_pixel = POINTS_PER_INCH / INK_CHECK_DPI
+    margins = {}
+    for position in range(1, count + 1):
+        page = render_page(pdf, position, INK_CHECK_DPI, boxes.trim, boxes.media.height)
+        columns = ink_columns(page)
+        if columns is None:
             continue
-        margins = page_margins(page, position, trim.left, trim.width)
-        if (margins.spine < required.spine - MARGIN_TOLERANCE_PT
-                or margins.outer < required.outer - MARGIN_TOLERANCE_PT):
-            pages.append(position)
-    return pages
+        ink = Reach(left=columns.first * points_per_pixel, right=(columns.last + 1) * points_per_pixel)
+        margins[position] = page_margins(ink, position, 0, page.width * points_per_pixel)
+    return margins
+
+
+def too_narrow(margins: dict[int, Margins], required: Margins) -> list[str]:
+    """The pages whose ink comes closer to the spine or the outer edge than required, with what was measured."""
+    return [f"{position} ({millimetres(page.spine):.2f} mm at the spine, {millimetres(page.outer):.2f} mm outside)"
+            for position, page in margins.items() if page.spine < required.spine or page.outer < required.outer]
+
+
+def narrowest(margins: dict[int, Margins]) -> Margins:
+    return Margins(spine=min(page.spine for page in margins.values()),
+                   outer=min(page.outer for page in margins.values()))
 
 
 def pages_not_in_black_ink(coverages: list[InkCoverage]) -> list[int]:
     return [position for position, coverage in enumerate(coverages, start=1) if not coverage.is_black_only]
 
 
-def check_print_pdf(pdf: Path, settings: PrintSettings, black_ink: bool) -> int:
-    """The page count of the made PDF; PrintError unless it is what the printer asked for."""
+def check_print_pdf(pdf: Path, settings: PrintSettings, black_ink: bool) -> CheckedPdf:
+    """What the checks measured on the made PDF; PrintError unless it is what the printer asked for."""
     info = pdfinfo(pdf)
     boxes = page_boxes(info)
     check_boxes(boxes, settings.crop_marks)
     count = page_count(info)
     if count % 2:
         raise PrintError(f"{pdf} has an odd number of pages ({count})")
-    outside = pages_outside_margins(page_words(pdf), boxes, required_margins(settings))
+    margins = ink_margins(pdf, count, boxes)
+    if not margins:
+        raise PrintError(f"{pdf} has no ink on any page")
+    outside = too_narrow(margins, required_margins(settings))
     if outside:
-        raise PrintError(f"letters closer to the spine than {settings.spine_margin_mm} mm or to the outer edge "
+        raise PrintError(f"ink closer to the spine than {settings.spine_margin_mm} mm or to the outer edge "
                          f"than {settings.outer_margin_mm} mm on pages {listed(outside)} of {pdf}")
     if black_ink:
         coverages = ink_coverage(pdf)
@@ -167,7 +186,7 @@ def check_print_pdf(pdf: Path, settings: PrintSettings, black_ink: bool) -> int:
         if coloured:
             raise PrintError(f"pages {listed(coloured)} of {pdf} use colour inks, not black alone "
                              "(a colour image, e.g. a cover: leave it out with skip_first_pages)")
-    return count
+    return CheckedPdf(pages=count, narrowest=narrowest(margins))
 
 
 def print_pdf_path(edition: str, format_name: str) -> Path:
@@ -183,9 +202,9 @@ def print_settings(root: Path, edition: str) -> PrintSettings:
     return settings
 
 
-def make_print_pdf(root: Path, edition: str, format_name: str) -> tuple[Path, Placement]:
-    """Place the built format of the edition on A5; the path of the new PDF (relative to the root)
-    and the placement used."""
+def make_print_pdf(root: Path, edition: str, format_name: str) -> tuple[Path, Placement, CheckedPdf]:
+    """Place the built format of the edition on A5; the path of the new PDF (relative to the root),
+    the placement used and what the checks measured."""
     settings = print_settings(root, edition)
     folder = edition_output_dir(edition, format_name)
     source = folder / BOOK_PDF_NAME
@@ -203,8 +222,7 @@ def make_print_pdf(root: Path, edition: str, format_name: str) -> tuple[Path, Pl
     except LatexError as error:
         raise PrintError(str(error)) from error
     result = print_pdf_path(edition, format_name)
-    check_print_pdf(root / result, settings, is_black_ink(format_name))
-    return result, placement
+    return result, placement, check_print_pdf(root / result, settings, is_black_ink(format_name))
 
 
 def main() -> int:
@@ -218,12 +236,14 @@ def main() -> int:
         print(print_pdf_path(args.edition, args.format))
         return 0
     try:
-        result, placement = make_print_pdf(args.root, args.edition, args.format)
+        result, placement, checked = make_print_pdf(args.root, args.edition, args.format)
     except (PrintError, EditionError, LayoutError, PdfProgramError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
-    print(f"{result} (the A4 pages scaled to {placement.scale:.4f}, "
-          f"{millimetres(placement.shift):.2f} mm away from the spine)")
+    print(f"{result}: {checked.pages} pages, the A4 pages scaled to {placement.scale:.4f} and moved "
+          f"{millimetres(placement.shift):.2f} mm away from the spine; the ink is at least "
+          f"{millimetres(checked.narrowest.spine):.2f} mm from the spine and "
+          f"{millimetres(checked.narrowest.outer):.2f} mm from the outer edge")
     return 0
 
 

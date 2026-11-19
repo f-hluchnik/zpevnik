@@ -7,8 +7,8 @@ from pathlib import Path
 from unittest import mock
 
 import pdf_programs
-from pdf_programs import (Box, InkCoverage, PdfProgramError, Span, ink_coverages, page_boxes, page_count,
-                          word_spans)
+from pdf_programs import (Box, Greymap, InkColumns, InkCoverage, PdfProgramError, Span, greymap, ink_columns,
+                          ink_coverages, page_boxes, page_count, render_page, word_spans)
 
 PDFINFO_BOX = """Pages:           182
 Page size:       476.22 x 651.968 pts
@@ -55,6 +55,33 @@ class Inks(unittest.TestCase):
         coverages = ink_coverages(INKCOV)
         self.assertEqual(coverages, [InkCoverage(0, 0, 0, 0.02525), InkCoverage(0.03008, 0.03008, 0.03008, 0.03008)])
         self.assertEqual([coverage.is_black_only for coverage in coverages], [True, False])
+
+
+class Rendering(unittest.TestCase):
+    def test_a_greymap_from_pdftoppm_is_read(self):
+        self.assertEqual(greymap(b"P5\n3 2\n255\n" + bytes(range(6))), Greymap(3, 2, bytes(range(6))))
+
+    def test_a_greymap_that_is_not_8_bit_or_is_cut_short_is_an_error(self):
+        with self.assertRaisesRegex(PdfProgramError, "8-bit"):
+            greymap(b"P5\n1 1\n65535\n\x00\x00")
+        with self.assertRaisesRegex(PdfProgramError, "pixels"):
+            greymap(b"P5\n2 2\n255\n\x00")
+
+    def test_the_ink_spans_every_row_and_a_pixel_that_is_only_grey_counts(self):
+        white, grey = b"\xff", b"\xfe"
+        page = Greymap(6, 2, white * 2 + grey + white * 3 + white * 4 + b"\x00" + white)
+        self.assertEqual(ink_columns(page), InkColumns(first=2, last=4))
+
+    def test_a_blank_page_has_no_ink(self):
+        self.assertIsNone(ink_columns(Greymap(3, 2, b"\xff" * 6)))
+
+    def test_a_page_is_rendered_inside_the_box_asked_for(self):
+        with mock.patch.object(pdf_programs, "run_binary", return_value=b"P5\n1 1\n255\n\xff") as run:
+            render_page(Path("x.pdf"), 7, 72, Box(10, 20, 110, 220), page_height=300)
+        command = run.call_args.args[0]
+        self.assertEqual(command[command.index("-x"):command.index("-x") + 8],
+                         ["-x", "10", "-y", "80", "-W", "100", "-H", "200"])
+        self.assertEqual(command[command.index("-f"):command.index("-f") + 4], ["-f", "7", "-l", "7"])
 
 
 class Programs(unittest.TestCase):
