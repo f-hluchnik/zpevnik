@@ -1,6 +1,6 @@
-# Phase 10 tickets: editions (done 9–11 Nov 2026, except E4)
+# Phase 10 tickets: editions (done 9–11 Nov 2026; E4 cancelled 19 Nov 2026)
 
-The ticket texts and status rows as they were when the work ended: the generator and the build for editions, English names, integrity checks, `lidovky`, front matter in book order. **E4** (the songs of `zpevnik-lite`) is still open and stays in [TICKETS.md](../../TICKETS.md). Summary: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows as they were when the work ended: the generator and the build for editions, English names, integrity checks, `lidovky`, front matter in book order. **E4** (the songs of `zpevnik-lite`) was cancelled (D-189): an edition is a folder when the owner wants one. Summary: [HISTORY.md](../../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
@@ -13,6 +13,7 @@ The ticket texts and status rows as they were when the work ended: the generator
 | E8 | done | front matter in book order (D-143), the songs from page 9: PR #98 |
 | R16 | done | the old song folder and the layout before editions dropped from the tools and CI: PR #102 |
 | S4 | done | the PDF diff ignores the imprint's version line: PR #99 |
+| E4 | cancelled | the songs of `zpevnik-lite`: low priority, the whole songbook is online; an edition is a folder when wanted (D-189) |
 
 ### E0 · Build version `8.33.N` — [agent] · S · needs nothing
 D-133. Today every push to master replaces the PDF of release `v8.33`, whose tag still points at the source of 21 Aug 2026, and commits another PDF to `zpevnik-web`; the version names a song count, not a build.
@@ -58,3 +59,6 @@ D-143, D-144. Once a commit after R15 has changed the song count (the version is
 
 ### S4 · The PDF diff ignores the version line — [agent] · S · needs E0
 D-133. Since E0 the imprint prints the build's version, which counts the commits, so every PR's diff reported the imprint page as changed (base `8.33.N`, head the merge commit `8.33.N+1`). `tools/pdfdiff.py` leaves the version out like the build date: a word shaped like a version (`8.33.71`, or `8.33.?` without Git history) on the front-matter pages is masked with its line. **Expected differences:** none in the book; from this PR on, the imprint page is no longer reported unless something else on it changes.
+
+### E4 · Choose the songs for `zpevnik-lite` — [you] + [agent] · S · needs E2 · **cancelled** (D-189)
+The agent adds a small helper that lists song ids with title and artist (filter by artist) to pick from. The owner picks the songs; the agent writes `editions/lite/edition.toml`. **Expected differences:** none for the full book. Owner, 11 Nov 2026: later, after the print edition is done; nothing waits for it (E5 finds editions by itself, E6 shows what exists).

@@ -69,7 +69,7 @@ The owner wanted the README, the tests and the build reviewed before the convert
 
 ## Phase 10 · Editions (E0–E3, E7, E8, R15, R16, S4) · 9–11 Nov 2026 · PRs #93, #95–#99, #102, #103
 
-E4, the songs of `zpevnik-lite`, is open: the owner picks them after the printed edition (D-147).
+E4, the songs of `zpevnik-lite`, was cancelled on 19 Nov 2026 (D-189): an edition is a folder with an `edition.toml` whenever the owner wants one.
 - E1 (D-138, then D-139): the owner decided the design: an edition is a filter over the song list (by song id or artist) with its own front matter; the full book is one of them.
 - E0 (#93, D-133): the build version is `8.33.N`, counting commits, so a release is a build and not only a song count; first release `v8.33.68`. S4 (#99): the PDF diff ignores the imprint's version line.
 - R15 (#95, D-143): English names for the folders and the front-matter files. E2 (#96, D-144): every book is an edition (`data/book.toml`, `editions/<name>/edition.toml`) built under `build/editions/<name>/` by `make [EDITION=<name>]`. E3 (#97, D-145): `\seealso` to a song outside an edition prints nothing, a missing link target fails the build, `make check`. E8 (#98): the front matter in Czech book order, the songs from page 9. R16 (#102): the traces of the old layout removed.
@@ -102,6 +102,15 @@ The songbook is online at `/zpivej/`, separate from the download page, from the 
 - W5a (#16, D-174): the wake-lock button is a small coffee-cup icon beside A− and A+.
 - Not verified on any real phone: the screen staying on (W5), the keyboard and autofocus of the search, `#page=N` in a phone's PDF viewer.
 - Helper files: archive/phase-9-website/ (the ticket texts).
+
+## Phase 13 · Finishing (Q7, J6, V10, Z2) · 12–19 Nov 2026 · PRs #142, #143, #146, #147, zpevnik-web#17
+
+- Q7 (#142, D-164): the converter is the one reader of the songs; `songs.py` has no regular expressions left.
+- J6 (#143, zpevnik-web#17, D-177): `\remark` for text that is not sung, a body item `remark` in `songs.json`, `schemaVersion` 2; the owner chose the places (one became a `\speaker`).
+- V10 (#146, D-178): a song in parts always has `\partrule` between the parts (`ejhorahora` and `rezrezrez` got it); no new form for tight verses.
+- Z2 (#147, D-175): `docs/OVERVIEW.md`, the refactoring in ten minutes and the notes for the website article.
+- H7, the bilingual songs as two songs, was cancelled (D-189): the owner keeps the songs as they are; `cernymuz` keeps the version of Waldemar Matuška in its second column.
+- Helper files: archive/phase-13-finishing/ (the ticket texts).
 
 ## Closing the refactoring · 6 Nov 2026
 
