@@ -12,8 +12,9 @@ import print_pdf
 from edition import PrintSettings
 from pdf_programs import Greymap, InkCoverage
 from print_layout import A5_HEIGHT_PT, A5_WIDTH_PT, Placement, millimetres, points
-from print_pdf import (CROP_MARK_ROOM_MM, INK_CHECK_DPI, PrintError, check_print_pdf, kept_pages,
-                       print_settings, wrapper_tex)
+from pdf_programs import Box
+from print_pdf import (CROP_MARK_ROOM_MM, INK_DPI, INK_PIXEL_PT, PrintError, check_print_pdf, kept_pages,
+                       placement_for, print_settings, wrapper_tex)
 
 SOURCE = Path("build/editions/lite/print/zpevnik.pdf")
 PLACEMENT = Placement(scale=0.69, shift=points(4.0))
@@ -28,8 +29,8 @@ def pdfinfo_report(pages: int = 4, trim_width: float = A5_WIDTH_PT, room: float 
             f"TrimBox: {trim}\n")
 
 
-PIXELS_PER_MM = INK_CHECK_DPI / 25.4
-TRIMMED_WIDTH_PIXELS = round(A5_WIDTH_PT * INK_CHECK_DPI / 72)
+PIXELS_PER_MM = INK_DPI / 25.4
+TRIMMED_WIDTH_PIXELS = round(A5_WIDTH_PT * INK_DPI / 72)
 
 
 def rendered(spine_mm: float, outer_mm: float, position: int) -> Greymap:
@@ -142,6 +143,22 @@ class Check(unittest.TestCase):
 
     def test_a_format_in_colour_is_not_checked_for_one_ink(self):
         self.assertEqual(self.check(inks=(InkCoverage(0.5, 0.5, 0, 0),) * 4, black_ink=False).pages, 4)
+
+
+class Placing(unittest.TestCase):
+    def test_the_pages_are_placed_with_the_pixel_the_check_may_lose_to_spare(self):
+        # An A4 page (595 pt, 2480 pixels at 300 dpi) with ink 28 pt from both edges.
+        a4 = Box(0, 0, 595.0, 842.0)
+        width = round(a4.width / INK_PIXEL_PT)
+        first = round(28 / INK_PIXEL_PT)
+        row = b"\xff" * first + b"\x00" * (width - 2 * first) + b"\xff" * first
+        with mock.patch.object(print_pdf, "render_page", return_value=Greymap(width, 1, row)):
+            placement = placement_for(Path("a4.pdf"), a4, range(1, 3), SETTINGS)
+        centre, reach = A5_WIDTH_PT / 2, a4.width / 2 - first * INK_PIXEL_PT
+        spine = centre - placement.scale * reach + placement.shift  # the left of the first, a right-hand page
+        outer = centre - placement.scale * reach - placement.shift
+        self.assertAlmostEqual(spine, points(SETTINGS.spine_margin_mm) + INK_PIXEL_PT)
+        self.assertAlmostEqual(outer, points(SETTINGS.outer_margin_mm) + INK_PIXEL_PT)
 
 
 class Settings(unittest.TestCase):

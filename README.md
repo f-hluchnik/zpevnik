@@ -32,7 +32,7 @@ Zpěvník (celý i jednotlivá vydání) si můžeš sestavit na svém počíta�
    pip install -r requirements-dev.txt
    ```
    Složka `.venv` se necommituje. Prostředí aktivuj (`source .venv/bin/activate`) v každém novém terminálu, ve kterém spouštíš `make`. `make` verzi Pythonu kontroluje a se starší skončí srozumitelnou chybou. Jiný Python mu můžeš zadat i přímo: `make PYTHON=python3.12`.
-3. **Nainstaluj TeX Live, poppler a Ghostscript.** Zpěvník potřebuje TeX Live s češtinou, `latexmk` a několik balíků: `csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `qrcode`, `cm-super` a `musixtex-fonts` (křížky a béčka v akordech); PDF pro tiskárnu ještě `pdfpages` a `crop` (ořezové značky). Poppler (programy `pdfinfo` a `pdftotext`) potřebuje PDF pro tiskárnu v A5 (viz [Tisk](#tisk)) a porovnání PDF (`tools/pdfdiff.py`). Ghostscript (program `gs`) potřebuje tisk jednou barvou (`CHORDS=black`): převádí noty do černé a kontroluje, že PDF pro tiskárnu nepotřebuje jinou barvu než černou.
+3. **Nainstaluj TeX Live, poppler a Ghostscript.** Zpěvník potřebuje TeX Live s češtinou, `latexmk` a několik balíků: `csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `qrcode`, `cm-super` a `musixtex-fonts` (křížky a béčka v akordech); PDF pro tiskárnu ještě `pdfpages` a `crop` (ořezové značky). Poppler (programy `pdfinfo`, `pdftoppm` a `pdftotext`) potřebuje PDF pro tiskárnu v A5 (viz [Tisk](#tisk)) a porovnání PDF (`tools/pdfdiff.py`). Ghostscript (program `gs`) potřebuje tisk jednou barvou (`CHORDS=black`): převádí noty do černé a kontroluje, že PDF pro tiskárnu nepotřebuje jinou barvu než černou.
    - **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a k němu balíky:
      ```
      sudo tlmgr update --self
@@ -53,7 +53,7 @@ Zpěvník (celý i jednotlivá vydání) si můžeš sestavit na svém počíta�
 - `the tests and the check of songs.json need the packages of requirements-dev.txt`: ve virtuálním prostředí chybí `jsonschema`. S aktivním `.venv` spusť `pip install -r requirements-dev.txt`.
 - `MuseScore 4 not found`: MuseScore je jinde, než ho `make` hledá. Nastav `MSCORE` (krok 4).
 - `rsvg-convert not found`: nainstaluj `librsvg` (krok 4).
-- `pdfinfo not found` nebo `pdftotext not found`: nainstaluj poppler (krok 3).
+- `pdfinfo not found`, `pdftoppm not found` nebo `pdftotext not found`: nainstaluj poppler (krok 3).
 - `gs not found: install Ghostscript`: nainstaluj Ghostscript (krok 3).
 
 ## Nová písnička
@@ -217,7 +217,7 @@ outer_margin_mm = 4.5
 skip_first_pages = 2
 crop_marks = true
 ```
-- `spine_margin_mm` a `outer_margin_mm` – nejmenší vzdálenost písmen od hřbetu a od vnějšího okraje oříznuté stránky, v milimetrech. Na lichých stránkách je hřbet vlevo, na sudých vpravo. `make` změří, kam sahají písmena na každé stránce PDF v A4, a pak stránky zmenší a odsune od hřbetu tak, aby oba okraje vyšly na všech stránkách. Zmenšuje nejvýš do A5 (strany A4 a A5 jsou v poměru √2 : 1), takže se každá písnička pořád vejde na jednu stránku. Když okraje potřebují víc místa, zmenší stránky ještě o kousek víc: u `skaut-kravare` na 97,5 % velikosti A5, takže základní písmo má asi 9,9 bodu místo 10,2. Tiskárna chtěla 12 a 4 mm, půl milimetru navíc je rezerva na ořez.
+- `spine_margin_mm` a `outer_margin_mm` – nejmenší vzdálenost písmen od hřbetu a od vnějšího okraje oříznuté stránky, v milimetrech. Na lichých stránkách je hřbet vlevo, na sudých vpravo. `make` změří, kam sahá tisk (písmena, noty, čáry) na každé stránce PDF v A4, a pak stránky zmenší a odsune od hřbetu tak, aby oba okraje vyšly na všech stránkách. Zmenšuje nejvýš do A5 (strany A4 a A5 jsou v poměru √2 : 1), takže se každá písnička pořád vejde na jednu stránku. Když okraje potřebují víc místa, zmenší stránky ještě o kousek víc: u `skaut-kravare` asi na 97 % velikosti A5, takže základní písmo má asi 9,9 bodu místo 10,2 (přesné číslo `make` vypíše). Tiskárna chtěla 12 a 4 mm, půl milimetru navíc je rezerva na ořez.
 - `skip_first_pages` – kolik prvních stránek do knižního bloku nepatří, sudý počet (lichý by přehodil všechny stránky na druhou stranu hřbetu). U `skaut-kravare` jsou to obálka a její rub: obálku dodá tiskárně zadavatel zvlášť.
 - `crop_marks` – `true`: stránka PDF je A5 a kolem ní 10 mm, v rozích ořezové značky; PDF navíc říká, kde je oříznutá stránka (TrimBox). Spadávka není, protože se nic netiskne až do kraje.
 
@@ -228,7 +228,7 @@ make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5
 Lichý počet stránek se doplní prázdnou stránkou na konci. Hotové PDF `make` zkontroluje a skončí chybou s čísly stránek, když oříznutá stránka není A5, počet stránek je lichý, tisk na některé stránce sahá blíž k okraji, než tabulka dovoluje, nebo když PDF s `CHORDS=black` na některé stránce potřebuje jinou barvu než černou. Na konci vypíše, kolik stránek PDF má a jak nejblíž ke hřbetu a k vnějšímu okraji tisk na celé knize sahá, například `the ink is at least 12.53 mm from the spine and 4.49 mm from the outer edge`.
 
 #### Jak ověřit PDF pro tiskárnu
-Okraje se měří dvakrát a pokaždé jinak. Poprvé podle písmen v PDF v A4 (`pdftotext`), z toho se spočítá zmenšení a posun. Podruhé na hotovém PDF: každá stránka se vykreslí v rozlišení 300 dpi jen v oříznuté ploše a změří se, kde na ní je jakýkoli tisk, tedy i noty, čáry a QR kód. Za tisk se počítá každý bod, který není úplně bílý, takže změřený okraj může vyjít nanejvýš o bod (0,085 mm) užší, než doopravdy je, nikdy širší. Čísla, která `make` vypíše, jsou tedy změřená na souboru, který posíláš, ne spočítaná.
+Okraje se měří dvakrát. Poprvé na PDF v A4, z toho se spočítá zmenšení a posun. Podruhé na hotovém PDF, tedy na souboru, který posíláš, až po zmenšení, posunu a ořezových značkách: každá stránka se vykreslí v rozlišení 300 dpi jen v oříznuté ploše a změří se, kde na ní je jakýkoli tisk, tedy i noty, čáry a QR kód. Za tisk se počítá každý bod, který není úplně bílý. Měření je přesné zhruba na jeden bod (0,085 mm), proto se stránky umisťují s jedním bodem navíc a kontrola je přísná. Čísla, která `make` vypíše, jsou změřená na hotovém souboru, ne spočítaná.
 
 Nezávisle na zpěvníku si to ověříš takhle:
 - **Pravítkem:** vytiskni jednu lichou a jednu sudou stránku z `zpevnik-a5.pdf` ve skutečné velikosti (v dialogu tisku „Skutečná velikost“ nebo „100 %“, ne „Přizpůsobit“) na A4 a změř vzdálenost od čáry ořezové značky k prvnímu písmenu: u hřbetu (vlevo na liché, vpravo na sudé) musí být aspoň 12 mm.
