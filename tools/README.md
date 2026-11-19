@@ -9,7 +9,7 @@ You normally run these through `make` (the main README, *Příkazy*); each also 
 | Module | Run by | What it does |
 |---|---|---|
 | `generate.py` | `make`, `make generate` | Writes the generated TeX of an edition (song list, contents, artist index, version, front matter) into `build/editions/<edition>/generated/`. `--version` prints the songbook version. |
-| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. For the print in one ink (`--format print-black`) it also makes each image in black ink only (D-188). |
+| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. Chord names are drawn with the songbook's chord list `scores/chords_zpevnik.xml`, so that B-flat prints as B (D-190). For the print in one ink (`--format print-black`) it also makes each image in black ink only (D-188). |
 | `build_edition.py` | `make` | Compiles an edition with latexmk and prints the path of its PDF. CI also uses `--list` to find the editions. |
 | `build_song.py` | `make song SONG=<id>` | Compiles one song alone into `build/songs/<id>.pdf`, the way Overleaf would. |
 | `print_pdf.py` | `make FORMAT=print SIZE=A5` | Places an edition's print format on A5 for its printer, as the `[print]` table of its `edition.toml` asks (margins, pages left out, crop marks), and checks the result: the margins of the ink measured on every rendered page, the page count and, in one ink, that every page is black ink only (D-185, D-188). |

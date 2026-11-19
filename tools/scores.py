@@ -19,10 +19,16 @@ class="StaffLines". \\score uses them to put the staff at the start of the text
 column and the block label level with the middle of the staff, so no song needs
 hand-tuned offsets. A score must be a single page.
 
+MuseScore's German spelling prints B as H but keeps the flat of B-flat. The export
+therefore draws chord names with the songbook's chord list, scores/chords_zpevnik.xml
+(MuseScore's own list with that flat left out), so that B-flat prints as B (D-190).
+A style can only name a chord list outside MuseScore by an absolute path, so the export
+applies a copy of the shared style that names it so.
+
 Usage: python3 tools/scores.py [--format NAME] [repo-root] [--force]
 Exports only scores whose image is older than the .mscz, the shared style, the
-chord colour or this tool, unless --force; a black-ink image is made again when it
-is older than its SVG.
+chord list, the chord colour or this tool, unless --force; a black-ink image is made
+again when it is older than its SVG.
 
 Needs MuseScore 4 (the MSCORE environment variable or on the PATH; on a Linux
 machine without a display, run under xvfb-run) and rsvg-convert (librsvg); the
@@ -40,10 +46,12 @@ import xml.etree.ElementTree as ElementTree
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path
+from xml.sax.saxutils import escape
 
 import pdf_programs
 from formats import BLACK_SCORE_SUFFIX, add_format_argument, is_black_ink
-from paths import SCORE_OUTPUT_DIR, SCORE_STYLE, SCORES_DIR, STYLE_FILE, add_root_argument
+from paths import (SCORE_CHORD_LIST, SCORE_OUTPUT_DIR, SCORE_STYLE, SCORES_DIR, STYLE_FILE,
+                   add_root_argument)
 from pdf_programs import PdfProgramError, convert_to_grey
 
 SVG_NAMESPACE = "http://www.w3.org/2000/svg"
@@ -66,6 +74,9 @@ MIN_STAFF_LINES = 4
 BLACK_INK_CHORD_COLOUR = "#000000"
 CHORD_COLOUR = re.compile(r"\\definecolor\{chordred\}\{RGB\}\{\s*(\d+),\s*(\d+),\s*(\d+)\s*\}")
 PRINTABLE_WIDTH = re.compile(r"<pagePrintableWidth>([\d.]+)</pagePrintableWidth>")
+# The style's chord list: a name built into MuseScore, or an absolute path. MuseScore takes
+# any other name for a built-in one and, finding none, silently uses its default list.
+CHORD_LIST_SETTING = re.compile(r"<chordDescriptionFile>[^<]*</chordDescriptionFile>")
 SVG_LENGTH_MM = re.compile(r"([\d.]+)mm")
 # What MuseScore writes before the drawing.
 SVG_METADATA_TAGS = frozenset(f"{{{SVG_NAMESPACE}}}{name}" for name in ("title", "desc"))
@@ -124,6 +135,16 @@ class CommandError(ScoreError):
 
 
 @dataclass(frozen=True)
+class ExportSettings:
+    """What every export shares: MuseScore, the style it applies, the chord colour and the
+    width of a full system in pt."""
+    mscore: str
+    style: Path
+    chord_colour: str
+    system_width: float
+
+
+@dataclass(frozen=True)
 class StaffLine:
     """One line of a staff in SVG units: where it starts and how far down it is."""
     left: float
@@ -165,6 +186,25 @@ def system_width_pt(mss_text: str) -> float:
     if not match:
         raise ScoreError(f"no <pagePrintableWidth> in {SCORE_STYLE}")
     return float(match.group(1)) * POINTS_PER_INCH
+
+
+def export_style(mss_text: str, chord_list: Path) -> str:
+    """The shared style with its chord list replaced by chord_list, named by its absolute path."""
+    setting = f"<chordDescriptionFile>{escape(str(chord_list.resolve()))}</chordDescriptionFile>"
+    style, count = CHORD_LIST_SETTING.subn(lambda _: setting, mss_text)
+    if count != 1:
+        raise ScoreError(f"{SCORE_STYLE} must name one chord list (<chordDescriptionFile>), "
+                         f"it names {count}")
+    return style
+
+
+def write_export_style(mss_text: str, chord_list: Path, directory: Path) -> Path:
+    """Write the style the export applies (export_style) into directory; its path."""
+    if not chord_list.is_file():
+        raise ScoreError(f"the chord list {chord_list} is missing")
+    path = directory / SCORE_STYLE.name
+    path.write_text(export_style(mss_text, chord_list), encoding="utf-8")
+    return path
 
 
 def svg_frame(svg: ElementTree.Element) -> SvgFrame:
@@ -317,10 +357,10 @@ def export_svg(mscore: str, score: Path, style: Path, work_dir: Path) -> Path:
     return pages[0]
 
 
-def export_score(score: Path, root: Path, mscore: str, colour: str, system_width: float) -> None:
+def export_score(score: Path, root: Path, settings: ExportSettings) -> None:
     output_dir = root / SCORE_OUTPUT_DIR
     with tempfile.TemporaryDirectory() as work_dir:
-        page = export_svg(mscore, score, root / SCORE_STYLE, Path(work_dir))
+        page = export_svg(settings.mscore, score, settings.style, Path(work_dir))
         tree = ElementTree.parse(page)
     svg = tree.getroot()
     try:
@@ -328,11 +368,12 @@ def export_score(score: Path, root: Path, mscore: str, colour: str, system_width
     except ScoreError as error:
         raise ScoreError(f"{score.name}: {error}") from error
     remove_page_background(svg)
-    paint_chord_names(svg, colour)
+    paint_chord_names(svg, settings.chord_colour)
     svg_file = output_dir / f"{score.stem}.svg"
     tree.write(svg_file, encoding="UTF-8", xml_declaration=True)
     svg_to_pdf(svg_file, svg_file.with_suffix(".pdf"))
-    svg_file.with_suffix(".tex").write_text(placement_tex(position, system_width), encoding="utf-8")
+    svg_file.with_suffix(".tex").write_text(placement_tex(position, settings.system_width),
+                                            encoding="utf-8")
 
 
 def svg_to_pdf(svg_file: Path, pdf_file: Path) -> None:
@@ -386,10 +427,14 @@ def export_scores(scores: list[Path], root: Path) -> None:
     """Export the scores with the settings every export shares; ScoreError on the first failure."""
     mscore = find_mscore()
     colour = chord_colour((root / STYLE_FILE).read_text(encoding="utf-8"))
-    width = system_width_pt((root / SCORE_STYLE).read_text(encoding="utf-8"))
+    mss_text = (root / SCORE_STYLE).read_text(encoding="utf-8")
+    width = system_width_pt(mss_text)
     (root / SCORE_OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
-    for score in scores:
-        export_score(score, root, mscore, colour, width)
+    with tempfile.TemporaryDirectory() as style_dir:
+        style = write_export_style(mss_text, root / SCORE_CHORD_LIST, Path(style_dir))
+        settings = ExportSettings(mscore, style, colour, width)
+        for score in scores:
+            export_score(score, root, settings)
 
 
 def export_black_ink_pdfs(scores: list[Path], root: Path, force: bool) -> int:
@@ -408,7 +453,7 @@ def main() -> int:
     parser.add_argument("--force", action="store_true", help="export every score, even if up to date")
     args = parser.parse_args()
     root = args.root
-    dependencies = [root / SCORE_STYLE, root / STYLE_FILE, Path(__file__)]
+    dependencies = [root / SCORE_STYLE, root / SCORE_CHORD_LIST, root / STYLE_FILE, Path(__file__)]
     scores = sorted((root / SCORES_DIR).glob("*.mscz"))
     pending = [score for score in scores if args.force or not is_up_to_date(score, root, dependencies)]
     try:

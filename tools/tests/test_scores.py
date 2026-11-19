@@ -16,10 +16,12 @@ from unittest import mock
 
 import scores
 from pdf_programs import PdfProgramError
+from paths import SCORE_CHORD_LIST, SCORE_STYLE
 from scores import (BLACK_INK_DEPENDENCIES, MSCORE_SCORE_NOT_LOADED, ScoreError, StaffPosition,
                     black_ink_pdf, black_ink_pdf_is_up_to_date, chord_colour, export_black_ink_pdf,
-                    export_svg, is_up_to_date, outputs, paint_chord_names, placement_tex,
-                    remove_page_background, run, saved_by, staff_position, system_width_pt)
+                    export_style, export_svg, is_up_to_date, outputs, paint_chord_names,
+                    placement_tex, remove_page_background, run, saved_by, staff_position,
+                    system_width_pt, write_export_style)
 
 # 100 SVG units are 10 mm wide, so one unit is 0.1 mm = 0.283465 pt.
 PT_PER_UNIT = 0.1 / 25.4 * 72
@@ -119,6 +121,51 @@ class SettingsTest(unittest.TestCase):
     def test_placement_file(self):
         self.assertEqual(placement_tex(StaffPosition(left=0, middle=40.054), 538.75),
                          "\\zpscoregeometry{0.00pt}{40.05pt}{538.75pt}\n")
+
+
+STYLE_WITH_CHORD_LIST = ("<Style><chordStyle>legacy</chordStyle>"
+                         "<chordDescriptionFile>chords_legacy.xml</chordDescriptionFile></Style>")
+
+
+class ExportStyleTest(unittest.TestCase):
+    """The export draws chord names with the songbook's chord list (D-190)."""
+
+    def test_the_chord_list_is_named_by_its_absolute_path_and_nothing_else_changes(self):
+        style = export_style(STYLE_WITH_CHORD_LIST, Path("scores/chords.xml"))
+        absolute = Path.cwd() / "scores" / "chords.xml"
+        self.assertEqual(style, STYLE_WITH_CHORD_LIST.replace("chords_legacy.xml", str(absolute)))
+
+    def test_the_path_is_escaped_for_xml(self):
+        style = export_style(STYLE_WITH_CHORD_LIST, Path("/a&b/chords.xml"))
+        self.assertIn("<chordDescriptionFile>/a&amp;b/chords.xml</chordDescriptionFile>", style)
+
+    def test_a_style_that_does_not_name_one_chord_list_fails(self):
+        setting = "<chordDescriptionFile>x.xml</chordDescriptionFile>"
+        for style, count in (("<Style/>", 0), (setting * 2, 2)):
+            with self.subTest(count=count), self.assertRaisesRegex(ScoreError, f"it names {count}"):
+                export_style(style, Path("/chords.xml"))
+
+    def test_the_written_style_is_the_export_style(self):
+        directory = Path(tempfile.mkdtemp())
+        self.addCleanup(lambda: __import__("shutil").rmtree(directory))
+        chord_list = directory / "chords.xml"
+        chord_list.write_text("<museScore/>")
+        path = write_export_style(STYLE_WITH_CHORD_LIST, chord_list, directory)
+        self.assertEqual(path.read_text(encoding="utf-8"),
+                         export_style(STYLE_WITH_CHORD_LIST, chord_list))
+
+    def test_a_missing_chord_list_fails(self):
+        with self.assertRaisesRegex(ScoreError, "chord list .* is missing"):
+            write_export_style(STYLE_WITH_CHORD_LIST, Path("/no/chords.xml"), Path("/no"))
+
+    def test_the_songbook_style_names_one_chord_list(self):
+        export_style(SCORE_STYLE.read_text(encoding="utf-8"), SCORE_CHORD_LIST)
+
+    def test_the_songbook_chord_list_leaves_out_the_flat_of_b_flat_in_german(self):
+        """In German spelling MuseScore draws the flat of B-flat with the german_B symbol."""
+        symbols = ElementTree.parse(SCORE_CHORD_LIST).getroot().iter("sym")
+        codes = [symbol.get("code") for symbol in symbols if symbol.get("class") == "german_B"]
+        self.assertEqual(codes, ["0x200b"])
 
 
 class UpToDateTest(unittest.TestCase):
