@@ -29,31 +29,19 @@ How the remaining tickets in [TICKETS.md](TICKETS.md) are grouped into working s
 | Step | What | Who | Session |
 |---|---|---|---|
 | 1 | About ten new songs | owner | none: content work (D-147) |
-| 2 | H7: split the bilingual songs (and `cernymuz` → `cernymuzmatuska`) | owner writes, the agent checks on request | Session 32 |
-| 3 | P4: proof check of the print PDF, then the owner signs off (the printer's requirements are built in, D-188) | agent, then owner | P4 session |
-| 4 | F1: the width table of the cursive title font | owner says what Gmail shows, then the agent | F1 session |
-| 5 | E4: the songs of `zpevnik-lite` | owner picks, the agent writes the edition | E4 session, after the print (D-147) |
+| 2 | P4: proof check of the print PDF, then the owner signs off (the printer's requirements are built in, D-188) | agent, then owner | P4 session |
+| 3 | F1: the cursive title in Chrome and Gmail (optional: the owner left it for now) | agent, if the owner asks | F1 session |
 
-When the owner says "the songs are written" (steps 1 and 2), the agent runs the P4 session. After P4 and E4 the songbook is done: what is not planned is in D-175.
-
-### Session 32 · H7 · `zpevnik` · when the owner has chosen the songs
-- **Needs:** the owner's choice of the songs to split and their ids and titles (TICKETS H7); `cernymuz` is decided (D-177). Run it when the owner has the songs ready, or let the owner write them and ask the agent only to check.
-- **Read:** TICKETS H7 · D-108, D-124, D-128, D-177, D-178.
-- **Notes:** ⚠ one song at a time. `cernymuz` and `jednoubudemdal` are the songs in parts that V10 left to H7 (D-178); afterwards a lint that every restart of the verse numbers has a `\partrule` is a small addition, if the owner wants it. H7 closes phase 13: its PR adds the phase to HISTORY.md and its line to OVERVIEW.md (Z1). H7 changes the PDF, so do it before P4 if the printed book is to have it.
+When the owner says "the songs are written" (step 1), the agent runs the P4 session. After P4 the songbook is done: what is not planned is in D-175; E4 and H7 were dropped (D-189).
 
 ### P4 session · Sonnet · `zpevnik` · after steps 1 to 3
-- **Needs:** P3 and P1 (done, D-188), the owner's new songs (D-147), H7 if it is to be in the printed book.
+- **Needs:** P3 and P1 (done, D-188), the owner's new songs (D-147).
 - **Read:** TICKETS P4 · D-188 · README *Tisk*.
 - **Notes:** the PDF is built on the owner's Mac (`make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5`), which also makes the black-ink scores with the real `rsvg-convert` for the first time. P4 ends with the owner's sign-off, not with the agent's.
 
 ### F1 session · `zpevnik` · when the owner has said what Gmail shows
-- **Needs:** the owner's description (or a screenshot) of what is wrong in Gmail's preview.
+- **Needs:** the owner's go-ahead (he left it for now, 19 Nov 2026). The cause is known (TICKETS F1).
 - **Read:** TICKETS F1 · D-188 (*Known and left as it is*). It is the last ticket of phase 3: its PR adds the phase to HISTORY.md and its line to OVERVIEW.md (Z1).
-
-### E4 session · Sonnet · `zpevnik` · after the printed edition
-- **Needs:** the owner's list of the songs for `zpevnik-lite`.
-- **Read:** TICKETS E4.
-- **Notes:** nothing waits for it; the full book does not change. It is the last ticket of phase 10: its PR adds the phase to HISTORY.md and its line to OVERVIEW.md (Z1).
 
 ---
 
@@ -62,6 +50,4 @@ When the owner says "the songs are written" (steps 1 and 2), the agent runs the 
 | Decision | Where | Blocks |
 |---|---|---|
 | The owner's new songs (about ten), content work | D-147 | P4 |
-| H7: which songs are split, their ids and titles; and whether H7 is in the printed book or after it | TICKETS H7 | H7; the order of H7 and P4 |
 | The print deadline, the paper and the number of copies (D-188) | the owner and the printer | sending the PDF |
-| E4: the songs for `zpevnik-lite` | TICKETS E4 | E4 (after the print) |

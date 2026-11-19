@@ -1,12 +1,13 @@
-# Phase 13 tickets (finishing)
+# Phase 13 tickets (finishing, 12–19 Nov 2026)
 
-The ticket texts and status rows of the finishing phase that are done, as they were when each ended. The phase is not finished: H7 is in [TICKETS.md](../../TICKETS.md). Summary when the phase ends: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows of the finishing phase, as they were when each ended. H7 was cancelled (D-189). Summary: [HISTORY.md](../../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
 | Q7 | done | the converter is the one reader of the songs; `songs.py` has no regexes (D-164): PR #142 |
 | J6 | done | `\remark` for text that is not sung, a body item `remark` in `songs.json`, `schemaVersion` 2 (D-177): PR #143 and zpevnik-web PR #17; the owner chose the places (one became a `\speaker`, one went to H7) |
 | V10 | done | a song in parts always has `\partrule` between the parts (`ejhorahora` and `rezrezrez` got it); no new form for tight verses (D-178): PR #146 |
+| H7 | cancelled | the bilingual songs as two songs: the owner keeps the songs as they are (`cernymuz` with the Matuška version in its second column); `jednoubudemdal` he may split later as content work (D-189) |
 | Z2 | done | `docs/OVERVIEW.md`: the refactoring area by area, the end state as a diagram, what is not planned and what is open, and the notes for the article moved from HISTORY.md (D-175): the PR of this change |
 
 ### Q7 · One reader of the songs — [agent] · M · `zpevnik`
@@ -30,3 +31,8 @@ The ticket texts and status rows of the finishing phase that are done, as they w
 
 ### Z2 · An overview of the refactoring — [agent] · S · `zpevnik` (docs only)
 For the owner, who writes the article on the website himself (D-175), and as a reference later: `docs/OVERVIEW.md`, facts only, readable in ten minutes. The starting point (v8.33) and the goal; for each area (safety net, registry and generated files, source hygiene, chord spacing, vertical spacing, code quality, editions, print, converter and `songs.json`, legal, website) the problem, what was done and how (the mechanism in a sentence or two), the numbers, and the decisions and PRs as links; the end state as one diagram (song files → `zpevnik.sty` → PDF; song files → converter → `songs.json` → website); what is not planned and why (D-175). It links to HISTORY.md, DECISIONS.md and WALKTHROUGH.md instead of repeating them. The *Notes for the website article* of HISTORY.md move into it, so the article has one place. A later phase adds its line in its last PR (Z1).
+
+### H7 · Bilingual songs as two songs — [you] + [agent] · S · ⚠ — **cancelled** (D-189)
+**The problem** (owner, `jednoubudemdal`). The Czech version and the English original ("We shall overcome") share one song, and the verse numbers start again; by the logic of the songbook they are two songs, each with its own title, its line in the contents and in the search, linked by `\seealso`.
+**To decide first (owner):** which songs are really two versions of one song, and the new ids and titles. The candidates are the songs whose verse numbers start again: `cernymuz`, `ejhorahora`, `idzepostaridze`, `jedesohajzvidna`, `jednoubudemdal`, `kolenasejchalupecky`, `rezrezrez` and `vodavodenka`. A song that stays one song has `\partrule` between its parts (D-178; `cernymuz` and `jednoubudemdal` are the two without one). **Already decided (owner, 13 Nov 2026, D-177):** `cernymuz` "verze Waldemara Matušky" is a second song: it becomes `cernymuzmatuska`, linked with `\seealso`, and its `\vers{\emph{verze …}}` line goes (the title says it).
+**Expected differences:** the songs split, one more entry in the contents and the artist index per split; the pages after them shift. **Last ticket of the phase:** its PR adds phase 13 to HISTORY.md and its line to OVERVIEW.md, and moves the rest of the phase's ticket texts to the archive (Z1).

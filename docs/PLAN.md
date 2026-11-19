@@ -25,14 +25,14 @@ Tags: **[agent]** = suitable for an AI agent. **[you]** = needs your decision or
 | 2 | Chord spacing | done | C1–C5 |
 | 3 | Vertical spacing | done | V1–V9 |
 | Q | Code quality and final command names | done | Q1–Q6 |
-| 8 | Editions (song subsets), build version | done except E4 (after print) | E0–E4, E7, E8 |
+| 8 | Editions (song subsets), build version | done (E4 dropped, D-189) | E0–E3, E7, E8 |
 | 6a | Delivery of the editions: CI release, download page | done | E5–E6 |
-| 9 | Print | **next**; P4 after the owner's new songs | P0, P1, P3, P4 |
+| 9 | Print | **next**; P1 done (D-188), P4 after the owner's new songs | P0, P1, P3, P4 |
 | A | Audits: README, unit tests, build speed | done | A1–A3 |
 | 5 | Converter and `songs.json` | done | J0–J5 |
 | 7 | Legal hygiene | done (`songs.json` part of L2 in J2) | L1–L2 |
 | 6 | Website | done | W1–W7, W5a, W6a |
-| 13 | Finishing: bilingual songs, the overview for the article (one reader of the songs, the remarks and the songs in parts are done) | next, beside print | H7, Z2 (D-175) |
+| 13 | Finishing: one reader of the songs, the remarks, the songs in parts, the overview for the article | done (H7 dropped, D-189) | Q7, J6, V10, Z2 (D-175) |
 
 WP0–WP4 are described in HISTORY.md (results) and in the archived plan (the original problem statements). The cleanup came before the converter so that the converter is written once, against semantic macros only, and `songs.json` carries no layout (D-108). Editions and print were pulled ahead of the converter in D-132; D-147 added the delivery of the editions and the audits before it, and moved `zpevnik-lite` behind the print edition.
 
@@ -48,7 +48,7 @@ The refactoring is closed by a review of the code as a senior engineer would lea
 
 ## WP8 – Editions (D-121)
 
-A song subset built from the same files, as a songbook of its own (D-139): `zpevnik-lite` (a manual selection, the main download on the website) and `lidovky` (until now a separate repository, now the songs of one registry entry). A folder per edition with its selection (song ids and/or artists) and an explicit page contract: each replaceable page is shared or its own, extra pages before the songs and after the contents (D-143); a filter on the song list in `tools/generate.py`, with the full book as the edition `full`; one `build/` root and `make` as the only entry point; the edition named by the build it comes from; no dangling links; one imprint core in every book, with the derivation sentence in every edition but the full book; CI, release asset and the download page (configured in `zpevnik-web`). Editions are independent of the print format. The full book must not change. The same filter later serves the hide switch (L2). First, E0 makes the version name one build (`8.33.N`, D-133), which the edition releases and the print proof rely on.
+A song subset built from the same files, as a songbook of its own (D-139): `zpevnik-lite` (a manual selection, the main download on the website; dropped as a ticket, an edition folder whenever the owner wants it, D-189) and `lidovky` (until now a separate repository, now the songs of one registry entry). A folder per edition with its selection (song ids and/or artists) and an explicit page contract: each replaceable page is shared or its own, extra pages before the songs and after the contents (D-143); a filter on the song list in `tools/generate.py`, with the full book as the edition `full`; one `build/` root and `make` as the only entry point; the edition named by the build it comes from; no dangling links; one imprint core in every book, with the derivation sentence in every edition but the full book; CI, release asset and the download page (configured in `zpevnik-web`). Editions are independent of the print format. The full book must not change. The same filter later serves the hide switch (L2). First, E0 makes the version name one build (`8.33.N`, D-133), which the edition releases and the print proof rely on.
 
 ## WP9 – Print (D-122)
 
