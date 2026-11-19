@@ -4,9 +4,8 @@ Run from the repository root: python3 -m unittest discover -s tools
 """
 import unittest
 
-from pdf_programs import Span
 from print_layout import (A5_SCALE, A5_WIDTH_PT, LayoutError, Margins, Placement, Reach, fit,
-                          is_right_hand, page_margins, reach)
+                          is_right_hand, page_margins)
 
 A4_WIDTH = 595.0
 EDGE = 28.0  # how far the letters of a symmetric test page stay from both A4 edges
@@ -61,7 +60,7 @@ class Fit(unittest.TestCase):
                          fit([SYMMETRIC, SYMMETRIC], A4_WIDTH, A5_WIDTH_PT, required))
 
     def test_a_book_without_letters_cannot_be_placed(self):
-        with self.assertRaisesRegex(LayoutError, "no page"):
+        with self.assertRaisesRegex(LayoutError, "no page has any ink"):
             fit([None, None], A4_WIDTH, A5_WIDTH_PT, Margins(10.0, 10.0))
 
     def test_margins_wider_than_the_page_are_an_error(self):
@@ -69,13 +68,7 @@ class Fit(unittest.TestCase):
             fit([SYMMETRIC], A4_WIDTH, A5_WIDTH_PT, Margins(A5_WIDTH_PT, 0.0))
 
 
-class Reaches(unittest.TestCase):
-    def test_the_reach_of_a_page_spans_all_its_words(self):
-        self.assertEqual(reach([Span(30, 40), Span(10, 20), Span(50, 60)]), Reach(10, 60))
-
-    def test_a_page_without_words_has_no_reach(self):
-        self.assertIsNone(reach([]))
-
+class PageMargins(unittest.TestCase):
     def test_the_margins_of_a_printed_page_count_from_its_trimmed_edges(self):
         self.assertEqual(page_margins(Reach(40, 380), 1, trim_left=10, trim_width=400), Margins(30, 30))
         self.assertEqual(page_margins(Reach(20, 380), 2, trim_left=10, trim_width=400), Margins(30, 10))
