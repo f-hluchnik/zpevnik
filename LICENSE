@@ -16,6 +16,11 @@ rights holders and are not licensed here. Neither are the front matter
 book's foreword quotes lyrics by Vlasta Redl) and the cover image
 (images/, drawn by Ivana Vlčková); their rights stay with their authors.
 
+One file in scores/ is not a score: scores/chords_zpevnik.xml is a chord list
+of MuseScore Studio with one symbol changed and a note added. It stays under its
+own licence, the GNU General Public License version 3 (GPL-3.0-only), as its
+header says.
+
 The songbook is non-commercial and free of charge. Rights holders who do not
 want their song in it, please write to frantahluchnik@gmail.com and the song
 will be removed.

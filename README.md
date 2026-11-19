@@ -148,6 +148,7 @@ Svislé mezery v písničce nepiš ručně, stará se o ně sazba:
 Každý obrázek s notami je jeden soubor `scores/<název>.mscz` z MuseScoru 4 a v písničce ho vysází `\score{<název>}`. Noty stojí vždy uvnitř bloku: na jeho začátku vedle štítku (`\intro{\score{pohadka}}`), jinde na vlastním řádku za `\\`. Odsazení, posun ani šířku do písničky nepiš: obrázek začíná tam, kde text bloku, štítek stojí uprostřed první osnovy a všechny noty mají stejné měřítko (celý systém přesně vyplní řádek).
 
 - Než začneš noty upravovat, načti v MuseScoru sdílený styl `scores/zpevnik.mss` (Formát → Styl → Načíst styl). Sestavení ho stejně použije na každý soubor, takže jen tak uvidíš rozdělení do systémů, jaké bude ve zpěvníku.
+- Akordy v notách piš v německém značení, jako ve zpěvníku: `B` (anglicky B♭) a `H` (anglicky B). Se sdíleným stylem je MuseScore ukáže jako „B♭“ a „H“, zpěvník vysází „B“ a „H“ (D-190).
 - Soubor s notami má vždy jen jednu stránku. Víc obrázků v jedné písničce znamená víc souborů (`morseovka_1.mscz`, `morseovka_2.mscz`).
 - Noty z MuseScoru ručně neexportuj: `make` (nebo `make scores`) je vyexportuje do `build/scores/` sám a přeskočí ty, které se nezměnily. Akordy dostanou stejnou červenou jako ve zpěvníku.
 - Písnička otevřená samostatně (Overleaf) ukáže místo not rámeček s názvem.
