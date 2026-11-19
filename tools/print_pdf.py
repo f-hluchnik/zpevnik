@@ -7,9 +7,10 @@ font embedded, scaled down and placed on A5 by a small LaTeX document of pdfpage
 The edition's `[print]` table (edition.toml, D-188) says what the printer needs:
 
 - the margins: no letter closer than `spine_margin_mm` to the bound edge and `outer_margin_mm`
-  to the outer edge. The letters of every page are measured on the A4 PDF, and print_layout.py
-  works out the scale and the shift away from the spine. The scale is at most A4 to A5
-  (1/sqrt(2)), so every song still fits its page;
+  to the outer edge. Every page of the A4 PDF is rendered at 300 dpi and its ink measured
+  (letters, scores and lines alike; any pixel that is not pure white), and print_layout.py works
+  out the scale and the shift away from the spine. The scale is at most A4 to A5 (1/sqrt(2)), so
+  every song still fits its page;
 - `skip_first_pages`: pages left out of the book block, an even number (a cover the printer gets
   separately);
 - `crop_marks`: the PDF page is the A5 page with 10 mm around it for crop marks (the crop
@@ -18,18 +19,20 @@ The edition's `[print]` table (edition.toml, D-188) says what the printer needs:
 
 An odd page count gets a blank page at the end. The finished PDF is checked: the trimmed page is
 A5, the page count even, and a format in one ink (formats.py) uses black ink alone on every page
-(Ghostscript's ink coverage). The margins are measured again, and not the way the pages were
-placed: every page is rendered at 300 dpi inside its trim box, and its ink (letters, scores,
-lines; any pixel that is not pure white) must keep both margins. Anything else stops with a
-message that names the pages; the narrowest margins measured are printed with the result.
+(Ghostscript's ink coverage). The margins are measured again on the finished PDF, after the
+scaling, the shift and the crop marks: every page is rendered at 300 dpi inside its trim box and
+its ink must keep both margins. The measure is good to about a pixel (0.085 mm), and a pixel the
+ink only touches counts as ink; the pages are placed with a pixel to spare, so that a book placed
+right passes and one that is not fails. Anything else stops with a message that names the pages; the
+narrowest margins measured are printed with the result.
 
 `--path` prints where the A5 PDF is (made or not), so the Makefile does not repeat the layout of build/.
 
 Usage: python3 tools/print_pdf.py [--edition NAME] [--format NAME] [--path] [repo-root]
        (run after building the format: make EDITION=... FORMAT=print CHORDS=black; adding
        SIZE=A5 does both)
-Needs pdflatex with pdfpages and crop, poppler (pdfinfo, pdftotext, pdftoppm) and, for a format
-in one ink, Ghostscript. Python >= 3.11, standard library only.
+Needs pdflatex with pdfpages and crop, poppler (pdfinfo, pdftoppm) and, for a format in one ink,
+Ghostscript. Python >= 3.11, standard library only.
 """
 import argparse
 import sys
@@ -42,14 +45,15 @@ from edition import EditionError, PrintSettings, edition_file, read_print_settin
 from formats import PRINT, add_format_argument, is_black_ink
 from paths import (BOOK_PDF_NAME, PRINT_PDF_NAME, PRINT_WRAPPER_NAME, add_edition_argument,
                    add_root_argument, edition_output_dir)
-from pdf_programs import (POINTS_PER_INCH, InkCoverage, PageBoxes, PdfProgramError, ink_columns,
-                          ink_coverage, page_boxes, page_count, page_words, pdfinfo, render_page)
+from pdf_programs import (POINTS_PER_INCH, Box, InkCoverage, PageBoxes, PdfProgramError, ink_columns,
+                          ink_coverage, page_boxes, page_count, pdfinfo, render_page)
 from print_layout import (A5_HEIGHT_PT, A5_WIDTH_PT, LayoutError, Margins, Placement, Reach, fit,
-                          millimetres, page_margins, points, reach)
+                          millimetres, page_margins, points)
 
 CROP_MARK_ROOM_MM = 10.0  # on every side of the A5 page, for the crop marks
 SIZE_TOLERANCE_PT = 1.0
-INK_CHECK_DPI = 300  # a pixel is 0.085 mm: a margin is measured at most that much too narrow
+INK_DPI = 300  # the resolution the ink is measured at
+INK_PIXEL_PT = POINTS_PER_INCH / INK_DPI  # 0.085 mm: a margin is measured at most that much too narrow
 REPORTED_PAGES = 10  # an error names at most this many pages
 PDFLATEX = ["pdflatex", "-interaction=nonstopmode", "-halt-on-error"]
 SETUP_HINT = "(README, Tisk)"
@@ -106,11 +110,21 @@ def required_margins(settings: PrintSettings) -> Margins:
     return Margins(spine=points(settings.spine_margin_mm), outer=points(settings.outer_margin_mm))
 
 
-def placement_for(source: Path, source_width: float, pages: range, settings: PrintSettings) -> Placement:
-    """The scale and the shift that keep the letters of the kept pages inside the margins."""
-    words = page_words(source)
-    return fit([reach(words[page - 1]) for page in pages], source_width, A5_WIDTH_PT,
-               required_margins(settings))
+def page_ink(pdf: Path, page: int, area: Box, page_height: float) -> Reach | None:
+    """How far the ink of a page reaches inside the area, in pt from its left edge; None for no ink."""
+    columns = ink_columns(render_page(pdf, page, INK_DPI, area, page_height))
+    if columns is None:
+        return None
+    return Reach(left=columns.first * INK_PIXEL_PT, right=(columns.last + 1) * INK_PIXEL_PT)
+
+
+def placement_for(source: Path, page_area: Box, pages: range, settings: PrintSettings) -> Placement:
+    """The scale and the shift that keep the ink of the kept pages inside the margins, with the
+    pixel the check of the finished PDF may lose to spare."""
+    required = required_margins(settings)
+    placed = Margins(spine=required.spine + INK_PIXEL_PT, outer=required.outer + INK_PIXEL_PT)
+    reaches = [page_ink(source, page, page_area, page_area.height) for page in pages]
+    return fit(reaches, page_area.width, A5_WIDTH_PT, placed)
 
 
 def listed(pages: Sequence[object]) -> str:
@@ -136,15 +150,11 @@ def check_boxes(boxes: PageBoxes, crop_marks: bool) -> None:
 def ink_margins(pdf: Path, count: int, boxes: PageBoxes) -> dict[int, Margins]:
     """The margins of the ink of every printed page with any ink, measured on the page rendered
     inside its trim box (so the crop marks around it do not count)."""
-    points_per_pixel = POINTS_PER_INCH / INK_CHECK_DPI
     margins = {}
     for position in range(1, count + 1):
-        page = render_page(pdf, position, INK_CHECK_DPI, boxes.trim, boxes.media.height)
-        columns = ink_columns(page)
-        if columns is None:
-            continue
-        ink = Reach(left=columns.first * points_per_pixel, right=(columns.last + 1) * points_per_pixel)
-        margins[position] = page_margins(ink, position, 0, page.width * points_per_pixel)
+        ink = page_ink(pdf, position, boxes.trim, boxes.media.height)
+        if ink is not None:
+            margins[position] = page_margins(ink, position, 0, boxes.trim.width)
     return margins
 
 
@@ -213,7 +223,7 @@ def make_print_pdf(root: Path, edition: str, format_name: str) -> tuple[Path, Pl
                          "does both; the Makefile lists the options)")
     info = pdfinfo(root / source)
     pages = kept_pages(page_count(info), settings.skip_first_pages)
-    placement = placement_for(root / source, page_boxes(info).media.width, pages, settings)
+    placement = placement_for(root / source, page_boxes(info).media, pages, settings)
     wrapper = folder / PRINT_WRAPPER_NAME
     (root / wrapper).write_text(wrapper_tex(source, pages, placement, settings.crop_marks), encoding="utf-8")
     try:

@@ -1,10 +1,8 @@
 """What the tools ask of a finished PDF, through poppler and Ghostscript.
 
 - pdfinfo (poppler): the page count and the page boxes of the first page;
-- pdftotext -bbox (poppler): where every word of every page is, to place the pages so that
-  the letters keep the margins the printer asks for;
-- pdftoppm (poppler): a page rendered in shades of grey, to measure where its ink is,
-  independently of the words: the check of the finished PDF;
+- pdftoppm (poppler): a page rendered in shades of grey, to measure where its ink is: letters,
+  scores and lines alike, as the printer's margins count them;
 - Ghostscript's inkcov device: how much of each ink (cyan, magenta, yellow, black) every page
   takes when printed, to check a print in one ink;
 - Ghostscript's pdfwrite device: a copy of a PDF in shades of grey only (DeviceGray), which
@@ -17,15 +15,12 @@ import re
 import subprocess
 from collections.abc import Iterator
 from dataclasses import dataclass
-from html.parser import HTMLParser
 from pathlib import Path
 
 PDFINFO = "pdfinfo"
-PDFTOTEXT = "pdftotext"
 PDFTOPPM = "pdftoppm"
 GHOSTSCRIPT = "gs"
-INSTALL_HINTS = {PDFINFO: "install poppler", PDFTOTEXT: "install poppler", PDFTOPPM: "install poppler",
-                 GHOSTSCRIPT: "install Ghostscript"}
+INSTALL_HINTS = {PDFINFO: "install poppler", PDFTOPPM: "install poppler", GHOSTSCRIPT: "install Ghostscript"}
 SETUP_HINT = "(README, Nastavení lokální kopie)"
 
 PAGES_LINE = re.compile(r"^Pages:\s+(\d+)$", re.M)
@@ -66,13 +61,6 @@ class Box:
     @property
     def height(self) -> float:
         return self.top - self.bottom
-
-
-@dataclass(frozen=True)
-class Span:
-    """How far a word reaches across its page, in pt from the left edge of the media box."""
-    left: float
-    right: float
 
 
 @dataclass(frozen=True)
@@ -149,36 +137,6 @@ def page_boxes(info: str) -> PageBoxes:
 def pdfinfo(pdf: Path) -> str:
     """pdfinfo's report with the page boxes of the first page."""
     return run([PDFINFO, "-box", str(pdf)])
-
-
-class WordBoxParser(HTMLParser):
-    """The <page> and <word> elements of pdftotext -bbox: the words of each page."""
-
-    def __init__(self):
-        super().__init__()
-        self.pages: list[list[Span]] = []
-
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        if tag == "page":
-            self.pages.append([])
-        elif tag == "word":
-            if not self.pages:
-                raise PdfProgramError(f"{PDFTOTEXT} -bbox wrote a word outside a page")
-            values = dict(attrs)
-            self.pages[-1].append(Span(left=float(values["xmin"]), right=float(values["xmax"])))
-
-
-def word_spans(bbox_html: str) -> list[list[Span]]:
-    """Every word of every page from the output of pdftotext -bbox."""
-    parser = WordBoxParser()
-    parser.feed(bbox_html)
-    parser.close()
-    return parser.pages
-
-
-def page_words(pdf: Path) -> list[list[Span]]:
-    """How far the words of each page reach across it."""
-    return word_spans(run([PDFTOTEXT, "-bbox", str(pdf), "-"]))
 
 
 def greymap(data: bytes) -> Greymap:
