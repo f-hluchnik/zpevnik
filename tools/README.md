@@ -9,10 +9,10 @@ You normally run these through `make` (the main README, *Příkazy*); each also 
 | Module | Run by | What it does |
 |---|---|---|
 | `generate.py` | `make`, `make generate` | Writes the generated TeX of an edition (song list, contents, artist index, version, front matter) into `build/editions/<edition>/generated/`. `--version` prints the songbook version. |
-| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. |
+| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. For the print in one ink (`--format print-black`) it also makes each image in black ink only (D-188). |
 | `build_edition.py` | `make` | Compiles an edition with latexmk and prints the path of its PDF. CI also uses `--list` to find the editions. |
 | `build_song.py` | `make song SONG=<id>` | Compiles one song alone into `build/songs/<id>.pdf`, the way Overleaf would. |
-| `print_pdf.py` | `make FORMAT=print SIZE=A5` | Scales an edition's print format to A5 for a printer (D-185). |
+| `print_pdf.py` | `make FORMAT=print SIZE=A5` | Places an edition's print format on A5 for its printer, as the `[print]` table of its `edition.toml` asks (margins, pages left out, crop marks), and checks the result: margins, page count and, in one ink, that every page is black ink only (D-185, D-188). |
 | `lint.py` | `make check` | Checks the songs, the artists registry, the edition definitions and the lists in `data/`. Errors fail, warnings are only listed. |
 | `convert.py` | `make check` | Reads every song with the converter (`songbook/`) and fails on anything it does not accept, with the file and line. `--song <id>` prints the model of one song as JSON. |
 | `songs_json.py` | `make json` | Writes `build/songs.json` for the website (D-165): the full book's published songs in book order with their pages, the contents and the artists. Needs the built full book, which `make json` builds first. |
@@ -42,6 +42,8 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 | `edition.py` | The book facts (`data/book.toml`) and the editions (`editions/<name>/edition.toml`): reading, validation and the song selection. |
 | `edition_tex.py` | The generated TeX of an edition's front matter. |
 | `formats.py` | The output formats (`screen`, `print`, `print-black`) and the `--format` argument. The Makefile chooses one from its `FORMAT` and `CHORDS` (D-185). |
+| `print_layout.py` | Where the book's pages go on the printer's A5 page: the scale and the shift away from the spine that keep the printer's margins (D-188). |
+| `pdf_programs.py` | What the tools read from a finished PDF and do with it through poppler and Ghostscript: page boxes, word positions, ink coverage, conversion to grey. |
 | `letter_toc.py` | The letter part of the contents. |
 | `artist_toc.py` | The artist part of the contents. |
 | `collation.py` | The Czech collation of song titles. |

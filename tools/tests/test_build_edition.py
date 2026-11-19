@@ -9,7 +9,7 @@ from pathlib import Path
 
 from build_edition import (LatexError, build, failure_excerpt, include_folders, latexmk_command,
                            missing_link_targets, pdf_path, run_latexmk, undefined_labels)
-from formats import PRINT, PRINT_BLACK
+from formats import PRINT, PRINT_BLACK, pretex
 from paths import generated_dir
 
 
@@ -23,8 +23,7 @@ class Command(unittest.TestCase):
     def test_a_format_adds_its_definitions_and_has_its_own_output_folder(self):
         command = latexmk_command("lite", PRINT_BLACK)
         self.assertIn("-outdir=build/editions/lite/print-black", command)
-        self.assertIn("-usepretex=\\def\\zpgenerated{build/editions/lite/generated}"
-                      "\\def\\zpprint{}\\def\\zpchordcolor{black}", command)
+        self.assertIn("-usepretex=\\def\\zpgenerated{build/editions/lite/generated}" + pretex(PRINT_BLACK), command)
 
 
 class Paths(unittest.TestCase):

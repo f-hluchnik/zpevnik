@@ -63,10 +63,11 @@ Three kinds of thing are kept apart: *source* (song files, `data/`, `editions/`,
 - **Version:** `major.minor` is the song count + 100 (738 songs → 8.38), the patch counts commits, so a release is a build ([D-133](DECISIONS.md#d-133--the-version-identifies-a-build-833n--agreed-owner-6-nov-2026-details-proposed-by-the-agent-confirmed-in-e0s-pr-ticket-e0)).
 - **Open:** the songs of `zpevnik-lite` are for the owner to pick after the printed edition (E4, [D-147](DECISIONS.md#d-147--order-after-session-21-delivery-print-audits-then-the-converter-and-the-website--agreed-owner-11-nov-2026-session-21-amends-d-132)).
 
-### Print (phase 3) · [#113](https://github.com/f-hluchnik/zpevnik/pull/113)–[#116](https://github.com/f-hluchnik/zpevnik/pull/116)
+### Print (phase 3) · [#113](https://github.com/f-hluchnik/zpevnik/pull/113)–[#116](https://github.com/f-hluchnik/zpevnik/pull/116) and the printer's requirements
 - **Done:** a feasibility report with the printer's checklist (`docs/p0-print-report.md`); the print formats `print` and `print-black`; the screen PDF scaled to A5 with a spine shift, `make FORMAT=print [CHORDS=black] SIZE=A5` since D-185 ([D-154](DECISIONS.md#d-154--print-the-owners-answers-and-output-formats-as-build-time-macros--implemented-in-part-agent-11-nov-2026-session-21c-first-pr-of-p3-agreed-with-the-owner-d-139-d-142-d-148)–[D-157](DECISIONS.md#d-157--print-preparation-is-done-what-is-left-belongs-to-the-printer-and-the-owner--recorded-agent-11-nov-2026-session-21c-closes-p0-and-p3-leaves-p1-open)). The screen PDF never changes because of print (zero diff).
 - **Cancelled:** a licensing check for selling, because the book is never sold ([D-140](DECISIONS.md#d-140--the-songbook-is-never-sold--agreed-owner-9-nov-2026)).
-- **Open:** the printer's answers (P1) and the checked proof on the final content (P4).
+- **Done:** the printer's requirements ([D-188](DECISIONS.md#d-188--print-for-the-printer-one-ink-margins-measured-on-the-letters-crop-marks-the-printers-needs-in-editiontoml--agreed-owner-19-nov-2026-closes-p1-amends-d-154-d-156-d-157-and-d-185)): the print in one ink (black, the scores too, checked page by page), the margins at the spine and the outer edge measured on the letters of every page, crop marks; the requirements live in the edition's `[print]` table, so the PDF for the printer is one command.
+- **Open:** the checked proof on the final content (P4); the malformed width table of the cursive title font (F1).
 
 ### Converter and `songs.json` (phase 7, J6) · [#88](https://github.com/f-hluchnik/zpevnik/pull/88), [#89](https://github.com/f-hluchnik/zpevnik/pull/89), [#123](https://github.com/f-hluchnik/zpevnik/pull/123), [#124](https://github.com/f-hluchnik/zpevnik/pull/124), [#126](https://github.com/f-hluchnik/zpevnik/pull/126)–[#129](https://github.com/f-hluchnik/zpevnik/pull/129), [#143](https://github.com/f-hluchnik/zpevnik/pull/143)
 - **Problem:** the website needs the songs as data, and the song files had quirks that no strict reader would accept.
@@ -89,7 +90,7 @@ The principle is a songbook that is correct and simple, not one with every featu
 
 ## What is open
 - **H7:** two versions of one song become two songs (`cernymuz` → `cernymuzmatuska`, `jednoubudemdal`); the owner writes them.
-- **The owner's new songs** (about ten), then **P1** (the printer's answers) and **P4** (the proof), then **E4** (`zpevnik-lite`).
+- **The owner's new songs** (about ten), then **P4** (the proof), **F1** (the title font), then **E4** (`zpevnik-lite`).
 - Each of these adds its line here in its last pull request.
 
 ---

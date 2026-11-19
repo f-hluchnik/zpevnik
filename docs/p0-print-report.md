@@ -2,6 +2,8 @@
 
 Session 21c, 11 Nov 2026. A report, not a change of the book (D-147, D-148): it holds what was measured, the plan the owner agreed, and the checklist for the printer (section 4). The scaled print it led to is built (D-154, D-155, D-156); the geometry trial is not built and stays a one-off branch (section 3, item 4).
 
+**Superseded in part (19 Nov 2026, D-188):** the printer answered. Sections 4 and 5 are history: the print is in one ink (black), the margins are measured on the letters and set by the edition's `[print]` table (the further scaling of section 5, at 0.975), with crop marks; `--spine-shift-mm` and `--skip-first` are gone.
+
 The print edition is `editions/skaut-kravare/` (152 songs, "Skautský zpěvník, oddíl Kravaře"), the only hand-made edition (D-148).
 
 ## 1. Scaled sample (done)

@@ -32,14 +32,14 @@ Zpěvník (celý i jednotlivá vydání) si můžeš sestavit na svém počíta�
    pip install -r requirements-dev.txt
    ```
    Složka `.venv` se necommituje. Prostředí aktivuj (`source .venv/bin/activate`) v každém novém terminálu, ve kterém spouštíš `make`. `make` verzi Pythonu kontroluje a se starší skončí srozumitelnou chybou. Jiný Python mu můžeš zadat i přímo: `make PYTHON=python3.12`.
-3. **Nainstaluj TeX Live a poppler.** Zpěvník potřebuje TeX Live s češtinou, `latexmk` a několik balíků: `csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `qrcode`, `cm-super` a `musixtex-fonts` (křížky a béčka v akordech). Poppler (program `pdfinfo`) potřebuje PDF pro tiskárnu v A5 (viz [Tisk](#tisk)) a porovnání PDF (`tools/pdfdiff.py`).
+3. **Nainstaluj TeX Live, poppler a Ghostscript.** Zpěvník potřebuje TeX Live s češtinou, `latexmk` a několik balíků: `csquotes`, `dashrule`, `eso-pic`, `pgf`, `geometry`, `xcolor`, `hyperref`, `qrcode`, `cm-super` a `musixtex-fonts` (křížky a béčka v akordech); PDF pro tiskárnu ještě `pdfpages` a `crop` (ořezové značky). Poppler (programy `pdfinfo` a `pdftotext`) potřebuje PDF pro tiskárnu v A5 (viz [Tisk](#tisk)) a porovnání PDF (`tools/pdfdiff.py`). Ghostscript (program `gs`) potřebuje tisk jednou barvou (`CHORDS=black`): převádí noty do černé a kontroluje, že PDF pro tiskárnu nepotřebuje jinou barvu než černou.
    - **macOS:** buď celý MacTeX (`brew install --cask mactex-no-gui`), nebo menší BasicTeX (`brew install --cask basictex`) a k němu balíky:
      ```
      sudo tlmgr update --self
-     sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref qrcode cm-super musixtex-fonts latexmk
+     sudo tlmgr install collection-langczechslovak babel-czech hyphen-czech csquotes dashrule eso-pic pgf geometry xcolor hyperref qrcode cm-super musixtex-fonts latexmk pdfpages crop
      ```
-     V obou případech pak ještě `brew install poppler`.
-   - **Linux:** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music latexmk poppler-utils`
+     V obou případech pak ještě `brew install poppler ghostscript` (MacTeX Ghostscript obvykle přináší sám; `gs --version` ukáže, jestli ho máš).
+   - **Linux:** `sudo apt-get install texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music latexmk poppler-utils ghostscript`
 
    GitHub Actions sestavuje zpěvník s TeX Live 2023. Novější verze funguje také, výsledek se ale může mírně lišit. Rozhoduje vždy sestavení na GitHub Actions.
 4. **Nainstaluj nástroje na noty.** Noty se exportují z MuseScoru (viz [Noty](#noty)), proto `make` potřebuje ještě tři věci:
@@ -53,7 +53,8 @@ Zpěvník (celý i jednotlivá vydání) si můžeš sestavit na svém počíta�
 - `the tests and the check of songs.json need the packages of requirements-dev.txt`: ve virtuálním prostředí chybí `jsonschema`. S aktivním `.venv` spusť `pip install -r requirements-dev.txt`.
 - `MuseScore 4 not found`: MuseScore je jinde, než ho `make` hledá. Nastav `MSCORE` (krok 4).
 - `rsvg-convert not found`: nainstaluj `librsvg` (krok 4).
-- `pdfinfo not found`: nainstaluj poppler (krok 3).
+- `pdfinfo not found` nebo `pdftotext not found`: nainstaluj poppler (krok 3).
+- `gs not found: install Ghostscript`: nainstaluj Ghostscript (krok 3).
 
 ## Nová písnička
 Každá písnička je jeden soubor ve složce `songs`. Seznam písniček, obsah (podle písmen i podle interpretů) a verzi zpěvníku vygeneruje `make`, takže `zpevnik.tex` ani `shared-pages/contents.tex` ručně neupravuješ. Písnička se podle názvu v `\song{}` sama zařadí do obsahu podle písmen i do sekce svého interpreta.
@@ -191,7 +192,7 @@ Všechno, co `make` vytvoří, ukládá do složky `build` (necommituje se, `mak
 - `make check` – všechny kontroly najednou: unit testy; kontrola písniček, registru interpretů a definic vydání; převod písniček pro web (hlásí, čemu nerozumí, i s číslem řádku); sestavení s kontrolou odkazů (selže na odkazu, který nikam nevede); jedna stránka na písničku; překrývání akordů; řádky v šířce textu. Chyby kontrolu zastaví, varování jen vypíše.
 - `make song SONG=<id>` – jen jedna písnička do `build/songs/<id>.pdf` (bez obsahu a bez jména interpreta, jako na Overleafu).
 - `make EDITION=<název>`, `make check EDITION=<název>` – jiné vydání (složka `editions/<název>/`, výsledek v `build/editions/<název>/zpevnik.pdf`, viz [Vydání zpěvníku](#vydání-zpěvníku)).
-- `make FORMAT=print` – zpěvník pro papír; `CHORDS=black` – černé akordy; `SIZE=A5` – PDF zmenšené na A5 pro tiskárnu (viz [Tisk](#tisk)).
+- `make FORMAT=print` – zpěvník pro papír; `CHORDS=black` – všechno černě, pro tisk jednou barvou; `SIZE=A5` – PDF v A5 pro tiskárnu vydání (viz [Tisk](#tisk)).
 - `make generate` – jen generování, `make scores` – jen export not, `make clean` – smaže složku `build`.
 - `make PYTHON=python3.12` – jiný Python než `python3`.
 - Jednotlivé kroky `make check`: `python3 -m unittest discover -s tools` (unit testy nástrojů), `python3 tools/lint.py` (kontrola písniček, registru interpretů a definic vydání), a po `make` ještě `python3 tools/check_pages.py` (jedna stránka na písničku), `python3 tools/chord_gaps.py` (překrývání akordů a akordy v okraji) a `python3 tools/song_lines.py` (zalomené řádky a řádky v okraji). U jiného vydání přidej `--edition <název>`.
@@ -204,17 +205,29 @@ Všechno, co `make` vytvoří, ukládá do složky `build` (necommituje se, `mak
 Pro papír sestavíš zpěvník (i kterékoli vydání) příkazem `make FORMAT=print`. PDF najdeš v `build/editions/<vydání>/print/zpevnik.pdf`, vedle PDF pro obrazovku, které se tím nemění. Na papíře nejde na odkazy kliknout, proto z PDF zmizí odkazy „→ obsah“ za názvem písničky, šipky před jménem interpreta, řádek písmen nad obsahem, odkaz „řazení podle interpretů“ a věta o hypertextových odkazech. Obsah podle písmen, písničky v sekcích interpretů a řádky „→ viz také“ mají místo odkazů čísla stran. Rejstřík interpretů obsahuje jen jména, protože sekce interpretů následují hned za ním ve stejném pořadí. Stránky písniček vypadají stejně jako na obrazovce, takže se každá písnička vejde na jednu stránku; ověří to `make check FORMAT=print`. Formáty definuje `tools/formats.py`.
 
 K `FORMAT=print` patří dvě volby. Bez `FORMAT=print` nebo s jinou hodnotou skončí `make` chybou (D-185):
-- `CHORDS=black` – černé akordy pro tisk jednou barvou (výchozí je `CHORDS=red`, červené akordy). Mění jen akordy: obrázek na obálce zůstane barevný a šedá jména interpretů šedá. PDF je ve složce `print-black` místo `print`.
-- `SIZE=A5` – PDF zmenšené na A5 pro tiskárnu (výchozí je `SIZE=A4`). `make` sestaví zpěvník pro papír v A4 a zmenší ho do `zpevnik-a5.pdf` vedle něj. Strany A4 a A5 jsou v poměru přesně √2 : 1, takže se každá písnička pořád vejde na jednu stránku. Potřebuje poppler (krok 3 v [Nastavení lokální kopie](#nastavení-lokální-kopie)).
+- `CHORDS=black` – tisk jednou barvou, černou (výchozí je `CHORDS=red`, červené akordy). Černé jsou akordy a také akordy v notách: kniha vezme noty z jejich černé verze (`build/scores/<název>-black.pdf`), kterou `make` udělá sám (potřebuje Ghostscript). Šedá jména interpretů zůstanou šedá, protože šedá se tiskne stejnou černou barvou, jen světleji. Obrázek na obálce zůstane barevný, a proto obálka do PDF pro tiskárnu nepatří (`skip_first_pages`, níže). PDF je ve složce `print-black` místo `print`.
+- `SIZE=A5` – PDF v A5 pro tiskárnu vydání, `zpevnik-a5.pdf` vedle PDF v A4. Co tiskárna potřebuje, říká tabulka `[print]` v `edition.toml` vydání (níže). Vydání bez ní PDF v A5 nemá a `make` skončí chybou.
 
-Volby zmenšení na A5 předávej v `PRINT_ARGS` (jen se `SIZE=A5`), například:
+#### PDF pro tiskárnu
+Požadavky tiskárny patří do `edition.toml` vydání, do tabulky `[print]` (D-188). Všechny čtyři klíče jsou povinné. Vydání `skaut-kravare` má:
+```toml
+[print]
+spine_margin_mm = 12.5
+outer_margin_mm = 4.5
+skip_first_pages = 2
+crop_marks = true
 ```
-make EDITION=<název> FORMAT=print SIZE=A5 PRINT_ARGS="--spine-shift-mm 3 --skip-first 2"
-```
-- `--spine-shift-mm` odsune obsah každé stránky od hřbetu, kde je u kroužkové vazby potřeba víc místa. Na A5 začíná tisk 7,1 mm od obou okrajů, takže posun o 3 mm dá 10,1 mm u hřbetu a 4,1 mm na vnější straně.
-- `--skip-first` vynechá první stránky, a to sudý počet (třeba obálku, která se tiskárně odevzdává zvlášť).
+- `spine_margin_mm` a `outer_margin_mm` – nejmenší vzdálenost písmen od hřbetu a od vnějšího okraje oříznuté stránky, v milimetrech. Na lichých stránkách je hřbet vlevo, na sudých vpravo. `make` změří, kam sahají písmena na každé stránce PDF v A4, a pak stránky zmenší a odsune od hřbetu tak, aby oba okraje vyšly na všech stránkách. Zmenšuje nejvýš do A5 (strany A4 a A5 jsou v poměru √2 : 1), takže se každá písnička pořád vejde na jednu stránku. Když okraje potřebují víc místa, zmenší stránky ještě o kousek víc: u `skaut-kravare` na 97,5 % velikosti A5, takže základní písmo má asi 9,9 bodu místo 10,2. Tiskárna chtěla 12 a 4 mm, půl milimetru navíc je rezerva na ořez.
+- `skip_first_pages` – kolik prvních stránek do knižního bloku nepatří, sudý počet (lichý by přehodil všechny stránky na druhou stranu hřbetu). U `skaut-kravare` jsou to obálka a její rub: obálku dodá tiskárně zadavatel zvlášť.
+- `crop_marks` – `true`: stránka PDF je A5 a kolem ní 10 mm, v rozích ořezové značky; PDF navíc říká, kde je oříznutá stránka (TrimBox). Spadávka není, protože se nic netiskne až do kraje.
 
-Lichý počet stránek se doplní prázdnou stránkou na konci.
+PDF pro tiskárnu sestavíš jedním příkazem:
+```
+make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5
+```
+Lichý počet stránek se doplní prázdnou stránkou na konci. Hotové PDF `make` zkontroluje a skončí chybou s čísly stránek, když oříznutá stránka není A5, počet stránek je lichý, některé písmeno je blíž k okraji, než tabulka dovoluje, nebo když PDF s `CHORDS=black` na některé stránce potřebuje jinou barvu než černou.
+
+Tiskárna chce PDF bez RGB, a proto pro ni je jen `CHORDS=black`. PDF s červenými akordy (`SIZE=A5` bez `CHORDS=black`) má barvy v RGB a převod do CMYK zpěvník nedělá (D-188). Pro jinou tiskárnu napiš do tabulky `[print]` její požadavky. Volby `PRINT_ARGS` už nejsou: `make` s nimi skončí chybou, která odkáže sem.
 
 ## Vydání zpěvníku
 Vydání je výběr písniček s vlastními úvodními stránkami, sestavený ze stejných souborů jako celý zpěvník. I celý zpěvník je vydání (`editions/full/`); další je třeba `lidovky` (lidové písničky, dřív samostatný repozitář). Každé vydání je složka `editions/<název>/` se souborem `edition.toml` a PDF z něj sestaví `make EDITION=<název>` do `build/editions/<název>/zpevnik.pdf`.
@@ -232,7 +245,7 @@ Vydání je výběr písniček s vlastními úvodními stránkami, sestavený ze
    ```
    `cover_image` je obrázek, který sdílená obálka (`cover = "shared"`) roztáhne přes celou stránku; cesta vede od složky vydání. U sdílené obálky je povinný. U vlastní obálky (`cover = "own"`) se neuvádí, protože obrázek patří do jejího `cover.tex`.
 2. **Vyber písničky:** `all = true` (všechny), `artists = ["<kotva>", ...]` (všechny písničky daných interpretů z registru) nebo `songs = ["<id>", ...]` (jednotlivé písničky podle názvu souboru bez `.tex`). `songs` a `artists` můžeš kombinovat. Neznámé `id` nebo kotvu ohlásí `make` i `make check` jako chybu. Písničky jsou vždy seřazené jako v celém zpěvníku, tedy abecedně.
-3. **Doplň, co potřebuješ.** Volitelně `title`, `subtitle` (podtitul pod názvem na titulní straně), `editors` (seznam jmen), `imprint` (soubor s texty nad tiráží, např. poděkování) a stránky před písničkami (`before_songs`) a za obsahem (`after_contents`). Obálku, předtitul a titulní stranu můžeš nahradit vlastní: v `[pages]` pak napiš `"own"` a vedle `edition.toml` přidej soubor `cover.tex`, `halftitle.tex` nebo `titlepage.tex` (příkladem je vydání `lidovky` s vlastní obálkou). Soubor `.tex` ve složce vydání, na který nic neodkazuje, je chyba. Všechny klíče a chyby popisuje `tools/edition.py`.
+3. **Doplň, co potřebuješ.** Volitelně `title`, `subtitle` (podtitul pod názvem na titulní straně), `editors` (seznam jmen), `imprint` (soubor s texty nad tiráží, např. poděkování), stránky před písničkami (`before_songs`) a za obsahem (`after_contents`) a tabulku `[print]`, když vydání půjde do tiskárny (viz [PDF pro tiskárnu](#pdf-pro-tiskárnu)). Obálku, předtitul a titulní stranu můžeš nahradit vlastní: v `[pages]` pak napiš `"own"` a vedle `edition.toml` přidej soubor `cover.tex`, `halftitle.tex` nebo `titlepage.tex` (příkladem je vydání `lidovky` s vlastní obálkou). Soubor `.tex` ve složce vydání, na který nic neodkazuje, je chyba. Všechny klíče a chyby popisuje `tools/edition.py`.
 4. **Spusť `make check EDITION=<název>`:** stejné kontroly jako u celého zpěvníku a navíc kontrola definice vydání.
 
 ### Jak přidat písničku do vydání
