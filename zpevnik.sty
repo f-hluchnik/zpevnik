@@ -37,9 +37,12 @@
 % read. The default is the screen PDF, so a song compiled alone and the screen build define
 % nothing. \zpprint: typeset for paper, where a link cannot be followed, so the labels that only
 % exist to be clicked are left out. \zpchordcolor: the xcolor colour of the chords.
+% \zpscoresuffix: added to the file name of a score's image (\score): -black in the print
+% for one ink, whose scores are black-ink images (tools/scores.py, D-188).
 \newif\ifzp@print
 \ifdefined\zpprint\zp@printtrue\fi
 \providecommand*{\zpchordcolor}{chordred}
+\providecommand*{\zpscoresuffix}{}
 % \zpscreenorprint{screen}{print}: the first on the screen, the second on paper.
 \newcommand{\zpscreenorprint}[2]{\ifzp@print#2\else#1\fi}
 % The contents (generated/obsah-*.tex, shared-pages/contents.tex). \zpcontentsentry{target}{text}:
@@ -329,7 +332,8 @@
 % the text column and the middle of its first staff is level with the middle of
 % a label, so a block label stands beside the staff. A score needs no offsets
 % in the song. Without the generated files (one song in Overleaf) a framed name
-% stands in for the image.
+% stands in for the image. The output format chooses the image (\zpscoresuffix):
+% every image of a score has the same geometry.
 \newcommand*{\zp@scoredir}{build/scores/}
 \newcommand*{\zp@labelmiddle}{.5\fontcharht\font`I}
 % Written by tools/scores.py: left end of the staff, middle of the first staff
@@ -345,7 +349,7 @@
   \edef\zp@scorescale{\fpeval{(\linewidth-\zp@labelhang)/(\zp@scoresystem)}}%
   \hspace*{-\fpeval{\zp@scorescale*(\zp@scoreleft)}pt}%
   \raisebox{\dimexpr\fpeval{\zp@scorescale*(\zp@scoremiddle)}pt-\height+\zp@labelmiddle\relax}%
-    {\includegraphics[scale=\zp@scorescale]{\zp@scoredir#1.pdf}}}
+    {\includegraphics[scale=\zp@scorescale]{\zp@scoredir#1\zpscoresuffix.pdf}}}
 
 %SEPARATORS AND VERTICAL SPACING
 \newif\ifzp@top % nothing after the song title (and subtitle) yet: a note above has no gap. \song raises the flag; a block, a note and \seealso lower it.

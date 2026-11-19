@@ -6,6 +6,16 @@ are its own (`editions/<name>/<page>.tex`); it can add an imprint fragment and p
 before the songs and after the contents. `read_book` and `read_edition` validate the
 files and report every problem at once in an `EditionError`.
 
+An edition that goes to a printer says what the printer needs in a `[print]` table
+(D-188), which `read_print_settings` reads for the A5 step (print_pdf.py):
+
+  [print]
+  spine_margin_mm = 12.5   # no letter closer to the bound edge
+  outer_margin_mm = 4.5    # nor to the outer edge
+  skip_first_pages = 2     # left out of the book block (an even number), e.g. a cover
+                           # the printer gets separately
+  crop_marks = true        # the page is the A5 page with crop marks around it
+
 Files an edition lists are written relative to its folder; another edition's file is
 named by path ("../full/introduction.tex"), so sharing is visible. A `.tex` file in the
 folder that nothing references is an error, so a misspelt name never goes unnoticed.
@@ -27,6 +37,7 @@ COVER, HALFTITLE, TITLEPAGE = "cover", "halftitle", "titlepage"
 PAGES = (COVER, HALFTITLE, TITLEPAGE)  # the replaceable pages, each shared or own
 TEX_SUFFIX = ".tex"
 ALL, SONGS, ARTISTS = "all", "songs", "artists"  # the selection keys of edition.toml
+PRINT_TABLE = "print"  # the printer's requirements (D-188)
 EDITION_NAME = re.compile(r"[a-z0-9][a-z0-9-]*")  # used in paths and in file names
 EDITION_FILE_DEPTH = len(("editions", "<name>", "<file>.tex"))  # no subfolders: see build_edition.py
 
@@ -45,6 +56,11 @@ def is_text(value: object) -> bool:
 TEXT = Kind("a non-empty string", is_text)
 YEAR = Kind("an integer", lambda v: isinstance(v, int) and not isinstance(v, bool))
 TRUE = Kind("true", lambda v: v is True)
+BOOLEAN = Kind("true or false", lambda v: isinstance(v, bool))
+MILLIMETRES = Kind("a number of millimetres, 0 or more",
+                   lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and v >= 0)
+EVEN_COUNT = Kind("an even integer, 0 or more (an odd one would move every page to the other side)",
+                  lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0 and v % 2 == 0)
 TEXTS = Kind("a list of non-empty strings", lambda v: isinstance(v, list) and all(map(is_text, v)))
 TABLE = Kind("a table", lambda v: isinstance(v, dict))
 PAGE_CHOICE = Kind(f'"{SHARED}" or "{OWN}"', lambda v: v in (SHARED, OWN))
@@ -53,8 +69,10 @@ BOOK_KEYS = {"title": TEXT, "author": TEXT, "start_year": YEAR, "source": TEXT, 
 EDITION_REQUIRED = {"pages": TABLE}
 EDITION_OPTIONAL = {"title": TEXT, "subtitle": TEXT, "editors": TEXTS, "cover_image": TEXT,
                     "imprint": TEXT, "before_songs": TEXTS, "after_contents": TEXTS,
-                    ALL: TRUE, SONGS: TEXTS, ARTISTS: TEXTS}
+                    ALL: TRUE, SONGS: TEXTS, ARTISTS: TEXTS, PRINT_TABLE: TABLE}
 PAGE_KEYS = {page: PAGE_CHOICE for page in PAGES}
+PRINT_KEYS = {"spine_margin_mm": MILLIMETRES, "outer_margin_mm": MILLIMETRES,
+              "skip_first_pages": EVEN_COUNT, "crop_marks": BOOLEAN}
 
 
 class EditionError(Exception):
@@ -74,6 +92,15 @@ class Book:
     start_year: int
     source: str        # a plain URL
     base_edition: str  # the edition that is the book itself (no derivation sentence)
+
+
+@dataclass(frozen=True)
+class PrintSettings:
+    """What the printer of an edition needs: the [print] table of its edition.toml."""
+    spine_margin_mm: float
+    outer_margin_mm: float
+    skip_first_pages: int
+    crop_marks: bool
 
 
 @dataclass(frozen=True)
@@ -122,8 +149,19 @@ def key_errors(table: dict, required: dict[str, Kind], optional: dict[str, Kind]
     return errors
 
 
+def table_errors(table: dict, key: str, keys: dict[str, Kind]) -> list[str]:
+    """The problems of a table of the edition file, if it has one, each prefixed with its key."""
+    if key not in table or not TABLE.accepts(table[key]):
+        return []
+    return [f"{key}: {error}" for error in key_errors(table[key], keys, {})]
+
+
 def edition_folder(name: str) -> Path:
     return EDITIONS_DIR / name
+
+
+def edition_file(name: str) -> Path:
+    return edition_folder(name) / EDITION_FILE_NAME
 
 
 def read_book(root: Path) -> Book:
@@ -211,15 +249,14 @@ class EditionReader:
 
 def read_edition(root: Path, name: str, book: Book, songs: list[Song], slugs: set[str]) -> Edition:
     """editions/<name>/edition.toml, validated against the songs and the registry slugs."""
-    where = edition_folder(name) / EDITION_FILE_NAME
+    where = edition_file(name)
     if not EDITION_NAME.fullmatch(name):
         raise EditionError(where, [f"the edition name '{name}' must match {EDITION_NAME.pattern}"])
     if not (root / where).is_file():
         raise EditionError(where, ["no such file"])
     table = read_toml(root / where)
     errors = key_errors(table, EDITION_REQUIRED, EDITION_OPTIONAL)
-    if "pages" in table and TABLE.accepts(table["pages"]):
-        errors += [f"pages: {e}" for e in key_errors(table["pages"], PAGE_KEYS, {})]
+    errors += table_errors(table, "pages", PAGE_KEYS) + table_errors(table, PRINT_TABLE, PRINT_KEYS)
     if errors:
         raise EditionError(where, errors)
 
@@ -242,6 +279,23 @@ def read_edition(root: Path, name: str, book: Book, songs: list[Song], slugs: se
     if reader.errors:
         raise EditionError(where, reader.errors)
     return edition
+
+
+def read_print_settings(root: Path, name: str) -> PrintSettings | None:
+    """The [print] table of an edition, validated; None if the edition has none. The rest of the
+    file is read_edition's (and the lint's): the A5 step needs only this table."""
+    where = edition_file(name)
+    if not (root / where).is_file():
+        raise EditionError(where, ["no such file"])
+    table = read_toml(root / where)
+    if PRINT_TABLE not in table:
+        return None
+    if not TABLE.accepts(table[PRINT_TABLE]):
+        raise EditionError(where, [f"'{PRINT_TABLE}' must be {TABLE.description}"])
+    errors = table_errors(table, PRINT_TABLE, PRINT_KEYS)
+    if errors:
+        raise EditionError(where, errors)
+    return PrintSettings(**table[PRINT_TABLE])
 
 
 def edition_names(root: Path) -> list[str]:

@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from edition import Book, EditionError, read_book, read_edition
+from edition import Book, EditionError, PrintSettings, read_book, read_edition, read_print_settings
 from paths import BOOK_FILE
 from .songs_builder import make_song
 
@@ -188,3 +188,46 @@ class ReadEdition(unittest.TestCase):
     def test_an_unreferenced_tex_file_in_the_folder_is_an_error(self):
         self.assertEqual(self.errors(lite(), **{"titulnilist.tex": ""}),
                          ["titulnilist.tex is not referenced by edition.toml"])
+
+
+PRINT_TABLE = "[print]\nspine_margin_mm = 12.5\nouter_margin_mm = 4\nskip_first_pages = 2\ncrop_marks = true\n"
+
+
+class PrintTable(unittest.TestCase):
+    """The [print] table: what the printer of an edition needs (D-188)."""
+
+    def settings(self, toml: str):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Repository(tmp)
+            repo.write("editions/lite/edition.toml", toml)
+            return read_print_settings(repo.root, "lite")
+
+    def edition_errors(self, toml: str) -> list[str]:
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(EditionError) as caught:
+                Repository(tmp).edition(toml)
+        return caught.exception.errors
+
+    def test_the_table_is_read(self):
+        self.assertEqual(self.settings(lite() + PRINT_TABLE), PrintSettings(12.5, 4, 2, True))
+
+    def test_an_edition_without_the_table_has_no_print_settings(self):
+        self.assertIsNone(self.settings(lite()))
+
+    def test_every_key_is_required_and_checked(self):
+        table = "[print]\nspine_margin_mm = -1\nouter_margin_mm = true\nskip_first_pages = 3\npaper = \"A5\"\n"
+        expected = ["print: missing key 'crop_marks'", "print: unknown key 'paper'",
+                    "print: 'spine_margin_mm' must be a number of millimetres, 0 or more",
+                    "print: 'outer_margin_mm' must be a number of millimetres, 0 or more",
+                    "print: 'skip_first_pages' must be an even integer, 0 or more "
+                    "(an odd one would move every page to the other side)"]
+        with self.assertRaises(EditionError) as caught:
+            self.settings(lite() + table)
+        self.assertEqual(caught.exception.errors, expected)
+        self.assertEqual(self.edition_errors(lite() + table), expected)
+
+    def test_print_must_be_a_table(self):
+        with self.assertRaises(EditionError) as caught:
+            self.settings('print = "yes"\n' + lite())
+        self.assertEqual(caught.exception.errors, ["'print' must be a table"])
+

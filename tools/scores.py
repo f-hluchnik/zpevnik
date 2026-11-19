@@ -5,7 +5,11 @@ For each scores/<name>.mscz this writes into build/scores/:
   <name>.svg  the image for the web: transparent, chord names in the songbook's
               chord colour;
   <name>.pdf  the same image for pdfLaTeX, which cannot include SVG;
-  <name>.tex  where the staff is in the image, for \\score in zpevnik.sty.
+  <name>.tex  where the staff is in the image, for \\score in zpevnik.sty;
+and with --format print-black (a format in one ink, formats.py) also
+  <name>-black.pdf  the image in black ink only: the SVG with black chord names, in
+              shades of grey. rsvg-convert writes RGB (cairo), which a printer separates
+              into four inks, so Ghostscript converts it (D-188).
 
 Every score is exported with the shared style scores/zpevnik.mss, which overrides
 the style saved in the file: all scores get the same staff size, fonts and system
@@ -15,12 +19,14 @@ class="StaffLines". \\score uses them to put the staff at the start of the text
 column and the block label level with the middle of the staff, so no song needs
 hand-tuned offsets. A score must be a single page.
 
-Usage: python3 tools/scores.py [repo-root] [--force]
+Usage: python3 tools/scores.py [--format NAME] [repo-root] [--force]
 Exports only scores whose image is older than the .mscz, the shared style, the
-chord colour or this tool, unless --force.
+chord colour or this tool, unless --force; a black-ink image is made again when it
+is older than its SVG.
 
 Needs MuseScore 4 (the MSCORE environment variable or on the PATH; on a Linux
-machine without a display, run under xvfb-run) and rsvg-convert (librsvg).
+machine without a display, run under xvfb-run) and rsvg-convert (librsvg); the
+black-ink images also Ghostscript.
 Python >= 3.11, standard library only.
 """
 import argparse
@@ -35,7 +41,10 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
+import pdf_programs
+from formats import BLACK_SCORE_SUFFIX, add_format_argument, is_black_ink
 from paths import SCORE_OUTPUT_DIR, SCORE_STYLE, SCORES_DIR, STYLE_FILE, add_root_argument
+from pdf_programs import PdfProgramError, convert_to_grey
 
 SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 XLINK_NAMESPACE = "http://www.w3.org/1999/xlink"
@@ -54,6 +63,7 @@ STAFF_SPACING_TOLERANCE = 0.01
 # the top mean the first staff was not found, which must fail rather than misplace a score.
 MIN_STAFF_LINES = 4
 
+BLACK_INK_CHORD_COLOUR = "#000000"
 CHORD_COLOUR = re.compile(r"\\definecolor\{chordred\}\{RGB\}\{\s*(\d+),\s*(\d+),\s*(\d+)\s*\}")
 PRINTABLE_WIDTH = re.compile(r"<pagePrintableWidth>([\d.]+)</pagePrintableWidth>")
 SVG_LENGTH_MM = re.compile(r"([\d.]+)mm")
@@ -92,6 +102,8 @@ RSVG_CONVERT = "rsvg-convert"
 # A fixed creation date (cairo reads it from SOURCE_DATE_EPOCH) makes the PDF the
 # same bytes on every export.
 REPRODUCIBLE_DATE = {"SOURCE_DATE_EPOCH": "0"}
+# What a black-ink image is made from, besides its SVG: the code that makes it.
+BLACK_INK_DEPENDENCIES = (Path(__file__), Path(pdf_programs.__file__))
 
 
 # Written SVGs keep MuseScore's plain <svg> and xlink: prefixes instead of ns0:.
@@ -319,9 +331,34 @@ def export_score(score: Path, root: Path, mscore: str, colour: str, system_width
     paint_chord_names(svg, colour)
     svg_file = output_dir / f"{score.stem}.svg"
     tree.write(svg_file, encoding="UTF-8", xml_declaration=True)
-    run([RSVG_CONVERT, "-f", "pdf", "-o", str(svg_file.with_suffix(".pdf")), str(svg_file)],
-        f"PDF conversion of {svg_file.name}", REPRODUCIBLE_DATE)
+    svg_to_pdf(svg_file, svg_file.with_suffix(".pdf"))
     svg_file.with_suffix(".tex").write_text(placement_tex(position, system_width), encoding="utf-8")
+
+
+def svg_to_pdf(svg_file: Path, pdf_file: Path) -> None:
+    run([RSVG_CONVERT, "-f", "pdf", "-o", str(pdf_file), str(svg_file)],
+        f"PDF conversion of {svg_file.name}", REPRODUCIBLE_DATE)
+
+
+def black_ink_pdf(svg_file: Path) -> Path:
+    """The black-ink image of an exported score, next to its SVG (\\zpscoresuffix in zpevnik.sty)."""
+    return svg_file.with_name(f"{svg_file.stem}{BLACK_SCORE_SUFFIX}.pdf")
+
+
+def export_black_ink_pdf(svg_file: Path) -> None:
+    """The image of an exported score in black ink only: its SVG with black chord names,
+    as a PDF in shades of grey."""
+    tree = ElementTree.parse(svg_file)
+    paint_chord_names(tree.getroot(), BLACK_INK_CHORD_COLOUR)
+    with tempfile.TemporaryDirectory() as work_dir:
+        black_svg = Path(work_dir) / svg_file.name
+        tree.write(black_svg, encoding="UTF-8", xml_declaration=True)
+        rgb_pdf = black_svg.with_suffix(".pdf")
+        svg_to_pdf(black_svg, rgb_pdf)
+        try:
+            convert_to_grey(rgb_pdf, black_ink_pdf(svg_file))
+        except PdfProgramError as error:
+            raise ScoreError(f"black-ink image of {svg_file.name}: {error}") from error
 
 
 def outputs(score: Path, root: Path) -> list[Path]:
@@ -329,12 +366,20 @@ def outputs(score: Path, root: Path) -> list[Path]:
     return [base.with_suffix(suffix) for suffix in (".svg", ".pdf", ".tex")]
 
 
-def is_up_to_date(score: Path, root: Path, dependencies: list[Path]) -> bool:
-    files = outputs(score, root)
+def newer_than(files: list[Path], inputs: list[Path]) -> bool:
+    """Every file exists and none is older than the newest input."""
     if not all(file.exists() for file in files):
         return False
-    newest_input = max(path.stat().st_mtime for path in [score, *dependencies])
+    newest_input = max(path.stat().st_mtime for path in inputs)
     return min(file.stat().st_mtime for file in files) >= newest_input
+
+
+def is_up_to_date(score: Path, root: Path, dependencies: list[Path]) -> bool:
+    return newer_than(outputs(score, root), [score, *dependencies])
+
+
+def black_ink_pdf_is_up_to_date(svg_file: Path) -> bool:
+    return newer_than([black_ink_pdf(svg_file)], [svg_file, *BLACK_INK_DEPENDENCIES])
 
 
 def export_scores(scores: list[Path], root: Path) -> None:
@@ -347,8 +392,18 @@ def export_scores(scores: list[Path], root: Path) -> None:
         export_score(score, root, mscore, colour, width)
 
 
+def export_black_ink_pdfs(scores: list[Path], root: Path, force: bool) -> int:
+    """Make the black-ink images that are missing or older than their SVG; how many were made."""
+    svg_files = [root / SCORE_OUTPUT_DIR / f"{score.stem}.svg" for score in scores]
+    pending = [svg for svg in svg_files if force or not black_ink_pdf_is_up_to_date(svg)]
+    for svg_file in pending:
+        export_black_ink_pdf(svg_file)
+    return len(pending)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    add_format_argument(parser)
     add_root_argument(parser)
     parser.add_argument("--force", action="store_true", help="export every score, even if up to date")
     args = parser.parse_args()
@@ -356,13 +411,15 @@ def main() -> int:
     dependencies = [root / SCORE_STYLE, root / STYLE_FILE, Path(__file__)]
     scores = sorted((root / SCORES_DIR).glob("*.mscz"))
     pending = [score for score in scores if args.force or not is_up_to_date(score, root, dependencies)]
-    if pending:
-        try:
+    try:
+        if pending:
             export_scores(pending, root)
-        except ScoreError as error:
-            print(f"error: {error}", file=sys.stderr)
-            return 1
-    print(f"{SCORE_OUTPUT_DIR}: {len(pending)} exported, {len(scores) - len(pending)} up to date")
+        black_ink = export_black_ink_pdfs(scores, root, args.force) if is_black_ink(args.format) else None
+    except ScoreError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return 1
+    report = f"{SCORE_OUTPUT_DIR}: {len(pending)} exported, {len(scores) - len(pending)} up to date"
+    print(report + (f", {black_ink} black-ink images made" if black_ink is not None else ""))
     return 0
 
 

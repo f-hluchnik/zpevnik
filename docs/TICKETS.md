@@ -22,7 +22,7 @@ Tags: **[agent]** an AI agent can do it · **[you]** needs your decision or revi
 - **Building and testing:** use the cloud workspace.
   - Run `apt-get update`, then `apt-get install -y texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music poppler-utils latexmk` in each new session (without the update the packages had no install candidate). Python there is 3.13. The score export (D-136) needs more, verified on 11 Nov 2026: `apt-get install -y librsvg2-bin fonts-cmu xvfb`, and MuseScore as the AppImage named by `MUSESCORE_URL` in the CI workflow (download, `--appimage-extract`, `MSCORE=<dir>/squashfs-root/AppRun`); then `xvfb-run -a make …`. From scratch the full book takes ≈18 s for the scores and ≈20 s for LaTeX; both are skipped when up to date.
   - That TeX Live is 2023 (pdfTeX 1.40.25) like CI, but a local build is only compared with another local build (base vs head). CI is the reference.
-- **The owner's computer** (Linux VM shell, if a session is linked to it) has TeX Live 2022 *without* Czech babel and Python 3.10, so neither the book nor the tools run there. It is needed only for the owner's local files, e.g. uncommitted changes in `zpevnik-web`.
+- **The owner's computer** (Linux VM shell, if a session is linked to it) has TeX Live 2022 *without* Czech babel and Python 3.10, so neither the book nor the tools run there as they are. It is needed for the owner's local files, e.g. uncommitted changes in `zpevnik-web`. Verified on 19 Nov 2026 (D-188): with the owner's grant of his Mac's `/usr/local/texlive/2026`, that shell builds the book with the Mac's TeX Live tree and its own pdfTeX (a `pdflatex.fmt` made with `pdftex -ini` and `TEXMFDIST`, `TEXMFSYSVAR`, `TEXMFSYSCONFIG` pointing into the tree, `TEXFORMATS` at the format), Python 3.12 from `uv python install 3.12`, and the score images copied from the owner's `build/scores/` (no MuseScore there). It has Ghostscript and poppler; `rsvg-convert` and `git` over SSH it does not have, so push from a cloud clone.
 - **Cloud session tooling:** `gh pr create` does not work there (GraphQL is blocked); open PRs with `gh api repos/f-hluchnik/zpevnik/pulls -f title=… -f head=<branch> -f base=master -F body=@file`. The clone is shallow: after the first push set the upstream by hand (`git config branch.<b>.remote origin` and `branch.<b>.merge refs/heads/<b>`). CI job logs contain the PDF diff summary (`gh api repos/f-hluchnik/zpevnik/actions/jobs/<id>/logs`).
 - **Repositories:** `f-hluchnik/zpevnik` (default branch `master`) and `f-hluchnik/zpevnik-web` (`main`). Both are public: anonymous clones work; pushing and PRs need the repo attached with push access.
 
@@ -36,11 +36,11 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/). **T
 |---|---|---|---|---|
 | 1 | The owner's new songs (about ten) | owner | in progress | content work, not a ticket (D-147); everything after it works on the final content |
 | 2 | H7 | owner writes; the agent checks on request | todo | the owner chooses the songs to split and their ids and titles; `cernymuz` is decided (D-177). It closes phase 13 (Z1) |
-| 3 | P1 | owner and the printer | in progress | the printer's answers: deadline, colour, spine shift, copies, PDF requirements (`docs/p0-print-report.md`, section 4, D-157); the agent then records them as a decision |
-| 4 | P4 | agent, then the owner signs off | todo | steps 1 to 3 (and H7 if it is to be in the printed book); the owner reads a proof; the commit and version that went to the printer are recorded here |
+| 3 | P4 | agent, then the owner signs off | todo | steps 1 and 2 (and H7 if it is to be in the printed book; the owner adds two more songs); the PDF is `make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5` (D-188); the owner reads a proof; the commit and version that went to the printer are recorded here. Still the owner's: the deadline, the paper, the number of copies |
+| 4 | F1 | owner says what is wrong, agent investigates | todo | the title page's cursive font has a malformed width table (D-188); the owner says what Gmail's preview shows wrong, before P4 if the printer's preflight is affected |
 | 5 | E4 | owner picks, agent writes `edition.toml` | todo | after the printed edition (D-147); nothing waits for it |
 
-H7 changes the PDF, so it goes before P4 if the printed book is to have it; the owner decides by the print deadline (P1). Optional, after H7, if the owner wants it enforced: a lint that a song whose verse numbers start again has a `\partrule` there (D-178).
+H7 changes the PDF, so it goes before P4 if the printed book is to have it; the owner decides by the print deadline. Optional, after H7, if the owner wants it enforced: a lint that a song whose verse numbers start again has a `\partrule` there (D-178).
 
 ---
 
@@ -55,13 +55,13 @@ The agent adds a small helper that lists song ids with title and artist (filter 
 
 # Phase 3 – Print (D-122)
 
-The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff). The report, the cancelled licensing check and the print build are done (HISTORY.md, archive/phase-3-print/).
-
-### P1 · Print requirements — [you] · S
-Decide and write down (the agent records it as a DECISIONS entry): the **deadline**; page size and binding (A4, A5, …; ring binding needs no gutter); whether the scaled screen PDF reads well on paper (D-142: print A4 pages "2 per sheet" to see A5 size); the binding offset for two-sided printing; paper and colour (black and white or colour); the printer's technical requirements (PDF version or PDF/X, embedded fonts, bleed, crop marks); whether links stay visible; the number of copies; **full songbook or a subset** (answered in D-148: the print book is its own edition, selected by hand by the owner; the rest of P1 is open). Answered after reading P0's report. The owner's new songs do not block P1 or P3: content changes need only a rebuild. Status of the answers: D-157.
+The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff). The report, the cancelled licensing check, the print build and the printer's requirements (P1, D-188) are done (HISTORY.md, archive/phase-3-print/).
 
 ### P4 · Print proof check — [agent] + [you] · S · needs P3 and the final content
-Done on the final content, after the owner's new songs (D-147; K1 is done); until then P3's output is a draft. Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, colour space against the printer's requirement (report, convert only if asked), crops of the first page, a middle page, a two-column song and the contents at 100%. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
+Done on the final content, after the owner's new songs (D-147; K1 is done); until then P3's output is a draft. Build `make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5` on the owner's Mac (it checks the trim box, the margins and the one ink itself, D-188). Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, crops of the first page, a middle page, a score, a two-column song and the contents at 100%. Tell the printer the final page count. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table.
+
+### F1 · The width table of the cursive title font — [you] + [agent] · S
+The title page sets its title in the French Cursive font (`\fontfamily{frc}`, `shared-pages/titlepage.tex`, and the cover of `lidovky`). Two characters of `frcr14` (codes 10 and 11) have a negative width (−0.025 em); pdfTeX writes them into the font's `/Widths` array as `-25.-2`, which is not a valid PDF number (poppler and Ghostscript warn, Ghostscript reads −25). Lenient viewers ignore it; a strict one may space that font wrongly or reject the page. The owner reports that Gmail's preview shows the PDF wrongly: first find out what exactly is wrong there and whether it is this. Then find the cleanest fix (does a newer pdfTeX write it correctly, can the two characters stay out of the width table, or another font), report it upstream if it is a pdfTeX bug, and do not patch PDFs after the build. **Expected differences:** none in the rendered pages.
 
 ---
 

@@ -12,9 +12,14 @@ import xml.etree.ElementTree as ElementTree
 import zipfile
 from pathlib import Path
 
-from scores import (MSCORE_SCORE_NOT_LOADED, ScoreError, StaffPosition, chord_colour, export_svg,
-                    is_up_to_date, outputs, paint_chord_names, placement_tex, remove_page_background,
-                    run, saved_by, staff_position, system_width_pt)
+from unittest import mock
+
+import scores
+from pdf_programs import PdfProgramError
+from scores import (BLACK_INK_DEPENDENCIES, MSCORE_SCORE_NOT_LOADED, ScoreError, StaffPosition,
+                    black_ink_pdf, black_ink_pdf_is_up_to_date, chord_colour, export_black_ink_pdf,
+                    export_svg, is_up_to_date, outputs, paint_chord_names, placement_tex,
+                    remove_page_background, run, saved_by, staff_position, system_width_pt)
 
 # 100 SVG units are 10 mm wide, so one unit is 0.1 mm = 0.283465 pt.
 PT_PER_UNIT = 0.1 / 25.4 * 72
@@ -233,3 +238,49 @@ class FailureTest(unittest.TestCase):
         self.assertIn(sys.executable, message)
         self.assertIn("cannot open the score", message)
         self.assertNotIn("typeregistration", message)
+
+
+class BlackInkTest(unittest.TestCase):
+    """The black-ink image of a score, for the print in one ink (D-188)."""
+
+    def setUp(self):
+        self.dir = Path(tempfile.mkdtemp())
+        self.addCleanup(lambda: __import__("shutil").rmtree(self.dir))
+        self.svg_file = self.dir / "a.svg"
+        self.svg_file.write_text('<svg xmlns="http://www.w3.org/2000/svg"><path class="Harmony" fill="#B82727" '
+                                 'd="M0,0"/><path class="Note" d="M0,0"/></svg>')
+
+    def test_it_lies_next_to_the_svg_under_the_suffix_the_black_format_reads(self):
+        self.assertEqual(black_ink_pdf(self.svg_file), self.dir / "a-black.pdf")
+
+    def test_the_chord_names_turn_black_and_the_image_is_converted_to_grey(self):
+        painted = {}
+
+        def svg_to_pdf(svg_file: Path, pdf_file: Path) -> None:
+            image = ElementTree.parse(svg_file).getroot()
+            painted.update({element.get("class"): element.get("fill") for element in image})
+            pdf_file.write_text("rgb")
+
+        with (mock.patch.object(scores, "svg_to_pdf", side_effect=svg_to_pdf),
+              mock.patch.object(scores, "convert_to_grey") as convert):
+            export_black_ink_pdf(self.svg_file)
+        self.assertEqual(painted, {"Harmony": "#000000", "Note": None})
+        self.assertEqual(convert.call_args.args[1], self.dir / "a-black.pdf")
+        self.assertIn("#B82727", self.svg_file.read_text())  # the screen's image keeps its colour
+
+    def test_a_failed_conversion_names_the_score(self):
+        with (mock.patch.object(scores, "svg_to_pdf"),
+              mock.patch.object(scores, "convert_to_grey", side_effect=PdfProgramError("gs not found"))):
+            with self.assertRaisesRegex(ScoreError, "black-ink image of a.svg: gs not found"):
+                export_black_ink_pdf(self.svg_file)
+
+    def test_it_is_made_again_when_its_svg_is_newer(self):
+        newest_code = max(path.stat().st_mtime for path in BLACK_INK_DEPENDENCIES)
+        self.assertFalse(black_ink_pdf_is_up_to_date(self.svg_file))
+        black_ink_pdf(self.svg_file).write_text("pdf")
+        os.utime(self.svg_file, (newest_code, newest_code))
+        os.utime(black_ink_pdf(self.svg_file), (newest_code + 10, newest_code + 10))
+        self.assertTrue(black_ink_pdf_is_up_to_date(self.svg_file))
+        os.utime(self.svg_file, (newest_code + 20, newest_code + 20))
+        self.assertFalse(black_ink_pdf_is_up_to_date(self.svg_file))
+

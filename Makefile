@@ -1,16 +1,18 @@
 # The build targets print the path of what they built; everything goes under build/.
-# make [pdf] [EDITION=<name>] [FORMAT=screen|print] [CHORDS=red|black] [SIZE=A4|A5] [PRINT_ARGS=...]
+# make [pdf] [EDITION=<name>] [FORMAT=screen|print] [CHORDS=red|black] [SIZE=A4|A5]
 #              generate the edition's .tex files and the score images, then compile
 #              build/editions/<name>/zpevnik.pdf (default edition: full). The paper options (D-185):
 #              FORMAT=print   for paper, into build/editions/<name>/print/ (tools/formats.py; default: screen)
-#              CHORDS=black   with FORMAT=print: black chords, into .../print-black/ (default: red)
-#              SIZE=A5        with FORMAT=print: also scale it to A5 for a printer, zpevnik-a5.pdf next to
-#                             it (tools/print_pdf.py; default: A4). PRINT_ARGS="--spine-shift-mm 3
-#                             --skip-first 2" are its options and need SIZE=A5
+#              CHORDS=black   with FORMAT=print: everything in black ink, into .../print-black/ (default: red)
+#              SIZE=A5        with FORMAT=print: also place it on A5 for the edition's printer, as the
+#                             [print] table of its edition.toml asks, zpevnik-a5.pdf next to it
+#                             (tools/print_pdf.py, D-188; default: A4); it prints the margins it
+#                             measured on the finished PDF
 #              Any other value, or a paper option without FORMAT=print, stops make with an error.
 # make generate [EDITION=<name>]  only run the generator (tools/generate.py)
 # make scores   only export the score images from MuseScore into build/scores/
-#               (tools/scores.py; skips scores that are up to date)
+#               (tools/scores.py; skips scores that are up to date; with CHORDS=black also their
+#               black-ink images)
 # make song SONG=<id>  build only that song into build/songs/<id>.pdf (tools/build_song.py)
 # make json    build the full book, write build/songs.json for the website (tools/songs_json.py) and
 #              check it against tools/songs.schema.json (tools/validate_songs_json.py)
@@ -51,7 +53,7 @@ $(call require-one-of,CHORDS,$(CHORD_COLORS))
 $(call require-one-of,SIZE,$(SIZES))
 $(if $(filter-out $(DEFAULT_CHORDS),$(CHORDS)),$(call require-paper,CHORDS=$(CHORDS)))
 $(if $(filter-out $(DEFAULT_SIZE),$(SIZE)),$(call require-paper,SIZE=$(SIZE)))
-$(if $(PRINT_ARGS),$(if $(filter $(A5_SIZE),$(SIZE)),,$(error PRINT_ARGS are options of the A5 step and need SIZE=$(A5_SIZE))))
+$(if $(PRINT_ARGS),$(error PRINT_ARGS is gone: the A5 step reads the margins and the pages to leave out from the [print] table of the edition's edition.toml (D-188)))
 
 # Recursively expanded, so that a target's own FORMAT (json) chooses it too.
 BUILD_FORMAT = $(if $(filter $(BLACK_CHORDS),$(CHORDS)),$(BLACK_PRINT_FORMAT),$(FORMAT))
@@ -90,11 +92,11 @@ generate: check-python
 	@$(PYTHON) tools/generate.py --edition $(EDITION)
 
 scores: check-python
-	@$(PYTHON) tools/scores.py
+	@$(PYTHON) tools/scores.py --format $(BUILD_FORMAT)
 
 compile: generate scores
 	@$(PYTHON) tools/build_edition.py $(BUILD_ARGS) > /dev/null
-	$(if $(A5_STEP),@$(PYTHON) tools/print_pdf.py $(BUILD_ARGS) $(PRINT_ARGS) > /dev/null)
+	$(if $(A5_STEP),@$(PYTHON) tools/print_pdf.py $(BUILD_ARGS))
 
 pdf: compile
 	$(call finish,The PDF is ready:)
