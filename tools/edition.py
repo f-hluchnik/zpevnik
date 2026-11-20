@@ -128,6 +128,7 @@ class Edition:
     before_songs: tuple[str, ...]
     after_contents: tuple[str, ...]
     selection: Selection
+    printing: PrintSettings | None  # the [print] table: what the edition's printer needs
 
     def select(self, songs: Iterable[Song]) -> list[Song]:
         """The edition's songs, in the order given."""
@@ -272,6 +273,7 @@ def read_edition(root: Path, name: str, book: Book, songs: list[Song], slugs: se
         before_songs=reader.listed_files("before_songs"),
         after_contents=reader.listed_files("after_contents"),
         selection=reader.selection({song.id for song in songs}, slugs),
+        printing=print_settings(table),
     )
     reader.errors += reader.unreferenced()
     if not reader.errors and not edition.select(songs):
@@ -288,14 +290,17 @@ def read_print_settings(root: Path, name: str) -> PrintSettings | None:
     if not (root / where).is_file():
         raise EditionError(where, ["no such file"])
     table = read_toml(root / where)
-    if PRINT_TABLE not in table:
-        return None
-    if not TABLE.accepts(table[PRINT_TABLE]):
+    if PRINT_TABLE in table and not TABLE.accepts(table[PRINT_TABLE]):
         raise EditionError(where, [f"'{PRINT_TABLE}' must be {TABLE.description}"])
     errors = table_errors(table, PRINT_TABLE, PRINT_KEYS)
     if errors:
         raise EditionError(where, errors)
-    return PrintSettings(**table[PRINT_TABLE])
+    return print_settings(table)
+
+
+def print_settings(table: dict) -> PrintSettings | None:
+    """The [print] table of a validated edition file, or None if it has none."""
+    return PrintSettings(**table[PRINT_TABLE]) if PRINT_TABLE in table else None
 
 
 def edition_names(root: Path) -> list[str]:

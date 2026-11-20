@@ -43,6 +43,13 @@
 \ifdefined\zpprint\zp@printtrue\fi
 \providecommand*{\zpchordcolor}{chordred}
 \providecommand*{\zpscoresuffix}{}
+% On paper the page numbers count from the first page of the printer's block, as in a printed
+% book (D-191). \zpprintskippedpages (generated from the edition's [print] table) is how many
+% of the book's first pages the block leaves out (its own cover and its back); they count from
+% 1 - N and are unnumbered front matter, so the contents and \seealso give the printed page.
+% The screen PDF keeps the PDF's own page numbers (D-155).
+\AtBeginDocument{\ifzp@print\ifdefined\zpprintskippedpages
+  \setcounter{page}{\numexpr1-\zpprintskippedpages\relax}\fi\fi}
 % \zpscreenorprint{screen}{print}: the first on the screen, the second on paper.
 \newcommand{\zpscreenorprint}[2]{\ifzp@print#2\else#1\fi}
 % The contents (generated/obsah-*.tex, shared-pages/contents.tex). \zpcontentsentry{target}{text}:

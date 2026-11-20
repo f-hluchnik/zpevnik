@@ -211,6 +211,11 @@ class PrintTable(unittest.TestCase):
     def test_the_table_is_read(self):
         self.assertEqual(self.settings(lite() + PRINT_TABLE), PrintSettings(12.5, 4, 2, True))
 
+    def test_the_edition_carries_the_table_for_the_generator(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.assertEqual(Repository(tmp).edition(lite() + PRINT_TABLE).printing, PrintSettings(12.5, 4, 2, True))
+            self.assertIsNone(Repository(tmp).edition(lite()).printing)
+
     def test_an_edition_without_the_table_has_no_print_settings(self):
         self.assertIsNone(self.settings(lite()))
 

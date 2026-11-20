@@ -4,7 +4,7 @@ Run from the repository root: python3 -m unittest discover -s tools
 """
 import unittest
 
-from edition import Book, Edition, Selection
+from edition import Book, Edition, PrintSettings, Selection
 from edition_tex import macros_tex, pages_tex, source_text
 
 BOOK = Book("Ještě mi chvilku zpívej", "František Hluchník", 2019, "https://github.com/f-hluchnik/zpevnik", "full")
@@ -16,7 +16,7 @@ def edition(name: str, **changes) -> Edition:
     """An edition with the shared pages and nothing else, changed as given."""
     fields = dict(name=name, title=BOOK.title, subtitle=None, editors=(), pages=SHARED_PAGES,
                   cover_image="images/cover_image.jpg", imprint=None, before_songs=(), after_contents=(),
-                  selection=Selection(True, frozenset(), frozenset()))
+                  selection=Selection(True, frozenset(), frozenset()), printing=None)
     return Edition(**{**fields, **changes})
 
 
@@ -34,6 +34,14 @@ class Macros(unittest.TestCase):
         self.assertIn("\\newcommand*{\\zpeditionsubtitle}{výběr}\n", tex)
         self.assertIn("\\newcommand*{\\zpeditioneditors}{A, B}\n", tex)
         self.assertIn("\\newcommand*{\\zpbooktitle}{Ještě mi chvilku zpívej}\n", tex)
+
+    def test_an_edition_without_a_printer_does_not_say_which_pages_the_block_leaves_out(self):
+        self.assertNotIn("zpprintskippedpages", macros_tex(BOOK, edition("lite")))
+
+    def test_an_edition_for_a_printer_says_how_many_first_pages_the_block_leaves_out(self):
+        printing = PrintSettings(spine_margin_mm=12.5, outer_margin_mm=4.5, skip_first_pages=2, crop_marks=True)
+        tex = macros_tex(BOOK, edition("lite", printing=printing))
+        self.assertIn("\\newcommand*{\\zpprintskippedpages}{2}\n", tex)
 
     def test_the_source_is_printed_without_its_scheme(self):
         self.assertEqual(source_text("https://github.com/f-hluchnik/zpevnik"), "github.com/f-hluchnik/zpevnik")
