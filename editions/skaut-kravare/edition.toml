@@ -1,8 +1,8 @@
 # Zpěvník pro kravařské skauty.
 title = "Skautský zpěvník"
 subtitle = "oddíl Kravaře"
-# The last page leads to the whole songbook online.
-after_contents = ["online.tex"]
+# The illustrator of the cover and the printer (D-192).
+imprint = "credits.tex"
 songs = [
     "amazonka",
     "andel",
@@ -185,7 +185,8 @@ titlepage = "shared"
 
 # What the printer asked for (D-188): letters at least 12 mm from the spine and 4 mm from the
 # outer edge, with half a millimetre to spare for the cut; crop marks, no bleed. The book block
-# starts after the edition's cover and its back (2 pages): the cover is printed separately.
+# starts after the edition's cover and its back (2 pages): the cover is printed separately
+# (print-cover/, D-192).
 [print]
 spine_margin_mm = 12.5
 outer_margin_mm = 4.5
