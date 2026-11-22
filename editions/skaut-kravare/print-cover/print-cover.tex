@@ -1,0 +1,64 @@
+% The cover of skaut-kravare for the printer: four A5 pages for a ring binding (D-192).
+%   1 the front: the scan of the drawing (../cover.jpg; a placeholder until it is there)
+%   2 the inside of the front: white
+%   3 the inside of the back: white
+%   4 the back: \chosenback, one of the designs of back.tex
+% Each page has the bleed and crop marks around the trim; the PDF names the trim box and the
+% bleed box. Build with XeLaTeX (README.md).
+\documentclass{article}
+\input{back}
+
+% The back the owner chose (proposals.pdf): forest | row | lily | moss | paper | frame.
+\newcommand*{\chosenback}{forest}
+% The front: the scan of the illustrator's drawing, over the whole bleed box.
+\newcommand*{\frontimage}{../cover.jpg}
+
+% Around the trim: the bleed, then room for the crop marks (mm).
+\newcommand*{\slug}{13}
+\newcommand*{\marklength}{5}
+\usepackage[paperwidth=\numexpr\trimwidth+2*\slug\relax mm,
+            paperheight=\numexpr\trimheight+2*\slug\relax mm, margin=0pt]{geometry}
+\pagestyle{empty}
+
+% The trim box and the bleed box of the current page, in bp from the page's lower left corner.
+\newcommand*{\mmtobp}[1]{\fpeval{round((#1)*72/25.4, 3)}}
+\newcommand*{\pdfbox}[2]{% #1 its name, #2 its margin from the trim (mm; negative outside)
+  /#1 [\mmtobp{\slug+#2} \mmtobp{\slug+#2}
+       \mmtobp{\slug+\trimwidth-#2} \mmtobp{\slug+\trimheight-#2}]}
+\newcommand*{\pageboxes}{%
+  \special{pdf:put @thispage << \pdfbox{TrimBox}{0} \pdfbox{BleedBox}{-\bleed} >>}}
+
+% Corner marks at the trim lines, starting outside the bleed.
+\newcommand*{\cropmarks}{%
+  \foreach \x/\dx in {0/-1, \trimwidth/1} {
+    \foreach \y/\dy in {0/-1, \trimheight/1} {
+      \draw[black, line width=0.25pt] \at{\x+\dx*\bleed}{\y} -- ++(\dx*\marklength mm, 0);
+      \draw[black, line width=0.25pt] \at{\x}{\y+\dy*\bleed} -- ++(0, \dy*\marklength mm);
+    }
+  }}
+
+% A page: #1 drawn from the trim's corner T, the crop marks, the PDF boxes.
+\newcommand{\coverpage}[1]{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \coordinate (T) at ([shift={(\slug mm,\slug mm)}]current page.south west);
+    #1
+    \cropmarks
+  \end{tikzpicture}\pageboxes\mbox{}\newpage}
+
+\newcommand*{\front}{%
+  \IfFileExists{\frontimage}
+    {\begin{scope}% the bleed box's width; a taller scan loses as much at the top as at the bottom
+       \clip \bleedbox;
+       \node[inner sep=0pt] at \at{\middlex}{\trimheight/2}
+         {\includegraphics[width=\numexpr\trimwidth+2*\bleed\relax mm]{\frontimage}};
+     \end{scope}}
+    {\fill[black!15] \bleedbox;
+     \node[align=center] at \at{\middlex}{\trimheight/2}
+       {přední strana: sken kresby\\(editions/skaut-kravare/cover.jpg)};}}
+
+\begin{document}
+\coverpage{\front}
+\coverpage{}
+\coverpage{}
+\coverpage{\backdesign{\chosenback}}
+\end{document}
