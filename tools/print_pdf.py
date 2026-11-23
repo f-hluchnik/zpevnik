@@ -13,7 +13,7 @@ The edition's `[print]` table (edition.toml, D-188) says what the printer needs:
   every song still fits its page;
 - `skip_first_pages`: pages left out of the book block, an even number (a cover the printer gets
   separately);
-- `crop_marks`: the PDF page is the A5 page with 10 mm around it for crop marks (the crop
+- `crop_marks`: the PDF page is the A5 page with 15 mm around it for crop marks (the crop
   package) and names the A5 page as its trim box. Nothing is printed to the edge, so there is
   no bleed: the bleed box is the trim box.
 
@@ -50,7 +50,9 @@ from pdf_programs import (POINTS_PER_INCH, Box, InkCoverage, PageBoxes, PdfProgr
 from print_layout import (A5_HEIGHT_PT, A5_WIDTH_PT, LayoutError, Margins, Placement, Reach, fit,
                           millimetres, page_margins, points)
 
-CROP_MARK_ROOM_MM = 10.0  # on every side of the A5 page, for the crop marks
+# On every side of the A5 page, for the crop marks: the crop package's `cam' marks reach 35 pt
+# (12.3 mm) from the trim. The cover of skaut-kravare uses the same room (print-cover/).
+CROP_MARK_ROOM_MM = 15.0
 SIZE_TOLERANCE_PT = 1.0
 INK_DPI = 300  # the resolution the ink is measured at
 INK_PIXEL_PT = POINTS_PER_INCH / INK_DPI  # 0.085 mm: a margin is measured at most that much too narrow

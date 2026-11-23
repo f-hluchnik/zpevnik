@@ -74,7 +74,7 @@ class Wrapper(unittest.TestCase):
         self.assertTrue(plain.startswith("\\documentclass[a5paper]{article}"))
         self.assertNotIn("crop", plain)
         self.assertIn("{crop}", marked)
-        self.assertIn("width=168.000mm,height=230.000mm", marked)
+        self.assertIn("width=178.000mm,height=240.000mm", marked)
         box = f"[{ROOM:.3f} {ROOM:.3f} {ROOM + A5_WIDTH_PT:.3f} {ROOM + A5_HEIGHT_PT:.3f}]"
         self.assertIn(f"/TrimBox {box} /BleedBox {box}", marked)
 

@@ -8,51 +8,28 @@
 \documentclass{article}
 \input{design}
 
-% Around the trim: the bleed, then room for the crop marks (mm).
-\newcommand*{\slug}{16}
-\usepackage[paperwidth=\numexpr\trimwidth+2*\slug\relax mm,
-            paperheight=\numexpr\trimheight+2*\slug\relax mm, margin=0pt]{geometry}
+% The crop marks are the book's (tools/print_pdf.py): the crop package's `cam' marks round the A5
+% page, on a PDF page with the same room on every side (CROP_MARK_ROOM_MM). They start 5 pt from the trim; the
+% pictures, drawn over them, cover the part inside the bleed.
+\newcommand*{\markroom}{15}
+\usepackage[paperwidth=\trimwidth mm, paperheight=\trimheight mm, margin=0pt]{geometry}
+\usepackage[cam, noinfo, center, width=\numexpr\trimwidth+2*\markroom\relax mm,
+            height=\numexpr\trimheight+2*\markroom\relax mm]{crop}
 \pagestyle{empty}
 
-% The trim box and the bleed box of the current page, in bp from the page's lower left corner.
+% The trim box and the bleed box of the current page, in bp from the PDF page's lower left corner.
 \newcommand*{\mmtobp}[1]{\fpeval{round((#1)*72/25.4, 3)}}
 \newcommand*{\pdfbox}[2]{% #1 its name, #2 its margin from the trim (mm; negative outside)
-  /#1 [\mmtobp{\slug+#2} \mmtobp{\slug+#2}
-       \mmtobp{\slug+\trimwidth-#2} \mmtobp{\slug+\trimheight-#2}]}
+  /#1 [\mmtobp{\markroom+#2} \mmtobp{\markroom+#2}
+       \mmtobp{\markroom+\trimwidth-#2} \mmtobp{\markroom+\trimheight-#2}]}
 \newcommand*{\pageboxes}{%
   \special{pdf:put @thispage << \pdfbox{TrimBox}{0} \pdfbox{BleedBox}{-\bleed} >>}}
 
-% Corner marks in the shape of the book's (the crop package's `cam' marks, tools/print_pdf.py):
-% on each trim line at each corner, a thin line 30 pt long with a small circle, crossed, near its
-% outer end. The book has no bleed and its marks start 5 pt from the trim; these start at the
-% bleed's outer edge, so that nothing is printed over the picture in the bleed.
-\newcommand*{\markline}{30pt}
-\newcommand*{\markcircle}{25pt}% from the line's start to the circle's centre
-\newcommand*{\markradius}{5pt}
-\newcommand*{\markwidth}{0.4pt}% LaTeX's \thinlines, as in the book
-% One mark, starting at (#1, #2) mm from the trim's corner T and pointing at the angle #3.
-\newcommand*{\cropmark}[3]{%
-  \begin{scope}[shift={(T)}, xshift={(#1)*1mm}, yshift={(#2)*1mm}, rotate=#3,
-                black, line width=\markwidth]
-    \draw (0,0) -- (\markline,0);
-    \draw (\markcircle,0) circle[radius=\markradius];
-    \draw (\markcircle,-\markradius) -- (\markcircle,\markradius);
-  \end{scope}}
-% Two marks at each corner: one along the horizontal trim line, one along the vertical one.
-\newcommand*{\cropmarks}{%
-  \foreach \x/\dx/\across in {0/-1/180, \trimwidth/1/0} {
-    \foreach \y/\dy/\along in {0/-1/270, \trimheight/1/90} {
-      \cropmark{\x+\dx*\bleed}{\y}{\across}
-      \cropmark{\x}{\y+\dy*\bleed}{\along}
-    }
-  }}
-
-% A page: #1 drawn from the trim's corner T, the crop marks, the PDF boxes.
+% A page: #1 drawn from the trim's corner T, and the PDF boxes.
 \newcommand{\coverpage}[1]{%
   \begin{tikzpicture}[remember picture, overlay]
-    \coordinate (T) at ([shift={(\slug mm,\slug mm)}]current page.south west);
+    \coordinate (T) at ([shift={(-\trimwidth mm/2, -\trimheight mm/2)}]current page.center);
     #1
-    \cropmarks
   \end{tikzpicture}\pageboxes\mbox{}\newpage}
 
 \begin{document}

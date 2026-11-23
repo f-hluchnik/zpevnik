@@ -17,17 +17,19 @@
   SmallCapsFont=AlegreyaSC-Regular]
 \newfontfamily\symbolfont{FreeSerif.otf}
 
-\definecolor{ink}{HTML}{2E261E} % the text and the QR code: dark brown, like the drawn title
+% The text and the QR code: dark brown, like the drawn title, in the printer's CMYK.
+\input{assets/colours}
 
 % (x, y) in mm from the trim's lower left corner T.
 \newcommand*{\at}[2]{([shift={({(#1)*1mm},{(#2)*1mm})}]T)}
 \newcommand*{\middlex}{\trimwidth/2}
-% A picture of the bleed box (assets/, make_assets.py) over the whole bleed box.
+% A picture of the bleed box, made by make_assets.py, over the whole bleed box.
+\newcommand*{\printassets}{../../../build/print-cover/assets}
 \newcommand*{\bleedpicture}[1]{\node[inner sep=0pt, anchor=south west] at \at{-\bleed}{-\bleed}
-  {\includegraphics[width=\numexpr\trimwidth+2*\bleed\relax mm]{assets/#1.jpg}};}
+  {\includegraphics[width=\numexpr\trimwidth+2*\bleed\relax mm]{\printassets/#1.jpg}};}
 
 % The front: the drawing with its rough painted edges, on white.
-\newcommand*{\front}{\bleedpicture{front}}
+\newcommand*{\front}{\bleedpicture{front-print}}
 
 % The back: the way to the online songbook on beige paper, under the scout lily between two
 % thin rules: "celý zpěvník" and the book's title, a QR code to the website, its address.

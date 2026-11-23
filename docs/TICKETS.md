@@ -35,7 +35,7 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/). **T
 | Step | Ticket | Who acts | Status | Waiting for, and what comes next |
 |---|---|---|---|---|
 | 1 | The owner's new songs (about ten) | owner | in progress | content work, not a ticket (D-147); everything after it works on the final content |
-| 2 | P5 | printer, then agent | in progress | the cover is ready (D-192, D-193): the back and the front chosen; waiting for the printer's answers (bleed, one file or two, the ring holes' distance from the edge, colour profile); then the PDF is converted for him and a test print checks the QR code |
+| 2 | P5 | owner, printer | in progress | the cover is ready (D-192, D-193): CMYK, 3 mm bleed, the book's crop marks; the owner sends the book and the cover to the printer; then a test print checks the colours and the QR code |
 | 3 | P4 | agent, then the owner signs off | todo | step 1 (the owner adds two more songs); the PDF is `make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5` (D-188); the owner reads a proof; the commit and version that went to the printer are recorded here. Still the owner's: the deadline, the paper, the number of copies |
 | 4 | F1 | agent, if the owner wants it | optional | Chrome and Gmail show only "Skaut" of the cursive title (diagnosed, see F1); the owner decided to leave it for now (19 Nov 2026) |
 
@@ -45,8 +45,8 @@ Everything not in the table is `done` or `cancelled` (HISTORY.md, archive/). **T
 
 The printed edition is important and has a deadline. The screen PDF must never change because of it (zero diff). The report, the cancelled licensing check, the print build and the printer's requirements (P1, D-188) are done (HISTORY.md, archive/phase-3-print/).
 
-### P5 · The cover of skaut-kravare — [you] + [agent] · S · needs the printer's answers
-Done: the source (D-192), the back, the front from the scan with its rough edges, no subtitle, a page for notes (D-193, `editions/skaut-kravare/print-cover/README.md`). Left: the printer's answers: his bleed (3 mm assumed), one 4-page file or the front and the back separately, how far from the edge the ring holes go (the drawing starts about 6 mm from the bound edge), his colour profile; then the PDF converted to it, and a test print with the QR code scanned on phones.
+### P5 · The cover of skaut-kravare — [you] + [agent] · S · needs the printer's check
+Done: the source (D-192), the back, the front from the 1200 dpi scan, CMYK, the book's crop marks on a 15 mm room, no subtitle, a page for notes (D-193, `editions/skaut-kravare/print-cover/README.md`). Left: the printer checks the book and the cover; a test print, its colours and the QR code scanned on phones.
 
 ### P4 · Print proof check — [agent] + [you] · S · needs P3 and the final content
 Done on the final content, after the owner's new songs (D-147; K1 is done); until then P3's output is a draft. Build `make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5` on the owner's Mac (it checks the trim box, the margins and the one ink itself, D-188). Preflight the PDF: fonts embedded (`pdffonts`), page size and page count, crops of the first page, a middle page, a score, a two-column song and the contents at 100%. Tell the printer the final page count. The owner reads a proof and signs off. Record the commit and version that went to the printer in the Status table. Phase 3 ends with P4: its PR adds the phase to HISTORY.md and finishes its line in OVERVIEW.md (Z1).

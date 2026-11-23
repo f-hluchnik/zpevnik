@@ -220,7 +220,7 @@ crop_marks = true
 ```
 - `spine_margin_mm` a `outer_margin_mm` – nejmenší vzdálenost písmen od hřbetu a od vnějšího okraje oříznuté stránky, v milimetrech. Na lichých stránkách je hřbet vlevo, na sudých vpravo. `make` změří, kam sahá tisk (písmena, noty, čáry) na každé stránce PDF v A4, a pak stránky zmenší a odsune od hřbetu tak, aby oba okraje vyšly na všech stránkách. Zmenšuje nejvýš do A5 (strany A4 a A5 jsou v poměru √2 : 1), takže se každá písnička pořád vejde na jednu stránku. Když okraje potřebují víc místa, zmenší stránky ještě o kousek víc: u `skaut-kravare` asi na 97 % velikosti A5, takže základní písmo má asi 9,9 bodu místo 10,2 (přesné číslo `make` vypíše). Tiskárna chtěla 12 a 4 mm, půl milimetru navíc je rezerva na ořez.
 - `skip_first_pages` – kolik prvních stránek do knižního bloku nepatří, sudý počet (lichý by přehodil všechny stránky na druhou stranu hřbetu). U `skaut-kravare` jsou to obálka a její rub: obálku dodá tiskárně zadavatel zvlášť. Čísla stran se pak na papíře počítají jako v tištěné knize, od první stránky bloku: vynechané stránky se nečíslují a obsah i „→ viz také“ ukazují čísla, která jsou na stránkách. V PDF pro obrazovku je číslo strany vždy pořadí stránky v PDF.
-- `crop_marks` – `true`: stránka PDF je A5 a kolem ní 10 mm, v rozích ořezové značky; PDF navíc říká, kde je oříznutá stránka (TrimBox). Spadávka není, protože se nic netiskne až do kraje.
+- `crop_marks` – `true`: stránka PDF je A5 a kolem ní 15 mm, v rozích ořezové značky; PDF navíc říká, kde je oříznutá stránka (TrimBox). Spadávka není, protože se nic netiskne až do kraje.
 
 PDF pro tiskárnu sestavíš jedním příkazem:
 ```
