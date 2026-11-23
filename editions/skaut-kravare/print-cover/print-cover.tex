@@ -9,8 +9,7 @@
 \input{design}
 
 % Around the trim: the bleed, then room for the crop marks (mm).
-\newcommand*{\slug}{13}
-\newcommand*{\marklength}{5}
+\newcommand*{\slug}{16}
 \usepackage[paperwidth=\numexpr\trimwidth+2*\slug\relax mm,
             paperheight=\numexpr\trimheight+2*\slug\relax mm, margin=0pt]{geometry}
 \pagestyle{empty}
@@ -23,12 +22,28 @@
 \newcommand*{\pageboxes}{%
   \special{pdf:put @thispage << \pdfbox{TrimBox}{0} \pdfbox{BleedBox}{-\bleed} >>}}
 
-% Corner marks at the trim lines, starting outside the bleed.
+% Corner marks in the shape of the book's (the crop package's `cam' marks, tools/print_pdf.py):
+% on each trim line at each corner, a thin line 30 pt long with a small circle, crossed, near its
+% outer end. The book has no bleed and its marks start 5 pt from the trim; these start at the
+% bleed's outer edge, so that nothing is printed over the picture in the bleed.
+\newcommand*{\markline}{30pt}
+\newcommand*{\markcircle}{25pt}% from the line's start to the circle's centre
+\newcommand*{\markradius}{5pt}
+\newcommand*{\markwidth}{0.4pt}% LaTeX's \thinlines, as in the book
+% One mark, starting at (#1, #2) mm from the trim's corner T and pointing at the angle #3.
+\newcommand*{\cropmark}[3]{%
+  \begin{scope}[shift={(T)}, xshift={(#1)*1mm}, yshift={(#2)*1mm}, rotate=#3,
+                black, line width=\markwidth]
+    \draw (0,0) -- (\markline,0);
+    \draw (\markcircle,0) circle[radius=\markradius];
+    \draw (\markcircle,-\markradius) -- (\markcircle,\markradius);
+  \end{scope}}
+% Two marks at each corner: one along the horizontal trim line, one along the vertical one.
 \newcommand*{\cropmarks}{%
-  \foreach \x/\dx in {0/-1, \trimwidth/1} {
-    \foreach \y/\dy in {0/-1, \trimheight/1} {
-      \draw[black, line width=0.25pt] \at{\x+\dx*\bleed}{\y} -- ++(\dx*\marklength mm, 0);
-      \draw[black, line width=0.25pt] \at{\x}{\y+\dy*\bleed} -- ++(0, \dy*\marklength mm);
+  \foreach \x/\dx/\across in {0/-1/180, \trimwidth/1/0} {
+    \foreach \y/\dy/\along in {0/-1/270, \trimheight/1/90} {
+      \cropmark{\x+\dx*\bleed}{\y}{\across}
+      \cropmark{\x}{\y+\dy*\bleed}{\along}
     }
   }}
 

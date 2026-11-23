@@ -32,8 +32,10 @@ The fonts come with TeX Live: Alegreya (package `alegreya`) and FreeSerif (`gnu-
 - `design.tex`: the front (`\front`), the back (`\back`), their type and colours; shared by both
   documents.
 - `preview.tex`: the cover as the reader sees it: A5, cut, no marks.
-- `print-cover.tex`: the four pages for the printer: trim 148 × 210 mm, 3 mm bleed, corner crop
-  marks 10 mm outside the trim; the PDF names its trim box and bleed box.
+- `print-cover.tex`: the four pages for the printer: trim 148 × 210 mm, 3 mm bleed, crop marks of
+  the book's shape (a line with a crossed circle, as the `crop` package's `cam` marks in
+  `tools/print_pdf.py`) starting at the bleed's edge, on a 180 × 242 mm page; the PDF names its trim
+  box and bleed box.
 - `scan.jpg`: the illustrator's scan of the drawing, the whole A5 sheet at 600 dpi (3527 × 5001 px),
   as she sent it: the source of the front.
 - `make_assets.py` and `assets/`: the pictures, each the bleed box (154 × 216 mm) at 300 dpi, made
@@ -57,3 +59,24 @@ The fonts come with TeX Live: Alegreya (package `alegreya`) and FreeSerif (`gnu-
   6 mm from the bound edge, so the holes may go through its edge); and the colours: he asked for CMYK (D-188), and this PDF is RGB. Ask
   which profile to convert to, or whether he converts.
 - A test print of the back, the QR code scanned with a few phones.
+
+## Converting to CMYK
+
+Ghostscript (it comes with MacTeX) converts the finished PDF; the trim and bleed boxes stay:
+
+```sh
+gs -o print-cover-cmyk.pdf -sDEVICE=pdfwrite -sColorConversionStrategy=CMYK \
+   -sProcessColorModel=DeviceCMYK -sOutputICCProfile=PRINTERS_PROFILE.icc print-cover.pdf
+```
+
+`PRINTERS_PROFILE.icc` is the colour profile the printer names for his press and paper. Without
+`-sOutputICCProfile`, Ghostscript uses its own generic profile (the beige then comes out at about
+C 6 %, M 5 %, Y 16 %, K 0); use that only for a test.
+
+## Changing the beige
+
+The beige is the sky's colour in the scan, adjusted by two numbers in `make_assets.py`:
+`BEIGE_SATURATION` (above 1: more colour, more yellow; below 1: greyer, nearer white) and
+`BEIGE_VALUE` (below 1: darker). Change them, run `python3 make_assets.py` (it prints the new colour
+as a hex code), then build the cover again. Small steps are enough: 0.1 in saturation or 0.01 in value
+is visible.
