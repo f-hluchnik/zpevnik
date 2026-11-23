@@ -1,50 +1,63 @@
 # The cover of skaut-kravare for the printer
 
-The printer binds the book with rings and prints the cover separately: one PDF of four A5 pages, with
-bleed and crop marks (D-188, D-192). This folder holds its source; it is built by hand, not by `make`.
+The printer binds the book with rings and prints the cover separately: one PDF of four A5 pages
+(D-188, D-192, D-193). This folder holds its source; it is built by hand, not by `make`.
 
 | Page | What |
 |---|---|
-| 1 | the front: the illustrator's drawing, `../cover.jpg` (a grey placeholder until the scan is there) |
+| 1 | the front: Klára Horká's drawing with its rough painted edges, on white, 6 mm from the trim top and bottom |
 | 2 | the inside of the front: white |
 | 3 | the inside of the back: white |
-| 4 | the back: the design `\chosenback` in `print-cover.tex`, one of the six in `back.tex` |
+| 4 | the back: beige paper, the scout lily between two rules, "celý zpěvník *Ještě mi chvilku zpívej*", a QR code to <https://zpevnik.hluchnikovi.cz/> and the address |
 
-The back carries the way to the online songbook: "celý zpěvník *Ještě mi chvilku zpívej*", a QR code
-to <https://zpevnik.hluchnikovi.cz/> and the address. It replaces the book's last page (D-180).
-The six designs are made in TeX and generated pictures only, nothing taken from the drawing, so they
-are a fallback in case the illustrator does not draw the back herself.
+The PDF is what the printer asked for (D-188): CMYK, no RGB; 3 mm bleed; the book's crop marks.
+The edition's own first page (`../cover.tex`) shows the same drawing, so the screen PDF opens with it.
 
 ## Building
 
-XeLaTeX, from this folder (the paths inside are relative to it), into `build/`:
+From this folder (the paths inside are relative to it), into `build/print-cover/`:
 
 ```sh
 cd editions/skaut-kravare/print-cover
-mkdir -p ../../../build/print-cover
-xelatex -output-directory=../../../build/print-cover proposals.tex    # the six backs, A5 as cut
+python3 make_assets.py                                                # the pictures, from scan.jpg
+xelatex -output-directory=../../../build/print-cover preview.tex      # the cover as cut: front and back
 xelatex -output-directory=../../../build/print-cover print-cover.tex  # for the printer
 ```
 
-Run each twice the first time (TikZ places the pictures on the page from the first run).
-The fonts come with TeX Live: Alegreya (package `alegreya`) and FreeSerif (`gnu-freefont`).
+Run each `xelatex` twice the first time (TikZ places the pictures on the page from the first run).
+`make_assets.py` needs numpy and Pillow (`python3 -m pip install numpy pillow`); the fonts and the
+colour profile come with TeX Live: Alegreya (`alegreya`), FreeSerif (`gnu-freefont`), FOGRA39
+(`colorprofiles`).
 
 ## Files
 
-- `back.tex`: the type, the colours, the QR code and the six back designs (`forest`, `row`, `lily`,
-  `moss`, `paper`, `frame`), shared by both documents.
-- `proposals.tex`: the six designs, one A5 page each, for choosing.
-- `print-cover.tex`: the four pages for the printer: trim 148 × 210 mm, 3 mm bleed, corner crop
-  marks 10 mm outside the trim; the PDF names its trim box and bleed box.
-- `make_assets.py` and `assets/`: the paper textures (300 dpi over the bleed box) and the spruce
-  rows. The output is committed; rerun the script (it needs numpy and Pillow) only to change them.
+- `scan.jpg`: the illustrator's scan, the whole A5 sheet at 1200 dpi (7089 × 10044 px), as she sent
+  it. The source of the front and of the beige.
+- `make_assets.py`: everything taken from the scan.
+  - The front: the painted area with its rough edges, scaled to leave 6 mm to the trim at the top
+    and the bottom, centred on white. The scan is first white-balanced on its bare paper, so the
+    paper round the drawing is pure white and meets the white page without a faint printed edge;
+    nothing else of the drawing is changed. For the printer at 600 ppi in CMYK
+    (`build/print-cover/assets/front-print.jpg`), for the screen PDF at 300 ppi in RGB
+    (`assets/front-screen.jpg`, committed: `make` needs it).
+  - The back's paper (`build/print-cover/assets/paper-beige.jpg`, CMYK): the beige is the mean colour
+    of the sky's light wash in the scan, the same hue, a little more saturated and darker so that it
+    reads as beige rather than off-white. The texture over it is generated: soft broad clouds, fine
+    mottling, grain and short fibres, each a few per cent of the brightness.
+  - The ink of the text and the QR code in CMYK (`assets/colours.tex`, committed).
+  - CMYK is FOGRA39, the European standard for coated paper, converted with littleCMS (relative
+    colorimetric, black point compensation: the usual prepress setting).
+- `design.tex`: the front (`\front`), the back (`\back`), their type and colours; shared by both
+  documents.
+- `preview.tex`: the cover as the reader sees it: A5, cut, no marks.
+- `print-cover.tex`: the four pages for the printer: trim 148 × 210 mm, 3 mm bleed, the book's crop
+  marks (the `crop` package's `cam` marks, as in `tools/print_pdf.py`) on a 178 × 240 mm page; the
+  PDF names its trim box and bleed box. The marks start 5 pt from the trim; the pictures are drawn
+  over them, so inside the bleed they are covered.
 
-## Before it goes to the printer
+## Changing the beige
 
-- The scan of the drawing at 300 dpi or more, cropped to the bleed box (154 × 216 mm) with the
-  paper's edges cut off, saved as `editions/skaut-kravare/cover.jpg`. A taller scan loses as much at
-  the top as at the bottom; a wider one would leave a gap, so crop it.
-- The owner's choice of the back (`\chosenback`), or the illustrator's own back instead.
-- The printer's answers: the bleed he wants (3 mm here) and the colours: he asked for CMYK
-  (D-188), and this PDF is RGB. Ask which profile to convert to, or whether he converts.
-- A test print of the back, the QR code scanned with a few phones.
+Two numbers in `make_assets.py`: `BEIGE_SATURATION` (above 1: more colour, more yellow; below 1:
+greyer, nearer white) and `BEIGE_VALUE` (below 1: darker). Change them, run `python3 make_assets.py`
+(it prints the new colour as a hex code), then build the cover again. Small steps are enough: 0.1 in
+saturation or 0.01 in value is visible.
