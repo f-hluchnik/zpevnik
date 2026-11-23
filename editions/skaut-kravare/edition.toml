@@ -1,8 +1,9 @@
 # Zpěvník pro kravařské skauty.
 title = "Skautský zpěvník"
-subtitle = "oddíl Kravaře"
 # The illustrator of the cover and the printer (D-192).
 imprint = "credits.tex"
+# A page for notes after the contents, on paper only (D-193).
+after_contents = ["notes.tex"]
 songs = [
     "amazonka",
     "andel",

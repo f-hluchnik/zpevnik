@@ -1,17 +1,13 @@
 % The cover of skaut-kravare for the printer: four A5 pages for a ring binding (D-192).
-%   1 the front: the scan of the drawing (../cover.jpg; a placeholder until it is there)
+%   1 the front: the drawing, in the style of front-choice.tex
 %   2 the inside of the front: white
 %   3 the inside of the back: white
-%   4 the back: \chosenback, one of the designs of back.tex
+%   4 the back: the way to the online songbook (design.tex)
 % Each page has the bleed and crop marks around the trim; the PDF names the trim box and the
 % bleed box. Build with XeLaTeX (README.md).
 \documentclass{article}
-\input{back}
-
-% The back the owner chose (proposals.pdf): forest | row | lily | moss | paper | frame.
-\newcommand*{\chosenback}{forest}
-% The front: the scan of the illustrator's drawing, over the whole bleed box.
-\newcommand*{\frontimage}{../cover.jpg}
+\input{design}
+\input{front-choice}
 
 % Around the trim: the bleed, then room for the crop marks (mm).
 \newcommand*{\slug}{13}
@@ -45,20 +41,9 @@
     \cropmarks
   \end{tikzpicture}\pageboxes\mbox{}\newpage}
 
-\newcommand*{\front}{%
-  \IfFileExists{\frontimage}
-    {\begin{scope}% the bleed box's width; a taller scan loses as much at the top as at the bottom
-       \clip \bleedbox;
-       \node[inner sep=0pt] at \at{\middlex}{\trimheight/2}
-         {\includegraphics[width=\numexpr\trimwidth+2*\bleed\relax mm]{\frontimage}};
-     \end{scope}}
-    {\fill[black!15] \bleedbox;
-     \node[align=center] at \at{\middlex}{\trimheight/2}
-       {přední strana: sken kresby\\(editions/skaut-kravare/cover.jpg)};}}
-
 \begin{document}
-\coverpage{\front}
+\coverpage{\front{\chosenfront}}
 \coverpage{}
 \coverpage{}
-\coverpage{\backdesign{\chosenback}}
+\coverpage{\back}
 \end{document}

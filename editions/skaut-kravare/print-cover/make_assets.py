@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
-"""The generated pictures of the back cover (back.tex): tinted paper and spruce silhouettes.
+"""The pictures of the cover (design.tex), made from the illustrator's scan.
 
-Run once; its output is committed in assets/ (the cover is built by hand, README.md), so
-building the cover needs no Python. Deterministic: the same seeds give the same files.
+Run once; its output is committed in assets/ (the cover is built by hand, README.md), so building
+the cover and the book needs no Python. The scan itself (600 dpi, 3527 x 5001 px) is not
+committed; it is kept with the owner. Deterministic: the same scan gives the same files.
 
-  assets/paper-<tint>.jpg   a paper texture over the bleed box, 300 dpi
-  assets/spruces-<row>.tex  TikZ paths of a row of spruces, in mm from the row's bottom left
+  assets/front-rough.jpg  the drawing with its rough edges, on white with even margins
+  assets/front-bleed.jpg  the drawing cropped inside its edges, over the whole page
+  assets/paper-beige.jpg  the paper of the back: a texture in the tone of the drawing's sky
+Each is the bleed box (A5 with 3 mm on every side) at 300 dpi.
 
 Needs numpy and Pillow (not the songbook's tools, which use the standard library only):
   python3 -m pip install numpy pillow
-  python3 editions/skaut-kravare/print-cover/make_assets.py
+  python3 editions/skaut-kravare/print-cover/make_assets.py path/to/scan.jpg
 """
-import random
-from dataclasses import dataclass
+import argparse
+import colorsys
 from pathlib import Path
 
 import numpy as np
@@ -21,14 +24,23 @@ from PIL import Image, ImageFilter
 ASSETS = Path(__file__).parent / "assets"
 DPI = 300
 MM_PER_INCH = 25.4
-JPEG_QUALITY = 90
-BLEED_BOX_MM = (154, 216)  # A5 with 3 mm bleed on every side
+JPEG_QUALITY = 92
+TRIM_MM = (148, 210)
+BLEED_MM = 3
+WHITE = 255.0
 
-PAPER_TINTS = {  # name in back.tex: sRGB of the paper
-    "cream": (237, 231, 214),
-    "sage": (214, 220, 199),
-    "moss": (186, 195, 166),
-}
+# Boxes in the scan's pixels (left, top, right, bottom), measured on the scan: a column or row
+# counts as painted where most of it is not bare paper (bright and grey).
+SCAN_PAPER = (5, 1000, 60, 4000)               # bare paper in the left margin
+SCAN_SKY = (2600, 300, 3300, 600)              # the sky's light wash, under the branch
+SCAN_PAINTING = (99, 92, 3416, 4936)           # the painted area, rough edges included
+SCAN_PAINTED_FULLY = (134, 122, 3365, 4923)    # inside the rough edges: paint everywhere
+ROUGH_EDGE_ROOM_PX = 40                        # paper kept around the painting's edges
+ROUGH_MARGIN_MM = 6                            # from the trim to the painting, top and bottom
+
+# The back's beige: the sky's hue, a step deeper so that it reads as beige, not as off-white.
+BEIGE_SATURATION = 1.6
+BEIGE_VALUE = 0.975
 PAPER_SEED = 7
 # The paper's shading, as fractions of its brightness: broad clouds, fine mottling, grain, fibres.
 CLOUDS = (0.008, 150)  # (strength, blur radius in px)
@@ -39,33 +51,56 @@ FIBRE_COUNT = 900
 FIBRE_LENGTH_PX = (15, 60)
 
 
-@dataclass(frozen=True)
-class SpruceRow:
-    seed: int
-    count: int
-    min_height_mm: float
-    max_height_mm: float
-    base_jitter_mm: float  # how far a tree's foot may sit above the row's bottom
-
-
-SPRUCE_ROWS = {
-    "row": SpruceRow(seed=3, count=26, min_height_mm=14, max_height_mm=30, base_jitter_mm=2),
-    "far": SpruceRow(seed=5, count=20, min_height_mm=55, max_height_mm=85, base_jitter_mm=0),
-    "near": SpruceRow(seed=11, count=14, min_height_mm=40, max_height_mm=70, base_jitter_mm=3),
-}
-ROW_SPAN_MM = (-6, 154)  # the row runs a little past both edges of the bleed box
-SPRUCE_WIDTH = 0.24      # half the width of a spruce's lowest tier, per its height
-TRUNK_WIDTH = 0.02       # half the width of the trunk, per the height
-MM_PER_TIER = 4
-
-
 def to_px(mm: float) -> int:
     return round(mm / MM_PER_INCH * DPI)
 
 
+BLEED_BOX_PX = (to_px(TRIM_MM[0] + 2 * BLEED_MM), to_px(TRIM_MM[1] + 2 * BLEED_MM))
+
+
+def mean_colour(scan: Image.Image, box: tuple[int, int, int, int]) -> np.ndarray:
+    return np.asarray(scan.crop(box), dtype=float).reshape(-1, 3).mean(axis=0)
+
+
+def white_balanced(scan: Image.Image) -> Image.Image:
+    """The scan with its bare paper made pure white, so it meets a white page without a seam."""
+    paper = mean_colour(scan, SCAN_PAPER)
+    pixels = np.asarray(scan, dtype=float) * (WHITE / paper)
+    return Image.fromarray(pixels.clip(0, WHITE).astype(np.uint8))
+
+
+def front_rough(scan: Image.Image) -> Image.Image:
+    """The painting with its edges and some paper round them, centred on white."""
+    left, top, right, bottom = SCAN_PAINTING
+    room = ROUGH_EDGE_ROOM_PX
+    painting = scan.crop((left - room, top - room, right + room, bottom + room))
+    scale = to_px(TRIM_MM[1] - 2 * ROUGH_MARGIN_MM) / (bottom - top)
+    painting = painting.resize((round(painting.width * scale), round(painting.height * scale)),
+                               Image.Resampling.LANCZOS)
+    page = Image.new("RGB", BLEED_BOX_PX, "white")
+    page.paste(painting, ((page.width - painting.width) // 2, (page.height - painting.height) // 2))
+    return page
+
+
+def front_bleed(scan: Image.Image) -> Image.Image:
+    """The painting inside its edges, cropped evenly top and bottom to the bleed box's shape."""
+    left, top, right, bottom = SCAN_PAINTED_FULLY
+    width = right - left
+    height = round(width * BLEED_BOX_PX[1] / BLEED_BOX_PX[0])
+    top += (bottom - top - height) // 2
+    return scan.crop((left, top, right, top + height)).resize(BLEED_BOX_PX, Image.Resampling.LANCZOS)
+
+
+def beige(scan: Image.Image) -> tuple[float, float, float]:
+    hue, saturation, value = colorsys.rgb_to_hsv(*(mean_colour(scan, SCAN_SKY) / WHITE))
+    red, green, blue = colorsys.hsv_to_rgb(hue, min(1.0, saturation * BEIGE_SATURATION),
+                                           value * BEIGE_VALUE)
+    return red * WHITE, green * WHITE, blue * WHITE
+
+
 def blurred_noise(rng: np.random.Generator, shape: tuple[int, int], radius: float) -> np.ndarray:
     """Gaussian-blurred white noise, normalised to mean 0 and deviation 1."""
-    noise = Image.fromarray((rng.random(shape) * 255).astype(np.uint8))
+    noise = Image.fromarray((rng.random(shape) * WHITE).astype(np.uint8))
     blurred = np.asarray(noise.filter(ImageFilter.GaussianBlur(radius)), dtype=float)
     return (blurred - blurred.mean()) / (blurred.std() + 1e-9)
 
@@ -77,61 +112,36 @@ def fibres(rng: np.random.Generator, shape: tuple[int, int]) -> np.ndarray:
     for _ in range(FIBRE_COUNT):
         y, x = rng.integers(0, height), rng.integers(0, width)
         streaks[y, x:x + rng.integers(*FIBRE_LENGTH_PX)] += rng.choice([-1, 1]) * 0.6
-    image = Image.fromarray(((streaks + 1) * 127).clip(0, 255).astype(np.uint8))
+    image = Image.fromarray(((streaks + 1) * 127).clip(0, WHITE).astype(np.uint8))
     return np.asarray(image.filter(ImageFilter.GaussianBlur(1.2)), dtype=float) / 127 - 1
 
 
-def paper(tint: tuple[int, int, int]) -> Image.Image:
+def paper(tint: tuple[float, float, float]) -> Image.Image:
     rng = np.random.default_rng(PAPER_SEED)
-    shape = (to_px(BLEED_BOX_MM[1]), to_px(BLEED_BOX_MM[0]))
+    shape = (BLEED_BOX_PX[1], BLEED_BOX_PX[0])
     shade = (CLOUDS[0] * blurred_noise(rng, shape, CLOUDS[1])
              + MOTTLING[0] * blurred_noise(rng, shape, MOTTLING[1])
              + GRAIN * rng.standard_normal(shape)
              + FIBRES * fibres(rng, shape))
-    rgb = np.array(tint, dtype=float)[None, None, :] * (1 + shade[..., None])
-    return Image.fromarray(rgb.clip(0, 255).astype(np.uint8))
+    rgb = np.array(tint)[None, None, :] * (1 + shade[..., None])
+    return Image.fromarray(rgb.clip(0, WHITE).astype(np.uint8))
 
 
-def spruce(x: float, foot: float, height: float, rng: random.Random) -> list[tuple[float, float]]:
-    """A spruce as a closed polygon (mm): the tip, then tiers of drooping branches down each side."""
-    tiers = max(5, int(height / MM_PER_TIER))
-    droop = height / tiers * 0.45
-    sides = []
-    for side in (1, -1):
-        points = []
-        for tier in range(1, tiers + 1):
-            share = tier / tiers
-            y = foot + height * (1 - share)
-            reach = height * SPRUCE_WIDTH * share ** 0.9 * rng.uniform(0.85, 1.1)
-            points += [(x + side * reach, y - droop), (x + side * reach * rng.uniform(0.45, 0.6), y)]
-        sides.append(points)
-    right, left = sides
-    trunk = height * TRUNK_WIDTH
-    return [(x, foot + height)] + right + [(x + trunk, foot), (x - trunk, foot)] + left[::-1]
-
-
-def spruce_row(row: SpruceRow) -> list[list[tuple[float, float]]]:
-    rng = random.Random(row.seed)
-    start, end = ROW_SPAN_MM
-    step = (end - start) / row.count
-    return [spruce(start + step * (i + rng.uniform(0.1, 0.9)), rng.uniform(0, row.base_jitter_mm),
-                   rng.uniform(row.min_height_mm, row.max_height_mm), rng)
-            for i in range(row.count)]
-
-
-def tikz_fills(polygons: list[list[tuple[float, float]]], name: str) -> str:
-    lines = [f"% A row of spruces ({name}), made by make_assets.py: do not edit."]
-    for polygon in polygons:
-        lines.append("\\fill " + " -- ".join(f"({x:.2f}mm,{y:.2f}mm)" for x, y in polygon) + " -- cycle;")
-    return "\n".join(lines) + "\n"
+def save(image: Image.Image, name: str) -> None:
+    image.save(ASSETS / name, quality=JPEG_QUALITY, dpi=(DPI, DPI))
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser.add_argument("scan", type=Path, help="the illustrator's scan of the drawing")
+    scan = Image.open(parser.parse_args().scan).convert("RGB")
     ASSETS.mkdir(exist_ok=True)
-    for name, tint in PAPER_TINTS.items():
-        paper(tint).save(ASSETS / f"paper-{name}.jpg", quality=JPEG_QUALITY, dpi=(DPI, DPI))
-    for name, row in SPRUCE_ROWS.items():
-        (ASSETS / f"spruces-{name}.tex").write_text(tikz_fills(spruce_row(row), name))
+    balanced = white_balanced(scan)
+    save(front_rough(balanced), "front-rough.jpg")
+    save(front_bleed(balanced), "front-bleed.jpg")
+    tint = beige(scan)
+    print("beige: #{:02X}{:02X}{:02X}".format(*(round(c) for c in tint)))
+    save(paper(tint), "paper-beige.jpg")
 
 
 if __name__ == "__main__":

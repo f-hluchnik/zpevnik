@@ -1,21 +1,18 @@
-% The six proposed backs as the reader will see them (A5, cut), one per page, for the choice.
-% Build with XeLaTeX (README.md).
+% The cover as the reader will see it (A5, cut): the front in both styles until the owner
+% chooses (front-choice.tex), then the back. Build with XeLaTeX (README.md).
 \documentclass{article}
-\input{back}
+\input{design}
 \usepackage[paperwidth=\trimwidth mm, paperheight=\trimheight mm, margin=0pt]{geometry}
 \pagestyle{empty}
 
-\newcommand*{\proposal}[1]{%
+\newcommand{\previewpage}[1]{%
   \begin{tikzpicture}[remember picture, overlay]
     \coordinate (T) at (current page.south west);
-    \backdesign{#1}
+    #1
   \end{tikzpicture}\mbox{}\newpage}
 
 \begin{document}
-\proposal{forest}
-\proposal{row}
-\proposal{lily}
-\proposal{moss}
-\proposal{paper}
-\proposal{frame}
+\previewpage{\front{rough}}
+\previewpage{\front{bleed}}
+\previewpage{\back}
 \end{document}

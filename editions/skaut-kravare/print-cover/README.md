@@ -1,19 +1,19 @@
 # The cover of skaut-kravare for the printer
 
 The printer binds the book with rings and prints the cover separately: one PDF of four A5 pages, with
-bleed and crop marks (D-188, D-192). This folder holds its source; it is built by hand, not by `make`.
+bleed and crop marks (D-188, D-192, D-193). This folder holds its source; it is built by hand, not by
+`make`.
 
 | Page | What |
 |---|---|
-| 1 | the front: the illustrator's drawing, `../cover.jpg` (a grey placeholder until the scan is there) |
+| 1 | the front: Klára Horká's drawing, in the style `front-choice.tex` names |
 | 2 | the inside of the front: white |
 | 3 | the inside of the back: white |
-| 4 | the back: the design `\chosenback` in `print-cover.tex`, one of the six in `back.tex` |
+| 4 | the back: beige paper, the scout lily between two rules, "celý zpěvník *Ještě mi chvilku zpívej*", a QR code to <https://zpevnik.hluchnikovi.cz/> and the address |
 
-The back carries the way to the online songbook: "celý zpěvník *Ještě mi chvilku zpívej*", a QR code
-to <https://zpevnik.hluchnikovi.cz/> and the address. It replaces the book's last page (D-180).
-The six designs are made in TeX and generated pictures only, nothing taken from the drawing, so they
-are a fallback in case the illustrator does not draw the back herself.
+The front has two styles until the owner chooses: `rough` (the drawing with its rough painted edges, on
+white with 6 mm margins) and `bleed` (the drawing, cropped inside its edges, over the whole page). The
+edition's own first page (`../cover.tex`) shows the same picture, so the screen PDF opens with it.
 
 ## Building
 
@@ -22,7 +22,7 @@ XeLaTeX, from this folder (the paths inside are relative to it), into `build/`:
 ```sh
 cd editions/skaut-kravare/print-cover
 mkdir -p ../../../build/print-cover
-xelatex -output-directory=../../../build/print-cover proposals.tex    # the six backs, A5 as cut
+xelatex -output-directory=../../../build/print-cover preview.tex      # the cover as cut: both fronts, the back
 xelatex -output-directory=../../../build/print-cover print-cover.tex  # for the printer
 ```
 
@@ -31,20 +31,28 @@ The fonts come with TeX Live: Alegreya (package `alegreya`) and FreeSerif (`gnu-
 
 ## Files
 
-- `back.tex`: the type, the colours, the QR code and the six back designs (`forest`, `row`, `lily`,
-  `moss`, `paper`, `frame`), shared by both documents.
-- `proposals.tex`: the six designs, one A5 page each, for choosing.
+- `design.tex`: the front (`\front{<style>}`), the back (`\back`), their type and colours; shared by
+  both documents.
+- `front-choice.tex`: the chosen front, read by `print-cover.tex` and by `../cover.tex`.
+- `preview.tex`: the cover as the reader sees it: A5, cut, no marks.
 - `print-cover.tex`: the four pages for the printer: trim 148 × 210 mm, 3 mm bleed, corner crop
   marks 10 mm outside the trim; the PDF names its trim box and bleed box.
-- `make_assets.py` and `assets/`: the paper textures (300 dpi over the bleed box) and the spruce
-  rows. The output is committed; rerun the script (it needs numpy and Pillow) only to change them.
+- `make_assets.py` and `assets/`: the pictures, each the bleed box (154 × 216 mm) at 300 dpi, made
+  from the illustrator's scan (600 dpi, kept with the owner, not committed):
+  - `front-rough.jpg`, `front-bleed.jpg`: the two fronts. The scan is first white-balanced on its bare
+    paper, so the paper round the drawing is pure white and meets the white page without a seam.
+  - `paper-beige.jpg`: the back's paper. Its tone is the drawing's own: the mean colour of the sky's
+    light wash in the scan, the same hue, slightly more saturated and darker so that it reads as beige
+    rather than off-white (#EDEAD8). The texture over it is generated, not scanned: soft broad clouds,
+    fine mottling, grain and short fibres, each a few per cent of the brightness.
+
+  The output is committed; rerun the script (it needs numpy and Pillow) only with a new scan:
+  `python3 make_assets.py path/to/scan.jpg`.
 
 ## Before it goes to the printer
 
-- The scan of the drawing at 300 dpi or more, cropped to the bleed box (154 × 216 mm) with the
-  paper's edges cut off, saved as `editions/skaut-kravare/cover.jpg`. A taller scan loses as much at
-  the top as at the bottom; a wider one would leave a gap, so crop it.
-- The owner's choice of the back (`\chosenback`), or the illustrator's own back instead.
-- The printer's answers: the bleed he wants (3 mm here) and the colours: he asked for CMYK
-  (D-188), and this PDF is RGB. Ask which profile to convert to, or whether he converts.
+- The owner's choice of the front (`front-choice.tex`); then the other front picture is deleted.
+- The printer's answers: the bleed he wants (3 mm here), whether he wants the front and the back as
+  one 4-page PDF or separately, and the colours: he asked for CMYK (D-188), and this PDF is RGB. Ask
+  which profile to convert to, or whether he converts.
 - A test print of the back, the QR code scanned with a few phones.
