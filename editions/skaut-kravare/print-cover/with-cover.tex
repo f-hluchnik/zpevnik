@@ -1,0 +1,20 @@
+% The printed book as it will look, for looking at, not for the printer: the cover's front and its
+% inside, the book's pages, the inside of the back and the back, each cut to A5 without the crop
+% marks and the bleed. Build the book's A5 PDF and the cover first (README.md), then, from this
+% folder: pdflatex -output-directory=../../../build/print-cover with-cover.tex
+\documentclass[a5paper]{article}
+\usepackage{pdfpages}
+
+% Both PDFs have the A5 page with this room on every side for the crop marks
+% (tools/print_pdf.py's CROP_MARK_ROOM_MM, \markroom in print-cover.tex).
+\newcommand*{\markroom}{15mm}
+\newcommand*{\book}{../../../build/editions/skaut-kravare/print-black/zpevnik-a5.pdf}
+\newcommand*{\cover}{../../../build/print-cover/print-cover.pdf}
+\newcommand*{\cutpages}[2]{% #1 the pages, #2 the PDF
+  \includepdf[pages={#1}, trim=\markroom{} \markroom{} \markroom{} \markroom, clip]{#2}}
+
+\begin{document}
+\cutpages{1-2}{\cover}
+\cutpages{-}{\book}
+\cutpages{3-4}{\cover}
+\end{document}
