@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-"""The pictures of the cover (design.tex), made from the illustrator's scan.
+"""The pictures of the cover (design.tex), made from the illustrator's scan (scan.jpg, 600 dpi).
 
 Run once; its output is committed in assets/ (the cover is built by hand, README.md), so building
-the cover and the book needs no Python. The scan itself (600 dpi, 3527 x 5001 px) is not
-committed; it is kept with the owner. Deterministic: the same scan gives the same files.
+the cover and the book needs no Python. Deterministic: the same scan gives the same files.
 
-  assets/front-rough.jpg  the drawing with its rough edges, on white with even margins
-  assets/front-bleed.jpg  the drawing cropped inside its edges, over the whole page
+  assets/front.jpg        the drawing with its rough painted edges, on white with even margins
   assets/paper-beige.jpg  the paper of the back: a texture in the tone of the drawing's sky
 Each is the bleed box (A5 with 3 mm on every side) at 300 dpi.
 
 Needs numpy and Pillow (not the songbook's tools, which use the standard library only):
   python3 -m pip install numpy pillow
-  python3 editions/skaut-kravare/print-cover/make_assets.py path/to/scan.jpg
+  python3 editions/skaut-kravare/print-cover/make_assets.py [path/to/scan.jpg]
 """
 import argparse
 import colorsys
@@ -21,7 +19,9 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageFilter
 
-ASSETS = Path(__file__).parent / "assets"
+HERE = Path(__file__).parent
+ASSETS = HERE / "assets"
+SCAN = HERE / "scan.jpg"
 DPI = 300
 MM_PER_INCH = 25.4
 JPEG_QUALITY = 92
@@ -34,7 +34,6 @@ WHITE = 255.0
 SCAN_PAPER = (5, 1000, 60, 4000)               # bare paper in the left margin
 SCAN_SKY = (2600, 300, 3300, 600)              # the sky's light wash, under the branch
 SCAN_PAINTING = (99, 92, 3416, 4936)           # the painted area, rough edges included
-SCAN_PAINTED_FULLY = (134, 122, 3365, 4923)    # inside the rough edges: paint everywhere
 ROUGH_EDGE_ROOM_PX = 40                        # paper kept around the painting's edges
 ROUGH_MARGIN_MM = 6                            # from the trim to the painting, top and bottom
 
@@ -69,7 +68,7 @@ def white_balanced(scan: Image.Image) -> Image.Image:
     return Image.fromarray(pixels.clip(0, WHITE).astype(np.uint8))
 
 
-def front_rough(scan: Image.Image) -> Image.Image:
+def front(scan: Image.Image) -> Image.Image:
     """The painting with its edges and some paper round them, centred on white."""
     left, top, right, bottom = SCAN_PAINTING
     room = ROUGH_EDGE_ROOM_PX
@@ -80,15 +79,6 @@ def front_rough(scan: Image.Image) -> Image.Image:
     page = Image.new("RGB", BLEED_BOX_PX, "white")
     page.paste(painting, ((page.width - painting.width) // 2, (page.height - painting.height) // 2))
     return page
-
-
-def front_bleed(scan: Image.Image) -> Image.Image:
-    """The painting inside its edges, cropped evenly top and bottom to the bleed box's shape."""
-    left, top, right, bottom = SCAN_PAINTED_FULLY
-    width = right - left
-    height = round(width * BLEED_BOX_PX[1] / BLEED_BOX_PX[0])
-    top += (bottom - top - height) // 2
-    return scan.crop((left, top, right, top + height)).resize(BLEED_BOX_PX, Image.Resampling.LANCZOS)
 
 
 def beige(scan: Image.Image) -> tuple[float, float, float]:
@@ -133,12 +123,11 @@ def save(image: Image.Image, name: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    parser.add_argument("scan", type=Path, help="the illustrator's scan of the drawing")
+    parser.add_argument("scan", type=Path, nargs="?", default=SCAN,
+                        help="the illustrator's scan of the drawing (default: scan.jpg)")
     scan = Image.open(parser.parse_args().scan).convert("RGB")
     ASSETS.mkdir(exist_ok=True)
-    balanced = white_balanced(scan)
-    save(front_rough(balanced), "front-rough.jpg")
-    save(front_bleed(balanced), "front-bleed.jpg")
+    save(front(white_balanced(scan)), "front.jpg")
     tint = beige(scan)
     print("beige: #{:02X}{:02X}{:02X}".format(*(round(c) for c in tint)))
     save(paper(tint), "paper-beige.jpg")

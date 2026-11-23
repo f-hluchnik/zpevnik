@@ -1,5 +1,5 @@
 % The cover of skaut-kravare for the printer: four A5 pages for a ring binding (D-192).
-%   1 the front: the drawing, in the style of front-choice.tex
+%   1 the front: the drawing with its rough painted edges
 %   2 the inside of the front: white
 %   3 the inside of the back: white
 %   4 the back: the way to the online songbook (design.tex)
@@ -7,7 +7,6 @@
 % bleed box. Build with XeLaTeX (README.md).
 \documentclass{article}
 \input{design}
-\input{front-choice}
 
 % Around the trim: the bleed, then room for the crop marks (mm).
 \newcommand*{\slug}{13}
@@ -42,7 +41,7 @@
   \end{tikzpicture}\pageboxes\mbox{}\newpage}
 
 \begin{document}
-\coverpage{\front{\chosenfront}}
+\coverpage{\front}
 \coverpage{}
 \coverpage{}
 \coverpage{\back}

@@ -1,5 +1,5 @@
-% The cover as the reader will see it (A5, cut): the front in both styles until the owner
-% chooses (front-choice.tex), then the back. Build with XeLaTeX (README.md).
+% The cover as the reader will see it (A5, cut): the front and the back. Build with XeLaTeX
+% (README.md).
 \documentclass{article}
 \input{design}
 \usepackage[paperwidth=\trimwidth mm, paperheight=\trimheight mm, margin=0pt]{geometry}
@@ -12,7 +12,6 @@
   \end{tikzpicture}\mbox{}\newpage}
 
 \begin{document}
-\previewpage{\front{rough}}
-\previewpage{\front{bleed}}
+\previewpage{\front}
 \previewpage{\back}
 \end{document}
