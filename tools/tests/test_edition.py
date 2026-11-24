@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from edition import BlockSettings, Book, EditionError, PrintSettings, read_book, read_edition, read_print_settings
+from edition import BlockSettings, Book, CoverSettings, EditionError, PrintSettings, read_book, read_edition, read_print_settings
 from paths import BOOK_FILE
 from .songs_builder import make_song
 
@@ -202,14 +202,15 @@ PRINTED_BLOCK = BlockSettings(paper="A5", ink="black", cover=False, crop_marks=T
                               outer_margin_mm=4)
 
 
-class PrintTable(unittest.TestCase):
-    """The [print] table: what the printer of an edition gets."""
+class PrintSettingsCase(unittest.TestCase):
+    """Reads the [print] table of an edition in a temporary checkout with a profile and a design."""
 
     def settings(self, toml: str) -> PrintSettings:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Repository(tmp)
             repo.write("editions/lite/edition.toml", toml)
             repo.write("editions/lite/printer.icc", "a profile")
+            repo.write("editions/lite/cover/design.tex", "% a design")
             return read_print_settings(repo.root, "lite")
 
     def errors(self, toml: str) -> list[str]:
@@ -217,6 +218,7 @@ class PrintTable(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Repository(tmp)
             repo.write("editions/lite/printer.icc", "a profile")
+            repo.write("editions/lite/cover/design.tex", "% a design")
             with self.assertRaises(EditionError) as from_print:
                 repo.write("editions/lite/edition.toml", toml)
                 read_print_settings(repo.root, "lite")
@@ -224,6 +226,10 @@ class PrintTable(unittest.TestCase):
                 repo.edition(toml)
         self.assertEqual(from_print.exception.errors, from_edition.exception.errors)
         return from_print.exception.errors
+
+
+class PrintTable(PrintSettingsCase):
+    """The [print] table and its [print.block]: what the printer of an edition gets."""
 
     def test_the_table_is_read(self):
         self.assertEqual(self.settings(lite() + PRINT_TABLE), PrintSettings(block=PRINTED_BLOCK))
@@ -248,10 +254,10 @@ class PrintTable(unittest.TestCase):
             "print: unknown key 'sheet'",
             "print.block: unknown key 'margin'",
             'print.block: \'paper\' must be "A4" or "A5"',
-            'print.block: \'ink\' must be "colour" or "black"',
             'print.block: \'colour\' must be "rgb" or "cmyk"',
-            "print.block: 'cover' must be true or false",
-            "print.block: 'bleed_mm' must be a number of millimetres, 0 or more"])
+            "print.block: 'bleed_mm' must be a number of millimetres, 0 or more",
+            'print.block: \'ink\' must be "colour" or "black"',
+            "print.block: 'cover' must be true or false"])
 
     def test_the_keys_must_go_together(self):
         table = ('[print.block]\nink = "black"\ncolour = "rgb"\nprofile = "printer.icc"\n'
@@ -271,4 +277,36 @@ class PrintTable(unittest.TestCase):
             self.settings('print = "yes"\n' + lite())
         self.assertEqual(caught.exception.errors, ["'print' must be a table"])
         self.assertEqual(self.errors(lite() + "[print]\nblock = 1\n"), ["print: 'block' must be a table"])
+
+
+COVER_TABLE = '[print.cover]\ndesign = "cover/design.tex"\npaper = "A5"\ncolour = "cmyk"\nbleed_mm = 3\n'
+
+
+class CoverTable(PrintSettingsCase):
+    """The [print.cover] table: a cover printed separately, from the edition's design."""
+
+    def test_the_table_is_read_with_the_design_from_the_root(self):
+        self.assertEqual(self.settings(lite() + COVER_TABLE).cover, CoverSettings(
+            design="editions/lite/cover/design.tex", paper="A5", colour="cmyk", bleed_mm=3))
+
+    def test_without_the_table_there_is_no_separate_cover(self):
+        self.assertIsNone(self.settings(lite()).cover)
+
+    def test_a_separate_cover_leaves_the_books_own_out_of_the_block_unless_the_block_says(self):
+        self.assertFalse(self.settings(lite() + COVER_TABLE).block.cover)
+        self.assertTrue(self.settings(lite() + "[print.block]\ncover = true\n" + COVER_TABLE).block.cover)
+
+    def test_the_design_is_required_and_the_cover_has_no_block_keys(self):
+        self.assertEqual(self.errors(lite() + '[print.cover]\nink = "black"\n'), [
+            "print.cover: missing key 'design'", "print.cover: unknown key 'ink'"])
+
+    def test_the_page_keys_are_checked_as_for_the_block(self):
+        table = '[print.cover]\ndesign = "cover/design.tex"\nprofile = "printer.icc"\n'
+        self.assertEqual(self.errors(lite() + table), ["print.cover: 'profile' goes with colour = \"cmyk\""])
+
+    def test_the_design_is_a_tex_file_of_the_edition(self):
+        for design in ("cover/missing.tex", "../full/cover/design.tex", "printer.icc"):
+            with self.subTest(design):
+                self.assertEqual(self.errors(lite() + f'[print.cover]\ndesign = "{design}"\n'), [
+                    f"print.cover: 'design' must be a .tex file in the edition's folder, not {design}"])
 

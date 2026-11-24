@@ -1,0 +1,14 @@
+% The scout lily of the cover's back (../lily.pdf): the glyph ⚜ of FreeSerif (TeX Live's
+% gnu-freefont) at 14.4 pt, black, as a PDF that pdfLaTeX includes. Made by hand with XeLaTeX,
+% from this folder:
+%   xelatex -output-directory=.. lily.tex
+% The PDF is the glyph's box; the log prints its depth below the baseline, which design.tex
+% lowers it by (\lilydepth).
+\documentclass[border=0pt]{standalone}
+\usepackage{fontspec}
+\newfontfamily\symbolfont{FreeSerif.otf}
+\begin{document}
+\setbox0\hbox{\symbolfont\fontsize{14.4pt}{14.4pt}\selectfont ⚜}%
+\typeout{The lily is \the\wd0 \space wide, \the\ht0 \space high and \the\dp0 \space deep.}%
+\box0
+\end{document}

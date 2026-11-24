@@ -186,11 +186,18 @@ titlepage = "shared"
 
 # What the printer asked for: an A5 book block in black ink, letters at least 12 mm from the
 # spine and 4 mm from the outer edge, with half a millimetre to spare for the cut; crop marks,
-# no bleed. The cover is printed separately (print-cover/), so the block leaves it out.
+# no bleed. The cover is printed separately, in CMYK with a 3 mm bleed, so the block leaves the
+# book's own cover out.
 [print.block]
 paper = "A5"
 ink = "black"
-cover = false
 crop_marks = true
 spine_margin_mm = 12.5
 outer_margin_mm = 4.5
+
+[print.cover]
+design = "print-cover/design.tex"
+paper = "A5"
+colour = "cmyk"
+crop_marks = true
+bleed_mm = 3

@@ -91,10 +91,11 @@ Every book is an edition: `editions/<name>/edition.toml`, the full book too (`ed
 
 ## Print
 
-`make print EDITION=<e>` makes the book block for the edition's printer, as the `[print.block]`
-table of its `edition.toml` asks ([printing.md](printing.md) lists the keys).
-Every key has a default, so every edition can be printed. The block goes to
-`build/print/<e>/zpevnik-<e>-<version>-blok.pdf`; the printer gets nothing from anywhere else.
+`make print EDITION=<e>` makes what the edition's printer gets, as the `[print]` table of its
+`edition.toml` asks ([printing.md](printing.md) lists the keys): the book block
+(`[print.block]`) and, with a `[print.cover]` table, the cover printed separately and a preview of
+the book with it. Every key of the block has a default, so every edition can be printed. The files
+go to `build/print/<e>/`, emptied first; the printer gets nothing from anywhere else.
 
 - **One build, a few switches.** The book is typeset on A4 in a format (`tools/formats.py`)
   that follows from the table: `print-black` (black ink), `print` (colour, RGB) or `print-cmyk`.
@@ -112,13 +113,18 @@ Every key has a default, so every edition can be printed. The block goes to
   (`tools/colours.py`) and typeset as a CMYK colour; the scores use their black-ink images.
   Converting the finished PDF with Ghostscript was rejected: its PDF writer ignores the profile it
   is given and uses its own.
-- **Black ink** is checked with Ghostscript's ink coverage on every page; a black-ink or CMYK
-  block may hold no RGB image, and every font must be embedded.
-- **The cover:** `cover = false` leaves the book's cover and its back out of the block at TeX
-  level (`\zpprintwithoutcover`), so the pages count from the half-title as in a printed book.
-  The cover of `skaut-kravare` is built by hand from `editions/skaut-kravare/print-cover/` (its
-  README). It is being moved into `make print`, configured by a `[print.cover]` table like the
-  block.
+- **Black ink** is checked with Ghostscript's ink coverage on every page of the block.
+- **The book's own cover** is left out of the block at TeX level (`cover = false`,
+  `\zpprintwithoutcover`), so the pages count from the half-title as in a printed book.
+- **A printed cover is a design, not a feature of the book.** Each edition with one has its own
+  `.tex` design that draws four pages (`\zpcoverfront`, `\zpcoverback`, optional insides) into a
+  small pdfLaTeX document with the block's page, marks and boxes (`tools/print_cover.py`,
+  `tools/print_output.py`). Its pictures are committed RGB ingredients; for CMYK the build converts
+  them with the profile (`tools/colours.py`), as it does the chords, so the design stays
+  independent of the printer. What made the ingredients (a scan, a script) lives beside them and is
+  run by hand, never by the build.
+- **Checks shared by the block and the cover:** the page boxes, every font embedded, no RGB image
+  in black ink or CMYK.
 
 ## Version and release
 

@@ -6,9 +6,12 @@ are its own (`editions/<name>/<page>.tex`); it can add an imprint fragment and p
 before the songs and after the contents. `read_book` and `read_edition` validate the
 files and report every problem at once in an `EditionError`.
 
-What a printer gets is set in the `[print.block]` table (`read_print_settings`, for
-print_pdf.py; docs/printing.md lists the keys). Every key has a default, so every edition can
-be printed: without the table, on A4, in colour, with its cover, as on the screen.
+What a printer gets is set in the `[print]` table (`read_print_settings`, for print_pdf.py and
+print_cover.py; docs/printing.md lists the keys): `[print.block]`, the book's pages, and
+`[print.cover]`, a cover printed separately from its own design. Every key of the block has a
+default, so every edition can be printed: without the table, on A4, in colour, with its cover,
+as on the screen. An edition with a printed cover leaves its own cover out of the block unless
+the block says otherwise.
 
 Files an edition lists are written relative to its folder; another edition's file is
 named by path ("../full/introduction.tex"), so sharing is visible. A `.tex` file in the
@@ -32,8 +35,8 @@ COVER, HALFTITLE, TITLEPAGE = "cover", "halftitle", "titlepage"
 PAGES = (COVER, HALFTITLE, TITLEPAGE)  # the replaceable pages, each shared or own
 TEX_SUFFIX = ".tex"
 ALL, SONGS, ARTISTS = "all", "songs", "artists"  # the selection keys of edition.toml
-PRINT_TABLE = "print"  # what the printer gets: [print.block], the book's pages
-BLOCK_TABLE = "block"
+PRINT_TABLE = "print"  # what the printer gets: [print.block], the book's pages; [print.cover]
+BLOCK_TABLE, COVER_TABLE = "block", "cover"
 COLOUR_INK, BLACK_INK = "colour", "black"
 RGB, CMYK = "rgb", "cmyk"
 FOGRA39 = "FOGRA39"  # the CMYK profile of TeX Live (package colorprofiles): coated paper, Europe
@@ -75,10 +78,12 @@ EDITION_OPTIONAL = {"title": TEXT, "subtitle": TEXT, "editors": TEXTS, "cover_im
                     "imprint": TEXT, "before_songs": TEXTS, "after_contents": TEXTS,
                     ALL: TRUE, SONGS: TEXTS, ARTISTS: TEXTS, PRINT_TABLE: TABLE}
 PAGE_KEYS = {page: PAGE_CHOICE for page in PAGES}
-PRINT_KEYS = {BLOCK_TABLE: TABLE}
-BLOCK_KEYS = {"paper": one_of(*PAPERS), "ink": one_of(COLOUR_INK, BLACK_INK), "colour": one_of(RGB, CMYK),
-              "profile": TEXT, "cover": BOOLEAN, "crop_marks": BOOLEAN, "bleed_mm": MILLIMETRES,
+PRINT_KEYS = {BLOCK_TABLE: TABLE, COVER_TABLE: TABLE}
+PAGE_SETTING_KEYS = {"paper": one_of(*PAPERS), "colour": one_of(RGB, CMYK), "profile": TEXT,
+                     "crop_marks": BOOLEAN, "bleed_mm": MILLIMETRES}
+BLOCK_KEYS = {**PAGE_SETTING_KEYS, "ink": one_of(COLOUR_INK, BLACK_INK), "cover": BOOLEAN,
               "spine_margin_mm": MILLIMETRES, "outer_margin_mm": MILLIMETRES}
+COVER_REQUIRED = {"design": TEXT}
 
 
 class EditionError(Exception):
@@ -100,24 +105,36 @@ class Book:
     base_edition: str  # the edition that is the book itself (no derivation sentence)
 
 
-@dataclass(frozen=True)
-class BlockSettings:
-    """The book's pages for the printer: the [print.block] table, each key with its default."""
+@dataclass(frozen=True, kw_only=True)
+class PageSettings:
+    """What every PDF for a printer says of its pages, each key with its default."""
     paper: str = A4
-    ink: str = COLOUR_INK        # black: everything in black ink only, the chords and scores too
-    colour: str = RGB            # with colour ink: CMYK converts the colours with `profile`
+    colour: str = RGB            # CMYK converts the colours with `profile`
     profile: str = FOGRA39       # FOGRA39, or the path of a .icc file from the repository root
-    cover: bool = True           # the book's own cover and its back start the block
     crop_marks: bool = False
-    bleed_mm: float = 0          # the bleed box beyond the trim; nothing of the block reaches it
+    bleed_mm: float = 0          # the bleed box beyond the trim
+
+
+@dataclass(frozen=True, kw_only=True)
+class BlockSettings(PageSettings):
+    """The book's pages for the printer: the [print.block] table."""
+    ink: str = COLOUR_INK        # black: everything in black ink only, the chords and scores too
+    cover: bool = True           # the book's own cover and its back start the block
     spine_margin_mm: float = 0   # no ink closer to the bound edge of the trimmed page
     outer_margin_mm: float = 0   # nor to its outer edge
+
+
+@dataclass(frozen=True, kw_only=True)
+class CoverSettings(PageSettings):
+    """The cover printed separately: the [print.cover] table."""
+    design: str                  # the design's .tex file, from the repository root
 
 
 @dataclass(frozen=True)
 class PrintSettings:
     """What a printer gets of an edition: the [print] table of its edition.toml."""
     block: BlockSettings = BlockSettings()
+    cover: CoverSettings | None = None  # no separate cover
 
 
 @dataclass(frozen=True)
@@ -175,12 +192,13 @@ def table_errors(table: dict, key: str, required: dict[str, Kind], optional: dic
 
 
 def print_table_errors(table: dict) -> list[str]:
-    """The problems of the keys of the [print] table and of its [print.block] table."""
+    """The problems of the keys of the [print] table and of its [print.block] and [print.cover] tables."""
     printing = table.get(PRINT_TABLE)
     if not TABLE.accepts(printing):
         return []
-    return (table_errors(table, PRINT_TABLE, {}, PRINT_KEYS)
-            + [f"{PRINT_TABLE}.{error}" for error in table_errors(printing, BLOCK_TABLE, {}, BLOCK_KEYS)])
+    inner = (table_errors(printing, BLOCK_TABLE, {}, BLOCK_KEYS)
+             + table_errors(printing, COVER_TABLE, COVER_REQUIRED, PAGE_SETTING_KEYS))
+    return table_errors(table, PRINT_TABLE, {}, PRINT_KEYS) + [f"{PRINT_TABLE}.{error}" for error in inner]
 
 
 def edition_folder(name: str) -> Path:
@@ -330,18 +348,44 @@ def read_print_settings(root: Path, name: str) -> PrintSettings:
 def print_settings(root: Path, folder: Path, table: dict, errors: list[str]) -> PrintSettings:
     """The settings of a [print] table whose keys are valid; what does not go together is added
     to `errors`."""
-    block = dict(table.get(PRINT_TABLE, {}).get(BLOCK_TABLE, {}))
-    where = f"{PRINT_TABLE}.{BLOCK_TABLE}"
-    if block.get("ink", COLOUR_INK) == BLACK_INK and "colour" in block:
-        errors.append(f"{where}: 'colour' goes with ink = \"{COLOUR_INK}\": black ink is black ink only")
-    if block.get("colour", RGB) == RGB and "profile" in block:
+    printing = table.get(PRINT_TABLE, {})
+    block_table = printing.get(BLOCK_TABLE, {})
+    if block_table.get("ink", COLOUR_INK) == BLACK_INK and "colour" in block_table:
+        errors.append(f"{PRINT_TABLE}.{BLOCK_TABLE}: 'colour' goes with ink = \"{COLOUR_INK}\": "
+                      "black ink is black ink only")
+    block = page_settings(root, folder, block_table, BLOCK_TABLE, errors)
+    cover = None
+    if COVER_TABLE in printing:
+        cover_table = page_settings(root, folder, printing[COVER_TABLE], COVER_TABLE, errors)
+        cover_table["design"] = str(design_path(root, folder, cover_table["design"], errors))
+        cover = CoverSettings(**cover_table)
+    # A cover printed separately replaces the book's own, unless the block says otherwise.
+    return PrintSettings(block=BlockSettings(**{"cover": cover is None, **block}), cover=cover)
+
+
+def page_settings(root: Path, folder: Path, table: dict, name: str, errors: list[str]) -> dict:
+    """The keys of a [print.<name>] table, with the profile as a path from the root; what does
+    not go together is added to `errors`."""
+    settings = dict(table)
+    where = f"{PRINT_TABLE}.{name}"
+    if settings.get("colour", RGB) == RGB and "profile" in settings:
         errors.append(f"{where}: 'profile' goes with colour = \"{CMYK}\"")
-    if block.get("crop_marks", False) and block.get("bleed_mm", 0) > CROP_MARK_ROOM_MM:
-        errors.append(f"{where}: a bleed_mm of {block['bleed_mm']} does not fit the {CROP_MARK_ROOM_MM} mm "
+    if settings.get("crop_marks", False) and settings.get("bleed_mm", 0) > CROP_MARK_ROOM_MM:
+        errors.append(f"{where}: a bleed_mm of {settings['bleed_mm']} does not fit the {CROP_MARK_ROOM_MM} mm "
                       "around the page for the crop marks")
-    if block.get("profile", FOGRA39) != FOGRA39:
-        block["profile"] = str(profile_path(root, folder, block["profile"], where, errors))
-    return PrintSettings(block=BlockSettings(**block))
+    if settings.get("profile", FOGRA39) != FOGRA39:
+        settings["profile"] = str(profile_path(root, folder, settings["profile"], where, errors))
+    return settings
+
+
+def design_path(root: Path, folder: Path, reference: str, errors: list[str]) -> PurePosixPath:
+    """The cover's design: a .tex file in the edition's folder or below it; the path from the root."""
+    path = repo_path(folder, reference)
+    if (path.suffix != TEX_SUFFIX or not path.is_relative_to(folder.as_posix())
+            or not (root / path).is_file()):
+        errors.append(f"{PRINT_TABLE}.{COVER_TABLE}: 'design' must be a {TEX_SUFFIX} file in the edition's "
+                      f"folder, not {reference}")
+    return path
 
 
 def profile_path(root: Path, folder: Path, reference: str, where: str, errors: list[str]) -> PurePosixPath:
