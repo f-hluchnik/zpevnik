@@ -1,10 +1,12 @@
 # The build targets print the path of what they built; everything goes under build/.
 # make [pdf] [EDITION=<name>]  generate the edition's .tex files and the score images, then compile
 #               build/editions/<name>/zpevnik.pdf, the PDF for the screen (default edition: full)
-# make print [EDITION=<name>]  the PDF for the edition's printer, as the [print] table of its
-#               edition.toml asks (docs/printing.md): the book typeset for paper in the format the
-#               table chooses (tools/formats.py) and checked like make check checks it, then placed on
-#               the printer's paper and checked again (tools/print_pdf.py), into build/print/<name>/
+# make print [EDITION=<name>]  the PDFs for the edition's printer, as the [print] table of its
+#               edition.toml asks (docs/printing.md), into build/print/<name>/: the book typeset for
+#               paper in the format the table chooses (tools/formats.py) and checked like make check
+#               checks it, then placed on the printer's paper and checked again (tools/print_pdf.py);
+#               with a [print.cover] table also the cover and a preview of the book with it
+#               (tools/print_cover.py)
 # make generate [EDITION=<name>]  only run the generator (tools/generate.py)
 # make scores   only export the score images from MuseScore into build/scores/
 #               (tools/scores.py; skips scores that are up to date)
@@ -76,9 +78,10 @@ print: check-python
 	@format=$$($(PYTHON) tools/print_pdf.py --edition $(EDITION) --block-format) && \
 		printf '\n==> %s\n' "Build of the $(EDITION) edition for paper ($$format)" && \
 		$(MAKE) --no-print-directory edition-checks BUILD_FORMAT=$$format
-	$(call step,The PDF for the printer)
+	$(call step,The PDFs for the printer)
 	@$(PYTHON) tools/print_pdf.py --edition $(EDITION)
-	$(call finish,The PDF for the printer is ready:,tools/print_pdf.py)
+	@$(PYTHON) tools/print_cover.py --edition $(EDITION)
+	$(call finish,The PDFs for the printer are in:,tools/print_pdf.py)
 
 song: scores
 	@$(PYTHON) tools/build_song.py $(SONG)

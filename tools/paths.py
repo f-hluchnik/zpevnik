@@ -23,8 +23,8 @@ EDITION_FILE_NAME = "edition.toml"
 SHARED_PAGES_DIR = Path("shared-pages")  # pages an edition can share, and the imprint core
 BOOK_TEX = Path("zpevnik.tex")
 BOOK_PDF_NAME = "zpevnik.pdf"           # the PDF of every edition, in its output directory
-PRINT_WRAPPER_NAME = "zpevnik-block.tex"  # print_pdf.py: the document that places a format's PDF on the paper ...
-PRINT_PDF_NAME = "zpevnik-block.pdf"      # ... and the PDF it makes, next to the one it places
+PRINT_WRAPPER_NAME = "zpevnik-block.tex"  # print_pdf.py: the document that places a format's PDF on the
+                                          # paper, next to it, and makes zpevnik-block.pdf
 BOOK_AUX_NAME = "zpevnik.aux"           # its main auxiliary file, which lists every \include
 BOOK_LOG_NAME = "zpevnik.log"           # the log of its last LaTeX run
 CHORD_TRACE_NAME = "zpevnik.chords"     # written by every build, see \chord in zpevnik.sty
@@ -44,7 +44,9 @@ SONGS_JSON_FILE = BUILD_DIR / "songs.json"  # the songs of the full book for the
 SONGS_SCHEMA_FILE = Path("tools/songs.schema.json")  # the schema of songs.json, the contract
 RELEASE_DIR = BUILD_DIR / "release"      # the PDFs of a release under their asset names (release.py)
 PRINT_DIR = BUILD_DIR / "print"          # make print: <edition>/, the files for the edition's printer
-PRINT_BLOCK_PART = "blok"                # the book block in their names (print_pdf.py)
+PRINT_BLOCK_PART = "blok"                # what each is, in their names: the book block (print_pdf.py),
+PRINT_COVER_PART = "obalka"              # the cover (print_cover.py)
+PRINT_PREVIEW_PART = "nahled"            # and the book with its cover as the reader will see it
 DEFAULT_EDITION = "full"
 
 # The files tools/generate.py writes into an edition's generated/ directory.
@@ -63,6 +65,11 @@ def edition_output_dir(edition: str, format_name: str = SCREEN) -> Path:
     keeps the edition's own folder; every other format has a folder of its own in it."""
     folder = EDITION_BUILD_DIR / edition
     return folder if format_name == SCREEN else folder / format_name
+
+
+def print_cover_dir(edition: str) -> Path:
+    """Where print_cover.py makes an edition's cover and the preview of the book with it."""
+    return EDITION_BUILD_DIR / edition / "print-cover"
 
 
 def generated_dir(edition: str) -> Path:

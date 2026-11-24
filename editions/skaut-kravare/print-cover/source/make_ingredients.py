@@ -1,33 +1,29 @@
 #!/usr/bin/env python3
-"""The pictures and colours of the cover, made from the illustrator's scan (scan.jpg, 1200 dpi).
+"""The pictures of the cover, made from the illustrator's scan (scan.jpg, 1200 dpi): run by hand.
 
-The first step of building the printer's cover (README.md). Deterministic: the same scan gives the
-same files. What the book needs is committed, so `make` needs no Python; the printer's pictures,
-large and made again in seconds, go to build/:
+The design (../design.tex) is drawn from these ingredients, committed; make print converts them to
+the printer's CMYK. Deterministic: the same scan gives the same files.
 
-  assets/front-screen.jpg               the front for the screen PDF's first page: RGB, 300 ppi
-  assets/colours.tex                    the cover's ink colour in CMYK, for design.tex
-  build/print-cover/assets/front-print.jpg  the front for the printer: CMYK, 600 ppi
-  build/print-cover/assets/paper-beige.jpg  the back's paper, in the tone of the drawing's sky: CMYK
-Each picture is the bleed box (A5 with 3 mm on every side). The front is the painted area with its
-rough edges, on white. CMYK is FOGRA39 (coated paper, the European standard), the profile TeX Live
-ships in its `colorprofiles` package; the printer asked for CMYK, not RGB.
+  ../front.jpg           the front for the printer: the painted area with its rough edges, on
+                         white, 600 ppi
+  ../paper.jpg           the back's paper, in the tone of the drawing's sky, 300 ppi
+  ../../cover.jpg        the front for the screen PDF's first page (../../cover.tex), 300 ppi
+Each picture is the bleed box (A5 with 3 mm on every side), in sRGB.
 
-Needs numpy, Pillow (with its littleCMS colour management) and TeX Live's kpsewhich:
+Needs numpy and Pillow:
   python3 -m pip install numpy pillow
-  python3 editions/skaut-kravare/print-cover/make_assets.py [path/to/scan.jpg]
+  python3 editions/skaut-kravare/print-cover/source/make_ingredients.py [path/to/scan.jpg]
 """
 import argparse
 import colorsys
-import subprocess
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageCms, ImageFilter
+from PIL import Image, ImageFilter
 
 HERE = Path(__file__).parent
-ASSETS = HERE / "assets"
-PRINT_ASSETS = HERE.parents[2] / "build" / "print-cover" / "assets"
+DESIGN_FOLDER = HERE.parent
+EDITION_FOLDER = DESIGN_FOLDER.parent
 SCAN = HERE / "scan.jpg"
 MM_PER_INCH = 25.4
 JPEG_QUALITY = 92
@@ -37,9 +33,6 @@ WHITE = 255
 PRINT_PPI = 600   # twice what a press resolves: the picture is not what limits the print
 SCREEN_PPI = 300
 PAPER_PPI = 300   # a generated texture: more pixels would only make the grain finer
-
-CMYK_PROFILE = "FOGRA39L_coated.icc"
-INK_RGB = (0x2E, 0x26, 0x1E)  # the text and the QR code: dark brown, like the drawn title
 
 # Boxes in the scan's pixels (left, top, right, bottom), measured on scan.jpg: a column or row
 # counts as painted where most of it is not bare paper (bright and grey). The scan has a yellow
@@ -132,34 +125,8 @@ def paper(tint: tuple[float, float, float]) -> Image.Image:
     return Image.fromarray(rgb.clip(0, WHITE).astype(np.uint8))
 
 
-class ToCmyk:
-    """sRGB to the printer's CMYK: relative colorimetric with black point compensation (the
-    usual prepress setting), through littleCMS."""
-
-    def __init__(self) -> None:
-        profile = subprocess.run(["kpsewhich", CMYK_PROFILE], capture_output=True, text=True,
-                                 check=True).stdout.strip()
-        self.transform = ImageCms.buildTransform(
-            ImageCms.createProfile("sRGB"), ImageCms.getOpenProfile(profile), "RGB", "CMYK",
-            renderingIntent=ImageCms.Intent.RELATIVE_COLORIMETRIC,
-            flags=ImageCms.Flags.BLACKPOINTCOMPENSATION)
-
-    def image(self, image: Image.Image) -> Image.Image:
-        return ImageCms.applyTransform(image, self.transform)
-
-    def colour(self, rgb: tuple[int, int, int]) -> tuple[float, ...]:
-        """One colour, as CMYK fractions 0 to 1."""
-        return tuple(v / WHITE for v in self.image(Image.new("RGB", (1, 1), rgb)).getpixel((0, 0)))
-
-
 def save(image: Image.Image, path: Path, ppi: int) -> None:
     image.save(path, quality=JPEG_QUALITY, dpi=(ppi, ppi))
-
-
-def colours_tex(ink: tuple[float, ...]) -> str:
-    cmyk = ",".join(f"{v:.3f}" for v in ink)
-    return (f"% The cover's ink in CMYK ({CMYK_PROFILE}), made by make_assets.py: do not edit.\n"
-            f"\\definecolor{{ink}}{{cmyk}}{{{cmyk}}}\n")
 
 
 def main() -> None:
@@ -168,15 +135,12 @@ def main() -> None:
                         help="the illustrator's scan of the drawing (default: scan.jpg)")
     Image.MAX_IMAGE_PIXELS = None  # the 1200 dpi scan is larger than Pillow's guard
     scan = Image.open(parser.parse_args().scan).convert("RGB")
-    PRINT_ASSETS.mkdir(parents=True, exist_ok=True)
-    to_cmyk = ToCmyk()
     balanced = white_balanced(scan)
-    save(to_cmyk.image(front(balanced, PRINT_PPI)), PRINT_ASSETS / "front-print.jpg", PRINT_PPI)
-    save(front(balanced, SCREEN_PPI), ASSETS / "front-screen.jpg", SCREEN_PPI)
+    save(front(balanced, PRINT_PPI), DESIGN_FOLDER / "front.jpg", PRINT_PPI)
+    save(front(balanced, SCREEN_PPI), EDITION_FOLDER / "cover.jpg", SCREEN_PPI)
     tint = beige(scan)
     print("beige: #{:02X}{:02X}{:02X}".format(*(round(c) for c in tint)))
-    save(to_cmyk.image(paper(tint)), PRINT_ASSETS / "paper-beige.jpg", PAPER_PPI)
-    (ASSETS / "colours.tex").write_text(colours_tex(to_cmyk.colour(INK_RGB)))
+    save(paper(tint), DESIGN_FOLDER / "paper.jpg", PAPER_PPI)
 
 
 if __name__ == "__main__":

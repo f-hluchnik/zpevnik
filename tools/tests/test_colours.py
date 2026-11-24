@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest import mock
 
 import colours
-from colours import ColourError, chord_colour, profile_file, to_cmyk
+from colours import ColourError, chord_colour, convert_picture, profile_file, to_cmyk
 from edition import FOGRA39
 from paths import REPO_ROOT, STYLE_FILE
 
@@ -63,3 +63,16 @@ class Conversion(unittest.TestCase):
         cyan, magenta, yellow, _ = to_cmyk(chord_colour(REPO_ROOT), FOGRA39_PROFILE)
         self.assertLess(cyan, 0.1)
         self.assertGreater(min(magenta, yellow), 0.7)
+
+    def test_an_rgb_picture_becomes_a_cmyk_jpeg_at_its_resolution_and_grey_stays_as_it_is(self):
+        from PIL import Image
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            Image.new("RGB", (4, 2), (184, 39, 39)).save(folder / "red.jpg", dpi=(600, 600))
+            Image.new("L", (4, 2), 128).save(folder / "grey.jpg")
+            self.assertTrue(convert_picture(folder / "red.jpg", folder / "red-cmyk.jpg", FOGRA39_PROFILE))
+            self.assertFalse(convert_picture(folder / "grey.jpg", folder / "grey-cmyk.jpg", FOGRA39_PROFILE))
+            with Image.open(folder / "red-cmyk.jpg") as converted:
+                self.assertEqual(converted.mode, "CMYK")
+                self.assertEqual(tuple(round(value) for value in converted.info["dpi"]), (600, 600))
+            self.assertFalse((folder / "grey-cmyk.jpg").exists())

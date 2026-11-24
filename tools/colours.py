@@ -6,21 +6,33 @@ The conversion is relative colorimetric with black point compensation, the usual
 setting. Ghostscript cannot do it: its PDF writer converts with its own built-in profile,
 whatever profile it is given.
 
+Two things are converted: the red of the chords (to_cmyk, for a block in CMYK) and the RGB JPEG
+pictures of a cover's design (convert_picture, for a cover in CMYK). A picture that carries its own
+colour profile is converted from it; any other RGB is taken as sRGB.
+
 littleCMS comes with the Python package Pillow (requirements-dev.txt): the only tool of the
 build that needs a package, and only for an edition printed in CMYK.
 """
+import io
 import re
 import subprocess
 from pathlib import Path
+from types import ModuleType
+from typing import TYPE_CHECKING
 
 from edition import FOGRA39
 from paths import STYLE_FILE
+
+if TYPE_CHECKING:
+    from PIL.ImageCms import ImageCmsTransform
 
 FOGRA39_FILE = "FOGRA39L_coated.icc"
 KPSEWHICH = "kpsewhich"  # finds a file of TeX Live
 INSTALL_HINT = "install the packages of requirements-dev.txt into the virtual environment (README)"
 CHORD_COLOUR = re.compile(r"\\definecolor\{chordred\}\{RGB\}\{\s*(\d+),\s*(\d+),\s*(\d+)\s*\}")
 CHANNEL_MAX = 255
+RGB_MODE, CMYK_MODE = "RGB", "CMYK"  # Pillow's names of the colour models
+JPEG_QUALITY = 95  # a converted picture is compressed once more: little loss on top of its own
 
 
 class ColourError(Exception):
@@ -49,15 +61,43 @@ def chord_colour(root: Path) -> tuple[int, int, int]:
     return red, green, blue
 
 
-def to_cmyk(rgb: tuple[int, int, int], profile: Path) -> tuple[float, float, float, float]:
-    """An sRGB colour in the profile's CMYK, each ink from 0 to 1."""
+def pillow() -> tuple[ModuleType, ModuleType]:
+    """Pillow's Image and ImageCms; ColourError if Pillow is not installed."""
     try:
         from PIL import Image, ImageCms
     except ImportError as error:
         raise ColourError(f"converting to CMYK needs Pillow: {INSTALL_HINT}") from error
-    transform = ImageCms.buildTransform(
-        ImageCms.createProfile("sRGB"), ImageCms.getOpenProfile(str(profile)), "RGB", "CMYK",
-        renderingIntent=ImageCms.Intent.RELATIVE_COLORIMETRIC, flags=ImageCms.Flags.BLACKPOINTCOMPENSATION)
-    pixel = ImageCms.applyTransform(Image.new("RGB", (1, 1), rgb), transform).getpixel((0, 0))
+    return Image, ImageCms
+
+
+def cmyk_transform(profile: Path, source_profile: bytes | None = None) -> "ImageCmsTransform":
+    """littleCMS's transform from RGB (sRGB, or the profile given as bytes) to the profile's CMYK:
+    relative colorimetric with black point compensation."""
+    _, image_cms = pillow()
+    source = (image_cms.ImageCmsProfile(io.BytesIO(source_profile)) if source_profile
+              else image_cms.createProfile("sRGB"))
+    return image_cms.buildTransform(
+        source, image_cms.getOpenProfile(str(profile)), RGB_MODE, CMYK_MODE,
+        renderingIntent=image_cms.Intent.RELATIVE_COLORIMETRIC, flags=image_cms.Flags.BLACKPOINTCOMPENSATION)
+
+
+def to_cmyk(rgb: tuple[int, int, int], profile: Path) -> tuple[float, float, float, float]:
+    """An sRGB colour in the profile's CMYK, each ink from 0 to 1."""
+    image, image_cms = pillow()
+    pixel = image_cms.applyTransform(image.new(RGB_MODE, (1, 1), rgb), cmyk_transform(profile)).getpixel((0, 0))
     cyan, magenta, yellow, black = (channel / CHANNEL_MAX for channel in pixel)
     return cyan, magenta, yellow, black
+
+
+def convert_picture(source: Path, target: Path, profile: Path) -> bool:
+    """Write an RGB picture as a JPEG in the profile's CMYK, at its resolution; False, and nothing
+    written, for a picture that is not RGB (grey or CMYK already)."""
+    image, image_cms = pillow()
+    image.MAX_IMAGE_PIXELS = None  # a cover at print resolution is larger than Pillow's guard
+    with image.open(source) as picture:
+        if picture.mode != RGB_MODE:
+            return False
+        transform = cmyk_transform(profile, picture.info.get("icc_profile"))
+        options = {"dpi": picture.info["dpi"]} if "dpi" in picture.info else {}
+        image_cms.applyTransform(picture, transform).save(target, "JPEG", quality=JPEG_QUALITY, **options)
+    return True

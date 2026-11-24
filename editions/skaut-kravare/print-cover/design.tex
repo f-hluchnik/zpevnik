@@ -1,54 +1,41 @@
-% The cover's design, read by print-cover.tex and preview.tex (XeLaTeX): the front, the back,
-% their type and colours. \front and \back draw a page inside a TikZ picture whose
-% coordinate T is the trim's lower left corner; both cover the bleed too.
-\usepackage{fontspec}
-\usepackage{graphicx}
-\usepackage{xcolor}
-\usepackage{tikz}
+% The cover of skaut-kravare, read by make print (tools/print_cover.py; docs/printing.md).
+% The front: Klára Horká's drawing with its rough painted edges, on white (front.jpg). The insides
+% stay white. The back: the way to the online songbook on beige paper (paper.jpg), under the scout
+% lily between two thin rules: "celý zpěvník" and the book's title, a QR code to the website and
+% its address. The text, the rules, the lily and the QR code are in black ink alone, so they print
+% sharp, with no inks to register. The pictures are made from the scan by source/make_ingredients.py.
+\usepackage[T1]{fontenc}
+\usepackage{Alegreya}  % TeX Live's alegreya
+\usepackage{microtype}
 \usepackage{qrcode}
 
-% The page (mm): A5, and the bleed the printer cuts off.
-\newcommand*{\trimwidth}{148}
-\newcommand*{\trimheight}{210}
-\newcommand*{\bleed}{3}
+\definecolor{coverink}{cmyk}{0,0,0,1}
 
-% Alegreya and FreeSerif (for the lily) come with TeX Live (packages alegreya, gnu-freefont).
-\setmainfont{Alegreya}[Extension=.otf, UprightFont=*-Regular, ItalicFont=*-Italic,
-  SmallCapsFont=AlegreyaSC-Regular]
-\newfontfamily\symbolfont{FreeSerif.otf}
+% A picture of the bleed box, over the whole bleed box. The pictures are made for a 3 mm bleed.
+\newcommand*{\bleedpicture}[1]{%
+  \node[inner sep=0pt, anchor=south west] at ([shift={(-\zpcoverbleed, -\zpcoverbleed)}]zpcovertrim)
+    {\includegraphics[width=\dimexpr\zpcovertrimwidth+2\zpcoverbleed\relax]{#1}};}
 
-% The text and the QR code: dark brown, like the drawn title, in the printer's CMYK.
-\input{assets/colours}
+\newcommand*{\zpcoverfront}{\bleedpicture{front.jpg}}
 
-% (x, y) in mm from the trim's lower left corner T.
-\newcommand*{\at}[2]{([shift={({(#1)*1mm},{(#2)*1mm})}]T)}
-\newcommand*{\middlex}{\trimwidth/2}
-% A picture of the bleed box, made by make_assets.py, over the whole bleed box.
-\newcommand*{\printassets}{../../../build/print-cover/assets}
-\newcommand*{\bleedpicture}[1]{\node[inner sep=0pt, anchor=south west] at \at{-\bleed}{-\bleed}
-  {\includegraphics[width=\numexpr\trimwidth+2*\bleed\relax mm]{\printassets/#1.jpg}};}
-
-% The front: the drawing with its rough painted edges, on white.
-\newcommand*{\front}{\bleedpicture{front-print}}
-
-% The back: the way to the online songbook on beige paper, under the scout lily between two
-% thin rules: "celý zpěvník" and the book's title, a QR code to the website, its address.
 \newcommand*{\onlineurl}{https://zpevnik.hluchnikovi.cz/}
 \newcommand*{\onlineaddress}{zpevnik.hluchnikovi.cz}
 \newcommand*{\booktitle}{Ještě mi chvilku zpívej}
 \newcommand*{\qrheight}{20mm}
-\newcommand*{\lilyrule}{%
-  \rule[0.6ex]{14mm}{0.3pt}\enspace{\symbolfont\Large ⚜}\enspace\rule[0.6ex]{14mm}{0.3pt}}
+% The lily (lily.pdf, from source/lily.tex) on the baseline, as the glyph it was made from.
+\newcommand*{\lilydepth}{2.088pt}
+\newcommand*{\lily}{\raisebox{-\lilydepth}{\includegraphics{lily.pdf}}}
+\newcommand*{\lilyrule}{\rule[0.6ex]{14mm}{0.3pt}\enspace\lily\enspace\rule[0.6ex]{14mm}{0.3pt}}
 \newcommand*{\online}{%
-  \begin{minipage}{100mm}\centering\color{ink}
+  \begin{minipage}{100mm}\centering\color{coverink}
   \lilyrule\par
   \vspace{9mm}
-  {\addfontfeature{LetterSpace=8}\scshape celý zpěvník}\enspace{\large\itshape\booktitle}\par
+  {\scshape\textls[80]{celý zpěvník}}\enspace{\large\itshape\booktitle}\par
   \vspace{5mm}
   \qrcode[height=\qrheight, nolink]{\onlineurl}\par
   \vspace{4.5mm}
-  {\addfontfeature{LetterSpace=10}\scshape\onlineaddress}\par
+  {\scshape\textls[100]{\onlineaddress}}\par
   \end{minipage}}
-\newcommand*{\onlinebottom}{28}% mm from the trim's bottom edge: the lower third
-\newcommand*{\back}{\bleedpicture{paper-beige}
-  \node[anchor=south] at \at{\middlex}{\onlinebottom} {\online};}
+\newcommand*{\onlinebottom}{28mm}% from the trim's bottom edge: the lower third
+\newcommand*{\zpcoverback}{\bleedpicture{paper.jpg}
+  \node[anchor=south] at ([shift={(0.5\zpcovertrimwidth, \onlinebottom)}]zpcovertrim) {\online};}

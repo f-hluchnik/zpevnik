@@ -3,18 +3,18 @@
 Run from the repository root: python3 -m unittest discover -s tools
 """
 import math
-import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
+import print_output
 import print_pdf
 from edition import BlockSettings
 from formats import PRINT, PRINT_BLACK, PRINT_CMYK
 from pdf_programs import Box, Greymap, InkCoverage
 from print_layout import A4, A5, CROP_MARK_ROOM_MM, PAPERS, Placement, millimetres, points
-from print_pdf import (INK_DPI, INK_PIXEL_PT, PrintError, check_print_pdf, deliver, delivered_path, placement_for,
-                       print_format, wrapper_tex)
+from print_output import PrintError
+from print_pdf import INK_DPI, INK_PIXEL_PT, check_print_pdf, placement_for, print_format, wrapper_tex
 
 SOURCE = Path("build/editions/lite/print/zpevnik.pdf")
 PLACEMENT = Placement(scale=0.69, shift=points(4.0))
@@ -82,23 +82,6 @@ class Wrapper(unittest.TestCase):
         self.assertTrue(wrapper_tex(SOURCE, 2, PLACEMENT, BlockSettings(paper=A4))
                         .startswith("\\documentclass[a4paper]{article}"))
 
-    def test_without_crop_marks_and_bleed_the_pdf_page_is_the_trimmed_page(self):
-        self.assertNotIn("crop", wrapper_tex(SOURCE, 2, PLACEMENT, PLAIN))
-
-    def test_crop_marks_add_room_and_the_page_names_its_trim_and_bleed(self):
-        tex = wrapper_tex(SOURCE, 2, PLACEMENT, BlockSettings(paper=A5, crop_marks=True, bleed_mm=3))
-        self.assertIn("\\usepackage[cam,noinfo,center,pdftex,width=178.000mm,height=240.000mm]{crop}", tex)
-        bleed = points(3)
-        trim = f"[{ROOM:.3f} {ROOM:.3f} {ROOM + A5_PAPER.width:.3f} {ROOM + A5_PAPER.height:.3f}]"
-        bleed_box = (f"[{ROOM - bleed:.3f} {ROOM - bleed:.3f} {ROOM + A5_PAPER.width + bleed:.3f} "
-                     f"{ROOM + A5_PAPER.height + bleed:.3f}]")
-        self.assertIn(f"/TrimBox {trim} /BleedBox {bleed_box}", tex)
-
-    def test_a_bleed_without_crop_marks_is_the_room_around_the_page(self):
-        tex = wrapper_tex(SOURCE, 2, PLACEMENT, BlockSettings(paper=A5, bleed_mm=3))
-        self.assertIn("\\usepackage[off,noinfo,center,pdftex,width=154.000mm,height=216.000mm]{crop}", tex)
-        self.assertIn(f"/BleedBox [0.000 0.000 {A5_PAPER.width + 2 * points(3):.3f}", tex)
-
 
 class Check(unittest.TestCase):
     def check(self, info: str = pdfinfo_report(), pages: tuple[Greymap, ...] = GOOD_PAGES,
@@ -111,8 +94,8 @@ class Check(unittest.TestCase):
         with (mock.patch.object(print_pdf, "pdfinfo", return_value=info),
               mock.patch.object(print_pdf, "render_page", side_effect=render_page),
               mock.patch.object(print_pdf, "ink_coverage", return_value=list(inks)),
-              mock.patch.object(print_pdf, "unembedded_fonts", return_value=list(fonts)),
-              mock.patch.object(print_pdf, "image_colours", return_value=list(images))):
+              mock.patch.object(print_output, "unembedded_fonts", return_value=list(fonts)),
+              mock.patch.object(print_output, "image_colours", return_value=list(images))):
             return check_print_pdf(Path("x.pdf"), block, format_name)
 
     def test_an_a5_block_inside_the_margins_in_black_ink_passes_and_reports_its_narrowest_margins(self):
@@ -196,24 +179,3 @@ class Placing(unittest.TestCase):
         width = math.ceil(a4.width / INK_PIXEL_PT)  # the last pixel reaches beyond the page
         with mock.patch.object(print_pdf, "render_page", return_value=Greymap(width, 1, b"\x00" * width)):
             self.assertEqual(placement_for(Path("a4.pdf"), a4, 2, BlockSettings()), Placement(scale=1.0, shift=0.0))
-
-
-class Delivery(unittest.TestCase):
-    def test_the_file_for_the_printer_names_the_edition_and_the_version(self):
-        self.assertEqual(delivered_path("lite", "8.49.3", "blok"),
-                         Path("build/print/lite/zpevnik-lite-8.49.3-blok.pdf"))
-
-    def test_a_new_version_replaces_the_earlier_ones_of_the_same_part(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            folder = root / "build/print/lite"
-            folder.mkdir(parents=True)
-            for name in ("zpevnik-lite-8.48.1-blok.pdf", "zpevnik-lite-8.48.1-obalka.pdf"):
-                (folder / name).write_text("old", encoding="utf-8")
-            (root / "made.pdf").write_text("new", encoding="utf-8")
-            with mock.patch.object(print_pdf, "current_version", return_value="8.49.?"):
-                target = deliver(root, Path("made.pdf"), "lite", "blok")
-            self.assertEqual(target, Path("build/print/lite/zpevnik-lite-8.49.x-blok.pdf"))
-            self.assertEqual(sorted(path.name for path in folder.iterdir()),
-                             ["zpevnik-lite-8.48.1-obalka.pdf", "zpevnik-lite-8.49.x-blok.pdf"])
-            self.assertEqual((root / target).read_text(encoding="utf-8"), "new")
