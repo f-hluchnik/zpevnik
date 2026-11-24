@@ -49,7 +49,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 import pdf_programs
-from formats import BLACK_SCORE_SUFFIX, add_format_argument, is_black_ink
+from formats import BLACK_SCORE_SUFFIX, add_format_argument, needs_black_scores
 from paths import (SCORE_CHORD_LIST, SCORE_OUTPUT_DIR, SCORE_STYLE, SCORES_DIR, STYLE_FILE,
                    add_root_argument)
 from pdf_programs import PdfProgramError, convert_to_grey
@@ -459,7 +459,7 @@ def main() -> int:
     try:
         if pending:
             export_scores(pending, root)
-        black_ink = export_black_ink_pdfs(scores, root, args.force) if is_black_ink(args.format) else None
+        black_ink = export_black_ink_pdfs(scores, root, args.force) if needs_black_scores(args.format) else None
     except ScoreError as error:
         print(f"error: {error}", file=sys.stderr)
         return 1

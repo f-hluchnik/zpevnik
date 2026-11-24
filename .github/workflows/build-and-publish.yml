@@ -34,7 +34,7 @@ jobs:
             python3 tools/generate.py --edition "$edition"
           done
 
-      # The unit tests and the check of songs.json need jsonschema (requirements-dev.txt).
+      # The unit tests and the check of songs.json need jsonschema and Pillow (requirements-dev.txt).
       # The runner's Python is externally managed, so the packages go into a virtual environment.
       - name: Install the test packages
         run: |

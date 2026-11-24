@@ -81,6 +81,7 @@ The docs describe the system as it is now; they are versioned with the code and 
 
 - `README.md` (Czech) — setup, writing songs, the commands, editions: for the contributor.
 - `docs/architecture.md` — how the system works and why: the parts, the build, editions, print, release, the website contract, the checks, the conventions.
+- `docs/printing.md` — printing an edition (`make print`): the `[print.block]` settings, the checks, what to ask a printer.
 - `tools/README.md` — what each tool does and who runs it.
 - `docs/archive/` — the frozen record of the 2026 refactoring (decision log, plans, tickets, history). Reference only; never updated.
 

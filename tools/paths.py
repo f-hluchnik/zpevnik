@@ -23,8 +23,8 @@ EDITION_FILE_NAME = "edition.toml"
 SHARED_PAGES_DIR = Path("shared-pages")  # pages an edition can share, and the imprint core
 BOOK_TEX = Path("zpevnik.tex")
 BOOK_PDF_NAME = "zpevnik.pdf"           # the PDF of every edition, in its output directory
-PRINT_WRAPPER_NAME = "zpevnik-a5.tex"   # print_pdf.py: the document that scales a format's PDF to A5 ...
-PRINT_PDF_NAME = "zpevnik-a5.pdf"       # ... and the PDF it makes, next to the one it scales
+PRINT_WRAPPER_NAME = "zpevnik-block.tex"  # print_pdf.py: the document that places a format's PDF on the paper ...
+PRINT_PDF_NAME = "zpevnik-block.pdf"      # ... and the PDF it makes, next to the one it places
 BOOK_AUX_NAME = "zpevnik.aux"           # its main auxiliary file, which lists every \include
 BOOK_LOG_NAME = "zpevnik.log"           # the log of its last LaTeX run
 CHORD_TRACE_NAME = "zpevnik.chords"     # written by every build, see \chord in zpevnik.sty
@@ -43,6 +43,8 @@ EDITION_BUILD_DIR = BUILD_DIR / "editions"
 SONGS_JSON_FILE = BUILD_DIR / "songs.json"  # the songs of the full book for the website (songs_json.py)
 SONGS_SCHEMA_FILE = Path("tools/songs.schema.json")  # the schema of songs.json, the contract
 RELEASE_DIR = BUILD_DIR / "release"      # the PDFs of a release under their asset names (release.py)
+PRINT_DIR = BUILD_DIR / "print"          # make print: <edition>/, the files for the edition's printer
+PRINT_BLOCK_PART = "blok"                # the book block in their names (print_pdf.py)
 DEFAULT_EDITION = "full"
 
 # The files tools/generate.py writes into an edition's generated/ directory.

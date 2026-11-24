@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from edition import Book, EditionError, PrintSettings, read_book, read_edition, read_print_settings
+from edition import BlockSettings, Book, EditionError, PrintSettings, read_book, read_edition, read_print_settings
 from paths import BOOK_FILE
 from .songs_builder import make_song
 
@@ -190,49 +190,85 @@ class ReadEdition(unittest.TestCase):
                          ["titulnilist.tex is not referenced by edition.toml"])
 
 
-PRINT_TABLE = "[print]\nspine_margin_mm = 12.5\nouter_margin_mm = 4\nskip_first_pages = 2\ncrop_marks = true\n"
+PRINT_TABLE = """[print.block]
+paper = "A5"
+ink = "black"
+cover = false
+crop_marks = true
+spine_margin_mm = 12.5
+outer_margin_mm = 4
+"""
+PRINTED_BLOCK = BlockSettings(paper="A5", ink="black", cover=False, crop_marks=True, spine_margin_mm=12.5,
+                              outer_margin_mm=4)
 
 
 class PrintTable(unittest.TestCase):
-    """The [print] table: what the printer of an edition needs."""
+    """The [print] table: what the printer of an edition gets."""
 
-    def settings(self, toml: str):
+    def settings(self, toml: str) -> PrintSettings:
         with tempfile.TemporaryDirectory() as tmp:
             repo = Repository(tmp)
             repo.write("editions/lite/edition.toml", toml)
+            repo.write("editions/lite/printer.icc", "a profile")
             return read_print_settings(repo.root, "lite")
 
-    def edition_errors(self, toml: str) -> list[str]:
+    def errors(self, toml: str) -> list[str]:
+        """The errors of the table, the same from the print step and from the generator."""
         with tempfile.TemporaryDirectory() as tmp:
-            with self.assertRaises(EditionError) as caught:
-                Repository(tmp).edition(toml)
-        return caught.exception.errors
+            repo = Repository(tmp)
+            repo.write("editions/lite/printer.icc", "a profile")
+            with self.assertRaises(EditionError) as from_print:
+                repo.write("editions/lite/edition.toml", toml)
+                read_print_settings(repo.root, "lite")
+            with self.assertRaises(EditionError) as from_edition:
+                repo.edition(toml)
+        self.assertEqual(from_print.exception.errors, from_edition.exception.errors)
+        return from_print.exception.errors
 
     def test_the_table_is_read(self):
-        self.assertEqual(self.settings(lite() + PRINT_TABLE), PrintSettings(12.5, 4, 2, True))
+        self.assertEqual(self.settings(lite() + PRINT_TABLE), PrintSettings(block=PRINTED_BLOCK))
 
     def test_the_edition_carries_the_table_for_the_generator(self):
         with tempfile.TemporaryDirectory() as tmp:
-            self.assertEqual(Repository(tmp).edition(lite() + PRINT_TABLE).printing, PrintSettings(12.5, 4, 2, True))
-            self.assertIsNone(Repository(tmp).edition(lite()).printing)
+            self.assertEqual(Repository(tmp).edition(lite() + PRINT_TABLE).printing.block, PRINTED_BLOCK)
 
-    def test_an_edition_without_the_table_has_no_print_settings(self):
-        self.assertIsNone(self.settings(lite()))
+    def test_without_the_table_the_block_is_the_screen_book_on_a4(self):
+        self.assertEqual(self.settings(lite()), PrintSettings(block=BlockSettings(
+            paper="A4", ink="colour", colour="rgb", profile="FOGRA39", cover=True, crop_marks=False,
+            bleed_mm=0, spine_margin_mm=0, outer_margin_mm=0)))
 
-    def test_every_key_is_required_and_checked(self):
-        table = "[print]\nspine_margin_mm = -1\nouter_margin_mm = true\nskip_first_pages = 3\npaper = \"A5\"\n"
-        expected = ["print: missing key 'crop_marks'", "print: unknown key 'paper'",
-                    "print: 'spine_margin_mm' must be a number of millimetres, 0 or more",
-                    "print: 'outer_margin_mm' must be a number of millimetres, 0 or more",
-                    "print: 'skip_first_pages' must be an even integer, 0 or more "
-                    "(an odd one would move every page to the other side)"]
-        with self.assertRaises(EditionError) as caught:
-            self.settings(lite() + table)
-        self.assertEqual(caught.exception.errors, expected)
-        self.assertEqual(self.edition_errors(lite() + table), expected)
+    def test_a_cmyk_block_names_its_profile_by_its_path_from_the_root(self):
+        table = '[print.block]\ncolour = "cmyk"\nprofile = "printer.icc"\n'
+        self.assertEqual(self.settings(lite() + table).block.profile, "editions/lite/printer.icc")
 
-    def test_print_must_be_a_table(self):
+    def test_every_key_is_checked(self):
+        table = ('[print]\nsheet = 1\n[print.block]\npaper = "A3"\nink = "red"\ncolour = "lab"\n'
+                 'cover = "no"\nbleed_mm = -1\nmargin = 2\n')
+        self.assertEqual(self.errors(lite() + table), [
+            "print: unknown key 'sheet'",
+            "print.block: unknown key 'margin'",
+            'print.block: \'paper\' must be "A4" or "A5"',
+            'print.block: \'ink\' must be "colour" or "black"',
+            'print.block: \'colour\' must be "rgb" or "cmyk"',
+            "print.block: 'cover' must be true or false",
+            "print.block: 'bleed_mm' must be a number of millimetres, 0 or more"])
+
+    def test_the_keys_must_go_together(self):
+        table = ('[print.block]\nink = "black"\ncolour = "rgb"\nprofile = "printer.icc"\n'
+                 'crop_marks = true\nbleed_mm = 16\n')
+        self.assertEqual(self.errors(lite() + table), [
+            "print.block: 'colour' goes with ink = \"colour\": black ink is black ink only",
+            "print.block: 'profile' goes with colour = \"cmyk\"",
+            "print.block: a bleed_mm of 16 does not fit the 15.0 mm around the page for the crop marks"])
+
+    def test_a_profile_is_a_file_of_the_repository(self):
+        table = '[print.block]\ncolour = "cmyk"\nprofile = "missing.icc"\n'
+        self.assertEqual(self.errors(lite() + table), [
+            "print.block: 'profile' must be FOGRA39 or a .icc file of the repository, not missing.icc"])
+
+    def test_print_and_its_block_must_be_tables(self):
         with self.assertRaises(EditionError) as caught:
             self.settings('print = "yes"\n' + lite())
         self.assertEqual(caught.exception.errors, ["'print' must be a table"])
+        self.assertEqual(self.errors(lite() + "[print]\nblock = 1\n"), ["print: 'block' must be a table"])
 

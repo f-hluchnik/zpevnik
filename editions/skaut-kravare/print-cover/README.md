@@ -24,7 +24,7 @@ xelatex -output-directory=../../../build/print-cover print-cover.tex  # for the 
 ```
 
 To look at the whole book as it will be printed (A5, the cover round the book's pages, no marks),
-build the book's A5 PDF (`make EDITION=skaut-kravare FORMAT=print CHORDS=black SIZE=A5`) and the
+build the book's block (`make print EDITION=skaut-kravare`) and the
 cover, then `pdflatex -output-directory=../../../build/print-cover with-cover.tex`.
 
 Run each `xelatex` twice the first time (TikZ places the pictures on the page from the first run).
@@ -56,7 +56,7 @@ colour profile come with TeX Live: Alegreya (`alegreya`), FreeSerif (`gnu-freefo
 - `with-cover.tex`: the book and its cover cut to A5 in one PDF, for looking at, not for the
   printer (its cover pictures are CMYK, so a screen shows them a little duller).
 - `print-cover.tex`: the four pages for the printer: trim 148 × 210 mm, 3 mm bleed, the book's crop
-  marks (the `crop` package's `cam` marks, as in `tools/print_pdf.py`) on a 178 × 240 mm page; the
+  marks (the `crop` package's `cam` marks, as in `make print`) on a 178 × 240 mm page; the
   PDF names its trim box and bleed box. The marks start 5 pt from the trim; the pictures are drawn
   over them, so inside the bleed they are covered.
 

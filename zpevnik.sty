@@ -36,20 +36,20 @@
 % The output format (tools/formats.py) reaches the book as macros defined before the document is
 % read. The default is the screen PDF, so a song compiled alone and the screen build define
 % nothing. \zpprint: typeset for paper, where a link cannot be followed, so the labels that only
-% exist to be clicked are left out. \zpchordcolor: the xcolor colour of the chords.
+% exist to be clicked are left out. \zpchordcolor: the xcolor colour of the chords (black, or
+% chordcmyk for the printer's CMYK).
 % \zpscoresuffix: added to the file name of a score's image (\score): -black in the print
-% for one ink, whose scores are black-ink images (tools/scores.py).
+% formats whose scores are black-ink images (tools/scores.py).
 \newif\ifzp@print
 \ifdefined\zpprint\zp@printtrue\fi
 \providecommand*{\zpchordcolor}{chordred}
 \providecommand*{\zpscoresuffix}{}
-% On paper the page numbers count from the first page of the printer's block, as in a printed
-% book. \zpprintskippedpages (generated from the edition's [print] table) is how many
-% of the book's first pages the block leaves out (its own cover and its back); they count from
-% 1 - N and are unnumbered front matter, so the contents and \seealso give the printed page.
-% The screen PDF keeps the PDF's own page numbers.
-\AtBeginDocument{\ifzp@print\ifdefined\zpprintskippedpages
-  \setcounter{page}{\numexpr1-\zpprintskippedpages\relax}\fi\fi}
+% The edition's cover and its blank back (zpevnik.tex). On paper they are left out when the
+% printer gets the cover separately (\zpprintwithoutcover, generated from the edition's [print]
+% table), so the block starts with the half-title and its pages count from there, as in a
+% printed book.
+\newcommand{\zpcoverpages}{\ifzp@print\ifdefined\zpprintwithoutcover\else
+  \zpcoverpage\blankpage\fi\else\zpcoverpage\blankpage\fi}
 % \zpscreenorprint{screen}{print}: the first on the screen, the second on paper.
 \newcommand{\zpscreenorprint}[2]{\ifzp@print#2\else#1\fi}
 % The contents (generated/obsah-*.tex, shared-pages/contents.tex). \zpcontentsentry{target}{text}:
@@ -384,6 +384,9 @@
 % all songs: spaces in the text are not typed by hand, a pause is \gap{n}, a
 % line of chords only is \chords{...}.
 \definecolor{chordred}{RGB}{184, 39, 39}
+% The same red in the printer's CMYK, for the print-cmyk format: the build converts it with the
+% edition's colour profile and defines \zpchordcmyk (tools/colours.py).
+\ifdefined\zpchordcmyk\definecolor{chordcmyk}{cmyk}{\zpchordcmyk}\fi
 \newcommand*{\chordsep}{0.5em}
 \newcommand*{\chordrunsep}{1em}
 \newcommand*{\gapunit}{0.5em}

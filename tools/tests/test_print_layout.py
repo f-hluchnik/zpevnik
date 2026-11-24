@@ -1,43 +1,43 @@
-"""Unit tests for the placement of the book's pages on the printer's A5 pages.
+"""Unit tests for the placement of the book's pages on the printer's pages.
 
 Run from the repository root: python3 -m unittest discover -s tools
 """
 import unittest
 
-from print_layout import (A5_SCALE, A5_WIDTH_PT, LayoutError, Margins, Placement, Reach, fit,
-                          is_right_hand, page_margins)
+from print_layout import A4, A5, PAPERS, LayoutError, Margins, Placement, Reach, fit, is_right_hand, page_margins
 
 A4_WIDTH = 595.0
 EDGE = 28.0  # how far the letters of a symmetric test page stay from both A4 edges
 SYMMETRIC = Reach(EDGE, A4_WIDTH - EDGE)
+PAPER = PAPERS[A5]
 
 
 def placed(page: Reach, position: int, placement: Placement) -> Reach:
-    """Where the letters of an A4 page land on A5: scaled around the centre, moved from the spine."""
+    """Where the letters of an A4 page land on the paper: scaled around the centre, moved from the spine."""
     shift = placement.shift if is_right_hand(position) else -placement.shift
     def x(value: float) -> float:
-        return (value - A4_WIDTH / 2) * placement.scale + A5_WIDTH_PT / 2 + shift
+        return (value - A4_WIDTH / 2) * placement.scale + PAPER.width / 2 + shift
     return Reach(x(page.left), x(page.right))
 
 
 def printed_margins(pages: list[Reach | None], placement: Placement) -> list[Margins]:
-    return [page_margins(placed(page, position, placement), position, 0, A5_WIDTH_PT)
+    return [page_margins(placed(page, position, placement), position, 0, PAPER.width)
             for position, page in enumerate(pages, start=1) if page is not None]
 
 
 class Fit(unittest.TestCase):
     def test_margins_wider_than_the_book_has_shrink_it_until_they_fit_exactly(self):
         required = Margins(spine=35.0, outer=13.0)
-        placement = fit([SYMMETRIC, SYMMETRIC], A4_WIDTH, A5_WIDTH_PT, required)
-        self.assertLess(placement.scale, A5_SCALE)
+        placement = fit([SYMMETRIC, SYMMETRIC], A4_WIDTH, PAPER, required)
+        self.assertLess(placement.scale, PAPER.largest_scale)
         for margins in printed_margins([SYMMETRIC, SYMMETRIC], placement):
             self.assertAlmostEqual(margins.spine, required.spine)
             self.assertAlmostEqual(margins.outer, required.outer)
 
     def test_the_book_never_grows_beyond_a4_to_a5_and_the_spare_room_is_split_evenly(self):
         required = Margins(spine=10.0, outer=2.0)
-        placement = fit([SYMMETRIC], A4_WIDTH, A5_WIDTH_PT, required)
-        self.assertEqual(placement.scale, A5_SCALE)
+        placement = fit([SYMMETRIC], A4_WIDTH, PAPER, required)
+        self.assertEqual(placement.scale, PAPER.largest_scale)
         margins = printed_margins([SYMMETRIC], placement)[0]
         self.assertAlmostEqual(margins.spine - required.spine, margins.outer - required.outer)
 
@@ -47,25 +47,28 @@ class Fit(unittest.TestCase):
         wide_left = Reach(5.0, A4_WIDTH - EDGE)
         required = Margins(spine=35.0, outer=13.0)
         layouts = {"spine": [wide_left, SYMMETRIC], "outer": [SYMMETRIC, wide_left]}
-        placements = {side: fit(pages, A4_WIDTH, A5_WIDTH_PT, required) for side, pages in layouts.items()}
+        placements = {side: fit(pages, A4_WIDTH, PAPER, required) for side, pages in layouts.items()}
         self.assertGreater(placements["spine"].shift, placements["outer"].shift)
         for side, pages in layouts.items():
             for margins in printed_margins(pages, placements[side]):
                 self.assertGreaterEqual(margins.spine, required.spine - 1e-9)
                 self.assertGreaterEqual(margins.outer, required.outer - 1e-9)
 
+    def test_on_a4_without_margins_the_book_keeps_its_size(self):
+        self.assertEqual(fit([SYMMETRIC], A4_WIDTH, PAPERS[A4], Margins(0.0, 0.0)), Placement(scale=1.0, shift=0.0))
+
     def test_pages_without_letters_are_left_out(self):
         required = Margins(spine=35.0, outer=13.0)
-        self.assertEqual(fit([None, SYMMETRIC, None], A4_WIDTH, A5_WIDTH_PT, required),
-                         fit([SYMMETRIC, SYMMETRIC], A4_WIDTH, A5_WIDTH_PT, required))
+        self.assertEqual(fit([None, SYMMETRIC, None], A4_WIDTH, PAPER, required),
+                         fit([SYMMETRIC, SYMMETRIC], A4_WIDTH, PAPER, required))
 
     def test_a_book_without_letters_cannot_be_placed(self):
         with self.assertRaisesRegex(LayoutError, "no page has any ink"):
-            fit([None, None], A4_WIDTH, A5_WIDTH_PT, Margins(10.0, 10.0))
+            fit([None, None], A4_WIDTH, PAPER, Margins(10.0, 10.0))
 
     def test_margins_wider_than_the_page_are_an_error(self):
         with self.assertRaisesRegex(LayoutError, "leave no room"):
-            fit([SYMMETRIC], A4_WIDTH, A5_WIDTH_PT, Margins(A5_WIDTH_PT, 0.0))
+            fit([SYMMETRIC], A4_WIDTH, PAPER, Margins(PAPER.width, 0.0))
 
 
 class PageMargins(unittest.TestCase):
