@@ -1,7 +1,6 @@
 # The cover of skaut-kravare for the printer
 
-The printer binds the book with rings and prints the cover separately: one PDF of four A5 pages
-(D-188, D-192, D-193). This folder holds its source; it is built by hand, not by `make`.
+The printer binds the book with rings and prints the cover separately: one PDF of four A5 pages. This folder holds its source; it is built by hand, not by `make`.
 
 | Page | What |
 |---|---|
@@ -10,7 +9,7 @@ The printer binds the book with rings and prints the cover separately: one PDF o
 | 3 | the inside of the back: white |
 | 4 | the back: beige paper, the scout lily between two rules, "celý zpěvník *Ještě mi chvilku zpívej*", a QR code to <https://zpevnik.hluchnikovi.cz/> and the address |
 
-The PDF is what the printer asked for (D-188): CMYK, no RGB; 3 mm bleed; the book's crop marks.
+The PDF is what the printer asked for: CMYK, no RGB; 3 mm bleed; the book's crop marks.
 The edition's own first page (`../cover.tex`) shows the same drawing, so the screen PDF opens with it.
 
 ## Building

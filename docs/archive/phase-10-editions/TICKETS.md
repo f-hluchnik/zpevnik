@@ -1,6 +1,6 @@
 # Phase 10 tickets: editions (done 9–11 Nov 2026; E4 cancelled 19 Nov 2026)
 
-The ticket texts and status rows as they were when the work ended: the generator and the build for editions, English names, integrity checks, `lidovky`, front matter in book order. **E4** (the songs of `zpevnik-lite`) was cancelled (D-189): an edition is a folder when the owner wants one. Summary: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows as they were when the work ended: the generator and the build for editions, English names, integrity checks, `lidovky`, front matter in book order. **E4** (the songs of `zpevnik-lite`) was cancelled (D-189): an edition is a folder when the owner wants one. Summary: [HISTORY.md](../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

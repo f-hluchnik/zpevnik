@@ -128,7 +128,7 @@ STYLE_WITH_CHORD_LIST = ("<Style><chordStyle>legacy</chordStyle>"
 
 
 class ExportStyleTest(unittest.TestCase):
-    """The export draws chord names with the songbook's chord list (D-190)."""
+    """The export draws chord names with the songbook's chord list."""
 
     def test_the_chord_list_is_named_by_its_absolute_path_and_nothing_else_changes(self):
         style = export_style(STYLE_WITH_CHORD_LIST, Path("scores/chords.xml"))
@@ -288,7 +288,7 @@ class FailureTest(unittest.TestCase):
 
 
 class BlackInkTest(unittest.TestCase):
-    """The black-ink image of a score, for the print in one ink (D-188)."""
+    """The black-ink image of a score, for the print in one ink."""
 
     def setUp(self):
         self.dir = Path(tempfile.mkdtemp())

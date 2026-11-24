@@ -1,12 +1,12 @@
 # The build targets print the path of what they built; everything goes under build/.
 # make [pdf] [EDITION=<name>] [FORMAT=screen|print] [CHORDS=red|black] [SIZE=A4|A5]
 #              generate the edition's .tex files and the score images, then compile
-#              build/editions/<name>/zpevnik.pdf (default edition: full). The paper options (D-185):
+#              build/editions/<name>/zpevnik.pdf (default edition: full). The paper options:
 #              FORMAT=print   for paper, into build/editions/<name>/print/ (tools/formats.py; default: screen)
 #              CHORDS=black   with FORMAT=print: everything in black ink, into .../print-black/ (default: red)
 #              SIZE=A5        with FORMAT=print: also place it on A5 for the edition's printer, as the
 #                             [print] table of its edition.toml asks, zpevnik-a5.pdf next to it
-#                             (tools/print_pdf.py, D-188; default: A4); it prints the margins it
+#                             (tools/print_pdf.py; default: A4); it prints the margins it
 #                             measured on the finished PDF
 #              Any other value, or a paper option without FORMAT=print, stops make with an error.
 # make generate [EDITION=<name>]  only run the generator (tools/generate.py)
@@ -29,7 +29,7 @@ PYTHON ?= python3
 REQUIRED_PYTHON := 3.11
 REQUIREMENTS_DEV := requirements-dev.txt
 
-# The paper options (D-185). The tools know a build by one format name (tools/formats.py):
+# The paper options. The tools know a build by one format name (tools/formats.py):
 # make's FORMAT and CHORDS choose it, SIZE only adds the A5 step after it.
 SCREEN_FORMAT := screen
 PRINT_FORMAT := print
@@ -53,7 +53,7 @@ $(call require-one-of,CHORDS,$(CHORD_COLORS))
 $(call require-one-of,SIZE,$(SIZES))
 $(if $(filter-out $(DEFAULT_CHORDS),$(CHORDS)),$(call require-paper,CHORDS=$(CHORDS)))
 $(if $(filter-out $(DEFAULT_SIZE),$(SIZE)),$(call require-paper,SIZE=$(SIZE)))
-$(if $(PRINT_ARGS),$(error PRINT_ARGS is gone: the A5 step reads the margins and the pages to leave out from the [print] table of the edition's edition.toml (D-188)))
+$(if $(PRINT_ARGS),$(error PRINT_ARGS is gone: the A5 step reads the margins and the pages to leave out from the [print] table of the edition's edition.toml))
 
 # Recursively expanded, so that a target's own FORMAT (json) chooses it too.
 BUILD_FORMAT = $(if $(filter $(BLACK_CHORDS),$(CHORDS)),$(BLACK_PRINT_FORMAT),$(FORMAT))
@@ -79,7 +79,7 @@ check-python:
 		exit 1; \
 	fi
 
-# The tests and the check of songs.json need jsonschema (D-165, D-166); the other tools only the standard library.
+# The tests and the check of songs.json need jsonschema; the other tools only the standard library.
 check-dev: check-python
 	@if ! $(PYTHON) -c 'import jsonschema' 2>/dev/null; then \
 		echo "error: the tests and the check of songs.json need the packages of $(REQUIREMENTS_DEV) (jsonschema)" >&2; \
@@ -104,7 +104,7 @@ pdf: compile
 song: scores
 	@$(PYTHON) tools/build_song.py $(SONG)
 
-# The website is built from the full book only (D-165): its pages are the screen PDF's.
+# The website is built from the full book only: its pages are the screen PDF's.
 json: override EDITION = full
 json: override FORMAT = $(SCREEN_FORMAT)
 json: override CHORDS = $(DEFAULT_CHORDS)

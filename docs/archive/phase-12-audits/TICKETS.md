@@ -1,6 +1,6 @@
 # Phase 12 tickets (done 12 Nov 2026)
 
-The ticket texts and status rows of the audits as they were when the phase ended. Summary: [HISTORY.md](../../HISTORY.md), phase 12.
+The ticket texts and status rows of the audits as they were when the phase ended. Summary: [HISTORY.md](../HISTORY.md), phase 12.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

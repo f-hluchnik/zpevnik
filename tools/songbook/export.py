@@ -1,4 +1,4 @@
-"""A song of the converter's model as songs.json carries it (D-164, D-165, J2).
+"""A song of the converter's model as songs.json carries it.
 
 songs.json is the contract with the website (tools/songs.schema.json, J3): semantic,
 never layout, and fixed in shape. Every object in a list of mixed kinds has a "type";

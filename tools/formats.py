@@ -8,7 +8,7 @@ step scales the finished PDF afterwards).
 
   screen       the PDF of the download page: links inside the book, red chords
   print        for paper: no links to follow, chords in colour
-  print-black  for paper in one ink, black (D-188): black chords, and the scores from their
+  print-black  for paper in one ink, black: black chords, and the scores from their
                black-ink images (scores.py); the A5 step checks that no page uses another ink
 
 Python >= 3.11, standard library only.

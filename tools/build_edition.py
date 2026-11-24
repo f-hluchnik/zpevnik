@@ -7,7 +7,7 @@ in the edition's: build/editions/<edition>/<format>/.
 latexmk runs quietly: its output is the same as the log's, so it is printed only when the run
 fails, cut down to the TeX error; the full log stays in the output folder.
 
-A link to a missing target fails the build (D-139): pdfTeX warns about it in the log
+A link to a missing target fails the build: pdfTeX warns about it in the log
 ("name{...} has been referenced but does not exist"), which covers the contents, the
 \\seealso links and the artist links of every edition. TeX runs with long log lines,
 so a warning is never split. A page number of the print formats that stays "??" fails it too

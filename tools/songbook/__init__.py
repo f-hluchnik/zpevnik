@@ -1,7 +1,7 @@
-"""The converter: reads the LaTeX songs (songs/<id>.tex) into an in-memory model (D-164).
+"""The converter: reads the LaTeX songs (songs/<id>.tex) into an in-memory model.
 
 Strict: a command, an environment or a structure it does not know is an error with its
-line (D-135, D-163), never a guess. `parse_song` reads one song from its source, `read_song`
+line, never a guess. `parse_song` reads one song from its source, `read_song`
 one song file.
 
 Python >= 3.11, standard library only.

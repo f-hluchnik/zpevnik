@@ -1,6 +1,6 @@
 # Project history
 
-What changed in the songbook refactoring and why, phase by phase (DECISIONS D-126). Facts only; the reasoning behind each choice is in [DECISIONS.md](DECISIONS.md), the helper files of finished phases are in [archive/](archive/). A short overview of the whole refactoring, with the notes for the article on the website, is in [OVERVIEW.md](OVERVIEW.md).
+What changed in the songbook refactoring and why, phase by phase (DECISIONS D-126). Facts only; the reasoning behind each choice is in [DECISIONS.md](DECISIONS.md), the helper files of finished phases are in [archive/](.). A short overview of the whole refactoring, with the notes for the article on the website, is in [OVERVIEW.md](OVERVIEW.md).
 
 ---
 

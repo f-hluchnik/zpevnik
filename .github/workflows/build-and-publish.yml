@@ -34,7 +34,7 @@ jobs:
             python3 tools/generate.py --edition "$edition"
           done
 
-      # The unit tests and the check of songs.json need jsonschema (requirements-dev.txt, D-165).
+      # The unit tests and the check of songs.json need jsonschema (requirements-dev.txt).
       # The runner's Python is externally managed, so the packages go into a virtual environment.
       - name: Install the test packages
         run: |
@@ -122,7 +122,7 @@ jobs:
             python3 tools/chord_gaps.py --edition "$edition"
           done
 
-      # Every line of a song is one printed line inside the text (D-183): the song blocks are
+      # Every line of a song is one printed line inside the text: the song blocks are
       # written by every build (zpevnik.lines next to the PDF). A wrapped line fails.
       - name: Check song lines
         run: |
@@ -130,7 +130,7 @@ jobs:
             python3 tools/song_lines.py --edition "$edition"
           done
 
-      # The website's data (J4, D-165): songs.json is written from the full book just compiled
+      # The website's data: songs.json is written from the full book just compiled
       # and checked as a whole against the schema, the contract with the website. A change
       # that breaks the contract fails its pull request, not the website's next build.
       - name: Build songs.json
@@ -237,7 +237,7 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
           # The release before the song count last changed: the website's "Jaké písničky
-          # přibyly?" compares it with this one (D-184). Fails here, before anything is
+          # přibyly?" compares it with this one. Fails here, before anything is
           # published, if the history has no such release.
           previous=$(python3 tools/generate.py --previous-version)
           echo "previous=$previous" >> "$GITHUB_OUTPUT"
@@ -295,11 +295,11 @@ jobs:
           echo "$notes"
           { echo "editions<<EDITIONSEOF"; echo "$notes"; echo "EDITIONSEOF"; } >> "$GITHUB_OUTPUT"
 
-      # The website holds no PDFs (E6, D-150): its build downloads them from the release
+      # The website holds no PDFs: its build downloads them from the release
       # named in version.txt. So the release is created first and the version is pushed
       # after it, and the website never points at a release that does not exist yet.
       # The web's main branch takes changes only through pull requests; the push uses a
-      # deploy key of zpevnik-web (write access), which its ruleset lets bypass (D-150).
+      # deploy key of zpevnik-web (write access), which its ruleset lets bypass.
       - name: Checkout website repo
         if: github.event_name == 'push'
         uses: actions/checkout@v4

@@ -1,6 +1,6 @@
 # Sessions 20–27 (done 10–12 Nov 2026)
 
-The blocks of the sessions of phases 10, 3, 12, 8, 7 and 9, with what each did, as they stood when the work ended (session 27, the online songbook, also covered W7). Summary: [HISTORY.md](../../HISTORY.md). Earlier sessions: [snapshot-2026-11-06/SESSIONS.md](../snapshot-2026-11-06/SESSIONS.md) and [phase-11-code-quality/SESSIONS.md](../phase-11-code-quality/SESSIONS.md).
+The blocks of the sessions of phases 10, 3, 12, 8, 7 and 9, with what each did, as they stood when the work ended (session 27, the online songbook, also covered W7). Summary: [HISTORY.md](../HISTORY.md). Earlier sessions: [snapshot-2026-11-06/SESSIONS.md](../snapshot-2026-11-06/SESSIONS.md) and [phase-11-code-quality/SESSIONS.md](../phase-11-code-quality/SESSIONS.md).
 
 ### Session 20 · E0 and the editions review — done (10 Nov 2026)
 E0 merged (PR #93; first release `v8.33.68`). Planning E2 led to D-143 (English names, the full book as the edition `full`, an explicit page contract, one `build/` root, `make` as the only entry point), recorded in a docs-only PR. Verified in this session with TeX Live 2023: the edition passed by `-usepretex`, the `.aux` subfolders the build must create in the output directory, and the full book byte-identical without `\setcounter{page}{8}`.

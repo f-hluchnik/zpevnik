@@ -91,7 +91,7 @@ Písnička se v obsahu řadí a vypisuje podle názvu v `\song{}`. Následujíc�
 ### Bloky
 Každý blok je odstavec se štítkem v levém okraji a s mezerou nad sebou. Text bloku patří do složených závorek. Řádky odděluj `\\`, skupiny řádků `\groupbreak`. Uvnitř bloku nesmí být prázdný řádek a text nekončí `\\` (to by vysázelo prázdný řádek navíc). Číslo bloku je volitelný parametr v hranatých závorkách; prázdný nebo vynechaný znamená blok bez čísla.
 
-Každý řádek zdroje je v PDF právě jeden řádek, nic se nezalamuje. Řádek o trochu delší než šířka textu sazba stáhne zúžením mezer mezi slovy. Když ani to nestačí, `make check` selže s hlášením `<id>: N line(s) of the source printed as M on p. P`. Řádek pak rozděl pomocí `\\` tam, kde to dává smysl (u čárky, u rýmu). Totéž platí pro akord na konci řádku: celý se musí vejít do šířky textu, jinak `make check` hlásí `a chord runs X pt into the margin`. Výjimkou je recitativ `\rec{}`: je to próza, takže se jeho řádky zalamovat smějí. Bloky napsané za sebou bez prázdného řádku (`\intro{...} \solo{...}`) zůstanou na jednom řádku. Písmena se nezužují; kdyby to někdy bylo potřeba, postup popisuje `docs/DECISIONS.md` (D-183).
+Každý řádek zdroje je v PDF právě jeden řádek, nic se nezalamuje. Řádek o trochu delší než šířka textu sazba stáhne zúžením mezer mezi slovy. Když ani to nestačí, `make check` selže s hlášením `<id>: N line(s) of the source printed as M on p. P`. Řádek pak rozděl pomocí `\\` tam, kde to dává smysl (u čárky, u rýmu). Totéž platí pro akord na konci řádku: celý se musí vejít do šířky textu, jinak `make check` hlásí `a chord runs X pt into the margin`. Výjimkou je recitativ `\rec{}`: je to próza, takže se jeho řádky zalamovat smějí. Bloky napsané za sebou bez prázdného řádku (`\intro{...} \solo{...}`) zůstanou na jednom řádku. Písmena se nezužují; kdyby to někdy bylo potřeba, postup popisuje [docs/architecture.md](docs/architecture.md) (*Songs*).
 
 | Příkaz | Štítek | Příklad |
 |---|---|---|
@@ -137,7 +137,7 @@ Svislé mezery v písničce nepiš ručně, stará se o ně sazba:
 - Mezi bloky (sloka, refrén, intro, …) je jedna mezera `\blocksep` (20 pt). Když by se písnička jinak nevešla na stránku, mezera se smrští až na nulu. Blok bez štítku je `\vers{...}`.
 - Střídání zpěváků (`On:`, `Ona:`) zapiš jako `\speaker{On}{text}`: jméno se vysází kurzívou ve sloupci štítků (zarovnané doprava jako štítky, delší jméno přečnívá doleva) a nad blokem bude normální mezera. Jméno nepiš přes `\vers`, protože má být kurzívou a s dvojtečkou. Uvnitř bloku (ve sloce s číslem, kde je sloupec štítků obsazený) se jméno vysází kurzívou před řádek, bez mezery nad ním: `\vers[1]{\speaker{A}{Text}\\ \speaker{B}{Text}}`.
 - Skupiny řádků uvnitř sloky odděluje `\groupbreak`.
-- Čárkovanou čáru mezi těsnými slokami udělá `\blockrule{délka v cm}`, plnou čáru mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem. Písnička z více částí (číslování slok začíná znovu) má mezi částmi vždy `\partrule` (D-178).
+- Čárkovanou čáru mezi těsnými slokami udělá `\blockrule{délka v cm}`, plnou čáru mezi částmi písničky `\partrule`. Obě nahrazují mezeru před dalším blokem. Písnička z více částí (číslování slok začíná znovu) má mezi částmi vždy `\partrule`.
 - `\note{}` (capo apod.) patří k následujícímu bloku: pod sebou mezeru nemá, nad sebou ano (kromě začátku písničky a místa za `\subtitle` nebo `\seealso`). Samostatná poznámka k písničce je `\remark{}` (viz [Bloky](#bloky)).
 - Celý zpěvník je vysázený v `\Large`. Když se písnička nevejde na stránku ani s mezerami smrštěnými na nulu, přidej za hlavičku `\large` a komentář proč. Velikost písma se do dalších písniček nepřenáší (každá písnička je ve vlastní skupině).
 - Ruční `\vspace` do písniček nepiš: mezery mezi bloky jsou automatické a noty se zarovnají samy (viz [Noty](#noty)).
@@ -148,7 +148,7 @@ Svislé mezery v písničce nepiš ručně, stará se o ně sazba:
 Každý obrázek s notami je jeden soubor `scores/<název>.mscz` z MuseScoru 4 a v písničce ho vysází `\score{<název>}`. Noty stojí vždy uvnitř bloku: na jeho začátku vedle štítku (`\intro{\score{pohadka}}`), jinde na vlastním řádku za `\\`. Odsazení, posun ani šířku do písničky nepiš: obrázek začíná tam, kde text bloku, štítek stojí uprostřed první osnovy a všechny noty mají stejné měřítko (celý systém přesně vyplní řádek).
 
 - Než začneš noty upravovat, načti v MuseScoru sdílený styl `scores/zpevnik.mss` (Formát → Styl → Načíst styl). Sestavení ho stejně použije na každý soubor, takže jen tak uvidíš rozdělení do systémů, jaké bude ve zpěvníku.
-- Akordy v notách piš v německém značení, jako ve zpěvníku: `B` (anglicky B♭) a `H` (anglicky B). Se sdíleným stylem je MuseScore ukáže jako „B♭“ a „H“, zpěvník vysází „B“ a „H“ (D-190).
+- Akordy v notách piš v německém značení, jako ve zpěvníku: `B` (anglicky B♭) a `H` (anglicky B). Se sdíleným stylem je MuseScore ukáže jako „B♭“ a „H“, zpěvník vysází „B“ a „H“.
 - Soubor s notami má vždy jen jednu stránku. Víc obrázků v jedné písničce znamená víc souborů (`morseovka_1.mscz`, `morseovka_2.mscz`).
 - Noty z MuseScoru ručně neexportuj: `make` (nebo `make scores`) je vyexportuje do `build/scores/` sám a přeskočí ty, které se nezměnily. Akordy dostanou stejnou červenou jako ve zpěvníku.
 - Písnička otevřená samostatně (Overleaf) ukáže místo not rámeček s názvem.
@@ -205,12 +205,12 @@ Všechno, co `make` vytvoří, ukládá do složky `build` (necommituje se, `mak
 ### Tisk
 Pro papír sestavíš zpěvník (i kterékoli vydání) příkazem `make FORMAT=print`. PDF najdeš v `build/editions/<vydání>/print/zpevnik.pdf`, vedle PDF pro obrazovku, které se tím nemění. Na papíře nejde na odkazy kliknout, proto z PDF zmizí odkazy „→ obsah“ za názvem písničky, šipky před jménem interpreta, řádek písmen nad obsahem, odkaz „řazení podle interpretů“ a věta o hypertextových odkazech. Obsah podle písmen, písničky v sekcích interpretů a řádky „→ viz také“ mají místo odkazů čísla stran. Rejstřík interpretů obsahuje jen jména, protože sekce interpretů následují hned za ním ve stejném pořadí. Stránky písniček vypadají stejně jako na obrazovce, takže se každá písnička vejde na jednu stránku; ověří to `make check FORMAT=print`. Formáty definuje `tools/formats.py`.
 
-K `FORMAT=print` patří dvě volby. Bez `FORMAT=print` nebo s jinou hodnotou skončí `make` chybou (D-185):
+K `FORMAT=print` patří dvě volby. Bez `FORMAT=print` nebo s jinou hodnotou skončí `make` chybou:
 - `CHORDS=black` – tisk jednou barvou, černou (výchozí je `CHORDS=red`, červené akordy). Černé jsou akordy a také akordy v notách: kniha vezme noty z jejich černé verze (`build/scores/<název>-black.pdf`), kterou `make` udělá sám (potřebuje Ghostscript). Šedá jména interpretů zůstanou šedá, protože šedá se tiskne stejnou černou barvou, jen světleji. Obrázek na obálce zůstane barevný, a proto obálka do PDF pro tiskárnu nepatří (`skip_first_pages`, níže). PDF je ve složce `print-black` místo `print`.
 - `SIZE=A5` – PDF v A5 pro tiskárnu vydání, `zpevnik-a5.pdf` vedle PDF v A4. Co tiskárna potřebuje, říká tabulka `[print]` v `edition.toml` vydání (níže). Vydání bez ní PDF v A5 nemá a `make` skončí chybou.
 
 #### PDF pro tiskárnu
-Požadavky tiskárny patří do `edition.toml` vydání, do tabulky `[print]` (D-188). Všechny čtyři klíče jsou povinné. Vydání `skaut-kravare` má:
+Požadavky tiskárny patří do `edition.toml` vydání, do tabulky `[print]`. Všechny čtyři klíče jsou povinné. Vydání `skaut-kravare` má:
 ```toml
 [print]
 spine_margin_mm = 12.5
@@ -236,7 +236,7 @@ Nezávisle na zpěvníku si to ověříš takhle:
 - **Tiskárnou:** požádej tiskárnu, ať před tiskem PDF zkontroluje (preflight) a potvrdí okraje a jednu barvu. V Adobe Acrobat Pro to ukáže Output Preview: barevné výtažky (separace) musí mít tisk jen na černé (Black).
 - **Nátiskem:** jeden zkušební výtisk z tiskárny ukáže všechno najednou, včetně skutečného ořezu.
 
-Tiskárna chce PDF bez RGB, a proto pro ni je jen `CHORDS=black`. PDF s červenými akordy (`SIZE=A5` bez `CHORDS=black`) má barvy v RGB a převod do CMYK zpěvník nedělá (D-188). Pro jinou tiskárnu napiš do tabulky `[print]` její požadavky. Volby `PRINT_ARGS` už nejsou: `make` s nimi skončí chybou, která odkáže sem.
+Tiskárna chce PDF bez RGB, a proto pro ni je jen `CHORDS=black`. PDF s červenými akordy (`SIZE=A5` bez `CHORDS=black`) má barvy v RGB a převod do CMYK zpěvník nedělá. Pro jinou tiskárnu napiš do tabulky `[print]` její požadavky. Volby `PRINT_ARGS` už nejsou: `make` s nimi skončí chybou, která odkáže sem.
 
 ## Vydání zpěvníku
 Vydání je výběr písniček s vlastními úvodními stránkami, sestavený ze stejných souborů jako celý zpěvník. I celý zpěvník je vydání (`editions/full/`); další je třeba `lidovky` (lidové písničky, dřív samostatný repozitář). Každé vydání je složka `editions/<název>/` se souborem `edition.toml` a PDF z něj sestaví `make EDITION=<název>` do `build/editions/<název>/zpevnik.pdf`.
@@ -274,9 +274,9 @@ Verze zpěvníku má tři čísla `major.minor.patch` a vypíše ji `python3 too
 - `major.minor` je počet písniček ve složce `songs` plus 100 (738 písniček dává 8.38).
 - `patch` je počet commitů v `master` (first-parent) od posledního commitu, který změnil počet písniček. Nová písnička tedy začíná znovu od 0 a každá další změna číslo zvýší o 1. Počítá se z historie Gitu; bez ní (např. po `git clone --depth 1`) vyjde `8.38.?`.
 
-Odkaz „Jaké písničky přibyly?“ na webu vede na porovnání aktuální verze s poslední verzí před poslední změnou počtu písniček (např. `v8.38.46...v8.47.8`). Tu vypíše `python3 tools/generate.py --previous-version` a workflow ji zapíše do webu spolu s verzí (D-184).
+Odkaz „Jaké písničky přibyly?“ na webu vede na porovnání aktuální verze s poslední verzí před poslední změnou počtu písniček (např. `v8.38.46...v8.47.8`). Tu vypíše `python3 tools/generate.py --previous-version` a workflow ji zapíše do webu spolu s verzí.
 
-Existující tag se nikdy nepřepisuje. Pokud už tag existuje (stane se to jen tehdy, když se po smazání písniček počet vrátí na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Podrobnosti jsou v komentářích workflow a v `docs/DECISIONS.md` (D-133, D-150).
+Existující tag se nikdy nepřepisuje. Pokud už tag existuje (stane se to jen tehdy, když se po smazání písniček počet vrátí na dřívější hodnotu), workflow skončí chybou dřív, než cokoli zveřejní. Podrobnosti jsou v komentářích workflow a v [docs/architecture.md](docs/architecture.md).
 
 ## Licence a autorská práva
 Zpěvník je nekomerční a šíří se zdarma. Autorská práva k textům, hudbě a akordům písní (`songs/`), k notám (`scores/`) a k PDF z nich sestaveným patří autorům písní; licence tohoto repozitáře se na ně nevztahuje. Totéž platí pro úvodní strany (`shared-pages/` kromě `contents.tex` a strany vydání v `editions/`; úvod celého zpěvníku cituje text Vlasty Redla) a pro obálku (`images/`, nakreslila Ivana Vlčková). Licence Apache 2.0 (soubor `LICENSE`) platí jen pro mou vlastní práci: skripty, styl a strukturu dokumentu, registr interpretů a dokumentaci. Pokud si držitel práv nepřeje, aby tu jeho píseň byla, může mi napsat na frantahluchnik@gmail.com a píseň odstraním.

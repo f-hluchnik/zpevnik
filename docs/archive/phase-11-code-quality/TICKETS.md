@@ -1,6 +1,6 @@
 # Phase 11 tickets (done 6 Nov 2026)
 
-The ticket texts and status rows of phase 11 as they were when the phase ended. Summary: [HISTORY.md](../../HISTORY.md), phase 11.
+The ticket texts and status rows of phase 11 as they were when the phase ended. Summary: [HISTORY.md](../HISTORY.md), phase 11.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

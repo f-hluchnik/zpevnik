@@ -313,7 +313,7 @@ __pycache__/
 # Chord positions written by every build (tools/chord_gaps.py, C3a)
 *.chords
 
-# Everything make builds: editions, single songs, score images (D-143)
+# Everything make builds: editions, single songs, score images
 /build/
 
 # MuseScore backup copies, next to any saved score

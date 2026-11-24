@@ -1,8 +1,7 @@
 """Every command and environment a song may use, and what it takes.
 
-This is the command set of zpevnik.sty after the renames (D-131) and the song quirks
-(D-135, D-136, D-163). A command that is not listed here is an error; one that is listed
-is an error where it does not belong (a part inside a part, a chord in a title).
+This is the command set of zpevnik.sty. A command that is not listed here is an error; one
+that is listed is an error where it does not belong (a part inside a part, a chord in a title).
 
 An argument signature is a string of letters, as in xparse: `m` a mandatory `{...}`
 argument, `o` an optional `[...]` argument, `s` an optional star.
@@ -28,7 +27,7 @@ METADATA = {"song": "m", "subtitle": "m", "artist": "om", "alttitle": "m", "toct
             "collection": "m", "seealso": "mm"}
 RULES: dict[str, tuple[str, RuleKind]] = {"blockrule": ("m", RuleKind.DASHED), "partrule": ("", RuleKind.SOLID)}
 ENVIRONMENT_COMMANDS = {"begin": "m", "end": "m"}
-COLUMNS_ENVIRONMENT = "multicols"  # \begin{multicols}{n}: the song has n columns (D-135)
+COLUMNS_ENVIRONMENT = "multicols"  # \begin{multicols}{n}: the song has n columns
 LAYOUT_ENVIRONMENTS = {"small"}     # PDF-only: a smaller font
 ENVIRONMENT_ARGUMENTS = {COLUMNS_ENVIRONMENT: "m"} | {name: "" for name in LAYOUT_ENVIRONMENTS}
 # PDF-only layout, read and dropped: a font size, a column break, the gap between columns.
@@ -69,7 +68,7 @@ DOTS = "dots"
 SHARP_SIGN = "#"  # \#: a plain sign in text (note names in lowercase letters); in a chord a sharp is \kk
 TEXT_SYMBOLS = {DOTS: "…", "&": "&", "ss": "ß", " ": " ", "textdagger": "†", "textasteriskcentered": "∗",
                 SHARP_SIGN: "#"}
-# Math is allowed for these symbols only (D-135).
+# Math is allowed for these symbols only.
 MATH_SYMBOLS = {"times": "×", "rightarrow": "→"}
 TIE = " "  # ~
 HYPHEN = "-"  # TeX puts a discretionary after it, so no character is the last node

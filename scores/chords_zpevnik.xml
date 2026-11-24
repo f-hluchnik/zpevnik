@@ -33,7 +33,7 @@
     v4.6.5 (the version of MUSESCORE_URL in the CI workflow), under its own licence above.
     One change, the one the comment at "german_B" describes: its code is 0x200b (zero
     width space) instead of 0x266d (flat), so that German spelling prints B-flat as "B"
-    and B as "H", as in the songbook (DECISIONS.md, D-190). tools/scores.py points the
+    and B as "H", as in the songbook. tools/scores.py points the
     export at this file.
 -->
 

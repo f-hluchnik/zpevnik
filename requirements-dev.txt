@@ -1,4 +1,4 @@
-# Packages for the tests and CI only (D-165): the tools that build the songbook use the
+# Packages for the tests and CI only: the tools that build the songbook use the
 # standard library. jsonschema validates songs.json against tools/songs.schema.json; the
 # rest is what it needs, pinned as pip resolved it on 12 Nov 2026, so every run checks alike.
 # Install into the virtual environment: pip install -r requirements-dev.txt

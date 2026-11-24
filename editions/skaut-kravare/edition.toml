@@ -1,8 +1,8 @@
 # Zpěvník pro kravařské skauty.
 title = "Skautský zpěvník"
-# The illustrator of the cover and the printer (D-192).
+# The illustrator of the cover and the printer.
 imprint = "credits.tex"
-# A page for notes after the contents, on paper only (D-193).
+# A page for notes after the contents, on paper only.
 after_contents = ["notes.tex"]
 songs = [
     "amazonka",
@@ -184,10 +184,10 @@ cover = "own"
 halftitle = "shared"
 titlepage = "shared"
 
-# What the printer asked for (D-188): letters at least 12 mm from the spine and 4 mm from the
+# What the printer asked for: letters at least 12 mm from the spine and 4 mm from the
 # outer edge, with half a millimetre to spare for the cut; crop marks, no bleed. The book block
 # starts after the edition's cover and its back (2 pages): the cover is printed separately
-# (print-cover/, D-192).
+# (print-cover/).
 [print]
 spine_margin_mm = 12.5
 outer_margin_mm = 4.5

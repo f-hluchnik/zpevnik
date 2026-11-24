@@ -194,7 +194,7 @@ PRINT_TABLE = "[print]\nspine_margin_mm = 12.5\nouter_margin_mm = 4\nskip_first_
 
 
 class PrintTable(unittest.TestCase):
-    """The [print] table: what the printer of an edition needs (D-188)."""
+    """The [print] table: what the printer of an edition needs."""
 
     def settings(self, toml: str):
         with tempfile.TemporaryDirectory() as tmp:

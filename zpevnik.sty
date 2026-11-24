@@ -38,23 +38,23 @@
 % nothing. \zpprint: typeset for paper, where a link cannot be followed, so the labels that only
 % exist to be clicked are left out. \zpchordcolor: the xcolor colour of the chords.
 % \zpscoresuffix: added to the file name of a score's image (\score): -black in the print
-% for one ink, whose scores are black-ink images (tools/scores.py, D-188).
+% for one ink, whose scores are black-ink images (tools/scores.py).
 \newif\ifzp@print
 \ifdefined\zpprint\zp@printtrue\fi
 \providecommand*{\zpchordcolor}{chordred}
 \providecommand*{\zpscoresuffix}{}
 % On paper the page numbers count from the first page of the printer's block, as in a printed
-% book (D-191). \zpprintskippedpages (generated from the edition's [print] table) is how many
+% book. \zpprintskippedpages (generated from the edition's [print] table) is how many
 % of the book's first pages the block leaves out (its own cover and its back); they count from
 % 1 - N and are unnumbered front matter, so the contents and \seealso give the printed page.
-% The screen PDF keeps the PDF's own page numbers (D-155).
+% The screen PDF keeps the PDF's own page numbers.
 \AtBeginDocument{\ifzp@print\ifdefined\zpprintskippedpages
   \setcounter{page}{\numexpr1-\zpprintskippedpages\relax}\fi\fi}
 % \zpscreenorprint{screen}{print}: the first on the screen, the second on paper.
 \newcommand{\zpscreenorprint}[2]{\ifzp@print#2\else#1\fi}
 % The contents (generated/obsah-*.tex, shared-pages/contents.tex). \zpcontentsentry{target}{text}:
 % a link, and on paper also a dotted leader and the page of the target; \zpcontentsentry* is the
-% link alone, also on paper (the artist index, D-182). \noindent: the style's
+% link alone, also on paper (the artist index). \noindent: the style's
 % negative \parindent would start the line left of its column, and a long title would run into
 % the neighbouring column instead of wrapping inside its own.
 \NewDocumentCommand{\zpcontentsentry}{s m m}{%
@@ -205,7 +205,7 @@
 \newcommand{\zp@block}[3][]{\zp@blockgap\zp@boldlabel{#2}{#1\ignorespaces#3\zp@blockend}}
 \newcommand*{\zp@blockend}{}
 % A song block (verse, chorus, ...; not a remark, which is prose): every line of the source is
-% one printed line (D-183). A line that is too long is squeezed (its spaces shrink) rather
+% one printed line. A line that is too long is squeezed (its spaces shrink) rather
 % than wrapped: a further line costs \zp@songlinepenalty, more than the worst squeezed line
 % (TeX's demerits: a wrap costs at least 2L^2, a squeezed line at most (L+100)^2, so any L
 % above 242 prefers squeezing). A line that still wraps is written to \jobname.lines and
@@ -306,13 +306,13 @@
 \newcommand{\echo}[1]{%
   \edef\zp@echosize{\f@size}\edef\zp@echoskip{\f@baselineskip}%
   \textsuperscript{\fontsize{\zp@echosize}{\zp@echoskip}\selectfont\emph{#1}}}
-\newcommand{\rec}[1]{\global\zp@prosetrue\textit{rec: }{/#1/}}%recitative (prose: its lines may wrap, D-183)
+\newcommand{\rec}[1]{\global\zp@prosetrue\textit{rec: }{/#1/}}%recitative (prose: its lines may wrap)
 % A note belongs to the block that follows: that block gets no gap (as after a
 % separator). The note itself has the normal gap above it, except at the start
 % of a song.
 \newcommand{\note}[1]{\ifvmode\ifzp@top\else\zp@blockgap\fi\fi\emph{#1}\global\zp@nogaptrue\global\zp@topfalse}
 % Link line to another song, pulled up to the previous block. A link to a song outside the
-% edition is left out completely (D-139): the generated song-list.tex registers the songs of
+% edition is left out completely: the generated song-list.tex registers the songs of
 % the edition; a song compiled alone has no list and keeps every link.
 \newif\ifzp@songlist
 \newcommand*{\zpregistersong}[1]{\global\zp@songlisttrue\global\expandafter\let\csname zp@song@#1\endcsname\@empty}
@@ -378,7 +378,7 @@
 % The place where chords would overlap is widened; the text does not move
 % otherwise. At the end of a line (before \\, \par, \end or the end of a block) a chord keeps
 % the room by which it is wider than its text, so that it counts in the length of the line: a
-% song line that cannot hold it is squeezed, or fails the build (D-183); a cue after the block
+% song line that cannot hold it is squeezed, or fails the build; a cue after the block
 % (R., ×2) starts after the chord. \chord reads the text up to the next chord, measures it and
 % returns it unchanged (one pass, nothing is stored in the .aux). This holds in
 % all songs: spaces in the text are not typed by hand, a pause is \gap{n}, a
@@ -468,7 +468,7 @@
 \expandafter\def\expandafter\zp@grabspace\space{%
   \zp@segtoks\expandafter{\the\zp@segtoks\space}\advance\zp@spaces\@ne \zp@trailingspacetrue
   \zp@scan}
-% Inside a box that only measures text: no footnote, and a line break is not counted (D-183).
+% Inside a box that only measures text: no footnote, and a line break is not counted.
 \def\zp@measuring{\let\footnote\@gobble \let\\\@normalcr}
 % \zp@reach := how far the chord reaches past its text at the end of a line, the text measured
 % at its narrowest (spaces shrunk) and without a space at its end (the end of the line

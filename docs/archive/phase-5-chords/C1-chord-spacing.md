@@ -4,7 +4,7 @@
 
 Session 9, 4 Nov 2026 (second iteration, after the owner's review). Branch `proto/c1-chord-spacing`, draft PR #42 (do not merge). Input for the owner's gate **C2**.
 
-**Files in [C1-chord-spacing/](C1-chord-spacing/):**
+**Files in [C1-chord-spacing/](C1-chord-spacing):**
 - `C1-13-songs-master.pdf` and `C1-13-songs-prototype.pdf`: the 13 songs as real compiled PDFs, from master and from the prototype, with page numbers as in the full book.
 - `C1-13-songs-master-vs-prototype.pdf`: the same pages interleaved (master, prototype, master, …).
 - `C1-full-book-prototype.pdf`: the whole book with the prototype `\chord`. Only the 13 songs had their manual spacing removed.

@@ -11,7 +11,7 @@ large and made again in seconds, go to build/:
   build/print-cover/assets/paper-beige.jpg  the back's paper, in the tone of the drawing's sky: CMYK
 Each picture is the bleed box (A5 with 3 mm on every side). The front is the painted area with its
 rough edges, on white. CMYK is FOGRA39 (coated paper, the European standard), the profile TeX Live
-ships in its `colorprofiles` package; the printer asked for CMYK, not RGB (D-188).
+ships in its `colorprofiles` package; the printer asked for CMYK, not RGB.
 
 Needs numpy, Pillow (with its littleCMS colour management) and TeX Live's kpsewhich:
   python3 -m pip install numpy pillow

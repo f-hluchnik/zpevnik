@@ -1,4 +1,4 @@
-"""Where the pages of the book go on the printer's A5 pages: one scale and one shift (D-188).
+"""Where the pages of the book go on the printer's A5 pages: one scale and one shift.
 
 The book is typeset on A4. Every page is scaled around its centre and then moved away from
 the spine: to the right on a right-hand page (the spine on its left), to the left on a

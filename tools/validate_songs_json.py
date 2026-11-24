@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Check songs.json against its schema, tools/songs.schema.json (J4, D-166).
+"""Check songs.json against its schema, tools/songs.schema.json.
 
-The schema is the contract with the website (D-165), so the file a release publishes has to
+The schema is the contract with the website, so the file a release publishes has to
 satisfy it. The unit tests validate only some songs; this validates the whole file that
 `make json` wrote, in about 5 s. CI runs it on every build, so a change that breaks the contract
 fails its pull request, not the website's next build.
 
-This is the one tool that needs a package, jsonschema (requirements-dev.txt, D-165): the tools
+This is the one tool that needs a package, jsonschema (requirements-dev.txt): the tools
 that build the book stay standard library.
 
 Usage: python3 tools/validate_songs_json.py [--input PATH] [repo-root]   (default: build/songs.json)

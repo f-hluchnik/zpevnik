@@ -1,6 +1,6 @@
 # Phase 9 tickets: the online songbook (done 13 Nov 2026)
 
-The ticket texts and status rows as they were when the work ended: the data from the release, song pages, index, artists, navigation, search, wake lock, robots.txt and the release check, in `zpevnik-web`. W5a (the wake-lock button as an icon) and W6a (chord wrapping, head + tail) were added on 13 Nov 2026 and are done. Summary: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows as they were when the work ended: the data from the release, song pages, index, artists, navigation, search, wake lock, robots.txt and the release check, in `zpevnik-web`. W5a (the wake-lock button as an icon) and W6a (chord wrapping, head + tail) were added on 13 Nov 2026 and are done. Summary: [HISTORY.md](../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|
