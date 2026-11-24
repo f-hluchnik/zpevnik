@@ -6,7 +6,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from edition import BlockSettings, Book, CoverSettings, EditionError, PrintSettings, read_book, read_edition, read_print_settings
+from edition import (BlockSettings, Book, CoverSettings, EditionError, PrintSettings, printed_editions, read_book,
+                     read_edition, read_print_settings)
 from paths import BOOK_FILE
 from .songs_builder import make_song
 
@@ -277,6 +278,15 @@ class PrintTable(PrintSettingsCase):
             self.settings('print = "yes"\n' + lite())
         self.assertEqual(caught.exception.errors, ["'print' must be a table"])
         self.assertEqual(self.errors(lite() + "[print]\nblock = 1\n"), ["print: 'block' must be a table"])
+
+
+    def test_the_editions_that_go_to_a_printer_are_those_with_the_table(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Repository(tmp)
+            repo.write("editions/lite/edition.toml", lite() + PRINT_TABLE)
+            repo.write("editions/plain/edition.toml", lite())
+            repo.write("editions/sheet/edition.toml", lite() + "[print]\n")
+            self.assertEqual(printed_editions(repo.root), ["lite", "sheet"])
 
 
 COVER_TABLE = '[print.cover]\ndesign = "cover/design.tex"\npaper = "A5"\ncolour = "cmyk"\nbleed_mm = 3\n'

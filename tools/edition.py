@@ -403,6 +403,11 @@ def edition_names(root: Path) -> list[str]:
     return sorted(path.name for path in (root / EDITIONS_DIR).iterdir() if path.is_dir())
 
 
+def printed_editions(root: Path) -> list[str]:
+    """The editions that go to a printer: those whose edition.toml has a [print] table."""
+    return [name for name in edition_names(root) if PRINT_TABLE in read_toml(root / edition_file(name))]
+
+
 def edition_problems(root: Path, songs: list[Song], slugs: set[str]) -> list[str]:
     """Every problem of the book file and of every edition, one line each (for the lints)."""
     try:

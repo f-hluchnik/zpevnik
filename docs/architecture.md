@@ -95,7 +95,10 @@ Every book is an edition: `editions/<name>/edition.toml`, the full book too (`ed
 `edition.toml` asks ([printing.md](printing.md) lists the keys): the book block
 (`[print.block]`) and, with a `[print.cover]` table, the cover printed separately and a preview of
 the book with it. Every key of the block has a default, so every edition can be printed. The files
-go to `build/print/<e>/`, emptied first; the printer gets nothing from anywhere else.
+go to `build/print/<e>/`, emptied first; the printer gets nothing from anywhere else. CI runs
+`make print` for every edition with a `[print]` table and keeps the files as the run's
+`printer-files` artifact, so the print path is checked on every pull request and the files a
+printer gets come from the reference TeX Live and a reviewed commit.
 
 - **One build, a few switches.** The book is typeset on A4 in a format (`tools/formats.py`)
   that follows from the table: `print-black` (black ink), `print` (colour, RGB) or `print-cmyk`.
@@ -164,6 +167,7 @@ go to `build/print/<e>/`, emptied first; the printer gets nothing from anywhere 
 | link check in `tools/build_edition.py` | a link or page reference that points nowhere |
 | `check_pages.py`, `chord_gaps.py`, `song_lines.py` | a song on two pages, overlapping chords, a wrapped line |
 | `validate_songs_json.py` | `songs.json` breaking the contract |
+| `make print` (CI, every edition with a `[print]` table) | a broken print path: the print format, the margins, the inks, the cover |
 | song-by-song PDF diff (`tools/pdfdiff.py`, CI) | every visible change of every edition, against the base commit |
 
 **A unit test earns its place** when it protects a rule or a failure that no other check catches,

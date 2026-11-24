@@ -31,9 +31,9 @@ there (print_output.py, which also has the page boxes and the checks the cover s
 
 For the Makefile, `--block-format` prints the format the edition's block is typeset in, and
 `--path` the folder of the files for the printer, so the Makefile does not repeat the layout of
-build/.
+build/. For CI, `--list` prints the editions that go to a printer: those with a [print] table.
 
-Usage: python3 tools/print_pdf.py [--edition NAME] [--block-format | --path] [repo-root]
+Usage: python3 tools/print_pdf.py [--edition NAME] [--block-format | --path | --list] [repo-root]
        (run after building the block's format; make print does both)
 Needs pdflatex with pdfpages and crop, poppler (pdfinfo, pdftoppm, pdffonts, pdfimages) and
 Ghostscript. Python >= 3.11, standard library only.
@@ -43,7 +43,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-from edition import BLACK_INK, CMYK, BlockSettings, EditionError, read_print_settings
+from edition import BLACK_INK, CMYK, BlockSettings, EditionError, printed_editions, read_print_settings
 from formats import PRINT, PRINT_BLACK, PRINT_CMYK, is_black_ink, is_cmyk
 from paths import (BOOK_PDF_NAME, PRINT_BLOCK_PART, PRINT_WRAPPER_NAME, add_edition_argument, add_root_argument,
                    edition_output_dir)
@@ -211,6 +211,8 @@ def main() -> int:
     what.add_argument("--block-format", action="store_true",
                       help="print the format the edition's block is typeset in and exit")
     what.add_argument("--path", action="store_true", help="print the folder of the files for the printer and exit")
+    what.add_argument("--list", action="store_true",
+                      help="print the editions that go to a printer (with a [print] table) and exit")
     args = parser.parse_args()
     try:
         if args.block_format:
@@ -218,6 +220,9 @@ def main() -> int:
             return 0
         if args.path:
             print(delivery_dir(args.edition))
+            return 0
+        if args.list:
+            print("\n".join(printed_editions(args.root)))
             return 0
         result, placement, checked = make_print_pdf(args.root, args.edition)
     except (PrintError, EditionError, LayoutError, PdfProgramError) as error:

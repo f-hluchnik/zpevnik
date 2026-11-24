@@ -25,7 +25,9 @@ jobs:
       # place that says what an edition is lists them, so a new edition needs no change here.
       - name: List editions
         id: editions
-        run: echo "names=$(python3 tools/build_edition.py --list | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "names=$(python3 tools/build_edition.py --list | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+          echo "printed=$(python3 tools/print_pdf.py --list | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
 
       # Derived .tex files are build outputs, not committed.
       - name: Generate derived files
@@ -129,6 +131,36 @@ jobs:
           for edition in ${{ steps.editions.outputs.names }}; do
             python3 tools/song_lines.py --edition "$edition"
           done
+
+      # What the printer of every edition with a [print] table gets, made as a contributor makes
+      # it (make print, with all its checks: the print format, the margins, the inks, the cover).
+      # This path runs only before a print run otherwise, so a change that breaks it would show
+      # on the day the printer waits; here it fails its pull request. The scores were exported
+      # above, so make only adds their black-ink images (rsvg-convert and Ghostscript). git names
+      # the build in the file names; the workspace belongs to another user in the container,
+      # hence safe.directory.
+      - name: Print
+        if: steps.editions.outputs.printed != ''
+        uses: xu-cheng/texlive-action@v2
+        with:
+          texlive_version: 2023
+          run: |
+            set -eu
+            apk add --no-cache python3 make git ghostscript poppler-utils rsvg-convert py3-pillow
+            git config --global --add safe.directory "$PWD"
+            for edition in ${{ steps.editions.outputs.printed }}; do
+              make print EDITION="$edition"
+            done
+
+      # The files for the printers, built by the reference TeX Live from this commit: what a
+      # printer gets is downloaded from the run of the merged commit (docs/printing.md).
+      - name: Keep the files for the printers
+        if: steps.editions.outputs.printed != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: printer-files
+          path: build/print/
+          retention-days: 30
 
       # The website's data: songs.json is written from the full book just compiled
       # and checked as a whole against the schema, the contract with the website. A change
