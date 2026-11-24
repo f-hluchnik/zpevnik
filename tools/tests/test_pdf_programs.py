@@ -7,15 +7,25 @@ from pathlib import Path
 from unittest import mock
 
 import pdf_programs
-from pdf_programs import (Box, Greymap, InkColumns, InkCoverage, PdfProgramError, greymap, ink_columns,
-                          ink_coverages, page_boxes, page_count, render_page)
+from pdf_programs import (Box, Greymap, InkColumns, InkCoverage, PdfProgramError, greymap, image_colours,
+                          ink_columns, ink_coverages, page_boxes, page_count, render_page, rendered_left, unembedded_fonts)
 
 PDFINFO_BOX = """Pages:           182
 Page size:       476.22 x 651.968 pts
 MediaBox:            0.00     0.00   476.22   651.97
 CropBox:             0.00     0.00   476.22   651.97
-BleedBox:           28.35    28.35   447.87   623.62
+BleedBox:           25.51    25.51   450.71   626.46
 TrimBox:            28.35    28.35   447.87   623.62
+"""
+PDFFONTS = """name                                 type              encoding         emb sub uni object ID
+------------------------------------ ----------------- ---------------- --- --- --- ---------
+HLYIQL+LCIRCLE10                     Type 1            Builtin          yes yes yes      8  0
+Helvetica-Bold                       Type 1            Custom           no  no  no      14  0
+"""
+PDFIMAGES = """page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio
+--------------------------------------------------------------------------------------------
+   1     0 image    1819  2551  rgb     3   8  jpeg   no         7  0   211   211 1430K  11%
+  12     1 image     900   300  gray    1   8  image  no        40  0   300   300   12K   4%
 """
 INKCOV = """ 0.00000  0.00000  0.00000  0.02525 CMYK OK
    **** Error: Unknown operator: '-25.-2', processed as number, value: -25.0
@@ -29,12 +39,23 @@ class Pdfinfo(unittest.TestCase):
         boxes = page_boxes(PDFINFO_BOX)
         self.assertEqual(boxes.media, Box(0, 0, 476.22, 651.97))
         self.assertEqual(boxes.trim, Box(28.35, 28.35, 447.87, 623.62))
+        self.assertEqual(boxes.bleed, Box(25.51, 25.51, 450.71, 626.46))
 
     def test_missing_lines_are_an_error(self):
         with self.assertRaises(PdfProgramError):
             page_count("Title: x\n")
         with self.assertRaises(PdfProgramError):
             page_boxes("Pages: 1\nMediaBox: 0 0 1 1\n")
+
+
+class Tables(unittest.TestCase):
+    def test_a_font_that_is_not_embedded_is_named_whatever_its_type(self):
+        with mock.patch.object(pdf_programs, "run", return_value=PDFFONTS):
+            self.assertEqual(unembedded_fonts(Path("x.pdf")), ["Helvetica-Bold"])
+
+    def test_every_image_has_its_page_and_colour_space(self):
+        with mock.patch.object(pdf_programs, "run", return_value=PDFIMAGES):
+            self.assertEqual(image_colours(Path("x.pdf")), [(1, "rgb"), (12, "gray")])
 
 
 class Inks(unittest.TestCase):
@@ -69,6 +90,14 @@ class Rendering(unittest.TestCase):
         self.assertEqual(command[command.index("-x"):command.index("-x") + 8],
                          ["-x", "10", "-y", "80", "-W", "100", "-H", "200"])
         self.assertEqual(command[command.index("-f"):command.index("-f") + 4], ["-f", "7", "-l", "7"])
+
+    def test_a_box_between_pixels_is_rendered_with_every_pixel_it_touches(self):
+        with mock.patch.object(pdf_programs, "run_binary", return_value=b"P5\n1 1\n255\n\xff") as run:
+            render_page(Path("x.pdf"), 1, 72, Box(10.6, 20.2, 110.4, 220.9), page_height=300)
+        command = run.call_args.args[0]
+        self.assertEqual(command[command.index("-x"):command.index("-x") + 8],
+                         ["-x", "10", "-y", "79", "-W", "101", "-H", "201"])
+        self.assertEqual(rendered_left(Box(10.6, 20.2, 110.4, 220.9), 72), 10)
 
 
 class Programs(unittest.TestCase):

@@ -3,9 +3,9 @@
 `macros_tex` defines the facts the shared pages print: the book's title, author, start
 year and source, the edition's title, subtitle and editors, the cover image,
 whether the edition is derived from the book (then the imprint prints the
-derivation sentence instead of the plain version line), and, for an edition with a
-[print] table, how many of its first pages the printer's block leaves out
-(\\zpprintskippedpages: on paper the block's first page is page 1).
+derivation sentence instead of the plain version line), and whether the printer's block
+leaves the cover and its back out (\\zpprintwithoutcover, from `cover = false` in the
+[print.block] table: a printer who prints the cover separately).
 `pages_tex` defines the pages zpevnik.tex puts into its fixed skeleton, resolved
 from edition.toml.
 The macros are defined with \\newcommand* so that an empty one compares equal to \\empty.
@@ -44,7 +44,7 @@ def macros_tex(book: Book, edition: Edition) -> str:
         define("zpcoverimage", edition.cover_image or ""),
         "\\newif\\ifzpderived\n",
         "\\zpderivedtrue\n" if derived else "",
-        define("zpprintskippedpages", str(edition.printing.skip_first_pages)) if edition.printing else "",
+        "" if edition.printing.block.cover else define("zpprintwithoutcover", ""),
     ])
 
 

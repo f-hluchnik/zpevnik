@@ -36,8 +36,9 @@ import subprocess
 import sys
 from pathlib import Path
 
-from edition import edition_names
-from formats import SCREEN, add_format_argument, pretex
+from colours import ColourError, chord_colour, profile_file, to_cmyk
+from edition import EditionError, edition_names, read_print_settings
+from formats import SCREEN, add_format_argument, is_cmyk, pretex
 from paths import (BOOK_LOG_NAME, BOOK_PDF_NAME, BOOK_TEX, EDITIONS_DIR, PAGES_TEX, SHARED_PAGES_DIR,
                    SONGS_DIR, add_edition_argument, add_root_argument, edition_output_dir, generated_dir)
 
@@ -76,10 +77,17 @@ def include_folders(root: Path) -> list[Path]:
     return [SONGS_DIR, SHARED_PAGES_DIR, *(EDITIONS_DIR / name for name in edition_names(root))]
 
 
-def latexmk_command(edition: str, format_name: str = SCREEN) -> list[str]:
-    definitions = f"\\def\\zpgenerated{{{generated_dir(edition).as_posix()}}}" + pretex(format_name)
+def latexmk_command(edition: str, format_name: str = SCREEN, chord_cmyk: str = "") -> list[str]:
+    definitions = (f"\\def\\zpgenerated{{{generated_dir(edition).as_posix()}}}" + pretex(format_name)
+                   + (f"\\def\\zpchordcmyk{{{chord_cmyk}}}" if chord_cmyk else ""))
     return [*LATEXMK, f"-outdir={edition_output_dir(edition, format_name)}", f"-usepretex={definitions}",
             str(BOOK_TEX)]
+
+
+def chord_cmyk(root: Path, edition: str) -> str:
+    """The chord red in the CMYK of the edition's printer, as xcolor reads it: "c,m,y,k"."""
+    profile = profile_file(root, read_print_settings(root, edition).block.profile)
+    return ",".join(f"{ink:.4f}" for ink in to_cmyk(chord_colour(root), profile))
 
 
 def failure_excerpt(output: str) -> str:
@@ -126,7 +134,8 @@ def build(root: Path, edition: str, format_name: str = SCREEN) -> Path:
     output = root / edition_output_dir(edition, format_name)
     for folder in include_folders(root):
         (output / folder).mkdir(parents=True, exist_ok=True)
-    run_latexmk(latexmk_command(edition, format_name), root,
+    cmyk = chord_cmyk(root, edition) if is_cmyk(format_name) else ""
+    run_latexmk(latexmk_command(edition, format_name, cmyk), root,
                 edition_output_dir(edition, format_name) / BOOK_LOG_NAME, LONG_LOG_LINES)
     pdf = pdf_path(edition, format_name)
     log = (output / BOOK_LOG_NAME).read_text(encoding=TEX_OUTPUT_ENCODING, errors="replace")
@@ -156,7 +165,7 @@ def main() -> int:
         return 0
     try:
         print(build(args.root, args.edition, args.format))
-    except (FileNotFoundError, LatexError, MissingLinkTargets, UndefinedLabels) as error:
+    except (FileNotFoundError, LatexError, MissingLinkTargets, UndefinedLabels, EditionError, ColourError) as error:
         print(f"error: {error}", file=sys.stderr)
         return 1
     return 0

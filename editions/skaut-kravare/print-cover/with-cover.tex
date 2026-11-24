@@ -6,9 +6,9 @@
 \usepackage{pdfpages}
 
 % Both PDFs have the A5 page with this room on every side for the crop marks
-% (tools/print_pdf.py's CROP_MARK_ROOM_MM, \markroom in print-cover.tex).
+% (tools/print_layout.py's CROP_MARK_ROOM_MM, \markroom in print-cover.tex).
 \newcommand*{\markroom}{15mm}
-\newcommand*{\book}{../../../build/editions/skaut-kravare/print-black/zpevnik-a5.pdf}
+\newcommand*{\book}{../../../build/editions/skaut-kravare/print-black/zpevnik-block.pdf}
 \newcommand*{\cover}{../../../build/print-cover/print-cover.pdf}
 \newcommand*{\cutpages}[2]{% #1 the pages, #2 the PDF
   \includepdf[pages={#1}, trim=\markroom{} \markroom{} \markroom{} \markroom, clip]{#2}}

@@ -6,15 +6,9 @@ are its own (`editions/<name>/<page>.tex`); it can add an imprint fragment and p
 before the songs and after the contents. `read_book` and `read_edition` validate the
 files and report every problem at once in an `EditionError`.
 
-An edition that goes to a printer says what the printer needs in a `[print]` table,
-which `read_print_settings` reads for the A5 step (print_pdf.py):
-
-  [print]
-  spine_margin_mm = 12.5   # no letter closer to the bound edge
-  outer_margin_mm = 4.5    # nor to the outer edge
-  skip_first_pages = 2     # left out of the book block (an even number), e.g. a cover
-                           # the printer gets separately
-  crop_marks = true        # the page is the A5 page with crop marks around it
+What a printer gets is set in the `[print.block]` table (`read_print_settings`, for
+print_pdf.py; docs/printing.md lists the keys). Every key has a default, so every edition can
+be printed: without the table, on A4, in colour, with its cover, as on the screen.
 
 Files an edition lists are written relative to its folder; another edition's file is
 named by path ("../full/introduction.tex"), so sharing is visible. A `.tex` file in the
@@ -30,6 +24,7 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
 from paths import BOOK_FILE, EDITION_FILE_NAME, EDITIONS_DIR, SHARED_PAGES_DIR
+from print_layout import A4, CROP_MARK_ROOM_MM, PAPERS
 from songbook import Song
 
 SHARED, OWN = "shared", "own"
@@ -37,7 +32,12 @@ COVER, HALFTITLE, TITLEPAGE = "cover", "halftitle", "titlepage"
 PAGES = (COVER, HALFTITLE, TITLEPAGE)  # the replaceable pages, each shared or own
 TEX_SUFFIX = ".tex"
 ALL, SONGS, ARTISTS = "all", "songs", "artists"  # the selection keys of edition.toml
-PRINT_TABLE = "print"  # the printer's requirements
+PRINT_TABLE = "print"  # what the printer gets: [print.block], the book's pages
+BLOCK_TABLE = "block"
+COLOUR_INK, BLACK_INK = "colour", "black"
+RGB, CMYK = "rgb", "cmyk"
+FOGRA39 = "FOGRA39"  # the CMYK profile of TeX Live (package colorprofiles): coated paper, Europe
+PROFILE_SUFFIX = ".icc"
 EDITION_NAME = re.compile(r"[a-z0-9][a-z0-9-]*")  # used in paths and in file names
 EDITION_FILE_DEPTH = len(("editions", "<name>", "<file>.tex"))  # no subfolders: see build_edition.py
 
@@ -59,11 +59,15 @@ TRUE = Kind("true", lambda v: v is True)
 BOOLEAN = Kind("true or false", lambda v: isinstance(v, bool))
 MILLIMETRES = Kind("a number of millimetres, 0 or more",
                    lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and v >= 0)
-EVEN_COUNT = Kind("an even integer, 0 or more (an odd one would move every page to the other side)",
-                  lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0 and v % 2 == 0)
 TEXTS = Kind("a list of non-empty strings", lambda v: isinstance(v, list) and all(map(is_text, v)))
 TABLE = Kind("a table", lambda v: isinstance(v, dict))
-PAGE_CHOICE = Kind(f'"{SHARED}" or "{OWN}"', lambda v: v in (SHARED, OWN))
+
+
+def one_of(*values: str) -> Kind:
+    return Kind(" or ".join(f'"{value}"' for value in values), lambda v: v in values)
+
+
+PAGE_CHOICE = one_of(SHARED, OWN)
 
 BOOK_KEYS = {"title": TEXT, "author": TEXT, "start_year": YEAR, "source": TEXT, "base_edition": TEXT}
 EDITION_REQUIRED = {"pages": TABLE}
@@ -71,8 +75,10 @@ EDITION_OPTIONAL = {"title": TEXT, "subtitle": TEXT, "editors": TEXTS, "cover_im
                     "imprint": TEXT, "before_songs": TEXTS, "after_contents": TEXTS,
                     ALL: TRUE, SONGS: TEXTS, ARTISTS: TEXTS, PRINT_TABLE: TABLE}
 PAGE_KEYS = {page: PAGE_CHOICE for page in PAGES}
-PRINT_KEYS = {"spine_margin_mm": MILLIMETRES, "outer_margin_mm": MILLIMETRES,
-              "skip_first_pages": EVEN_COUNT, "crop_marks": BOOLEAN}
+PRINT_KEYS = {BLOCK_TABLE: TABLE}
+BLOCK_KEYS = {"paper": one_of(*PAPERS), "ink": one_of(COLOUR_INK, BLACK_INK), "colour": one_of(RGB, CMYK),
+              "profile": TEXT, "cover": BOOLEAN, "crop_marks": BOOLEAN, "bleed_mm": MILLIMETRES,
+              "spine_margin_mm": MILLIMETRES, "outer_margin_mm": MILLIMETRES}
 
 
 class EditionError(Exception):
@@ -95,12 +101,23 @@ class Book:
 
 
 @dataclass(frozen=True)
+class BlockSettings:
+    """The book's pages for the printer: the [print.block] table, each key with its default."""
+    paper: str = A4
+    ink: str = COLOUR_INK        # black: everything in black ink only, the chords and scores too
+    colour: str = RGB            # with colour ink: CMYK converts the colours with `profile`
+    profile: str = FOGRA39       # FOGRA39, or the path of a .icc file from the repository root
+    cover: bool = True           # the book's own cover and its back start the block
+    crop_marks: bool = False
+    bleed_mm: float = 0          # the bleed box beyond the trim; nothing of the block reaches it
+    spine_margin_mm: float = 0   # no ink closer to the bound edge of the trimmed page
+    outer_margin_mm: float = 0   # nor to its outer edge
+
+
+@dataclass(frozen=True)
 class PrintSettings:
-    """What the printer of an edition needs: the [print] table of its edition.toml."""
-    spine_margin_mm: float
-    outer_margin_mm: float
-    skip_first_pages: int
-    crop_marks: bool
+    """What a printer gets of an edition: the [print] table of its edition.toml."""
+    block: BlockSettings = BlockSettings()
 
 
 @dataclass(frozen=True)
@@ -128,7 +145,7 @@ class Edition:
     before_songs: tuple[str, ...]
     after_contents: tuple[str, ...]
     selection: Selection
-    printing: PrintSettings | None  # the [print] table: what the edition's printer needs
+    printing: PrintSettings         # the [print] table: what a printer gets
 
     def select(self, songs: Iterable[Song]) -> list[Song]:
         """The edition's songs, in the order given."""
@@ -150,11 +167,20 @@ def key_errors(table: dict, required: dict[str, Kind], optional: dict[str, Kind]
     return errors
 
 
-def table_errors(table: dict, key: str, keys: dict[str, Kind]) -> list[str]:
+def table_errors(table: dict, key: str, required: dict[str, Kind], optional: dict[str, Kind]) -> list[str]:
     """The problems of a table of the edition file, if it has one, each prefixed with its key."""
     if key not in table or not TABLE.accepts(table[key]):
         return []
-    return [f"{key}: {error}" for error in key_errors(table[key], keys, {})]
+    return [f"{key}: {error}" for error in key_errors(table[key], required, optional)]
+
+
+def print_table_errors(table: dict) -> list[str]:
+    """The problems of the keys of the [print] table and of its [print.block] table."""
+    printing = table.get(PRINT_TABLE)
+    if not TABLE.accepts(printing):
+        return []
+    return (table_errors(table, PRINT_TABLE, {}, PRINT_KEYS)
+            + [f"{PRINT_TABLE}.{error}" for error in table_errors(printing, BLOCK_TABLE, {}, BLOCK_KEYS)])
 
 
 def edition_folder(name: str) -> Path:
@@ -257,7 +283,7 @@ def read_edition(root: Path, name: str, book: Book, songs: list[Song], slugs: se
         raise EditionError(where, ["no such file"])
     table = read_toml(root / where)
     errors = key_errors(table, EDITION_REQUIRED, EDITION_OPTIONAL)
-    errors += table_errors(table, "pages", PAGE_KEYS) + table_errors(table, PRINT_TABLE, PRINT_KEYS)
+    errors += table_errors(table, "pages", PAGE_KEYS, {}) + print_table_errors(table)
     if errors:
         raise EditionError(where, errors)
 
@@ -273,7 +299,7 @@ def read_edition(root: Path, name: str, book: Book, songs: list[Song], slugs: se
         before_songs=reader.listed_files("before_songs"),
         after_contents=reader.listed_files("after_contents"),
         selection=reader.selection({song.id for song in songs}, slugs),
-        printing=print_settings(table),
+        printing=print_settings(root, edition_folder(name), table, reader.errors),
     )
     reader.errors += reader.unreferenced()
     if not reader.errors and not edition.select(songs):
@@ -283,24 +309,49 @@ def read_edition(root: Path, name: str, book: Book, songs: list[Song], slugs: se
     return edition
 
 
-def read_print_settings(root: Path, name: str) -> PrintSettings | None:
-    """The [print] table of an edition, validated; None if the edition has none. The rest of the
-    file is read_edition's (and the lint's): the A5 step needs only this table."""
+def read_print_settings(root: Path, name: str) -> PrintSettings:
+    """The [print] table of an edition, validated, with the defaults of what it leaves out. The
+    rest of the file is read_edition's (and the lint's): the print step needs only this table."""
     where = edition_file(name)
     if not (root / where).is_file():
         raise EditionError(where, ["no such file"])
     table = read_toml(root / where)
     if PRINT_TABLE in table and not TABLE.accepts(table[PRINT_TABLE]):
         raise EditionError(where, [f"'{PRINT_TABLE}' must be {TABLE.description}"])
-    errors = table_errors(table, PRINT_TABLE, PRINT_KEYS)
+    errors = print_table_errors(table)
     if errors:
         raise EditionError(where, errors)
-    return print_settings(table)
+    settings = print_settings(root, edition_folder(name), table, errors)
+    if errors:
+        raise EditionError(where, errors)
+    return settings
 
 
-def print_settings(table: dict) -> PrintSettings | None:
-    """The [print] table of a validated edition file, or None if it has none."""
-    return PrintSettings(**table[PRINT_TABLE]) if PRINT_TABLE in table else None
+def print_settings(root: Path, folder: Path, table: dict, errors: list[str]) -> PrintSettings:
+    """The settings of a [print] table whose keys are valid; what does not go together is added
+    to `errors`."""
+    block = dict(table.get(PRINT_TABLE, {}).get(BLOCK_TABLE, {}))
+    where = f"{PRINT_TABLE}.{BLOCK_TABLE}"
+    if block.get("ink", COLOUR_INK) == BLACK_INK and "colour" in block:
+        errors.append(f"{where}: 'colour' goes with ink = \"{COLOUR_INK}\": black ink is black ink only")
+    if block.get("colour", RGB) == RGB and "profile" in block:
+        errors.append(f"{where}: 'profile' goes with colour = \"{CMYK}\"")
+    if block.get("crop_marks", False) and block.get("bleed_mm", 0) > CROP_MARK_ROOM_MM:
+        errors.append(f"{where}: a bleed_mm of {block['bleed_mm']} does not fit the {CROP_MARK_ROOM_MM} mm "
+                      "around the page for the crop marks")
+    if block.get("profile", FOGRA39) != FOGRA39:
+        block["profile"] = str(profile_path(root, folder, block["profile"], where, errors))
+    return PrintSettings(block=BlockSettings(**block))
+
+
+def profile_path(root: Path, folder: Path, reference: str, where: str, errors: list[str]) -> PurePosixPath:
+    """A colour profile the edition names: a .icc file of the repository, written relative to the
+    edition's folder; the path from the root."""
+    path = repo_path(folder, reference)
+    if path.suffix != PROFILE_SUFFIX or not (root / path).is_file():
+        errors.append(f"{where}: 'profile' must be {FOGRA39} or a {PROFILE_SUFFIX} file of the repository, "
+                      f"not {reference}")
+    return path
 
 
 def edition_names(root: Path) -> list[str]:

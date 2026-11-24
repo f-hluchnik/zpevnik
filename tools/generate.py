@@ -83,6 +83,11 @@ def version(song_count: int, patch: str) -> str:
     return f"{n // 100}.{n % 100:02d}.{patch}"
 
 
+def current_version(root: Path) -> str:
+    """The version of a build of the checkout at root."""
+    return version(len(song_paths(root)), build_patch(root))
+
+
 def generated_files(entries: list[dict], songs: list[Song], book: Book, edition: Edition,
                     book_version: str) -> dict[Path, str]:
     """The text of every generated file of the edition, by its path in generated/.
@@ -156,7 +161,7 @@ def main() -> int:
                         help="print the version of the release before the song count last changed and exit")
     args = parser.parse_args()
     if args.version:
-        print(version(len(song_paths(args.root)), build_patch(args.root)))
+        print(current_version(args.root))
         return 0
     if args.previous_version:
         return print_previous_version(args.root)

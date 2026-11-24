@@ -8,7 +8,8 @@ the old, and git keeps the history. The record of the 2026 refactoring (its deci
 plans, tickets and phases) is frozen in [archive/](archive/README.md), for reference only.
 
 Related: [README.md](../README.md) (in Czech: setup, writing songs, commands),
-[tools/README.md](../tools/README.md) (every tool), and the `zpevnik-web` README (the website).
+[printing.md](printing.md) (printing an edition), [tools/README.md](../tools/README.md) (every
+tool), and the `zpevnik-web` README (the website).
 
 ## The parts
 
@@ -17,7 +18,7 @@ Three kinds of thing, kept apart:
 | Kind | Where | Rule |
 |---|---|---|
 | **Source** | `songs/`, `data/`, `editions/`, `scores/`, `shared-pages/`, `zpevnik.tex`, `zpevnik.sty` | The only things a person edits. |
-| **Build output** | `build/` | Made by `make`, never committed, safe to delete (`make clean`). |
+| **Build output** | `build/` | Made by `make`, never committed, safe to delete (`make clean`). What a printer gets is in `build/print/`. |
 | **Release** | GitHub release `v<version>` | What the website uses: one PDF per edition, `songs.json`, `scores.zip`. |
 
 ```
@@ -90,19 +91,34 @@ Every book is an edition: `editions/<name>/edition.toml`, the full book too (`ed
 
 ## Print
 
-The book is typeset on A4. For a printer, `tools/print_pdf.py` scales the pages of the `print`
-or `print-black` format onto A5 as the edition's `[print]` table asks:
+`make print EDITION=<e>` makes the book block for the edition's printer, as the `[print.block]`
+table of its `edition.toml` asks ([printing.md](printing.md) lists the keys).
+Every key has a default, so every edition can be printed. The block goes to
+`build/print/<e>/zpevnik-<e>-<version>-blok.pdf`; the printer gets nothing from anywhere else.
 
+- **One build, a few switches.** The book is typeset on A4 in a format (`tools/formats.py`)
+  that follows from the table: `print-black` (black ink), `print` (colour, RGB) or `print-cmyk`.
+  It is checked like `make check` checks the screen PDF, then placed on the paper by a small
+  pdfpages document (`tools/print_pdf.py`). The page size never changes in TeX, so a song fits
+  its page in every format.
 - **Margins on the ink:** every page is rendered at 300 dpi and its ink measured; the largest
   scale and the shift away from the spine that keep both margins on every page are computed
-  (`tools/print_layout.py`), never more than A4 to A5, so a song still fits its page. The
-  finished PDF is measured again.
-- **Crop marks** (the `crop` package) on a page with 15 mm round the A5 trim; the PDF names the
-  trim box. The book block has no bleed: nothing is printed to the edge.
-- **One ink:** a black-ink book is checked with Ghostscript's ink coverage on every page.
-- **Page numbers** on paper count from the first page of the printer's block.
-- The cover of `skaut-kravare` is built by hand from `editions/skaut-kravare/print-cover/`
-  (its README). It is being moved into the build, configured from `edition.toml` like the block.
+  (`tools/print_layout.py`), never above the paper's own (1 for A4, 1/√2 for A5). The finished
+  PDF is measured again, against its exact trim box.
+- **The page:** crop marks (the `crop` package) on a page with 15 mm round the trim, or the
+  bleed alone; the PDF names the trim box and the bleed box.
+- **CMYK without converting the PDF.** Only the chords have a colour. Their red is converted
+  once with the edition's profile (FOGRA39 from TeX Live by default) by littleCMS through Pillow
+  (`tools/colours.py`) and typeset as a CMYK colour; the scores use their black-ink images.
+  Converting the finished PDF with Ghostscript was rejected: its PDF writer ignores the profile it
+  is given and uses its own.
+- **Black ink** is checked with Ghostscript's ink coverage on every page; a black-ink or CMYK
+  block may hold no RGB image, and every font must be embedded.
+- **The cover:** `cover = false` leaves the book's cover and its back out of the block at TeX
+  level (`\zpprintwithoutcover`), so the pages count from the half-title as in a printed book.
+  The cover of `skaut-kravare` is built by hand from `editions/skaut-kravare/print-cover/` (its
+  README). It is being moved into `make print`, configured by a `[print.cover]` table like the
+  block.
 
 ## Version and release
 
@@ -151,7 +167,7 @@ unless that string is a contract.
 ## Conventions
 
 - **Tools:** Python 3.11+, standard library only. The tests and the check of `songs.json` also
-  use `jsonschema` (`requirements-dev.txt`).
+  use `jsonschema`, and a CMYK print Pillow (`requirements-dev.txt`).
 - **Language:** code, comments, commits and these docs in English; the README in Czech.
 - **Changes** reach `master` only through a pull request. Its description states the *expected*
   differences of the PDFs and the *actual* ones the CI diff shows.

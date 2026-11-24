@@ -1,6 +1,6 @@
 # Tools
 
-The Python tools that generate, build and check the songbook: Python 3.11 or newer, standard library only; the tests and `validate_songs_json.py` also need `jsonschema` from `requirements-dev.txt` (setup in the main README, *Nastavení lokální kopie*). They run from the repository root. This page says what each module is for and who runs it; how it works is in the module's docstring, and every command prints its options with `--help`.
+The Python tools that generate, build and check the songbook: Python 3.11 or newer, standard library only; the tests and `validate_songs_json.py` also need `jsonschema`, and a print in CMYK Pillow, from `requirements-dev.txt` (setup in the main README, *Nastavení lokální kopie*). They run from the repository root. This page says what each module is for and who runs it; how it works is in the module's docstring, and every command prints its options with `--help`.
 
 ## Commands, run through `make`
 
@@ -9,10 +9,10 @@ You normally run these through `make` (the main README, *Příkazy*); each also 
 | Module | Run by | What it does |
 |---|---|---|
 | `generate.py` | `make`, `make generate` | Writes the generated TeX of an edition (song list, contents, artist index, version, front matter) into `build/editions/<edition>/generated/`. `--version` prints the songbook version. |
-| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. Chord names are drawn with the songbook's chord list `scores/chords_zpevnik.xml`, so that B-flat prints as B. For the print in one ink (`--format print-black`) it also makes each image in black ink only. |
+| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. Chord names are drawn with the songbook's chord list `scores/chords_zpevnik.xml`, so that B-flat prints as B. For the print formats whose scores are black (`--format print-black`, `print-cmyk`) it also makes each image in black ink only. |
 | `build_edition.py` | `make` | Compiles an edition with latexmk and prints the path of its PDF. CI also uses `--list` to find the editions. |
 | `build_song.py` | `make song SONG=<id>` | Compiles one song alone into `build/songs/<id>.pdf`, the way Overleaf would. |
-| `print_pdf.py` | `make FORMAT=print SIZE=A5` | Places an edition's print format on A5 for its printer, as the `[print]` table of its `edition.toml` asks (margins, pages left out, crop marks), and checks the result: the margins of the ink measured on every rendered page, the page count and, in one ink, that every page is black ink only. |
+| `print_pdf.py` | `make print` | Places an edition's print format on the printer's paper as the `[print.block]` table of its `edition.toml` asks (paper, margins, crop marks, bleed; [docs/printing.md](../docs/printing.md)), checks the result (the boxes, the margins of the ink on every rendered page, the page count, embedded fonts, black ink alone or no RGB image) and copies it to `build/print/<edition>/`. `--block-format` tells the Makefile which format to build. |
 | `lint.py` | `make check` | Checks the songs, the artists registry, the edition definitions and the lists in `data/`. Errors fail, warnings are only listed. |
 | `convert.py` | `make check` | Reads every song with the converter (`songbook/`) and fails on anything it does not accept, with the file and line. `--song <id>` prints the model of one song as JSON. |
 | `songs_json.py` | `make json` | Writes `build/songs.json` for the website: the full book's published songs in book order with their pages, the contents and the artists. Needs the built full book, which `make json` builds first. |
@@ -41,9 +41,10 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 | `registry.py` | The artists registry (`data/artists.toml`): loading, defaults and validation. |
 | `edition.py` | The book facts (`data/book.toml`) and the editions (`editions/<name>/edition.toml`): reading, validation and the song selection. |
 | `edition_tex.py` | The generated TeX of an edition's front matter. |
-| `formats.py` | The output formats (`screen`, `print`, `print-black`) and the `--format` argument. The Makefile chooses one from its `FORMAT` and `CHORDS`. |
-| `print_layout.py` | Where the book's pages go on the printer's A5 page: the scale and the shift away from the spine that keep the printer's margins. |
-| `pdf_programs.py` | What the tools read from a finished PDF and do with it through poppler and Ghostscript: page boxes, rendered pages and where their ink is, ink coverage, conversion to grey. |
+| `formats.py` | The output formats (`screen`, `print`, `print-black`, `print-cmyk`) and the `--format` argument. `make print` chooses one from the edition's `[print.block]` table. |
+| `colours.py` | The chords' red in the printer's CMYK: the colour profile (FOGRA39 from TeX Live, or the edition's `.icc` file) and the conversion by littleCMS through Pillow. |
+| `print_layout.py` | The papers (A4, A5) and where the book's pages go on them: the scale and the shift away from the spine that keep the printer's margins. |
+| `pdf_programs.py` | What the tools read from a finished PDF and do with it through poppler and Ghostscript: page boxes, fonts, images, rendered pages and where their ink is, ink coverage, conversion to grey. |
 | `letter_toc.py` | The letter part of the contents. |
 | `artist_toc.py` | The artist part of the contents. |
 | `collation.py` | The Czech collation of song titles. |

@@ -1,6 +1,7 @@
 """What the tools ask of a finished PDF, through poppler and Ghostscript.
 
 - pdfinfo (poppler): the page count and the page boxes of the first page;
+- pdffonts and pdfimages (poppler): the fonts that are not embedded, and the colour of every image;
 - pdftoppm (poppler): a page rendered in shades of grey, to measure where its ink is: letters,
   scores and lines alike, as the printer's margins count them;
 - Ghostscript's inkcov device: how much of each ink (cyan, magenta, yellow, black) every page
@@ -11,6 +12,7 @@
 Every function raises PdfProgramError with a message that says what to install or what failed.
 Python >= 3.11, standard library only.
 """
+import math
 import re
 import subprocess
 from collections.abc import Iterator
@@ -19,14 +21,23 @@ from pathlib import Path
 
 PDFINFO = "pdfinfo"
 PDFTOPPM = "pdftoppm"
+PDFFONTS = "pdffonts"
+PDFIMAGES = "pdfimages"
 GHOSTSCRIPT = "gs"
-INSTALL_HINTS = {PDFINFO: "install poppler", PDFTOPPM: "install poppler", GHOSTSCRIPT: "install Ghostscript"}
+INSTALL_HINTS = {PDFINFO: "install poppler", PDFTOPPM: "install poppler", PDFFONTS: "install poppler",
+                 PDFIMAGES: "install poppler", GHOSTSCRIPT: "install Ghostscript"}
 SETUP_HINT = "(README, Nastavení lokální kopie)"
 
 PAGES_LINE = re.compile(r"^Pages:\s+(\d+)$", re.M)
 NUMBER = r"(-?[\d.]+)"
-BOX_LINE = re.compile(rf"^(MediaBox|TrimBox):\s+{NUMBER}\s+{NUMBER}\s+{NUMBER}\s+{NUMBER}$", re.M)
-MEDIA_BOX, TRIM_BOX = "MediaBox", "TrimBox"
+BOX_LINE = re.compile(rf"^(MediaBox|BleedBox|TrimBox):\s+{NUMBER}\s+{NUMBER}\s+{NUMBER}\s+{NUMBER}$", re.M)
+MEDIA_BOX, BLEED_BOX, TRIM_BOX = "MediaBox", "BleedBox", "TrimBox"
+# pdffonts and pdfimages print a table: two header lines, then a row per font or image. A font's
+# name and type may hold spaces, so its "emb" column is counted from the end of the row.
+TABLE_HEADER_LINES = 2
+FONT_EMBEDDED_COLUMN = -5
+EMBEDDED = "yes"
+IMAGE_PAGE_COLUMN, IMAGE_COLOUR_COLUMN = 0, 5
 POINTS_PER_INCH = 72
 # A binary greymap as pdftoppm -gray writes it: "P5", width, height, the largest value, then a
 # byte per pixel, row after row.
@@ -84,7 +95,8 @@ class InkColumns:
 @dataclass(frozen=True)
 class PageBoxes:
     media: Box
-    trim: Box  # the page after the cut; the media box itself if the PDF names no trim box
+    trim: Box   # the page after the cut; the media box itself if the PDF names no trim box
+    bleed: Box  # how far beyond the cut the printing may reach; the media box if the PDF names none
 
 
 @dataclass(frozen=True)
@@ -127,16 +139,32 @@ def page_count(info: str) -> int:
 
 
 def page_boxes(info: str) -> PageBoxes:
-    """The media and trim box from the output of pdfinfo -box (the first page's)."""
+    """The media, bleed and trim box from the output of pdfinfo -box (the first page's)."""
     boxes = {match.group(1): Box(*map(float, match.groups()[1:])) for match in BOX_LINE.finditer(info)}
-    if MEDIA_BOX not in boxes or TRIM_BOX not in boxes:
-        raise PdfProgramError(f"{PDFINFO} -box did not report the media box and the trim box")
-    return PageBoxes(media=boxes[MEDIA_BOX], trim=boxes[TRIM_BOX])
+    if not {MEDIA_BOX, BLEED_BOX, TRIM_BOX} <= boxes.keys():
+        raise PdfProgramError(f"{PDFINFO} -box did not report the media, bleed and trim boxes")
+    return PageBoxes(media=boxes[MEDIA_BOX], trim=boxes[TRIM_BOX], bleed=boxes[BLEED_BOX])
 
 
 def pdfinfo(pdf: Path) -> str:
     """pdfinfo's report with the page boxes of the first page."""
     return run([PDFINFO, "-box", str(pdf)])
+
+
+def table_rows(output: str) -> list[list[str]]:
+    """The rows of a table pdffonts or pdfimages printed, split into columns."""
+    return [line.split() for line in output.splitlines()[TABLE_HEADER_LINES:] if line.strip()]
+
+
+def unembedded_fonts(pdf: Path) -> list[str]:
+    """The names of the fonts the PDF uses without embedding them."""
+    return [row[0] for row in table_rows(run([PDFFONTS, str(pdf)])) if row[FONT_EMBEDDED_COLUMN] != EMBEDDED]
+
+
+def image_colours(pdf: Path) -> list[tuple[int, str]]:
+    """The page and the colour space (gray, rgb, cmyk, ...) of every image of the PDF."""
+    return [(int(row[IMAGE_PAGE_COLUMN]), row[IMAGE_COLOUR_COLUMN])
+            for row in table_rows(run([PDFIMAGES, "-list", str(pdf)]))]
 
 
 def greymap(data: bytes) -> Greymap:
@@ -163,12 +191,24 @@ def ink_columns(page: Greymap) -> InkColumns | None:
     return InkColumns(first, last) if last >= 0 else None
 
 
+def pixel_span(start: float, end: float, scale: float) -> tuple[int, int]:
+    """The first pixel and the number of whole pixels that cover start to end (in pt) at the scale."""
+    first = math.floor(start * scale)
+    return first, math.ceil(end * scale) - first
+
+
+def rendered_left(area: Box, dpi: int) -> float:
+    """Where the left edge of a page rendered by render_page is, in pt from the page's left edge."""
+    return pixel_span(area.left, area.right, dpi / POINTS_PER_INCH)[0] * POINTS_PER_INCH / dpi
+
+
 def render_page(pdf: Path, page: int, dpi: int, area: Box, page_height: float) -> Greymap:
-    """One page in shades of grey at `dpi`, only the area of it (a box of the page, in pt)."""
+    """One page in shades of grey at `dpi`, only the whole pixels that cover the area (a box of the
+    page, in pt): its left edge is at rendered_left, up to a pixel left of the area's."""
     scale = dpi / POINTS_PER_INCH
-    crop = {"-x": area.left * scale, "-y": (page_height - area.top) * scale,
-            "-W": area.width * scale, "-H": area.height * scale}
-    options = [str(part) for option, pixels in crop.items() for part in (option, round(pixels))]
+    x, width = pixel_span(area.left, area.right, scale)
+    y, height = pixel_span(page_height - area.top, page_height - area.bottom, scale)
+    options = ["-x", str(x), "-y", str(y), "-W", str(width), "-H", str(height)]
     pages = ["-f", str(page), "-l", str(page)]
     # Without an output name, pdftoppm writes the one page to its standard output.
     return greymap(run_binary([PDFTOPPM, "-gray", "-r", str(dpi), *options, *pages, "-singlefile", str(pdf)]))
