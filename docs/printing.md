@@ -18,6 +18,11 @@ They go to `build/print/<edition>/`, named with the edition and the version:
 Each `make print` empties the folder first, so it holds exactly what the printer gets. Without the
 full Git history the build number is unknown and the names have `x` in its place (`8.49.x`).
 
+CI runs `make print` for every edition with a `[print]` table, so a change that breaks printing
+fails its pull request. It keeps the files for 30 days as the `printer-files` artifact of the run
+(the run's page on GitHub, *Artifacts*). Send the printer the files of the run of the merged
+commit: they are built by the reference TeX Live, the same as the released PDFs.
+
 ## What `make print` does
 
 1. Reads the edition's `[print]` table and chooses the format the book is typeset in
