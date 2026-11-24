@@ -1,6 +1,6 @@
 # Phase 7 tickets: converter and `songs.json` (done 8–12 Nov 2026)
 
-The ticket texts and status rows as they were when the work ended: the song quirks and structure, the converter, `songs.json`, its schema, the release assets and the scores. Summary: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows as they were when the work ended: the song quirks and structure, the converter, `songs.json`, its schema, the release assets and the scores. Summary: [HISTORY.md](../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

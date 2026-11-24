@@ -33,7 +33,7 @@ SINGLE_SONG_TEMPLATE = Path("tests/single-song.tex")
 STYLE_FILE = Path("zpevnik.sty")
 SCORES_DIR = Path("scores")              # MuseScore sources, one .mscz per image
 SCORE_STYLE = SCORES_DIR / "zpevnik.mss"  # shared MuseScore style, applied on every export
-SCORE_CHORD_LIST = SCORES_DIR / "chords_zpevnik.xml"  # how the export draws chord names (D-190)
+SCORE_CHORD_LIST = SCORES_DIR / "chords_zpevnik.xml"  # how the export draws chord names
 
 # Everything derived lives under one root (gitignored), deleted by `make clean`.
 BUILD_DIR = Path("build")
@@ -41,7 +41,7 @@ SCORE_OUTPUT_DIR = BUILD_DIR / "scores"  # <name>.svg (web), .pdf (pdfLaTeX), .t
 SONG_BUILD_DIR = BUILD_DIR / "songs"     # make song: <id>.pdf
 EDITION_BUILD_DIR = BUILD_DIR / "editions"
 SONGS_JSON_FILE = BUILD_DIR / "songs.json"  # the songs of the full book for the website (songs_json.py)
-SONGS_SCHEMA_FILE = Path("tools/songs.schema.json")  # the schema of songs.json, the contract (D-165)
+SONGS_SCHEMA_FILE = Path("tools/songs.schema.json")  # the schema of songs.json, the contract
 RELEASE_DIR = BUILD_DIR / "release"      # the PDFs of a release under their asset names (release.py)
 DEFAULT_EDITION = "full"
 

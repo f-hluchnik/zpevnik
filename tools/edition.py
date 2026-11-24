@@ -6,8 +6,8 @@ are its own (`editions/<name>/<page>.tex`); it can add an imprint fragment and p
 before the songs and after the contents. `read_book` and `read_edition` validate the
 files and report every problem at once in an `EditionError`.
 
-An edition that goes to a printer says what the printer needs in a `[print]` table
-(D-188), which `read_print_settings` reads for the A5 step (print_pdf.py):
+An edition that goes to a printer says what the printer needs in a `[print]` table,
+which `read_print_settings` reads for the A5 step (print_pdf.py):
 
   [print]
   spine_margin_mm = 12.5   # no letter closer to the bound edge
@@ -37,7 +37,7 @@ COVER, HALFTITLE, TITLEPAGE = "cover", "halftitle", "titlepage"
 PAGES = (COVER, HALFTITLE, TITLEPAGE)  # the replaceable pages, each shared or own
 TEX_SUFFIX = ".tex"
 ALL, SONGS, ARTISTS = "all", "songs", "artists"  # the selection keys of edition.toml
-PRINT_TABLE = "print"  # the printer's requirements (D-188)
+PRINT_TABLE = "print"  # the printer's requirements
 EDITION_NAME = re.compile(r"[a-z0-9][a-z0-9-]*")  # used in paths and in file names
 EDITION_FILE_DEPTH = len(("editions", "<name>", "<file>.tex"))  # no subfolders: see build_edition.py
 

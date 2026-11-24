@@ -1,4 +1,4 @@
-"""The songs in songs/*.tex, read by the converter (tools/songbook/, D-164).
+"""The songs in songs/*.tex, read by the converter (tools/songbook/).
 
 The converter is the one reader of the song files: every tool that needs a song's
 title, artists, collections or scores takes them from its model (`songbook.Song`).

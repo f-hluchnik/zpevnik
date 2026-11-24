@@ -4,7 +4,7 @@
 The book is typeset on A4 (zpevnik.tex). The printer gets the same pages, vector and with every
 font embedded, scaled down and placed on A5 by a small LaTeX document of pdfpages
 (`zpevnik-a5.tex`, written next to the PDF it scales), so nothing but TeX Live is needed for it.
-The edition's `[print]` table (edition.toml, D-188) says what the printer needs:
+The edition's `[print]` table (edition.toml) says what the printer needs:
 
 - the margins: no letter closer than `spine_margin_mm` to the bound edge and `outer_margin_mm`
   to the outer edge. Every page of the A4 PDF is rendered at 300 dpi and its ink measured

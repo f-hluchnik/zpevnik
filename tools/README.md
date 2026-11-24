@@ -9,18 +9,18 @@ You normally run these through `make` (the main README, *Příkazy*); each also 
 | Module | Run by | What it does |
 |---|---|---|
 | `generate.py` | `make`, `make generate` | Writes the generated TeX of an edition (song list, contents, artist index, version, front matter) into `build/editions/<edition>/generated/`. `--version` prints the songbook version. |
-| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. Chord names are drawn with the songbook's chord list `scores/chords_zpevnik.xml`, so that B-flat prints as B (D-190). For the print in one ink (`--format print-black`) it also makes each image in black ink only (D-188). |
+| `scores.py` | `make`, `make scores` | Exports the MuseScore scores (`scores/*.mscz`) as images into `build/scores/`, skipping those that are up to date. Chord names are drawn with the songbook's chord list `scores/chords_zpevnik.xml`, so that B-flat prints as B. For the print in one ink (`--format print-black`) it also makes each image in black ink only. |
 | `build_edition.py` | `make` | Compiles an edition with latexmk and prints the path of its PDF. CI also uses `--list` to find the editions. |
 | `build_song.py` | `make song SONG=<id>` | Compiles one song alone into `build/songs/<id>.pdf`, the way Overleaf would. |
-| `print_pdf.py` | `make FORMAT=print SIZE=A5` | Places an edition's print format on A5 for its printer, as the `[print]` table of its `edition.toml` asks (margins, pages left out, crop marks), and checks the result: the margins of the ink measured on every rendered page, the page count and, in one ink, that every page is black ink only (D-185, D-188). |
+| `print_pdf.py` | `make FORMAT=print SIZE=A5` | Places an edition's print format on A5 for its printer, as the `[print]` table of its `edition.toml` asks (margins, pages left out, crop marks), and checks the result: the margins of the ink measured on every rendered page, the page count and, in one ink, that every page is black ink only. |
 | `lint.py` | `make check` | Checks the songs, the artists registry, the edition definitions and the lists in `data/`. Errors fail, warnings are only listed. |
 | `convert.py` | `make check` | Reads every song with the converter (`songbook/`) and fails on anything it does not accept, with the file and line. `--song <id>` prints the model of one song as JSON. |
-| `songs_json.py` | `make json` | Writes `build/songs.json` for the website (D-165): the full book's published songs in book order with their pages, the contents and the artists. Needs the built full book, which `make json` builds first. |
-| `validate_songs_json.py` | `make json`, CI | Checks the whole `build/songs.json` against `songs.schema.json` and prints where it breaks the contract (D-166). The only tool that needs `jsonschema`. |
-| `songs.schema.json` | the tests, `validate_songs_json.py` | The JSON Schema of `songs.json`, the contract with the website (D-165). A change of the shape changes it and `SCHEMA_VERSION` in `songs_json.py` in the same PR. |
+| `songs_json.py` | `make json` | Writes `build/songs.json` for the website: the full book's published songs in book order with their pages, the contents and the artists. Needs the built full book, which `make json` builds first. |
+| `validate_songs_json.py` | `make json`, CI | Checks the whole `build/songs.json` against `songs.schema.json` and prints where it breaks the contract. The only tool that needs `jsonschema`. |
+| `songs.schema.json` | the tests, `validate_songs_json.py` | The JSON Schema of `songs.json`, the contract with the website. A change of the shape changes it and `SCHEMA_VERSION` in `songs_json.py` in the same PR. |
 | `check_pages.py` | `make check`, after the build | Fails if a song takes more than one page, unless `data/multipage-allowlist.txt` lists it. |
 | `chord_gaps.py` | `make check`, after the build | Fails if two chords on the same line overlap or a chord runs into the margin. |
-| `song_lines.py` | `make check`, after the build | Fails if a line of a song wrapped (one line of the source printed as more) or runs into the margin (D-183). |
+| `song_lines.py` | `make check`, after the build | Fails if a line of a song wrapped (one line of the source printed as more) or runs into the margin. |
 
 ## Commands, run by CI
 
@@ -29,7 +29,7 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 | Module | Run by | What it does |
 |---|---|---|
 | `pdfdiff.py` | CI, pull requests | Compares the PDF of every edition with the PDF before the change, song by song and page by page; the result goes to the run summary. Locally it needs two built checkouts (`--base`, `--head`). |
-| `release.py` | CI, every build; the release only on push to `master` | Copies each edition's PDF under its release asset name into `build/release/`, adds `songs.json` and `scores.zip` (the score SVGs) for the website (D-166), and prints the editions part of the release notes. |
+| `release.py` | CI, every build; the release only on push to `master` | Copies each edition's PDF under its release asset name into `build/release/`, adds `songs.json` and `scores.zip` (the score SVGs) for the website, and prints the editions part of the release notes. |
 
 ## Library modules, never run directly
 
@@ -37,18 +37,18 @@ These are run by `.github/workflows/build-and-publish.yml`. You run them yoursel
 |---|---|
 | `paths.py` | Where things live in the repository, and the `--edition` and `repo-root` arguments the commands share. |
 | `positions.py` | The positions TeX records for the checks (`chord_gaps.py`, `song_lines.py`): sp per pt and their rounding. |
-| `songs.py` | Reading `songs/*.tex` with the converter (`songbook/`, the one reader of the songs, D-164); `published()` leaves the hidden songs out. |
+| `songs.py` | Reading `songs/*.tex` with the converter (`songbook/`, the one reader of the songs); `published()` leaves the hidden songs out. |
 | `registry.py` | The artists registry (`data/artists.toml`): loading, defaults and validation. |
 | `edition.py` | The book facts (`data/book.toml`) and the editions (`editions/<name>/edition.toml`): reading, validation and the song selection. |
 | `edition_tex.py` | The generated TeX of an edition's front matter. |
-| `formats.py` | The output formats (`screen`, `print`, `print-black`) and the `--format` argument. The Makefile chooses one from its `FORMAT` and `CHORDS` (D-185). |
-| `print_layout.py` | Where the book's pages go on the printer's A5 page: the scale and the shift away from the spine that keep the printer's margins (D-188). |
+| `formats.py` | The output formats (`screen`, `print`, `print-black`) and the `--format` argument. The Makefile chooses one from its `FORMAT` and `CHORDS`. |
+| `print_layout.py` | Where the book's pages go on the printer's A5 page: the scale and the shift away from the spine that keep the printer's margins. |
 | `pdf_programs.py` | What the tools read from a finished PDF and do with it through poppler and Ghostscript: page boxes, rendered pages and where their ink is, ink coverage, conversion to grey. |
 | `letter_toc.py` | The letter part of the contents. |
 | `artist_toc.py` | The artist part of the contents. |
 | `collation.py` | The Czech collation of song titles. |
 | `tex_text.py` | Escaping plain text as TeX. |
-| `songbook/` | The converter (D-164): reads a song into an in-memory model, strictly. A package: `lexer`, `stream`, `grammar` (every command a song may use), `parser` (the song level), `inline` (lines, chords, text), `chords`, `model`, `dump` (the model as JSON for reading and snapshots), `export` (a song in the shape of songs.json), `errors`. |
+| `songbook/` | The converter: reads a song into an in-memory model, strictly. A package: `lexer`, `stream`, `grammar` (every command a song may use), `parser` (the song level), `inline` (lines, chords, text), `chords`, `model`, `dump` (the model as JSON for reading and snapshots), `export` (a song in the shape of songs.json), `errors`. |
 | `allowlist.py` | Reading a list of song ids (`data/hidden.txt`, `data/multipage-allowlist.txt`, `data/no-chords-allowlist.txt`). |
 | `build_version.py` | The patch number of the version, and the release before the last change of the song count (the website's comparison), both from the Git history. |
 
@@ -63,6 +63,6 @@ python3 -m unittest discover -s tools                     # all of them
 python3 -m unittest discover -s tools -p test_lint.py     # one file
 ```
 
-What deserves a test is decided in `docs/DECISIONS.md` (D-159). `tests/test_readme.py` checks that this page lists every module and package of `tools/`, so a new one needs a row here. `tests/songbook_snapshots/` holds the songs the converter's snapshot tests read, frozen, with the expected model.
+What deserves a test is in [docs/architecture.md](../docs/architecture.md) (*Checks*). `tests/test_readme.py` checks that this page lists every module and package of `tools/`, so a new one needs a row here. `tests/songbook_snapshots/` holds the songs the converter's snapshot tests read, frozen, with the expected model.
 
 The LaTeX tests of `zpevnik.sty` are a different thing: they live in the top-level `tests/` and CI runs them through `tests/single-song.sh`.

@@ -1,6 +1,6 @@
 # How it works: one song, from file to screen
 
-A map of the whole system for its owner, and a trace of one real song through it: `songs/folsomprisonblues.tex`. Read this first; the other docs say *what was decided and when* ([DECISIONS.md](DECISIONS.md), [HISTORY.md](HISTORY.md)), this one says *how the parts fit together*. The module-by-module list is [tools/README.md](../tools/README.md); the website's own model is in the `zpevnik-web` README (*The mental model*).
+A map of the whole system for its owner, and a trace of one real song through it: `songs/folsomprisonblues.tex`. Read this first; the other docs say *what was decided and when* ([DECISIONS.md](DECISIONS.md), [HISTORY.md](HISTORY.md)), this one says *how the parts fit together*. The module-by-module list is [tools/README.md](../../tools/README.md); the website's own model is in the `zpevnik-web` README (*The mental model*).
 
 Written on 12 Nov 2026 from `zpevnik` master `9ac19fc` and the release `v8.38.38`; numbers such as page 146 move as songs are added.
 

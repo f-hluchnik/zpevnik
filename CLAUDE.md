@@ -4,12 +4,10 @@
 
 This project maintains a songbook in two forms, in two repositories:
 
-- `f-hluchnik/zpevnik` (this repository) — LaTeX source of the songbook (the only source of song content), compiled to the PDF. It also holds the planning docs (`docs/`) of both repositories.
-- `f-hluchnik/zpevnik-web` — website published through GitHub Pages; today a download page for the PDFs.
+- `f-hluchnik/zpevnik` (this repository) — LaTeX source of the songbook (the only source of song content), compiled to a PDF per edition, and the data of the website (`songs.json`). It also holds the docs (`docs/`) of both repositories.
+- `f-hluchnik/zpevnik-web` — website published through GitHub Pages: the download page and the online songbook under `/zpivej/`.
 
-The project is being refactored so that the songbook is available both as a downloadable PDF and as an online HTML songbook on the website (under `/zpivej/`, separate from the download page), both built from the same LaTeX files. The technical debt in the LaTeX source has been paid off (`docs/HISTORY.md`). Editions (song subsets) and a print edition are in scope (D-121, D-122) and come before the converter and the website (D-132); the koledy songbook is out of scope. See `docs/DECISIONS.md` (D-100 onwards).
-
-The architecture and the relationship between the two repositories were reviewed on 3 Nov 2026 and are described in `docs/PLAN.md` and `docs/DECISIONS.md`. Verify them against the code before relying on them.
+Both forms, and every edition, are built from the same LaTeX files. How the system works today, and why, is in `docs/architecture.md`; verify it against the code before relying on it. The koledy songbook is out of scope.
 
 ## 2. Your role
 
@@ -20,9 +18,9 @@ Act as a senior software engineer and architect.
 - Prefer the simplest maintainable solution that satisfies the requirements.
 - Consider the impact of changes across both repositories.
 - Distinguish requirements from proposed implementation details.
-- Do not blindly follow the planning documents.
+- Do not blindly follow the documentation.
 
-The goal is a coherent, robust solution, not merely completion of tickets.
+The goal is a coherent, robust solution, not merely completion of a task.
 
 ## 3. Engineering principles
 
@@ -42,7 +40,7 @@ The goal is a coherent, robust solution, not merely completion of tickets.
 ### Before implementation
 
 - Understand the relevant parts of the codebase.
-- Read the relevant planning documents and ticket descriptions.
+- Read the relevant parts of `docs/architecture.md`.
 - Identify dependencies and potential side effects.
 - Challenge assumptions when necessary.
 - For non-trivial changes, present a concise implementation plan before modifying files.
@@ -64,7 +62,7 @@ Do not start implementation when an important architectural decision remains unr
 - Inspect the resulting changes.
 - Report what was changed and what was verified.
 - Explicitly mention anything that could not be verified.
-- Update the relevant ticket status and document important architectural decisions.
+- Update `docs/architecture.md` (and any other doc the change affects) in the same pull request.
 
 Never claim that something works without having verified it.
 
@@ -79,19 +77,14 @@ Never claim that something works without having verified it.
 
 ## 6. Project documentation
 
-The planning documents are the primary reference for project requirements and progress.
+The docs describe the system as it is now; they are versioned with the code and change in the pull request of the change they describe.
 
-- `docs/PLAN.md` — overall goals and architectural direction.
-- `docs/HISTORY.md` — what each finished phase changed.
-- `docs/OVERVIEW.md` — the refactoring in ten minutes, area by area, and the notes for the article on the website.
-- `docs/archive/` — helper files of finished phases and the original inventory (reference only; binary review files are on the owner's computer, see `docs/archive/README.md`).
-- `docs/TICKETS.md` — actionable work and ticket status.
-- `docs/DECISIONS.md` — agreed architectural decisions and rationale.
-- `docs/SESSIONS.md` — how tickets are grouped into sessions, with the prompt for each.
+- `README.md` (Czech) — setup, writing songs, the commands, editions: for the contributor.
+- `docs/architecture.md` — how the system works and why: the parts, the build, editions, print, release, the website contract, the checks, the conventions.
+- `tools/README.md` — what each tool does and who runs it.
+- `docs/archive/` — the frozen record of the 2026 refactoring (decision log, plans, tickets, history). Reference only; never updated.
 
-Treat these documents as living documents. They are versioned with the code: update them in the pull request of the change they describe.
-
-Keep them consistent with the actual implementation. Do not silently change agreed requirements or architectural decisions.
+A decision is recorded by changing `docs/architecture.md`: replace the outdated text, do not append a log entry. Keep the docs consistent with the implementation; do not silently change agreed behaviour.
 
 If you identify a contradiction or outdated information, raise it before making consequential changes.
 
@@ -121,7 +114,7 @@ Use the available context and tools efficiently.
 - Inspect the current Git state before making changes.
 - Preserve existing user modifications.
 - Never discard, overwrite, or reset user changes without explicit permission.
-- Committing to a ticket branch, pushing that branch and opening its pull request are allowed without asking: the owner reviews changes only in the PR. Never merge, force-push, push to the default branch, deploy, or publish without explicit authorization.
+- Committing to a feature branch, pushing that branch and opening its pull request are allowed without asking: the owner reviews changes only in the PR. Never merge, force-push, push to the default branch, deploy, or publish without explicit authorization.
 - Keep changes scoped and reviewable.
 - Never introduce secrets or credentials into the repositories.
 
@@ -131,9 +124,16 @@ The repository and its documentation are the persistent source of truth, not con
 
 At the end of a meaningful implementation session:
 
-- Update ticket statuses.
-- Record significant architectural decisions.
+- Make sure the docs describe the new state.
 - Document unresolved issues and dependencies.
 - Ensure the next session can continue without relying on the previous conversation.
 
 At the beginning of a new session, inspect the relevant project documentation and current Git state before continuing.
+
+## 11. Working environment
+
+- **Build and test in the cloud workspace.** In each new session: `apt-get update`, then `apt-get install -y texlive-lang-czechslovak texlive-latex-extra texlive-fonts-extra texlive-music poppler-utils latexmk ghostscript librsvg2-bin fonts-cmu xvfb`. MuseScore is the AppImage named by `MUSESCORE_URL` in the CI workflow: download it, `--appimage-extract`, set `MSCORE=<dir>/squashfs-root/AppRun`, and run make under `xvfb-run -a`.
+- That TeX Live is 2023, like CI, but compare a local build only with another local build (base against head, `tools/pdfdiff.py`). CI is the reference.
+- **Pull requests:** `gh pr create` does not work there (GraphQL is blocked); use `gh api repos/f-hluchnik/zpevnik/pulls -f title=… -f head=<branch> -f base=master -F body=@file`. CI's job logs hold the PDF diff summary.
+- **Repositories:** `f-hluchnik/zpevnik` (default branch `master`) and `f-hluchnik/zpevnik-web` (`main`), both public.
+

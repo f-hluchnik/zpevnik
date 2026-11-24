@@ -1,6 +1,6 @@
 # Phase 13 tickets (finishing, 12–19 Nov 2026)
 
-The ticket texts and status rows of the finishing phase, as they were when each ended. H7 was cancelled (D-189). Summary: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows of the finishing phase, as they were when each ended. H7 was cancelled (D-189). Summary: [HISTORY.md](../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

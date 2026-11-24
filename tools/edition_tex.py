@@ -5,7 +5,7 @@ year and source, the edition's title, subtitle and editors, the cover image,
 whether the edition is derived from the book (then the imprint prints the
 derivation sentence instead of the plain version line), and, for an edition with a
 [print] table, how many of its first pages the printer's block leaves out
-(\\zpprintskippedpages: on paper the block's first page is page 1, D-191).
+(\\zpprintskippedpages: on paper the block's first page is page 1).
 `pages_tex` defines the pages zpevnik.tex puts into its fixed skeleton, resolved
 from edition.toml.
 The macros are defined with \\newcommand* so that an empty one compares equal to \\empty.

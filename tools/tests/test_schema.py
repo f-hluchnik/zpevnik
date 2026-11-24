@@ -1,6 +1,6 @@
 """songs.json against its schema (tools/songs.schema.json, J3): the contract with the website.
 
-Needs jsonschema (requirements-dev.txt, D-165); the tools themselves do not.
+Needs jsonschema (requirements-dev.txt); the tools themselves do not.
 Run from the repository root: python3 -m unittest discover -s tools
 """
 import copy

@@ -1,6 +1,15 @@
 # Archive
 
-Reference material of finished phases, kept for the record and for the article on the website (HISTORY.md). Nothing here is needed for further work.
+The record of the 2026 refactoring, frozen on 24 Nov 2026. Nothing here is current: how the songbook works today is in [../architecture.md](../architecture.md). These files are kept for the history and for an article about the refactoring; they are not updated, and their links to code may point at things that have since changed.
+
+| File | What |
+|---|---|
+| `DECISIONS.md` | The decision log (D-001 to D-193), in the order the decisions were made; later entries supersede earlier ones |
+| `HISTORY.md` | What each phase changed, PR by PR |
+| `OVERVIEW.md` | The refactoring in ten minutes, and the notes for the article |
+| `WALKTHROUGH.md` | One song traced from file to screen (as of 12 Nov 2026) |
+| `PLAN.md`, `TICKETS.md`, `SESSIONS.md` | The plan, the tickets and the working sessions as they were when the work ended |
+| `p0-print-report.md` | The print feasibility report and the printer checklist |
 
 | Folder | What |
 |---|---|

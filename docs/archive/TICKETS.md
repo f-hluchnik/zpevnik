@@ -1,6 +1,6 @@
 # Zpěvník – tickets
 
-Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. This file lists only what is left. What is done: [HISTORY.md](HISTORY.md), and the full text of every finished ticket in [archive/](archive/README.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
+Each ticket is one pull request. Background: [PLAN.md](PLAN.md). Agreed decisions: [DECISIONS.md](DECISIONS.md); a ticket never overrides an agreed decision. This file lists only what is left. What is done: [HISTORY.md](HISTORY.md), and the full text of every finished ticket in [archive/](README.md). Tickets are grouped into sessions with ready-made prompts in [SESSIONS.md](SESSIONS.md).
 
 Goal: the PDF and an online HTML songbook, both built from the same LaTeX files (D-100). The refactoring, the editions, the converter, the legal hygiene, the online songbook and the overview for the article are done (HISTORY.md, OVERVIEW.md). **What is left is mostly the owner's own work** (new songs, the printer); the agent's part is the print proof (P4) and small helpers on request. E4 and H7 were dropped (D-189). Then the songbook is done: the features that are not planned, and why, are in D-175 (correct and simple, not every feature).
 

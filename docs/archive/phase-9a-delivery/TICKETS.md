@@ -1,6 +1,6 @@
 # Phase 9a tickets (done 11 Nov 2026)
 
-The ticket texts and status rows of the delivery phase as they were when it ended. Summary: [HISTORY.md](../../HISTORY.md), phase 9a.
+The ticket texts and status rows of the delivery phase as they were when it ended. Summary: [HISTORY.md](../HISTORY.md), phase 9a.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

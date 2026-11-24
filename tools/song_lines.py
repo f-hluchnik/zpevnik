@@ -2,7 +2,7 @@
 """Check that every line of a song is one printed line and ends inside the text.
 
 Every build writes the song blocks (verse, chorus, ...) to <job>.lines (\\zp@songblock in
-zpevnik.sty, D-183), in sp:
+zpevnik.sty), in sp:
     "block page source printed prose"  per block: its lines in the source, as TeX printed
                                         them, and 1 if it holds a recitative (prose)
     "end page x edge"                   per line end: where the line ends, the right edge

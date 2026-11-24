@@ -9,7 +9,7 @@ For each scores/<name>.mscz this writes into build/scores/:
 and with --format print-black (a format in one ink, formats.py) also
   <name>-black.pdf  the image in black ink only: the SVG with black chord names, in
               shades of grey. rsvg-convert writes RGB (cairo), which a printer separates
-              into four inks, so Ghostscript converts it (D-188).
+              into four inks, so Ghostscript converts it.
 
 Every score is exported with the shared style scores/zpevnik.mss, which overrides
 the style saved in the file: all scores get the same staff size, fonts and system
@@ -21,7 +21,7 @@ hand-tuned offsets. A score must be a single page.
 
 MuseScore's German spelling prints B as H but keeps the flat of B-flat. The export
 therefore draws chord names with the songbook's chord list, scores/chords_zpevnik.xml
-(MuseScore's own list with that flat left out), so that B-flat prints as B (D-190).
+(MuseScore's own list with that flat left out), so that B-flat prints as B.
 A style can only name a chord list outside MuseScore by an absolute path, so the export
 applies a copy of the shared style that names it so.
 

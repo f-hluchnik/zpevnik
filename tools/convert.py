@@ -2,7 +2,7 @@
 """Read every song with the converter (tools/songbook/) and report what it does not accept.
 
 The converter is strict: an unknown command, a cue without a target, a line break at
-the end of a part (D-163) is an error with its file and line. `make check` and CI run
+the end of a part is an error with its file and line. `make check` and CI run
 this. `--song ID` prints the model of one song as JSON instead (for reading; songs.json
 is J2).
 

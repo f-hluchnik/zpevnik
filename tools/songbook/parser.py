@@ -3,7 +3,7 @@
 The song level follows TeX's modes as zpevnik.sty uses them: after an empty line
 (vertical mode) a `\\cue`, `\\note` or `\\speaker` is a block of its own; after a part in
 the same paragraph, whatever follows (a cue, "×2", a note) is appended to the part's
-last line. Two parts in one paragraph are two blocks (D-163).
+last line. Two parts in one paragraph are two blocks.
 
 Python >= 3.11, standard library only.
 """

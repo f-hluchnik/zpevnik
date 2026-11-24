@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Write songs.json: the songs of the full book for the website (J2, D-165).
+"""Write songs.json: the songs of the full book for the website.
 
 The website shows the full book only. songs.json holds its songs in book order, as the
 converter reads them (tools/songbook/, export.py has the shape of one song), each with its
 page in the built full book; the letter contents and the artist index as the book lists
 them, so the website never sorts; and the version of the build. Hidden songs are left
-out with the function every book uses (songs.published, D-161).
+out with the function every book uses (songs.published).
 
 Build the full book first (`make json` does both): the pages come from its .aux files,
 and a build of other songs than these is an error.

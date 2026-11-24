@@ -1,6 +1,6 @@
 # Phase 8 tickets (done 12 Nov 2026)
 
-The ticket texts and status rows of the legal phase as they were when it ended. Summary: [HISTORY.md](../../HISTORY.md), phase 8. What is left of it lives in other tickets: `songs.json` leaves out the hidden songs in J2, `noindex` and `robots.txt` are W6.
+The ticket texts and status rows of the legal phase as they were when it ended. Summary: [HISTORY.md](../HISTORY.md), phase 8. What is left of it lives in other tickets: `songs.json` leaves out the hidden songs in J2, `noindex` and `robots.txt` are W6.
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

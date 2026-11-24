@@ -1,6 +1,6 @@
 # Phase 3 tickets: print (done 11–19 Nov 2026, except P4)
 
-The ticket texts and status rows as they were when the work ended: the feasibility report, the cancelled licensing check, the print build and the printer's requirements. **P4** (the proof on the final content) is still open and stays in [TICKETS.md](../../TICKETS.md). Summary: [HISTORY.md](../../HISTORY.md).
+The ticket texts and status rows as they were when the work ended: the feasibility report, the cancelled licensing check, the print build and the printer's requirements. **P4** (the proof on the final content) is still open and stays in [TICKETS.md](../TICKETS.md). Summary: [HISTORY.md](../HISTORY.md).
 
 | Ticket | Status | Notes / PR |
 |---|---|---|

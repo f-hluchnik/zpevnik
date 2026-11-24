@@ -2,14 +2,14 @@
 """The release of a build: one PDF per edition, what the website needs, and the release notes.
 
 Every edition (a folder of editions/, see edition.py), the full book included, is released
-as `zpevnik-<edition>-<version>.pdf` (D-143). A new edition is released without a change
+as `zpevnik-<edition>-<version>.pdf`. A new edition is released without a change
 here or in the CI. The PDFs are built by `make` into build/editions/<name>/; this copies
 them under their asset names into build/release/ and prints the editions part of the
 release notes (Markdown, in Czech like the site).
 
-The website's build reads the release named in its version.txt (D-110), so the release also
-holds `songs.json` and `scores.zip`, the score images (build/scores/*.svg) of the songs
-(J4, D-166). Their names carry no version: the release's tag already does.
+The website's build reads the release named in its version.txt, so the release also
+holds `songs.json` and `scores.zip`, the score images (build/scores/*.svg) of the songs.
+Their names carry no version: the release's tag already does.
 
 Usage: python3 tools/release.py VERSION [repo-root]
 Python >= 3.11, standard library only.

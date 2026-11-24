@@ -1,4 +1,4 @@
-"""Unit tests of the converter (tools/songbook/): the structure rules (D-163), the model (D-164)
+"""Unit tests of the converter (tools/songbook/): the structure rules, the model
 and the TeX rules the songs rely on; snapshots of real songs, frozen as fixtures.
 
 Run from the repository root: python3 -m unittest discover -s tools
@@ -59,7 +59,7 @@ class TexRules(unittest.TestCase):
 
     def test_a_chord_inside_a_word_as_zpevnik_sty_tests_it(self):
         """A character right before the chord and a letter right after it; checked against TeX's
-        own test on every chord of the book (session 24, D-165)."""
+        own test on every chord of the book."""
         cases = {
             r"slip a\chord{A}way": True,
             r"slip a \chord{A}away": False,                  # a space before the chord
@@ -185,7 +185,7 @@ class SongFacts(unittest.TestCase):
 
 
 class Errors(unittest.TestCase):
-    """What the converter rejects: each was in the songs once (D-135, D-163) or would print wrong."""
+    """What the converter rejects: each was in the songs once or would print wrong."""
     CASES = {
         "unknown command": "\\vers{\\textit{a}}",
         "ends with a line break": "\\vers{a\\\\\n}",

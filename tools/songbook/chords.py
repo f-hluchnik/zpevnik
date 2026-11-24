@@ -36,7 +36,7 @@ def parse_chord(tokens: list[Token], command: Token) -> Chord:
 
 
 def check_plain_bass(chord: Chord, command: Token) -> None:
-    """A bass note is `\\bas{G}`, never `/G` on the base line (D-164, J1a)."""
+    """A bass note is `\\bas{G}`, never `/G` on the base line."""
     for part in chord.parts:
         match = PLAIN_BASS.search(part.text) if part.position is ChordPosition.BASE else None
         if match:

@@ -11,7 +11,7 @@ that check_pages.py reads, so a song is compared with itself wherever it sits
 in the book. The page-number footer is left out of every comparison. Front
 matter and the pages after the last song (the table of contents) are compared
 by position, with the imprint's build date and version left out: they change with
-every build (the version counts the commits, D-133), not with the change under review.
+every build (the version counts the commits), not with the change under review.
 
 Writes a Markdown report to stdout. Differences never change the exit code
 (some tickets expect them); it exits 1 only when it cannot do its job.
